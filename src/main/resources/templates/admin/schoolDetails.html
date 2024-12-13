@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+</head>
+
+<body>
+	<center>
+		<h1>学校情報詳細</h1><br>
+
+		<h2>学校ID:</h2>
+		<!--		<p th:text="${schoolS.school_id}">学校ID</p>-->
+
+		<h2>学校名:</h2>
+		<!--		<p th:text="${schoolS.school_name}">学校名</p>-->
+
+		<table border="1">
+			<tr>
+				<th></th>
+				<th>教室名</th>
+				<th>建物</th>
+				<th>階層</th>
+				<th>PC</th>
+			</tr>
+			<tr th:each="schoolDetails : ${schoolS}">
+				<td><input type="checkbox" id="check1" /></td>
+				<td th:text="${schoolDetails.room_name}"></td>
+				<td th:text="${schoolDetails.hall}"></td>
+				<td th:text="${schoolDetails.floor}"></td>
+				<td th:text="${schoolDetails.pc_flg}"></td>
+			</tr>
+		</table><br>
+	</center>
+</body>
+
+</html>
