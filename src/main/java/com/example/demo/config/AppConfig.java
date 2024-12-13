@@ -4,7 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.demo.service.SchoolServiceInterface;
+import com.example.demo.service.UserListServiceInterface;
 import com.example.demo.service.impl.SchoolServiceImpl;
+import com.example.demo.service.impl.UserListServiceImpl;
 
 @Configuration
 public class AppConfig {
@@ -14,4 +16,9 @@ public class AppConfig {
 		return new SchoolServiceImpl();
 	}
 	
+	
+	@Bean(name="userListService")
+	UserListServiceInterface userListServiceInterface(){
+		return new UserListServiceImpl();
+	}
 }
