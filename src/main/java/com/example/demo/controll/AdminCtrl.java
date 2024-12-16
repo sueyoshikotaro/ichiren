@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.entity.User;
 import com.example.demo.service.SchoolServiceInterface;
+import com.example.demo.service.UserListServiceInterface;
 
 /**
  * 管理者のコントローラ
@@ -22,6 +24,10 @@ public class AdminCtrl {
 	@Autowired
 	@Qualifier("schoolService")
 	SchoolServiceInterface schoolS;
+	
+	@Autowired
+	@Qualifier("userListService")
+	UserListServiceInterface userListService;
 
 	/**
 	 * ログイン画面を表示する
@@ -33,6 +39,7 @@ public class AdminCtrl {
 	}
 
 	/**
+	 * 末吉
 	 * メニュー画面を表示する
 	 * @return
 	 */
@@ -41,6 +48,7 @@ public class AdminCtrl {
 		return "admin/menu";
 	}
 
+	
 	/**
 	 * 学校情報詳細画面を表示する
 	 * @return
@@ -57,6 +65,38 @@ public class AdminCtrl {
 
 		return mav;
 	}
+	
+	
+	/*
+	 * 向江さん
+	 * ユーザ一覧のリクエストハンドラメソッド
+	 * @return ユーザ一覧
+	 */
+
+	@GetMapping("userList")
+	public ModelAndView userList() {
+		//ModelAndViewのインスタンス生成
+		ModelAndView mav = new ModelAndView();
+
+		//サービスのインスタンス生成
+		//UserListServiceInterface userListService = new UserListServiceImpl();
+
+		//サービスのメソッドを呼び出す
+		Iterable<User> userList = userListService.userList();
+
+		mav.addObject("users", userList);
+		mav.setViewName("admin/UserList");
+		
+		//System.out.println(userList.toString());
+
+		return mav;
+
+		//return "admin/UserList";
+
+	}
+	
+	
+	
 
 	/**
 	 * グループ一覧画面を表示する
