@@ -16,12 +16,44 @@ public class SchoolServiceImpl implements SchoolServiceInterface {
 	@Autowired
 	SchoolCrudRepository repo;
 
+	//学校情報管理システム
+	/**
+	 * 末吉
+	 * 学校情報詳細表示
+	 */
 	@Override
 	public List<School> schoolDetails() {
-
+		
 		List<School> list = repo.selectSchoolDetails();
 
 		return list;
 	}
+
+	
+	/**
+	 * 末吉
+	 * 教室情報検索
+	 */
+//	@Override
+//	public List<School> existRoom(String room_name) {
+//		
+//		List<School> list = repo.serchRoom(room_name);
+//		
+//		System.out.println(repo.serchRoom(room_name).toString());
+//		
+//		if(list == null || list.isEmpty()) {
+//			
+//			list = repo.selectSchoolDetails();
+//			return list;
+//			
+//		} else {
+//			
+//			return list;
+//		}
+//		return null;
+//		
+//	}
+
+	
 
 }

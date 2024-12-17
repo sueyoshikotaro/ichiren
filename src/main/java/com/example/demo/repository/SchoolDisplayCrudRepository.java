@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.example.demo.Form.SchoolDisplay;
+import com.example.demo.form.SchoolDisplay;
 
 public interface SchoolDisplayCrudRepository extends CrudRepository<SchoolDisplay, Integer> {
 	

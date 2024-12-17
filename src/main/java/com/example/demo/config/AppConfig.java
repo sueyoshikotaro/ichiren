@@ -3,10 +3,14 @@ package com.example.demo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
-import com.example.demo.service.UserListServiceInterface;
+import com.example.demo.service.UserDisplayServiceInterface;
+import com.example.demo.service.UserServiceInterface;
+import com.example.demo.service.impl.SchoolDisplayImpl;
 import com.example.demo.service.impl.SchoolServiceImpl;
-import com.example.demo.service.impl.UserListServiceImpl;
+import com.example.demo.service.impl.UserDisplayImpl;
+import com.example.demo.service.impl.UserServiceImpl;
 
 @Configuration
 public class AppConfig {
@@ -16,9 +20,20 @@ public class AppConfig {
 		return new SchoolServiceImpl();
 	}
 	
-	
+
 	@Bean(name="userListService")
-	UserListServiceInterface userListServiceInterface(){
-		return new UserListServiceImpl();
+	UserServiceInterface userListServiceInterface(){
+		return new UserServiceImpl();
 	}
+	
+	@Bean(name="schoolDisplayService")
+	SchoolDisplayServiceInterface schoolDisplayService() {
+		return new SchoolDisplayImpl();
+	}
+	
+	@Bean(name = "userDisplayImpl")
+	UserDisplayServiceInterface userDisplayService() {
+		return new UserDisplayImpl();
+	}
+	
 }

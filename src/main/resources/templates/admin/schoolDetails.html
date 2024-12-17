@@ -10,12 +10,12 @@
 	<center>
 		<h1>学校情報詳細</h1><br>
 
-		<h2>学校ID:</h2>
-		<!--		<p th:text="${schoolS.school_id}">学校ID</p>-->
+		<tr th:each="schoolDetails : ${schoolS}" th:if="${schoolDetailsStat.index == 0}">
+			<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
+			<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
+		</tr><br>
 
-		<h2>学校名:</h2>
-		<!--		<p th:text="${schoolS.school_name}">学校名</p>-->
-
+		<!--教室情報一覧表示-->
 		<table border="1">
 			<tr>
 				<th></th>
@@ -26,12 +26,27 @@
 			</tr>
 			<tr th:each="schoolDetails : ${schoolS}">
 				<td><input type="checkbox" id="check1" /></td>
+
 				<td th:text="${schoolDetails.room_name}"></td>
 				<td th:text="${schoolDetails.hall}"></td>
 				<td th:text="${schoolDetails.floor}"></td>
-				<td th:text="${schoolDetails.pc_flg}"></td>
+				<td th:if="${schoolDetails.pc_flg == 1}">有</td>
+				<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
 			</tr>
 		</table><br>
+		
+		
+<!--		<form name="form1" th:action="@{schoolDetails}" method="get">-->
+<!--			<button type="submit">編集</button><br>-->
+<!--		</form>-->
+
+<!--		<form name="form1" th:action="@{schoolDetails}" method="get">-->
+<!--			<button type="submit">追加</button><br>-->
+<!--		</form>-->
+
+<!--		<form name="form1" th:action="@{/nextpage}" method="get">-->
+<!--			<button type="submit">削除</button><br>-->
+<!--		</form>-->
 	</center>
 </body>
 

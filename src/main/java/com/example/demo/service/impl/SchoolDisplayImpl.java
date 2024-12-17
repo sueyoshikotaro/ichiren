@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.Form.SchoolDisplay;
+import com.example.demo.form.SchoolDisplay;
 import com.example.demo.repository.SchoolDisplayCrudRepository;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 

@@ -17,8 +17,7 @@ public class School {
 	@Id
 	private Integer school_id;
 	private String school_abb;
-	private String school_name;
-	
+	private String school_name;	
 
 }
 

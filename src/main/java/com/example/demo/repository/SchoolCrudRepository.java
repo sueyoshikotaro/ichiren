@@ -27,6 +27,18 @@ public interface SchoolCrudRepository extends CrudRepository<School, Integer> {
 	 * @param school_id
 	 */
 
-	@Query("select * from school right join room on school.school_id = room.school_id")
+	/**
+	 * 末吉
+	 * 学校情報詳細
+	 */
+	@Query("select * from school inner join room on school.school_id = room.school_id")
 	public List<School> selectSchoolDetails();
+	
+	/**
+	 * 末吉
+	 * 教室検索
+	 */
+	@Query("select * from school inner join room on school.school_id = room.school_id where room.room_name Like '%' || :room_name || '%'")
+	public List<School> serchRoom(String room_name);
+
 }

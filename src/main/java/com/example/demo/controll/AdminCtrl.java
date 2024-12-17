@@ -1,15 +1,22 @@
 package com.example.demo.controll;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.demo.entity.User;
+import com.example.demo.form.SchoolDisplay;
+import com.example.demo.form.UserDisplay;
+import com.example.demo.form.UserForm;
+import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
-import com.example.demo.service.UserListServiceInterface;
+import com.example.demo.service.UserDisplayServiceInterface;
+import com.example.demo.service.UserServiceInterface;
 
 /**
  * 管理者のコントローラ
@@ -27,8 +34,17 @@ public class AdminCtrl {
 	
 	@Autowired
 	@Qualifier("userListService")
-	UserListServiceInterface userListService;
+	UserServiceInterface userListService;
 
+	@Autowired
+	@Qualifier("schoolDisplayService")
+	SchoolDisplayServiceInterface schoolDisplayService;
+	
+	@Autowired
+	@Qualifier("userDisplayImpl")
+	UserDisplayServiceInterface userDisplayService;
+	
+	
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -50,6 +66,7 @@ public class AdminCtrl {
 
 	
 	/**
+	 * 末吉
 	 * 学校情報詳細画面を表示する
 	 * @return
 	 */
@@ -57,11 +74,10 @@ public class AdminCtrl {
 	public ModelAndView schoolDetails(ModelAndView mav) {
 
 		//schoolS.schoolDateils();
+		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
-		mav.addObject("schoolS", schoolS.schoolDetails());
+		mav.addObject("schoolS", SchoolDetails);
 		mav.setViewName("admin/schoolDetails");
-		
-		System.out.println(schoolS.schoolDetails());
 
 		return mav;
 	}
@@ -82,10 +98,12 @@ public class AdminCtrl {
 		//UserListServiceInterface userListService = new UserListServiceImpl();
 
 		//サービスのメソッドを呼び出す
-		Iterable<User> userList = userListService.userList();
+		Iterable<UserDisplay> userList = userDisplayService.userList();
 
 		mav.addObject("users", userList);
-		mav.setViewName("admin/UserList");
+		mav.setViewName("admin/userList");
+		
+		System.out.println(userList);
 		
 		//System.out.println(userList.toString());
 
@@ -96,6 +114,22 @@ public class AdminCtrl {
 	}
 	
 	
+	/*
+	 * 向江
+	 * ユーザ詳細を表示するリクエストハンドラメソッド
+	 *
+	 */
+	@PostMapping("userDetail")
+	public ModelAndView userDetail(UserForm u, ModelAndView mav) {
+		System.out.println("konnitihasiru");
+		
+		mav.addObject("user", u);
+		mav.setViewName("admin/userDetail");
+		
+ 
+		return mav;
+	
+	}
 	
 
 	/**

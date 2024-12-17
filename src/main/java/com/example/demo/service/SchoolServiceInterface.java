@@ -9,4 +9,7 @@ public interface SchoolServiceInterface {
 	//学校情報詳細表示
 	public List<School> schoolDetails();
 	
+//	public List<School> existRoom();
+	
+
 }
