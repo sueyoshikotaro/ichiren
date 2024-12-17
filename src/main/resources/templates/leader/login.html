@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+</head>
+
+<body>
+	<h1>タスクどん</h1>
+	<h2>ログイン</h2>
+	<center>
+		<form th:action="@{/taskdon/user/deptGroupList}" method="post">
+			<table>
+				<tr>
+					<th>ID</th>
+					<td><input type="text" name="user_id" required></td>
+				</tr>
+				<tr>
+					<th>パスワード</th>
+					<td><input type="password" name="user_pass" required></td>
+				</tr>
+			</table>
+			<input type="submit" value="ログイン"><br>
+			<button onclick="openPopup()">※パスワードを忘れた場合</button>
+		</form>
+	</center>
+</body>
+
+</html>
