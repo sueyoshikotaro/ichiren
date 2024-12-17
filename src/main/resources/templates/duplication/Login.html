@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>タスクどん_ログイン</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!--CSSリンク挿入欄-->
+	<link rel="stylesheet" th:href="">
+
+</head>
+
+<body>
+	<!--コンテナ(デザイン情報)-->
+	<div class="login_container">
+		<h2>ログイン画面</h2>
+
+		<!--入力情報(必須)-->
+		<form th:action="" method="post">
+			<div class="form-group">
+				<label>ユーザID</label>
+				<input type="text" id="user_id" name="user_id" th:value="${user_id}" required>
+			</div>
+			<div class="form-group">
+				<label>パスワード</label>
+				<input type="password" id="user_pass" name="user_pass" th:value="${user_pass}" required>
+			</div>
+			<!--user_id等はDB設計に準拠-->
+
+			<div class="button-group">
+				<button type="submit" class="login-button">ログイン</button>
+			</div>
+		</form>
+
+		<!--パスワード再設定説明(ポップアップ)-->
+		<p>※<a href="#" class="popup-link">パスワードを忘れた場合</a></p>
+		<div class="popup" style="display: none;">
+			<div class="popup-content">
+				<span class="close">&times;</span>
+				<h3>パスワードを忘れた場合の対処方法</h3>
+				<p>パスワードを忘れた場合、ユーザは以下の手続きをお願いします</p>
+				<ul>
+					<li>該当する学校の管理者にパスワードを忘れた旨を説明。</li>
+					<li>管理者に許可を得て、パスワードの初期化をしてもらう。</li>
+					<li>初期化後に、デフォルトパスワードでログインします。</li>
+					<li>デフォルトパスワードでログイン後、再設定してください。</li>
+				</ul>
+				<p> ※管理者は、パスワード初期化できません。</p>
+			</div>
+		</div>
+	</div>
+
+	<!--JavaScriptリンク挿入欄-->
+	<script th:src=""></script>
+
+</body>
+
+</html>
