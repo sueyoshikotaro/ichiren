@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
-import com.example.demo.form.UserForm;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
@@ -31,7 +30,7 @@ public class AdminCtrl {
 	@Autowired
 	@Qualifier("schoolService")
 	SchoolServiceInterface schoolS;
-	
+
 	@Autowired
 	@Qualifier("userListService")
 	UserServiceInterface userListService;
@@ -39,12 +38,11 @@ public class AdminCtrl {
 	@Autowired
 	@Qualifier("schoolDisplayService")
 	SchoolDisplayServiceInterface schoolDisplayService;
-	
+
 	@Autowired
 	@Qualifier("userDisplayImpl")
 	UserDisplayServiceInterface userDisplayService;
-	
-	
+
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -64,7 +62,6 @@ public class AdminCtrl {
 		return "admin/menu";
 	}
 
-	
 	/**
 	 * 末吉
 	 * 学校情報詳細画面を表示する
@@ -81,10 +78,9 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
-	
+
 	/*
-	 * 向江さん
+	 * 向江
 	 * ユーザ一覧のリクエストハンドラメソッド
 	 * @return ユーザ一覧
 	 */
@@ -102,36 +98,50 @@ public class AdminCtrl {
 
 		mav.addObject("users", userList);
 		mav.setViewName("admin/userList");
-		
-		System.out.println(userList);
-		
-		//System.out.println(userList.toString());
 
 		return mav;
 
-		//return "admin/UserList";
-
 	}
+	
+	
 	
 	
 	/*
 	 * 向江
-	 * ユーザ詳細を表示するリクエストハンドラメソッド
-	 *
+	 * ユーザ削除確認画面を表示するリクエストハンドラメソッド
+	 * @return
 	 */
-	@PostMapping("userDetail")
-	public ModelAndView userDetail(UserForm u, ModelAndView mav) {
-		System.out.println("konnitihasiru");
+	@PostMapping("userDelete")
+	public ModelAndView userDelete(UserDisplay u, ModelAndView mav) {
+		
+		
+		// サービスのメソッドを呼び出す
+		
 		
 		mav.addObject("user", u);
-		mav.setViewName("admin/userDetail");
+		mav.setViewName("admin/userDeleteConfirm");
 		
- 
 		return mav;
+	}
+
 	
+	/*
+	 * 向江
+	 * パスワード初期化確認画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("passClear")
+	public ModelAndView passClear(UserDisplay u,ModelAndView mav) {
+		
+		
+		mav.addObject("user",u);
+		mav.setViewName("admin/passClear");
+		
+		return mav;
 	}
 	
-
+	
+	
 	/**
 	 * グループ一覧画面を表示する
 	 * @return

@@ -13,38 +13,54 @@
 		<h2>ユーザ一覧画面</h2><br>
 
 		<table border="1">
-			<thead>
-				<tr>
-					<th>ユーザID</th>
-					<th>ユーザ名</th>
-					<th>パスワード</th>
-					<th>所属学校</th>
-					<th>入学年度</th>
-					<td colspan="1"></td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="user : ${users}">
-					<td th:text="${user.user_id}"></td>
-					<td th:text="${user.user_name}"></td>
-					<td th:text="${user.user_pass}"></td>
-<!--					<td th:text="${user.school_id}"></td>-->
-					<td th:text="${user.school_name}"></td>
-					<td th:text="${user.enr_year}"></td>
-					<td>
-						<form th:action="@{userDetail}" method="post">
-							<input type="hidden" name="user_id" th:value="${user.user_id}">
-							<input type="hidden" name="user_name" th:value="${user.user_name}">
-							<input type="hidden" name="user_pass" th:value="${user.user_pass}">
-							<input type="hidden" name="school_name" th:value="${user.school_name}">
-							<input type="hidden" name="enr_year" th:value="${user.enr_year}">
-							<input type="submit" value="詳細">
-						</form>
 
-					</td>
-				</tr>
-			</tbody>
-		</table>
+			<tr>
+				<th>ユーザID</th>
+				<th>ユーザ名</th>
+				<th>パスワード</th>
+				<th>所属学校</th>
+				<th>入学年度</th>
+				<td colspan="2"></td>
+				<!--					<td colspan></td>-->
+			</tr>
+
+			<tr th:each="user : ${users}">
+				<td th:text="${user.user_id}"></td>
+				<td th:text="${user.user_name}"></td>
+				<td th:text="${user.user_pass}"></td>
+				<!--					<td th:text="${user.school_id}"></td>-->
+				<td th:text="${user.school_name}"></td>
+				<td th:text="${user.enr_year}"></td>
+				<td>
+
+					<!-- 削除 -->
+					<form th:action="@{userDelete}" method="post">
+						<input type="hidden" name="user_id" th:value="${user.user_id}">
+						<input type="hidden" name="user_name" th:value="${user.user_name}">
+						<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+						<input type="hidden" name="school_name" th:value="${user.school_name}">
+						<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+						<input type="hidden" name="user_flg" th:value="${user.user_flg}">
+						<input type="submit" value="削除">
+					</form>
+				</td>
+				<td>
+					<!-- パスワード初期化 -->
+					<form th:action="@{passClear}" method="post">
+						<input type="hidden" name="user_id" th:value="${user.user_id}">
+						<input type="hidden" name="user_name" th:value="${user.user_name}">
+						<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+						<input type="hidden" name="school_name" th:value="${user.school_name}">
+						<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+						<input type="submit" value="パスワード初期化">
+					</form>
+
+				</td>
+			</tr>
+
+		</table><br>
+
+
 	</center>
 </body>
 
