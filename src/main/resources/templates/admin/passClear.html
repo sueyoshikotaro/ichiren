@@ -1,0 +1,62 @@
+<!-- 向江 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+</head>
+
+<body>
+
+	<center>
+		<h1>タスクどん</h1><br>
+		<h2>ユーザ初期化確認画面</h2><br>
+
+		<p>確認メッセージ</p>
+
+		<form th:action="@{passClear}" method="post">
+			<!--		<div th:object="${user}">-->
+			<table border="1">
+
+				<tr>
+					<th>項目</th>
+					<th>内容</th>
+				</tr>
+				<tr>
+					<th>ユーザID</th>
+					<td th:text="${user.user_id}"></td>
+				</tr>
+				<tr>
+					<th>ユーザ名</th>
+					<td th:text="${user.user_name}"></td>
+				</tr>
+				<tr>
+					<th>パスワード</th>
+					<td th:text="${user.user_pass}"></td>
+				</tr>
+				<tr>
+					<th>所属学校</th>
+					<td th:text="${user.school_name}"></td>
+				</tr>
+				<tr>
+					<th>入学年度</th>
+					<td th:text="${user.enr_year}"></td>
+				</tr>
+			</table>
+
+
+			<br>
+			<br>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="submit" value="初期化">
+				</td>
+			</tr>
+
+
+		</form>
+	</center>
+</body>
+
+</html>
