@@ -35,24 +35,40 @@ public class UserCtrl {
 	@Autowired
 	HttpSession session;
 
-	/**
-	 * ログイン画面を表示 
-	 * @return
-	 */
-	@GetMapping("login")
-	public String login(String user_id, String user_pass, ModelAndView mav) {
-
-		if (System.getProperty("INTERNAL_STARTUP") != null && user_id.equals("admin")) {
-
-			return "redirect:admin/adminRegister";
-		} else if (user_pass.equals("taskdon1")) {
-
-			return "redirect:common/resetPass";
-		} else {
-
+		/**
+		 * ログイン画面を表示 
+		 * @return
+		 */
+		@GetMapping("login")
+		public String login() {
+	
 			return "common/login";
 		}
-	}
+
+		//	/**
+		//	 * ログイン画面を表示 
+		//	 * @return
+		//	 */
+		//	@GetMapping("login")
+		//	public String login(@RequestParam("firstLogin") boolean firstLogin, String user_id, String user_pass) {
+		//
+		//		if (user_id.equals("admin") && user_pass.equals("admin")) {
+		//
+		//			//上位管理者の初回ログイン時の処理
+		//			return "admin/adminRegister";
+		//		} else {
+		//
+		//			if (firstLogin) {
+		//
+		//				// 初回ログイン時の処理
+		//				return "redirect:/common/resetPass";
+		//			} else {
+		//
+		//				// 通常のログイン処理
+		//				return "common/login";
+		//			}
+		//		}
+		//	}
 
 	/**
 	 * ID重複をチェック
