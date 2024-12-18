@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>メニュー画面</title>
+	<title>メニュー画面</title>
 </head>
+
 <body>
 	<h2>メニュー</h2>
-		<div class="menu-container">
-			<form name="form1" th:action="@{schoolDetails}" method="get">
-				<button type="submit">グループ一覧</button><br>
-			</form>
-			
-			<form name="form1" th:action="@{schoolDetails}" method="get">
-				<button type="submit">学校情報詳細</button><br>
-			</form>
-			
-			<form name="form1" th:action="@{userList}" method="get">
-				<button type="submit">ユーザ一覧</button><br>
-			</form>
-			
-			<form name="form1" th:action="@{/nextpage}" method="get">
-				<button type="submit">チャット</button><br>
-			</form>
-		</div>
+	<div class="menu-container">
+		<form name="form1" th:action="@{schoolDetails}" method="get">
+			<button type="submit">グループ一覧</button><br>
+		</form>
+
+		<form name="form1" th:action="@{schoolDetails}" method="get">
+			<button type="submit">学校情報詳細</button><br>
+		</form>
+
+		<form name="form1" th:action="@{userList}" method="get">
+			<button type="submit">ユーザ一覧</button><br>
+		</form>
+
+		<form name="form1" th:action="@{/nextpage}" method="get">
+			<button type="submit">チャット</button><br>
+		</form>
+		<form name="form1" th:action="@{teInfoRegist}" method="get">
+			<button type="submit">新規講師登録</button><br>
+		</form>
+	</div>
 </body>
+
 </html>

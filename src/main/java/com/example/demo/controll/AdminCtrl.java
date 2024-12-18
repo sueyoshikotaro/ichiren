@@ -144,7 +144,7 @@ public class AdminCtrl {
 	@PostMapping("passClear")
 	public ModelAndView passClear(UserDisplay u, ModelAndView mav) {
 
-		mav.addObject("user",u);
+		mav.addObject("user", u);
 		mav.setViewName("admin/passClear");
 
 		return mav;
@@ -163,6 +163,59 @@ public class AdminCtrl {
 
 		//mav.addObject("user",u);
 		mav.setViewName("admin/userUpdateComp");
+
+		return mav;
+	}
+
+	/*
+	 * 向江
+	 * 新規講師登録画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@GetMapping("teInfoRegist")
+	public String teInfoRegist() {
+
+		return "admin/teInfoRegist";
+	}
+
+	/*
+	 * 向江
+	 * 新規講師登録確認画面を表示するリクエストハンドラメソッド
+	 * @oaram u
+	 * @param mav
+	 */
+	@PostMapping("teInfoRegistConfirm")
+	public String teInfoRegistConfirm(UserDisplay u, ModelAndView mav) {
+
+		if (userDisplayService.userIDCheck(u.getUser_id())) {
+
+			mav.setViewName("admin/teInfoRegistConfirm");
+			mav.addObject("user", u);
+
+		} else {
+
+			mav.addObject("errMsg", "既に使われているIDです。");
+			mav.setViewName("admin/teInfoRegist");
+
+		}
+
+		return "mav";
+	}
+
+	/*
+	 * 向江
+	 * 新規講師登録完了画面を表示するリクエストハンドラメソッド
+	 * @param u
+	 * @param mav
+	 * @return
+	 */
+	@PostMapping("teInfoRegistComp")
+	public ModelAndView teInfoRegistComp(UserDisplay u, ModelAndView mav) {
+
+		userDisplayService.teInfoRegist(u.getUser_id(), u.getUser_name(), u.getUser_pass(), u.getSchool_name(),
+				u.getEnr_year(), 1);
+
+		//userDisplayService.InsertUser(u);
 
 		return mav;
 	}
