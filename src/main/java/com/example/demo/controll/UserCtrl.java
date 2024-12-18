@@ -3,8 +3,6 @@ package com.example.demo.controll;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -17,6 +15,8 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.TaskServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -40,31 +40,39 @@ public class UserCtrl {
 	 * @return
 	 */
 	@GetMapping("login")
-	public String login(String user_id, String user_pass) {
+	public String login(String user_id, String user_pass, ModelAndView mav) {
 
-		return "leader/login";
+		if (System.getProperty("INTERNAL_STARTUP") != null && user_id.equals("admin")) {
+
+			return "redirect:admin/adminRegister";
+		} else if (user_pass.equals("taskdon1")) {
+
+			return "redirect:common/resetPass";
+		} else {
+
+			return "common/login";
+		}
 	}
 
 	/**
 	 * ID重複をチェック
 	 */
 	@PostMapping("deptGroupList")
-	public ModelAndView userIdCheck(ModelAndView mav, String id) {
+	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
 
 		boolean flg;
 		Optional<User> user;
 
 		//flg = userCrudRepo.existsById(user_id);
+		user = userCrudRepo.findById(user_id);
 
-		user = userCrudRepo.findById(id);
+		if (user.get().getUser_id().equals(user_id)) {
 
-		if (user.get().getUser_id().equals(id)) {
-
-			mav.setViewName("leader/deptGroupList");
-			session.setAttribute("user_id", id);
+			mav.setViewName("common/deptGroupList");
+			session.setAttribute("user_id", user_id);
 		} else {
 
-			mav.setViewName("leader/login");
+			mav.setViewName("common/login");
 			mav.addObject("errMsg", "IDが一致しません。");
 		}
 
@@ -77,8 +85,8 @@ public class UserCtrl {
 	 */
 	@GetMapping("deptGroupList")
 	public String deptGroupList() {
-
-		return "learder/deptGroupList";
+    
+		return "common/deptGroupList";
 	}
 
 	/**
@@ -88,17 +96,17 @@ public class UserCtrl {
 	@GetMapping("resetPass")
 	public String resetPass() {
 
-		return "leader/resetPass";
+		return "common/resetPass";
 	}
 
 	/**
-	 * 新規管理者登録画面を表示
+	 * 管理者登録画面を表示
 	 * @return
 	 */
-	@GetMapping("newAdminRegister")
-	public String newAdminRegister() {
+	@GetMapping("adminRegister")
+	public String adminRegister() {
 
-		return "admin/newAdminRegister";
+		return "admin/adminRegister";
 	}
 
 	/**

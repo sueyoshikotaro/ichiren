@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!--CSSリンク挿入欄-->
-	<link rel="stylesheet" href="../css/login.css" >
+	<link rel="stylesheet" th:href="@{/css/login.css}">
 
 </head>
 
@@ -16,18 +16,20 @@
 		<h2>ログイン画面</h2>
 
 		<!--入力情報(必須)-->
-		<form th:action="" method="post">
+		<form th:action="@{/taskdon/user/deptGroupList}" method="post">
 			<div class="form-group">
 				<label>ユーザID</label>
-				<input type="text" id="user_id" name="user_id" placeholder="[st]or[te]+8桁の英数字" th:value="${user_id}" required>
+				<input type="text" id="user_id" name="user_id" placeholder="例:st○○○○○○○○" th:value="${user_id}"
+					required>
 			</div>
 			<!--注釈文-->
-			<h4>※学生はst,管理者はte</h4>
-			
+			<h4>※学生(st+学籍番号),管理者(te+8桁の英数字)</h4>
 			<div class="form-group">
 				<label>パスワード</label>
-				<input type="password" id="user_pass" name="user_pass" placeholder="8桁以上,16桁未満の英数字" th:value="${user_pass}" required>
+				<input type="password" id="user_pass" name="user_pass" th:value="${user_pass}" required>
 			</div>
+			<!--注釈文-->
+			<h4>※8桁以上,16桁未満の英数字</h4>
 			<!--user_id等はDB設計に準拠-->
 
 			<div class="button-group">
@@ -54,7 +56,7 @@
 	</div>
 
 	<!--JavaScriptリンク挿入欄-->
-	<script src="../js/login.js"></script>
+	<script th:src="@{/js/login.js}"></script>
 
 </body>
 

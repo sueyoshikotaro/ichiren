@@ -1,4 +1,4 @@
-package com.example.demo.service.impl;
+/* SQL エラー  (1054): Unknown column 'te66667777' in 'where clause' *//* SQL エラー  (1054): Unknown column 'te66667777' in 'where clause' */package com.example.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

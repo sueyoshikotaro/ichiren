@@ -14,7 +14,7 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	 * 向江
 	 * ユーザ一覧表示
 	 */
-	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id")
+	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id where user_flg = 1")
 	public List<UserDisplay> userList();
 	
 	/*

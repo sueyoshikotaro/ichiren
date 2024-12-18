@@ -5,6 +5,11 @@
 <head>
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+
+
 </head>
 
 <body>
@@ -15,7 +20,7 @@
 
 		<p>削除確認メッセージ</p>
 
-		<form th:action="@{userDelete}" method="post">
+		<form th:action="@{userDeleteConfirm}" method="post">
 			<!--		<div th:object="${user}">-->
 			<table border="1">
 
@@ -43,7 +48,9 @@
 					<th>入学年度</th>
 					<td th:text="${user.enr_year}"></td>
 				</tr>
+
 			</table>
+
 			<br>
 
 			<tr>
@@ -54,6 +61,7 @@
 			</tr>
 			<br>
 			<br>
+
 			<tr>
 				<td colspan="2" align="center">
 					<input type="submit" value="削除">
@@ -61,8 +69,33 @@
 			</tr>
 
 
+			<!--			 ユーザ削除確認画面での完了のポップアップ -->
+			<!--			<p><button href="#" class="btn btn-link popup-link">削除</button></p>-->
+			<!--			<div class="popup" style="display: none;">-->
+			<!--				<div class="popup-content">-->
+			<!--					<span class="close">&times;</span>-->
+			<!--					<p>ユーザは削除されました</p>-->
+			<!--					<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a><br>-->
+			<!--				</div>-->
+			<!--			</div>-->
+
+			<!--			 JavaScriptリンク挿入欄 -->
+			<!--			<script src="../js/userDeleteConfirm.js"></script>-->
+
+
+			<input type="hidden" name="user_id" th:value="${user.user_id}">
+			<input type="hidden" name="user_name" th:value="${user.user_name}">
+			<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+			<input type="hidden" name="school_name" th:value="${user.school_name}">
+			<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+			<input type="hidden" name="user_flg" th:value="${user.user_flg}">
 
 		</form>
+		
+		
+		
+		<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a>
+
 	</center>
 </body>
 

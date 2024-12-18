@@ -15,38 +15,41 @@
 			<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
 		</tr><br>
 
-		<!--教室情報一覧表示-->
-		<table border="1">
-			<tr>
-				<th></th>
-				<th>教室名</th>
-				<th>建物</th>
-				<th>階層</th>
-				<th>PC</th>
-			</tr>
-			<tr th:each="schoolDetails : ${schoolS}">
-				<td><input type="checkbox" id="check1" /></td>
+		<form th:action="@{sort}" method="post">
+			<!--教室情報一覧表示-->
+			<table border="1">
+				<tr>
+					<th></th>
+					<th>教室名▼</th>
+					<th>建物</th>
+					<th>階層</th>
+					<th>PC▼</th>
+				</tr>
+				<tr th:each="schoolDetails : ${schoolS}">
+					<td><input type="checkbox" id="check1" /></td>
 
-				<td th:text="${schoolDetails.room_name}"></td>
-				<td th:text="${schoolDetails.hall}"></td>
-				<td th:text="${schoolDetails.floor}"></td>
-				<td th:if="${schoolDetails.pc_flg == 1}">有</td>
-				<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
-			</tr>
-		</table><br>
-		
-		
-<!--		<form name="form1" th:action="@{schoolDetails}" method="get">-->
-<!--			<button type="submit">編集</button><br>-->
-<!--		</form>-->
+					<td th:text="${schoolDetails.room_name}"></td>
+					<td th:text="${schoolDetails.hall}"></td>
+					<td th:text="${schoolDetails.floor}"></td>
+					<td th:if="${schoolDetails.pc_flg == 1}">有</td>
+					<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
+				</tr>
+			</table><br>
+		</form>
 
-<!--		<form name="form1" th:action="@{schoolDetails}" method="get">-->
-<!--			<button type="submit">追加</button><br>-->
-<!--		</form>-->
 
-<!--		<form name="form1" th:action="@{/nextpage}" method="get">-->
-<!--			<button type="submit">削除</button><br>-->
-<!--		</form>-->
+
+		<!--		<form name="form1" th:action="@{schoolDetails}" method="get">-->
+		<!--			<button type="submit">編集</button><br>-->
+		<!--		</form>-->
+
+		<!--		<form name="form1" th:action="@{schoolDetails}" method="get">-->
+		<!--			<button type="submit">追加</button><br>-->
+		<!--		</form>-->
+
+		<!--		<form name="form1" th:action="@{/nextpage}" method="get">-->
+		<!--			<button type="submit">削除</button><br>-->
+		<!--		</form>-->
 	</center>
 </body>
 
