@@ -102,10 +102,7 @@ public class AdminCtrl {
 		return mav;
 
 	}
-	
-	
-	
-	
+
 	/*
 	 * 向江
 	 * ユーザ削除確認画面を表示するリクエストハンドラメソッド
@@ -113,35 +110,63 @@ public class AdminCtrl {
 	 */
 	@PostMapping("userDelete")
 	public ModelAndView userDelete(UserDisplay u, ModelAndView mav) {
-		
-		
+
 		// サービスのメソッドを呼び出す
-		
-		
+		//				userDisplayService.DeleteUser(u.getUser_id());
+
 		mav.addObject("user", u);
 		mav.setViewName("admin/userDeleteConfirm");
-		
+
 		return mav;
 	}
 
-	
+	/*
+	 * 向江
+	 * ユーザ削除完了画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("userDeleteConfirm")
+	public ModelAndView userDeleteConfirm(UserDisplay u, ModelAndView mav) {
+
+		// サービスのメソッドを呼び出す
+		userDisplayService.DeleteUser(u.getUser_id());
+
+		mav.setViewName("admin/userUpdateComp");
+
+		return mav;
+	}
+
 	/*
 	 * 向江
 	 * パスワード初期化確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
 	@PostMapping("passClear")
-	public ModelAndView passClear(UserDisplay u,ModelAndView mav) {
-		
-		
+	public ModelAndView passClear(UserDisplay u, ModelAndView mav) {
+
 		mav.addObject("user",u);
 		mav.setViewName("admin/passClear");
-		
+
 		return mav;
 	}
-	
-	
-	
+
+	/*
+	 * 向江
+	 * パスワード初期化完了後の画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("passClearConfirm")
+	public ModelAndView passClearConfirm(UserDisplay u, ModelAndView mav) {
+
+		// サービスのメソッドを呼び出す
+		userDisplayService.PassReset(u.getUser_id());
+
+		//mav.addObject("user",u);
+		mav.setViewName("admin/userUpdateComp");
+
+		return mav;
+	}
+
 	/**
 	 * グループ一覧画面を表示する
 	 * @return

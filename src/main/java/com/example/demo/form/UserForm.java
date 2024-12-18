@@ -13,6 +13,6 @@ public class UserForm {
 	private String user_pass;
 	private String school_id;
 	private String enr_year;
-	private String user_flg;
+	private int user_flg;
  
 }
