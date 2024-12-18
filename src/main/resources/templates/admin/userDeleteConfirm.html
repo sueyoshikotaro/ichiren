@@ -4,20 +4,21 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>タスクどん_ユーザ削除</title>
+	<title>タスクどん</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!--CSSリンク挿入欄-->
-	<link rel="stylesheet" href="../../static/css/userDelete.css">
-
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+
+
 </head>
 
 <body>
-	<div class="userDelete_container">
-		<h2>ユーザ削除確認</h2>
 
-		<p>削除しても大丈夫ですか？</p>
+	<center>
+		<h1>タスクどん</h1><br>
+		<h2>ユーザ削除確認画面</h2><br>
+
+		<p>削除確認メッセージ</p>
 
 		<form th:action="@{userDeleteConfirm}" method="post">
 			<!--		<div th:object="${user}">-->
@@ -57,22 +58,30 @@
 				<td>
 					<input type="checkbox">
 				</td>
-			</tr><br>
+			</tr>
+			<br>
+			<br>
 
 			<tr>
 				<td colspan="2" align="center">
-					<input type="submit" value="削除" class="popup-link">
+					<input type="submit" value="削除">
 				</td>
 			</tr>
 
-			<!--ポップアップ-->
-			<div class="popup" style="display: none;">
-				<div class="popup-content">
-					<!-- ここにポップアップの中身を入力します -->
-					<p>ユーザは削除されました</p>
-					<button th:href="@{/taskdon/admin/userList}">ユーザ一覧</button><br>
-				</div>
-			</div>
+
+			<!--			 ユーザ削除確認画面での完了のポップアップ -->
+			<!--			<p><button href="#" class="btn btn-link popup-link">削除</button></p>-->
+			<!--			<div class="popup" style="display: none;">-->
+			<!--				<div class="popup-content">-->
+			<!--					<span class="close">&times;</span>-->
+			<!--					<p>ユーザは削除されました</p>-->
+			<!--					<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a><br>-->
+			<!--				</div>-->
+			<!--			</div>-->
+
+			<!--			 JavaScriptリンク挿入欄 -->
+			<!--			<script src="../js/userDeleteConfirm.js"></script>-->
+
 
 			<input type="hidden" name="user_id" th:value="${user.user_id}">
 			<input type="hidden" name="user_name" th:value="${user.user_name}">
@@ -82,11 +91,12 @@
 			<input type="hidden" name="user_flg" th:value="${user.user_flg}">
 
 		</form>
-	</div>
+		
+		
+		
+		<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a>
 
-	<!--JavaScriptリンク挿入欄-->
-	<script src="../../static/js/userDelete.js"></script>
-	
+	</center>
 </body>
 
 </html>
