@@ -15,17 +15,6 @@
 	margin-bottom: 20px;
 }
 
-.manage_container h4 {
-	text-align: left;
-	margin-top: -20px;
-	font-size: 14px;
-	color: #666;
-}
-
-.manage_container h3 {
-	text-align: center;
-}
-
 /* 入力欄 */
 .form-group {
 	margin-bottom: 20px;
@@ -55,7 +44,7 @@
 
 .back-button {
 	padding: 10px 20px;
-	background-color: crimson;
+	background-color:crimson;
 	color: #fff;
 	border: none;
 	border-radius: 5px;
@@ -64,12 +53,12 @@
 }
 
 .back-button:hover {
-	background-color: darkred;
+	background-color:darkred;
 }
 
 .confirm-button {
 	padding: 10px 20px;
-	background-color: blue;
+	background-color:blue;
 	color: #fff;
 	border: none;
 	border-radius: 5px;
@@ -78,33 +67,5 @@
 }
 
 .confirm-button:hover {
-	background-color: darkblue;
-}
-
-.decision-button {
-	padding: 10px 20px;
-	background-color: blue;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-}
-
-.decision-button:hover{
-	background-color: darkblue;
-}
-
-.login-back-button{
-	padding: 10px 20px;
-		background-color: blue;
-		color: #fff;
-		border: none;
-		border-radius: 5px;
-		cursor: pointer;
-		transition: background-color 0.3s ease;
-}
-
-.login-back-button:hover{
-	background-color: darkblue;
+	background-color:darkblue;
 }
