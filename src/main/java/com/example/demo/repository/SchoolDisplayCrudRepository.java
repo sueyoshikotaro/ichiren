@@ -13,6 +13,6 @@ public interface SchoolDisplayCrudRepository extends CrudRepository<SchoolDispla
 	 * 末吉
 	 * 学校情報詳細
 	 */
-	@Query("select * from school inner join room on school.school_id = room.school_id")
+	@Query("select * from school inner join room on school.school_id = room.school_id order by room.room_name Desc")
 	public List<SchoolDisplay> selectSchoolDetails();
 }
