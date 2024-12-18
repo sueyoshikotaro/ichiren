@@ -23,5 +23,19 @@ public class TaskServiceImpl implements TaskServiceInterface {
 		return repo.selectTask();
 	}
 
+	@Override
+	public void taskRegister(Task task) {
+		repo.registerTask(task);
+	}
+
+	@Override
+	public List<Task> taskUserSearch(String user_id) {
+		
+		repo.selectTaskByUser(user_id);
+		return null;
+	}
+	
+	
+
 	
 }
