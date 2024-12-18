@@ -12,5 +12,5 @@ public interface TaskServiceInterface {
 	public void taskRegister(Task task);
 		
 	//タスク担当者検索
-	public List<Task> taskUserSearch(String user_id);
+	public Iterable<Task> taskUserSearch();
 }

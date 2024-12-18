@@ -3,6 +3,8 @@ package com.example.demo.controll;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -13,10 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
+import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.TaskServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -146,14 +147,24 @@ public class UserCtrl {
 	 */
 	@GetMapping("taskRegister")
 	public ModelAndView taskRegister(ModelAndView mav) {
-		String user_id = (String) session.getAttribute("user_id");
-		System.out.println(session.getAttribute("user_id"));
-		List<Task> taskUser = TaskService.taskUserSearch(user_id);
+		Iterable<Task> taskUser = TaskService.taskUserSearch();
+//		System.out.println(taskUser);
 		mav.addObject("taskuser", taskUser);
 		
-		System.out.println(taskUser);
-		mav.setViewName("leader/taskRegister");
+//		System.out.println(taskUser);
+		mav.setViewName("leader/taskRegist");
 		return mav;
 	}
-
+	
+	/**
+	 * タスク登録確認画面を表示するリクエストハンドラメソッド
+	 */
+	public ModelAndView taskRegisterConfirm(TaskForm t, ModelAndView mav) {
+		
+		mav.addObject("tasks", t);
+		mav.setViewName("leader/taskRegistConfirm");
+		return mav;
+	}
+	
+	
 }
