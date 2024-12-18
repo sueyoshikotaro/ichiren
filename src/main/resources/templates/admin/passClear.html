@@ -5,17 +5,18 @@
 <head>
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
 
 	<center>
 		<h1>タスクどん</h1><br>
-		<h2>ユーザ初期化確認画面</h2><br>
+		<h2>パスワード初期化確認画面</h2><br>
 
 		<p>確認メッセージ</p>
 
-		<form th:action="@{passClear}" method="post">
+		<form th:action="@{passClearConfirm}" method="post">
 			<!--		<div th:object="${user}">-->
 			<table border="1">
 
@@ -27,24 +28,13 @@
 					<th>ユーザID</th>
 					<td th:text="${user.user_id}"></td>
 				</tr>
-				<tr>
-					<th>ユーザ名</th>
-					<td th:text="${user.user_name}"></td>
-				</tr>
+
 				<tr>
 					<th>パスワード</th>
 					<td th:text="${user.user_pass}"></td>
 				</tr>
-				<tr>
-					<th>所属学校</th>
-					<td th:text="${user.school_name}"></td>
-				</tr>
-				<tr>
-					<th>入学年度</th>
-					<td th:text="${user.enr_year}"></td>
-				</tr>
-			</table>
 
+			</table>
 
 			<br>
 			<br>
@@ -54,6 +44,12 @@
 				</td>
 			</tr>
 
+			<input type="hidden" name="user_id" th:value="${user.user_id}">
+			<input type="hidden" name="user_name" th:value="${user.user_name}">
+			<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+			<input type="hidden" name="school_name" th:value="${user.school_name}">
+			<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+			<input type="hidden" name="user_flg" th:value="${user.user_flg}">
 
 		</form>
 	</center>
