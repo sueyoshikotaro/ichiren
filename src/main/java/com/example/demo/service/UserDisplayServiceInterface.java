@@ -12,4 +12,6 @@ public interface UserDisplayServiceInterface {
 	
 	// パスワード初期化
 	public void PassReset(String user_id);
+
+	
 }
