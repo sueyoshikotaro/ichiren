@@ -86,26 +86,33 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolDetailsChange")
-	public ModelAndView schoolDetails(@RequestParam("checkList") List<String> checkList,
-			@RequestParam("button") String button, SchoolDisplay schoolDisplay, ModelAndView mav) {
-		
-		System.out.println(schoolDisplay);
-//		// チェックボックスの値を処理する
-//		if (button.equals("edit")) {
-//			
-//			List<SchoolDisplay> SchoolDetailsEdit = schoolDisplayService.SchoolDetailsEdit(checkList);
-//			
-//			
-//			mav.addObject("checkList", checkList);
-//			mav.setViewName("SchoolDetailsEdit");
-//			
-//			return mav;
-//		} else if (button.equals("add")) {
-//			return mav;
-//		} else {
-//			return mav;
+//	public ModelAndView schoolDetails(@RequestParam("checkList") List<String> checkList,
+//			@RequestParam("button") String button, SchoolDisplay schoolDisplay, ModelAndView mav) {
+//		
+//		for(String a : checkList) {
+//			System.out.println(a);
 //		}
-		return null;
+//		return null;
+//	}
+	public ModelAndView schoolDetailsChange(@RequestParam("checkList") List<String> checkList, @RequestParam("button") String button, ModelAndView mav) {
+		
+		if(button.equals("edit")) {
+			mav.addObject("schoolS", checkList);
+			mav.setViewName("admin/schoolDetails");
+			
+			return mav;
+		} else if(button.equals("add")) {
+			mav.addObject("schoolAdd", checkList);
+			mav.setViewName("admin/addSchoolDetails");
+			
+			return mav;
+		} else {
+			mav.addObject("schoolEdit", checkList);
+			mav.setViewName("admin/deleteSchoolDetails");
+			
+			return mav;
+		}
+		
 	}
 
 	/*

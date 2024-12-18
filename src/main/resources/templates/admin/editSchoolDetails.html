@@ -8,7 +8,7 @@
 
 <body>
 	<center>
-		<h1>学校情報詳細</h1><br>
+		<h1>学校情報編集</h1><br>
 
 		<tr th:each="schoolDetails : ${schoolS}" th:if="${schoolDetailsStat.index == 0}">
 			<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
@@ -25,7 +25,7 @@
 					<th>階層</th>
 					<th>PC▼</th>
 				</tr>
-				<tr th:each="schoolDetails : ${schoolS}">
+				<tr th:each="schoolDetails : ${schoolEdit}">
 					<td><input type="checkbox" name="checkList" th:value="${schoolDetails}" id="check1" /></td>
 
 					<td th:text="${schoolDetails.room_name}"></td>
@@ -35,9 +35,6 @@
 					<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
 				</tr>
 			</table><br>
-			<button type="submit" name="button" value="edit">編集</button>
-			<button type="submit" name="button" value="add">追加</button>
-			<button type="submit" name="button" value="delete">削除</button>
 		</form>
 	</center>
 </body>
