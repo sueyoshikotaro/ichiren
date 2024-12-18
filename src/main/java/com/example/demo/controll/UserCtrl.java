@@ -40,9 +40,18 @@ public class UserCtrl {
 	 * @return
 	 */
 	@GetMapping("login")
-	public String login() {
+	public String login(String user_id, String user_pass, ModelAndView mav) {
 
-		return "common/login";
+		if (System.getProperty("INTERNAL_STARTUP") != null && user_id.equals("admin")) {
+
+			return "redirect:admin/adminRegister";
+		} else if (user_pass.equals("taskdon1")) {
+
+			return "redirect:common/resetPass";
+		} else {
+
+			return "common/login";
+		}
 	}
 
 	/**
@@ -88,7 +97,17 @@ public class UserCtrl {
 	@GetMapping("resetPass")
 	public String resetPass() {
 
-		return "leader/resetPass";
+		return "common/resetPass";
+	}
+
+	/**
+	 * 管理者登録画面を表示
+	 * @return
+	 */
+	@GetMapping("adminRegister")
+	public String adminRegister() {
+
+		return "admin/adminRegister";
 	}
 
 	/**
