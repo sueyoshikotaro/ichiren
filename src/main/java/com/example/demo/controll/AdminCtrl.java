@@ -31,7 +31,7 @@ public class AdminCtrl {
 	@Autowired
 	@Qualifier("schoolService")
 	SchoolServiceInterface schoolS;
-	
+
 	@Autowired
 	@Qualifier("userListService")
 	UserServiceInterface userListService;
@@ -39,12 +39,11 @@ public class AdminCtrl {
 	@Autowired
 	@Qualifier("schoolDisplayService")
 	SchoolDisplayServiceInterface schoolDisplayService;
-	
+
 	@Autowired
 	@Qualifier("userDisplayImpl")
 	UserDisplayServiceInterface userDisplayService;
-	
-	
+
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -64,7 +63,6 @@ public class AdminCtrl {
 		return "admin/menu";
 	}
 
-	
 	/**
 	 * 末吉
 	 * 学校情報詳細画面を表示する
@@ -72,7 +70,6 @@ public class AdminCtrl {
 	 */
 	@GetMapping("schoolDetails")
 	public ModelAndView schoolDetails(ModelAndView mav) {
-
 		//schoolS.schoolDateils();
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
@@ -81,8 +78,8 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
-	
+
+
 	/*
 	 * 向江さん
 	 * ユーザ一覧のリクエストハンドラメソッド
@@ -102,9 +99,9 @@ public class AdminCtrl {
 
 		mav.addObject("users", userList);
 		mav.setViewName("admin/userList");
-		
+
 		System.out.println(userList);
-		
+
 		//System.out.println(userList.toString());
 
 		return mav;
@@ -112,8 +109,7 @@ public class AdminCtrl {
 		//return "admin/UserList";
 
 	}
-	
-	
+
 	/*
 	 * 向江
 	 * ユーザ詳細を表示するリクエストハンドラメソッド
@@ -122,15 +118,13 @@ public class AdminCtrl {
 	@PostMapping("userDetail")
 	public ModelAndView userDetail(UserForm u, ModelAndView mav) {
 		System.out.println("konnitihasiru");
-		
+
 		mav.addObject("user", u);
 		mav.setViewName("admin/userDetail");
-		
- 
+
 		return mav;
-	
+
 	}
-	
 
 	/**
 	 * グループ一覧画面を表示する
