@@ -14,10 +14,10 @@
 		<table border="1">
 			<tbody>
 				<tr th:each="task : ${tasks}">
-					<td th:text="${task.taskName}"></td>
-					<td th:text="'優先度：'+${task.taskPriority}"></td>
-					<td th:text="${task.taskStatus}"></td>
-					<td th:text="${task.endDate}"></td>
+					<td th:text="${task.task_name}"></td>
+					<td th:text="'優先度：'+${task.task_priority}"></td>
+					<td th:text="${task.task_status}"></td>
+					<td th:text="${task.end_date}"></td>
 					<td th:text="'進捗' + ${task.progress} + '％'"></td>
 					<td>
 						<form th:action="@{userDetail}" method="post">
@@ -25,13 +25,11 @@
 							<input type="submit" value="詳細">
 						</form>
 					</td>
-
-
 				</tr>
-
 			</tbody>
 
 		</table>
+		<button th:onclick="|location.href='@{taskRegister}'|">登録</button>
 	</center>
 </body>
 

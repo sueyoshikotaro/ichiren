@@ -64,7 +64,6 @@ public class UserCtrl {
 		Optional<User> user;
 
 		//flg = userCrudRepo.existsById(user_id);
-
 		user = userCrudRepo.findById(user_id);
 
 		if (user.get().getUser_id().equals(user_id)) {
@@ -86,7 +85,7 @@ public class UserCtrl {
 	 */
 	@GetMapping("deptGroupList")
 	public String deptGroupList() {
-
+    
 		return "common/deptGroupList";
 	}
 
@@ -123,4 +122,22 @@ public class UserCtrl {
 		mav.setViewName("leader/taskList");
 		return mav;
 	}
+
+	/**
+	 * タスク登録画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @return
+	 */
+	@GetMapping("taskRegister")
+	public ModelAndView taskRegister(ModelAndView mav) {
+		String user_id = (String) session.getAttribute("user_id");
+		System.out.println(session.getAttribute("user_id"));
+		List<Task> taskUser = TaskService.taskUserSearch(user_id);
+		mav.addObject("taskuser", taskUser);
+		
+		System.out.println(taskUser);
+		mav.setViewName("leader/taskRegister");
+		return mav;
+	}
+
 }
