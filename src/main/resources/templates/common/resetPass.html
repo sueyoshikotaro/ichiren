@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん_パスワード再設定</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+	<form th:action=@{}>
+		<div class="">
+			<lavel>新パスワード</lavel>
+			<input type="text" id="" name="" required>
+		</div>
+		<div class="">
+			<lavel>新パスワード（確認用）</lavel>
+			<input type="text" id="" name="" required>
+		</div>
+		<a href="#" class="popup-link">確認</a>
+		<div class="popup" style="display: none;">
+			<div class="popup-content">
+				<span class="close">&times;</span>
+				<h3>パスワード再設定確認</h3>
+			</div>
+		</div>
+	</form>
+</body>
+
+</html>

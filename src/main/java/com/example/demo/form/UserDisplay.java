@@ -17,4 +17,5 @@ public class UserDisplay {
 	private String user_pass;
 	private String school_name;
 	private String enr_year;
+	private int user_flg;
 }

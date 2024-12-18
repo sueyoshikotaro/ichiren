@@ -1,0 +1,58 @@
+<!-- 向江 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+	<center>
+		<h1>タスクどん</h1><br>
+		<h2>パスワード初期化確認画面</h2><br>
+
+		<p>確認メッセージ</p>
+
+		<form th:action="@{passClearConfirm}" method="post">
+			<!--		<div th:object="${user}">-->
+			<table border="1">
+
+				<tr>
+					<th>項目</th>
+					<th>内容</th>
+				</tr>
+				<tr>
+					<th>ユーザID</th>
+					<td th:text="${user.user_id}"></td>
+				</tr>
+
+				<tr>
+					<th>パスワード</th>
+					<td th:text="${user.user_pass}"></td>
+				</tr>
+
+			</table>
+
+			<br>
+			<br>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="submit" value="初期化">
+				</td>
+			</tr>
+
+			<input type="hidden" name="user_id" th:value="${user.user_id}">
+			<input type="hidden" name="user_name" th:value="${user.user_name}">
+			<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+			<input type="hidden" name="school_name" th:value="${user.school_name}">
+			<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+			<input type="hidden" name="user_flg" th:value="${user.user_flg}">
+
+		</form>
+	</center>
+</body>
+
+</html>

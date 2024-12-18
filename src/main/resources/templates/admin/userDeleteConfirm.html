@@ -1,0 +1,102 @@
+<!-- 向江 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+
+
+</head>
+
+<body>
+
+	<center>
+		<h1>タスクどん</h1><br>
+		<h2>ユーザ削除確認画面</h2><br>
+
+		<p>削除確認メッセージ</p>
+
+		<form th:action="@{userDeleteConfirm}" method="post">
+			<!--		<div th:object="${user}">-->
+			<table border="1">
+
+				<tr>
+					<th>項目</th>
+					<th>内容</th>
+				</tr>
+				<tr>
+					<th>ユーザID</th>
+					<td th:text="${user.user_id}"></td>
+				</tr>
+				<tr>
+					<th>ユーザ名</th>
+					<td th:text="${user.user_name}"></td>
+				</tr>
+				<tr>
+					<th>パスワード</th>
+					<td th:text="${user.user_pass}"></td>
+				</tr>
+				<tr>
+					<th>所属学校</th>
+					<td th:text="${user.school_name}"></td>
+				</tr>
+				<tr>
+					<th>入学年度</th>
+					<td th:text="${user.enr_year}"></td>
+				</tr>
+
+			</table>
+
+			<br>
+
+			<tr>
+				<th colspan>一度ユーザを削除すると元には戻せません</th>
+				<td>
+					<input type="checkbox">
+				</td>
+			</tr>
+			<br>
+			<br>
+
+			<tr>
+				<td colspan="2" align="center">
+					<input type="submit" value="削除">
+				</td>
+			</tr>
+
+
+			<!--			 ユーザ削除確認画面での完了のポップアップ -->
+			<!--			<p><button href="#" class="btn btn-link popup-link">削除</button></p>-->
+			<!--			<div class="popup" style="display: none;">-->
+			<!--				<div class="popup-content">-->
+			<!--					<span class="close">&times;</span>-->
+			<!--					<p>ユーザは削除されました</p>-->
+			<!--					<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a><br>-->
+			<!--				</div>-->
+			<!--			</div>-->
+
+			<!--			 JavaScriptリンク挿入欄 -->
+			<!--			<script src="../js/userDeleteConfirm.js"></script>-->
+
+
+			<input type="hidden" name="user_id" th:value="${user.user_id}">
+			<input type="hidden" name="user_name" th:value="${user.user_name}">
+			<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+			<input type="hidden" name="school_name" th:value="${user.school_name}">
+			<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+			<input type="hidden" name="user_flg" th:value="${user.user_flg}">
+
+		</form>
+		
+		
+		
+		<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a>
+
+	</center>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>タスクどん_新規登録[管理者]</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!--CSSリンク挿入欄-->
+	<link rel="stylesheet" href="../css/adminRegist.css">
+
+</head>
+
+<body>
+	<!--コンテナ(デザイン情報)-->
+	<div class="manage_container">
+		<h2>新規管理者登録</h2>
+
+		<!--入力(必須)+押下-->
+		<form th:action="" method="post">
+			<div class="form-group">
+				<label>管理者ID</label>
+				<input type="text" id="user_id" name="user_id" placeholder="te+8桁の英数字" th:value="${user_id}" required>
+			</div>
+			<div class="form-group">
+				<label>学校ID</label>
+				<input type="text" id="school_abb" name="school_abb" placeholder="例:KCSKA" th:value="${school_abb}" required>
+			</div>
+			<div class="form-group">
+				<label>学校名</label>
+				<input type="text" id="school_name" name="school_name" th:value="${school_name}" readonly>
+			</div>
+			<div class="form-group">
+				<label>パスワード</label>
+				<input type="password" id="user_pass" name="user_pass" th:value="${user_pass}" required>
+			</div>
+			<!--user_id,school_id,school_name,admin_passはDB設計に準拠-->
+
+			<div class="form-group">
+				<label>パスワード(確認用)</label>
+				<input type="password" id="user_pass_confirm" name="user_pass_confirm" th:value="${user_pass_confirm}"
+					required>
+			</div>
+			<div class="button-group">
+				<button type="button" class="back-button">戻る</button>
+				<button type="submit" class="confirm-button">確認</button>
+			</div>
+		</form>
+	</div>
+
+	<!--JavaScriptリンク挿入欄-->
+	<script th:src=""></script>
+
+</body>
+
+</html>
