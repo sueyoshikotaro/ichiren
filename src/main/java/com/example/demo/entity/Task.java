@@ -25,4 +25,6 @@ public class Task {
 	private boolean task_flg;
 	private String user_id;
 	private int group_id;
+	
+	private String user_name;
 }

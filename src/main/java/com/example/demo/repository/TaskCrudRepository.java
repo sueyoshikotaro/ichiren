@@ -30,7 +30,7 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 */
 	@Query("select user.user_name from teams inner join user_detail on teams.group_id = user_detail.group_id "
 			+ "inner join user on user.user_id = user_detail.user_id where user_detail.group_id=1;")
-	public List<Task> selectTaskByUser(String user_id);
+	public Iterable<Task> selectTaskByUser();
 
 	/**
 	 * 湊原

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスク登録</title>
+</head>
+
+<body>
+	<center>
+		<h1>タスクどん</h1><br>
+		<h2>タスク登録確認画面</h2><br>
+		<table border="1">
+			<tbody>
+				<tr th:each="task : ${tasks}">
+					<td th:text="${task.task_name}"></td>
+					<td th:text="'優先度：'+${task.task_priority}"></td>
+					<td th:text="${task.task_status}"></td>
+					<td th:text="${task.end_date}"></td>
+					<td th:text="'進捗' + ${task.progress} + '％'"></td>
+					<td>
+						<form th:action="@{userDetail}" method="post">
+							<input type="hidden" name="task_id" th:value="${task.task_id}">
+							<input type="submit" value="詳細">
+						</form>
+					</td>
+				</tr>
+			</tbody>
+
+		</table>
+		<button th:onclick="|location.href='@{taskRegister}'|">登録</button>
+	</center>
+</body>
+
+</html>

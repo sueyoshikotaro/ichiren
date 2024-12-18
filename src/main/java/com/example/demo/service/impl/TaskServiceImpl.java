@@ -12,14 +12,14 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	//湊原
 	@Autowired
 	TaskCrudRepository repo;
-	
+
 	/**
 	 * 湊原
 	 * タスク一覧表示
 	 */
 	@Override
 	public List<Task> taskDisplayList() {
-		
+
 		return repo.selectTask();
 	}
 
@@ -29,13 +29,9 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	}
 
 	@Override
-	public List<Task> taskUserSearch(String user_id) {
-		
-		repo.selectTaskByUser(user_id);
-		return null;
+	public Iterable<Task> taskUserSearch() {
+//		
+		return repo.selectTaskByUser();
 	}
-	
-	
 
-	
 }
