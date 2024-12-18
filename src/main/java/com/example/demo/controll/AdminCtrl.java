@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.form.SchoolDisplay;
@@ -79,6 +80,34 @@ public class AdminCtrl {
 		return mav;
 	}
 
+	/**
+	 * 末吉
+	 * 学校情報編集画面を表示する
+	 * @return
+	 */
+	@PostMapping("schoolDetailsChange")
+	public ModelAndView schoolDetails(@RequestParam("checkList") List<String> checkList,
+			@RequestParam("button") String button, SchoolDisplay schoolDisplay, ModelAndView mav) {
+		
+		System.out.println(schoolDisplay);
+//		// チェックボックスの値を処理する
+//		if (button.equals("edit")) {
+//			
+//			List<SchoolDisplay> SchoolDetailsEdit = schoolDisplayService.SchoolDetailsEdit(checkList);
+//			
+//			
+//			mav.addObject("checkList", checkList);
+//			mav.setViewName("SchoolDetailsEdit");
+//			
+//			return mav;
+//		} else if (button.equals("add")) {
+//			return mav;
+//		} else {
+//			return mav;
+//		}
+		return null;
+	}
+
 	/*
 	 * 向江
 	 * ユーザ一覧のリクエストハンドラメソッド
@@ -116,7 +145,6 @@ public class AdminCtrl {
 
 		mav.addObject("user", u);
 		mav.setViewName("admin/userDeleteConfirm");
-
 		return mav;
 	}
 
@@ -132,7 +160,7 @@ public class AdminCtrl {
 		userDisplayService.DeleteUser(u.getUser_id());
 
 		mav.setViewName("admin/userUpdateComp");
-
+    
 		return mav;
 	}
 
@@ -143,7 +171,7 @@ public class AdminCtrl {
 	 */
 	@PostMapping("passClear")
 	public ModelAndView passClear(UserDisplay u, ModelAndView mav) {
-
+    
 		mav.addObject("user",u);
 		mav.setViewName("admin/passClear");
 
@@ -163,7 +191,7 @@ public class AdminCtrl {
 
 		//mav.addObject("user",u);
 		mav.setViewName("admin/userUpdateComp");
-
+    
 		return mav;
 	}
 
