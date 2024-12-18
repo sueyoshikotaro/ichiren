@@ -12,16 +12,26 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	//湊原
 	@Autowired
 	TaskCrudRepository repo;
-	
+
 	/**
 	 * 湊原
 	 * タスク一覧表示
 	 */
 	@Override
 	public List<Task> taskDisplayList() {
-		
+
 		return repo.selectTask();
 	}
 
-	
+	@Override
+	public void taskRegister(Task task) {
+		repo.registerTask(task);
+	}
+
+	@Override
+	public Iterable<Task> taskUserSearch() {
+//		
+		return repo.selectTaskByUser();
+	}
+
 }
