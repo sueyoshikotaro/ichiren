@@ -18,7 +18,7 @@
 		<h1>タスクどん</h1><br>
 		<h2>ユーザ削除確認画面</h2><br>
 
-		<p>削除確認メッセージ</p>
+		<p>本当にこのユーザを削除しますか？</p>
 
 		<form th:action="@{userDeleteConfirm}" method="post">
 			<!--		<div th:object="${user}">-->
@@ -54,7 +54,9 @@
 			<br>
 
 			<tr>
-				<th colspan>一度ユーザを削除すると元には戻せません</th>
+
+				<th>一度ユーザを削除すると元には戻せません</th>
+
 				<td>
 					<input type="checkbox">
 				</td>
@@ -67,7 +69,8 @@
 					<input type="submit" value="削除">
 				</td>
 			</tr>
-
+			<br>
+			<br>
 
 			<!--			 ユーザ削除確認画面での完了のポップアップ -->
 			<!--			<p><button href="#" class="btn btn-link popup-link">削除</button></p>-->
@@ -91,10 +94,19 @@
 			<input type="hidden" name="user_flg" th:value="${user.user_flg}">
 
 		</form>
+
+
+<!--		 ポップアップ -->
+<!--		<div id="popup" class="popup">-->
+<!--			<div class="popup-content" style="display: none;">-->
+<!--				<p>ユーザ削除完了しました</p>-->
+<!--				<button id="userListBtn">ユーザ一覧</button>-->
+<!--			</div>-->
+<!--		</div>-->
 		
-		
-		
-		<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a>
+<!--		<script src="../js/userDeleteConfirm.js"></script>		-->
+
+<!--		<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a>-->
 
 	</center>
 </body>
