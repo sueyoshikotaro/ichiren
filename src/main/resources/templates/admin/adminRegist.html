@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!--CSSリンク挿入欄-->
-	<link rel="stylesheet" href="../css/adminRegist.css">
+	<link rel="stylesheet" th:href="@{/css/adminRegist.css}">
 
 </head>
 
@@ -15,40 +15,43 @@
 	<div class="manage_container">
 		<h2>新規管理者登録</h2>
 
-		<!--入力(必須)+押下-->
 		<form th:action="" method="post">
 			<div class="form-group">
 				<label>管理者ID</label>
-				<input type="text" id="user_id" name="user_id" placeholder="te+8桁の英数字" th:value="${user_id}" required>
+				<input type="text" id="user_id" name="user_id" placeholder="例:te○○○○○○○○" th:value="" required>
 			</div>
+			<!--注釈文-->
+			<h4>※te+8桁の英数字</h4>
+
 			<div class="form-group">
 				<label>学校ID</label>
-				<input type="text" id="school_abb" name="school_abb" placeholder="例:KCSKA" th:value="${school_abb}" required>
+				<input type="text" id="school_abb" name="school_abb" placeholder="例:KCSKA" th:value="" required>
 			</div>
 			<div class="form-group">
 				<label>学校名</label>
-				<input type="text" id="school_name" name="school_name" th:value="${school_name}" readonly>
+				<input type="text" id="school_name" name="school_name" placeholder="※学校ID入力後に,自動入力されます" th:value=""
+					readonly>
 			</div>
 			<div class="form-group">
 				<label>パスワード</label>
-				<input type="password" id="user_pass" name="user_pass" th:value="${user_pass}" required>
+				<input type="password" id="user_pass" name="user_pass" th:value="" required>
 			</div>
-			<!--user_id,school_id,school_name,admin_passはDB設計に準拠-->
+			<!--注釈文-->
+			<h4>※8桁以上,16桁未満の英数字</h4>
 
 			<div class="form-group">
 				<label>パスワード(確認用)</label>
-				<input type="password" id="user_pass_confirm" name="user_pass_confirm" th:value="${user_pass_confirm}"
-					required>
+				<input type="password" id="user_pass_confirm" name="user_pass_confirm" th:value="" required>
 			</div>
+			<!--注釈文-->
+			<h4>※8桁以上,16桁未満の英数字</h4>
+
 			<div class="button-group">
 				<button type="button" class="back-button">戻る</button>
 				<button type="submit" class="confirm-button">確認</button>
 			</div>
 		</form>
 	</div>
-
-	<!--JavaScriptリンク挿入欄-->
-	<script th:src=""></script>
 
 </body>
 

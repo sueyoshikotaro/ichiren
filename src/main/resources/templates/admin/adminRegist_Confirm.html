@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!--CSSリンク挿入欄-->
-	<link rel="stylesheet" href="">
+	<link rel="stylesheet" th:href="@{/css/adminRegist.css}">
 
 </head>
 
@@ -16,35 +16,31 @@
 		<h2>新規管理者登録</h2>
 
 		<h3 th:text="#{manage.confirm.question}">こちらの内容でよろしいですか？</h3>
-		<!--閲覧+押下-->
+		
 		<form th:action="" method="post">
 			<div class="form-group">
 				<label th:text="#{manage.admin_id}">管理者ID</label>
-				<input type="text" id="user_id" name="user_id" th:value="${user_id}" readonly>
+				<input type="text" id="user_id" name="user_id" th:value="" readonly>
 			</div>
 			<div class="form-group">
 				<label th:text="#{manage.school_abb}">学校ID</label>
-				<input type="text" id="school_id" name="school_id" th:value="${school_id}" readonly>
+				<input type="text" id="school_id" name="school_id" th:value="" readonly>
 			</div>
 			<div class="form-group">
 				<label th:text="#{manage.school_name}">学校名</label>
-				<input type="text" id="school_name" name="school_name" th:value="${school_name}" readonly>
+				<input type="text" id="school_name" name="school_name" th:value="" readonly>
 			</div>
 			<div class="form-group">
 				<label th:text="#{manage.admin_pass}">パスワード</label>
-				<input type="password" id="user_pass" name="user_pass" th:value="${user_pass}" readonly>
+				<input type="password" id="user_pass" name="user_pass" th:value="" readonly>
 			</div>
-			<!--admin_id,school_id,school_name,admin_passはDB設計に準拠-->
-
+			
 			<div class="button-group">
-				<button type="button" class="back-button" th:text="#{manage.back}">戻る</button>
-				<button type="submit" class="decision-button" th:text="#{manage.decision}">確定</button>
+				<button type="button" class="back-button">戻る</button>
+				<button type="submit" class="decision-button">確定</button>
 			</div>
 		</form>
 	</div>
-
-	<!--JavaScriptリンク挿入欄-->
-	<script th:src="@{/js/manage.js}"></script>
 
 </body>
 
