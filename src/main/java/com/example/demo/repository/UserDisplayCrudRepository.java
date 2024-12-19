@@ -39,7 +39,7 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	 * 講師情報登録用のSQL
 	 */
 	@Modifying
-	@Query("insert into user(user_id,user_name,user_pass,school_id,enr_year,user_flg) values(:user_id,:user_name,:user_pass,(select school_id from school where school_name = :school_name),:enr_year,1)")
-	public void teInfoRegist(String user_id, String user_name, String user_pass, String school_name, String enr_year);
+	@Query("insert into user(user_id,user_name,user_pass,school_id,enr_year,user_flg) values(:user_id,:user_name,'taskdon1',(select school_id from school where school_name = :school_name),:enr_year,1)")
+	public void teInfoRegist(String user_id, String user_name, String user_pass, String school_name, String enr_year, int user_flg);
 
 }

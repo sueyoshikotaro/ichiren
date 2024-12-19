@@ -1,0 +1,62 @@
+<!-- 向江 -->
+<!-- 新規講師登録機能 -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+</head>
+
+<body>
+	<center>
+		<h1>タスクどん</h1>
+		<h2>新規講師登録確認画面</h2>
+
+		<form th:action="@{teInfoRegistComp}" method="post">
+			<table>
+				<tr>
+					<th>講師ID</th>
+					<td th:text="${te.user_id}"></td>
+				</tr>
+				<tr>
+					<th>講師名</th>
+					<td th:text="${te.user_name}"></td>
+				</tr>
+
+				<tr>
+					<th>所属学校</th>
+					<td th:text="${te.school_name}"></td>
+				</tr>
+				<tr>
+					<th>入社年月日</th>
+					<td th:text="${te.enr_year}"></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="right">
+						<input type="submit" value="登録">
+					</td>
+				</tr>
+			</table>
+
+			<input type="hidden" name="user_id" th:value="${user.user_id}">
+			<input type="hidden" name="user_name" th:value="${user.user_name}">
+			<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+			<input type="hidden" name="school_name" th:value="${user.school_name}">
+			<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+			<input type="hidden" name="user_flg" th:value="${user.user_flg}">
+
+
+		</form>
+		<br>
+		<br>
+
+	</center>
+
+</body>
+
+</html>

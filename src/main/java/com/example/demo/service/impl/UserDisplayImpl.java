@@ -44,7 +44,7 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 	/*
 	 * 向江
-	 * 講師新規登録
+	 * 新規講師登録
 	 * 入力したIDの重複チェックを行う
 	 */
 	@Override
@@ -64,12 +64,32 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 	/*
 	 * 向江
-	 * 講師情報登録
+	 * パスワードと確認用パスワードのチェックを行う
 	 */
 	@Override
-	public void teInfoRegist(String user_id, String user_name, String user_pass, String school_name, String enr_year, int user_flg) {
+	public boolean userPassCheck(String user_pass, String user_rpass) {
 
-		userCrudRepo.teInfoRegist(user_id, user_name, user_pass, school_name, enr_year);
+		if (user_pass.equals(user_rpass)) {
+
+			return true;
+		} else {
+
+			return false;
+		}
+
 	}
+
+	/*
+	 * 向江
+	 * 新規講師登録
+	 * DBへ講師を登録する
+	 */
+	@Override
+	public void InsertTeach(String user_id, String user_name, String user_pass, String school_name, String enr_year, int user_flg) {
+		
+		userCrudRepo.teInfoRegist(user_id, user_name, user_pass, school_name, enr_year, user_flg);
+		
+	}
+
 
 }

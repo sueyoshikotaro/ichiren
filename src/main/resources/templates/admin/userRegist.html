@@ -1,0 +1,58 @@
+<!-- 向江 -->
+<!-- 新規ユーザ登録機能 -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+</head>
+
+<body>
+
+	<h1>タスクどん</h1>
+	<h2>新規ユーザ登録</h2>
+
+	<form th:action="@{teRegistConfirm}" method="post">
+		<table>
+			<tr>
+				<th>講師ID</th>
+				<td><input type="text" name="user_id" th:value="${user_id}" required></td>
+			</tr>
+			<tr>
+				<th>講師名</th>
+				<td><input type="text" name="user_name" th:value="${user_name}" required></td>
+			</tr>
+			<tr>
+				<th>パスワード</th>
+				<td><input type="password" name="user_pass" minlength="8" th:value="${user_pass}" required></td>
+			</tr>
+			<tr>
+				<th>確認用パスワード</th>
+				<td><input type="password" name="user_rpass" minlength="8" th:value="${user_rpass}" required></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right">
+					<input type="submit" value="確認">
+				</td>
+			</tr>
+
+		</table>
+
+
+		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;">エラーメッセージ</p>
+
+
+	</form>
+	<br>
+	<br>
+
+
+
+</body>
+
+</html>
