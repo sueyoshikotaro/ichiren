@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
 
 <head>
 	<title>タスクどん_新規登録[管理者]</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!--CSSリンク挿入欄-->
-	<link rel="stylesheet" href="../css/adminRegist.css">
+	<link rel="stylesheet" href="../../static/css/adminRegist.css">
 
 </head>
 
@@ -23,7 +24,8 @@
 			</div>
 			<div class="form-group">
 				<label>学校ID</label>
-				<input type="text" id="school_abb" name="school_abb" placeholder="例:KCSKA" th:value="${school_abb}" required>
+				<input type="text" id="school_abb" name="school_abb" placeholder="例:KCSKA" th:value="${school_abb}"
+					required>
 			</div>
 			<div class="form-group">
 				<label>学校名</label>

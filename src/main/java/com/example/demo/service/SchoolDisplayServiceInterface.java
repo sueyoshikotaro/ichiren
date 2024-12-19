@@ -7,4 +7,6 @@ import com.example.demo.form.SchoolDisplay;
 public interface SchoolDisplayServiceInterface {
 	
 	public List<SchoolDisplay> SchoolDetails();
+
+	public List<SchoolDisplay> EditSchoolDetails(String room_id);
 }
