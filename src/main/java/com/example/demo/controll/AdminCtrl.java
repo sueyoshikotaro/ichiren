@@ -227,14 +227,16 @@ public class AdminCtrl {
 
 		if (userDisplayService.userIDCheck(u.getUser_id())) {
 			
-			mav.setViewName("teInfoRegistConfirm");
+			mav.setViewName("admin/teInfoRegistConfirm");
 			mav.addObject("te", u);
+			
+			
 			
 		} else {
 			
 			// IDが重複していた場合
 			mav.addObject("errMsg", "IDが重複しています。");
-			mav.setViewName("teInfoRegist");
+			mav.setViewName("admin/teInfoRegist");
 		}
 		
 		return mav;
