@@ -43,4 +43,14 @@ public class AppConfig {
 		return new TaskServiceImpl();
 	}
 	
+	@Bean(name = "userService")
+	UserServiceInterface userService() {
+		return new UserServiceImpl();
+	}
+	
+	@Bean(name = "groupService")
+	UserServiceInterface groupService() {
+		return new UserServiceImpl();
+	}
+	
 }

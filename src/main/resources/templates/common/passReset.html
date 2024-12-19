@@ -8,7 +8,7 @@
 </head>
 
 <body>
-	<form th:action=@{}>
+	<form th:action=@{/taskdon/user/login} method="post">
 		<div class="">
 			<lavel>新パスワード</lavel>
 			<input type="text" id="" name="" required>
@@ -22,7 +22,7 @@
 		<div class="popup" style="display: none;">
 			<div class="popup-content">
 				<span class="close">&times;</span>
-				<h3>パスワード再設定確認message</h3>
+				<h3>パスワード再設定確認メッセージ</h3>
 				<button th:href="@{taskdon/user/login}">はい</button>
 				<button>いいえ</button>
 			</div>

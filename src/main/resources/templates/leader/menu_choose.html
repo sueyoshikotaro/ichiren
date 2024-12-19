@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん_メニュー</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+	<h2>メニュー</h2>
+	<!-- ログイン中表示 -->
+	<h2 th:if="${session.user}" th:text="${session.user.get().getUser_name()}+さん、ログイン中"></h2>
+
+	<!-- 連絡事項表示領域(予定) -->
+	<div style="overflow-y: scroll; height: 200px;"></div>
+
+	<!-- ドロップダウンリスト -->
+	<select>
+		<option value="breakNow" selected>休憩中</option>
+		<option value="room102">102</option>
+		<option value="room201">201</option>
+		<option value="room303">303</option>
+	</select>
+
+	<!-- 遷移ボタン -->
+	<div class="button-group">
+		<button type="submit">所属グループ一覧</button><br>
+		<button type="submit" disabled>メンバ一覧</button><br>
+		<button type="submit" disabled>タスク一覧</button><br>
+		<button type="submit" disabled>連絡事項作成</button><br>
+		<button type="submit" disabled>ToDoリスト</button><br>
+		<button type="submit" disabled>チャット</button><br>
+		<button type="submit">ログアウト</button>
+	</div>
+	</form>
+
+</body>
+
+</html>

@@ -13,10 +13,13 @@
 
 <body>
 	<h2>所属グループ一覧</h2>
-	<div>
+	<!-- ログイン中表示 -->
+	<h2 th:if="${session.user}" th:text="${session.user.get().getUser_name()}+さん、ログイン中"></h2>
+
+	<center>
+		<a th:href="@{/taskdon/user/menu_choose}">グループ１</a><br>
 		<a th:href="@{/taskdon/user/logout}">ログアウト</a><br>
-		<a th:href="@{/taskdon/user/menulist}">メニュー画面</a>
-	</div>
+	</center>
 </body>
 
 </html>
