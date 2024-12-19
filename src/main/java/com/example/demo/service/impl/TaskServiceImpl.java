@@ -22,10 +22,19 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
 		return repo.selectTask();
 	}
-
+	
+	/**
+	 * 湊原
+	 * タスク登録
+	 */
 	@Override
-	public void taskRegister(Task task) {
-		repo.registerTask(task);
+	public void taskRegister(String task_category, String task_name, String task_content, String str,
+			String start_date, String end_date, String task_priority, String task_level, String task_weight, String user_name, String group_id) {
+		
+		
+		repo.registerTask(task_category, task_name, task_content, str,
+				start_date, end_date, task_priority, task_level, task_weight, user_name, group_id);
+		
 	}
 
 	@Override

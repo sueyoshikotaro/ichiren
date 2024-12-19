@@ -5,12 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.form.FormContents;
+import com.example.demo.form.Room;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -52,6 +56,10 @@ public class AdminCtrl {
 	public String login() {
 		return "admin/login";
 	}
+	
+	public String logout() {
+		return "admin/login";
+	}
 
 	/**
 	 * 末吉
@@ -69,11 +77,13 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("schoolDetails")
-	public ModelAndView schoolDetails(ModelAndView mav) {
+	public ModelAndView schoolDetails(ModelAndView mav, Model model) {
 
 		//schoolS.schoolDateils();
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
+		model.addAttribute("FormContent", new FormContents());
+		
 		mav.addObject("schoolS", SchoolDetails);
 		mav.setViewName("admin/schoolDetails");
 
@@ -82,38 +92,53 @@ public class AdminCtrl {
 
 	/**
 	 * 末吉
-	 * 学校情報編集画面を表示する
+	 * 学校情報編集、削除、追加画面の表示する
 	 * @return
 	 */
 	@PostMapping("schoolDetailsChange")
-//	public ModelAndView schoolDetails(@RequestParam("checkList") List<String> checkList,
-//			@RequestParam("button") String button, SchoolDisplay schoolDisplay, ModelAndView mav) {
-//		
-//		for(String a : checkList) {
-//			System.out.println(a);
-//		}
-//		return null;
-//	}
-	public ModelAndView schoolDetailsChange(@RequestParam("checkList") List<String> checkList, @RequestParam("button") String button, ModelAndView mav) {
+	public ModelAndView schoolDetailsChange(@RequestParam("button") String button, @ModelAttribute FormContents formcontents, ModelAndView mav) {
 		
-		if(button.equals("edit")) {
-			mav.addObject("schoolS", checkList);
-			mav.setViewName("admin/schoolDetails");
+		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
+		
+		//編集ボタンを押下
+		if (button.equals("edit")){
 			
-			return mav;
-		} else if(button.equals("add")) {
-			mav.addObject("schoolAdd", checkList);
-			mav.setViewName("admin/addSchoolDetails");
-			
-			return mav;
+			mav.addObject("schoolEdit", EditSchoolDetails);
+			mav.setViewName("admin/schoolEdit");
+
+		} else if (button.equals("add")) {
+			mav.setViewName(button);
+      
 		} else {
-			mav.addObject("schoolEdit", checkList);
+			mav.addObject("schoolEdit", EditSchoolDetails);
 			mav.setViewName("admin/deleteSchoolDetails");
-			
-			return mav;
 		}
-		
+
+		return mav;
 	}
+	
+	
+	/**
+	 * 学校情報編集確認画面を表示する
+	 * @return
+	 */
+	@PostMapping("schoolEditConfirm")
+	public ModelAndView userEdit(Room r, ModelAndView mav) {
+
+		// サービスのメソッドを呼び出す
+		//				userDisplayService.DeleteUser(u.getUser_id());
+
+//		System.out.println(r);
+//		
+//		mav.addObject("schoolEdit", r);
+		mav.setViewName("admin/schoolEditConfirm");
+		
+		return mav;
+	}
+	
+	
+	
+	
 
 	/*
 	 * 向江
@@ -166,8 +191,8 @@ public class AdminCtrl {
 		// サービスのメソッドを呼び出す
 		userDisplayService.DeleteUser(u.getUser_id());
 
-		mav.setViewName("admin/userUpdateComp");
-    
+		mav.setViewName("admin/updateComp");
+
 		return mav;
 	}
 
@@ -198,8 +223,8 @@ public class AdminCtrl {
 		userDisplayService.PassReset(u.getUser_id());
 
 		//mav.addObject("user",u);
-		mav.setViewName("admin/userUpdateComp");
-    
+		mav.setViewName("admin/updateComp");
+
 		return mav;
 	}
 
@@ -209,7 +234,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("teInfoRegist")
-	public String teInfoRegist() {
+	public String dispRegist() {
 
 		return "admin/teInfoRegist";
 	}
@@ -217,45 +242,46 @@ public class AdminCtrl {
 	/*
 	 * 向江
 	 * 新規講師登録確認画面を表示するリクエストハンドラメソッド
-	 * @oaram u
+	 * @param u
 	 * @param mav
 	 */
 	@PostMapping("teInfoRegistConfirm")
-	public String teInfoRegistConfirm(UserDisplay u, ModelAndView mav) {
+	public ModelAndView dispTeInfoRegistConf(UserDisplay u, ModelAndView mav) {
 
 		if (userDisplayService.userIDCheck(u.getUser_id())) {
-
+			
 			mav.setViewName("admin/teInfoRegistConfirm");
-			mav.addObject("user", u);
-
+			mav.addObject("te", u);
+			
+			
+			
 		} else {
-
-			mav.addObject("errMsg", "既に使われているIDです。");
+			
+			// IDが重複していた場合
+			mav.addObject("errMsg", "IDが重複しています。");
 			mav.setViewName("admin/teInfoRegist");
-
 		}
-
-		return "mav";
+		
+		return mav;
 	}
 
 	/*
 	 * 向江
 	 * 新規講師登録完了画面を表示するリクエストハンドラメソッド
-	 * @param u
-	 * @param mav
+	 * @param t
+	 * @param mav 
 	 * @return
 	 */
 	@PostMapping("teInfoRegistComp")
-	public ModelAndView teInfoRegistComp(UserDisplay u, ModelAndView mav) {
-
-		userDisplayService.teInfoRegist(u.getUser_id(), u.getUser_name(), u.getUser_pass(), u.getSchool_name(),
-				u.getEnr_year(), 1);
-
-		//userDisplayService.InsertUser(u);
-
+	public ModelAndView dispTeInfoRegistComp(UserDisplay u, ModelAndView mav) {
+		
+		userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), u.getUser_pass(), u.getSchool_name(), u.getEnr_year(), 1);
+		
+		mav.setViewName("teInfoRegistComp");
+		
 		return mav;
 	}
-
+	
 	/**
 	 * グループ一覧画面を表示する
 	 * @return

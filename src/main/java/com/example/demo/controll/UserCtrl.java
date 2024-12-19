@@ -20,6 +20,8 @@ import com.example.demo.service.UserServiceInterface;
 
 import jakarta.servlet.http.HttpSession;
 
+
+
 @Controller
 @RequestMapping("/taskdon/user")
 public class UserCtrl {
@@ -167,12 +169,28 @@ public class UserCtrl {
 
 	/**
 	 * タスク登録確認画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @return
 	 */
-	public ModelAndView taskRegisterConfirm(TaskForm t, ModelAndView mav) {
-
+	@PostMapping("taskRegistConfirm")
+	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
+    
 		mav.addObject("tasks", t);
 		mav.setViewName("leader/taskRegistConfirm");
 		return mav;
 	}
-
+	
+	/**
+	 * タスク登録完了画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @return
+	 */
+	@PostMapping("taskRegistComplete")
+	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
+		TaskService.taskRegister(t.getTask_category(),t.getTask_name(),t.getTask_content(),"未着手"
+				, t.getStart_date(), t.getEnd_date(), t.getTask_priority(),t.getTask_level(),t.getTask_weight()
+				, t.getUser_name(),t.getGroup_id());
+		mav.setViewName("leader/taskRegistComplete");
+		return mav;
+	}
 }

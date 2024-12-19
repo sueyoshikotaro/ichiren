@@ -15,11 +15,13 @@ public interface UserDisplayServiceInterface {
 
 	// IDチェック
 	public boolean userIDCheck(String user_id);
-
-	// 講師情報登録
-	public void teInfoRegist(String user_id, String user_name, String user_pass, String school_name, String enr_year, int user_flg);
+	
+	// passチェック
+	public boolean userPassCheck(String user_pass, String user_rpass);
 
 	
-	//public void teInfoRegist(String user_id, String user_name, String user_pass);
+	// 新規講師登録
+	public void InsertTeach(String user_id, String user_name, String user_pass, String school_name, String enr_year, int user_flg); 
+		
 
 }

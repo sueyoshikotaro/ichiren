@@ -20,4 +20,10 @@ public class SchoolDisplayImpl implements SchoolDisplayServiceInterface {
 		return repo.selectSchoolDetails();
 	}
 
+	@Override
+	public List<SchoolDisplay> EditSchoolDetails(String room_id) {
+		
+		return repo.schoolDetailsChange(room_id);
+	}
+
 }
