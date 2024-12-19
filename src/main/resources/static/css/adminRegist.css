@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /* コンテナ */
 .manage_container {
 	max-width: 400px;
@@ -44,7 +46,7 @@
 
 .back-button {
 	padding: 10px 20px;
-	background-color:crimson;
+	background-color: crimson;
 	color: #fff;
 	border: none;
 	border-radius: 5px;
@@ -53,12 +55,12 @@
 }
 
 .back-button:hover {
-	background-color:darkred;
+	background-color: darkred;
 }
 
 .confirm-button {
 	padding: 10px 20px;
-	background-color:blue;
+	background-color: blue;
 	color: #fff;
 	border: none;
 	border-radius: 5px;
@@ -67,5 +69,5 @@
 }
 
 .confirm-button:hover {
-	background-color:darkblue;
+	background-color: darkblue;
 }

@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /* レスポンシブデザイン用のメディアクエリ */
 @media (max-width: 768px) {
 
@@ -33,13 +35,18 @@
 	}
 }
 
+body {
+	background-image: url(../img/backimg01.jpg);
+}
+
 /* ログイン画面のデザイン */
 .login_container {
 	max-width: 400px;
 	margin: 40px auto;
 	padding: 20px;
-	background-color: #FFF9E6;
-	border: 1px solid #ccc;
+	background-image: url(../img/dondog1.jpg);
+	background-size: cover;
+	border: 2px solid black;
 	border-radius: 10px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -57,7 +64,6 @@
 	display: block;
 	margin-bottom: 5px;
 	font-size: 16px;
-	font-family: 'Noto Sans JP', sans-serif;
 	font-weight: bold;
 }
 
@@ -69,13 +75,11 @@
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	font-size: 16px;
-	font-family: 'Noto Sans JP', sans-serif;
 }
 
 .form-group input[type="text"]::placeholder,
 .form-group input[type="password"]::placeholder {
 	font-size: 16px;
-	font-family: 'Noto Sans JP', sans-serif;
 }
 
 .button-group {
@@ -99,7 +103,6 @@
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 16px;
-	font-family: 'Noto Sans JP', sans-serif;
 }
 
 .login-button:hover {
@@ -109,13 +112,13 @@
 /* パスワード再設定説明のポップアップ */
 .popup-link {
 	text-decoration: none;
-	color: #337ab7;
+	color: black;
 	font-size: 16px;
-	font-family: 'Noto Sans JP', sans-serif;
+	font-weight: bold;
 }
 
 .popup-link:hover {
-	color: #23527c;
+	color: blue;
 }
 
 .popup {
@@ -136,7 +139,7 @@
 	width: 80%;
 	max-width: 400px;
 	padding: 20px;
-	background-color: #f9f9f9;
+	background-color: #FFFCDD;
 	border: 1px solid #ccc;
 	border-radius: 10px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -146,14 +149,11 @@
 	text-align: center;
 	margin-bottom: 10px;
 	font-size: 18px;
-	font-family: 'Noto Sans JP', sans-serif;
 }
 
 .popup-content p {
 	margin-bottom: 20px;
-	font-size: 16px;
-	font-family: 'Noto Sans JP', sans-serif;
-}
+	font-size: 16px;}
 
 .popup-content ul {
 	list-style: none;
@@ -163,9 +163,7 @@
 
 .popup-content li {
 	margin-bottom: 10px;
-	font-size: 16px;
-	font-family: 'Noto Sans JP', sans-serif;
-}
+	font-size: 16px;}
 
 .close {
 	position: absolute;
@@ -176,5 +174,9 @@
 }
 
 .close:hover {
-	color: #337ab7;
+	color: red;
+}
+
+.Ano {
+	text-align: center;
 }
