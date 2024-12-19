@@ -50,13 +50,13 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	@Override
 	public boolean userIDCheck(String user_id) {
 
-		boolean flg = userCrudRepo.existsById(user_id);
+		String flg = userCrudRepo.selectById(user_id);
 
-		if (!flg) {
-
+		if (flg != "") {
+			System.out.println("重複しないユーザID");
 			return true;
 		} else {
-
+			System.out.println("重複するユーザID");
 			return false;
 		}
 
@@ -85,11 +85,11 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 * DBへ講師を登録する
 	 */
 	@Override
-	public void InsertTeach(String user_id, String user_name, String user_pass, String school_name, String enr_year, int user_flg) {
-		
-		userCrudRepo.teInfoRegist(user_id, user_name, user_pass, school_name, enr_year, user_flg);
-		
-	}
+	public void InsertTeach(String user_id, String user_name, String user_pass, String school_name, String enr_year,
+			int user_flg) {
 
+		userCrudRepo.teInfoRegist(user_id, user_name, user_pass, school_name, enr_year, user_flg);
+
+	}
 
 }

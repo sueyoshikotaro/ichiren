@@ -9,6 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 import com.example.demo.form.UserDisplay;
 
 public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, String>  {
+	
+	
+	@Query("select user_id from user where user_id = :user_id")
+	public String selectById(String user_id);
 
 	/*
 	 * 向江
@@ -39,7 +43,7 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	 * 講師情報登録用のSQL
 	 */
 	@Modifying
-	@Query("insert into user(user_id,user_name,user_pass,school_id,enr_year,user_flg) values(:user_id,:user_name,'taskdon1',(select school_id from school where school_name = :school_name),:enr_year,1)")
+	@Query("insert into user(user_id,user_name,user_pass,school_name,enr_year,user_flg) values(:user_id,:user_name,'taskdon1',(select school_id from school where school_name = :school_name),:enr_year,1)")
 	public void teInfoRegist(String user_id, String user_name, String user_pass, String school_name, String enr_year, int user_flg);
 
 }
