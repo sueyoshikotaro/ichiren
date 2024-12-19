@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+</head>
+
+<body>
+	<h2>タスク詳細画面</h2>
+	<div>
+		<div th:text="${task.task_name}"></div>
+		<div th:text="${task.task_category}"></div>
+		<div th:text="${task.task_content}"></div>
+		<div th:text="${task.user_name}"></div>
+		<div th:text="${task.task_priority}"></div>
+		<div th:text="${task.task_level}"></div>
+		<div th:text="${task.task_weight}"></div>
+		<div th:text="${task.task_status}"></div>
+		<div th:text="${task.end_date}"></div>
+		<div th:text="${task.progress}"></div>
+	</div>
+</body>
+
+</html>
