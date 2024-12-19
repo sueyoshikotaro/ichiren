@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
 	<script th:src="@{/js/taskRegist.js}"></script>
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
 <body>
@@ -27,7 +28,7 @@
 				<label>担当者</label>
 				<select name="user_name" required>
 					<p>担当者を選択してください</p>
-					<option th:each="user : ${taskuser}" th:value="${user.user_name}" th:text="${user.user_name}">
+					<option name="user_name" th:each="user : ${taskuser}" th:value="${user.user_name}" th:text="${user.user_name}">
 					</option>
 				</select>
 			</div>
@@ -53,23 +54,24 @@
 			</div>
 			<div>
 				<label>重み</label>
-				<input type="text" id="result" name="task_weight" th:value="result" readonly></input>
+				<input type="text" id="result" name="task_weight" readonly>
 				<!--JavaScriptリンク挿入欄-->
 				<script th:inline="javascript">
 					const priority = document.getElementById("priority").nextElementSibling;
 					const level = document.getElementById("level").nextElementSibling;
-					
+
 					priority.addEventListener('change', calculate);
 					level.addEventListener('change', calculate);
 					calculate();
-					
+
 					function calculate() {
 						const value1 = priority.value;
 						const value2 = level.value;
 						const resultValue = parseInt(value1) * parseInt(value2);
-						document.getElementById("result").textContent = resultValue;
+						document.getElementById("result").value = resultValue;
 					}
 				</script>
+				</input>
 			</div>
 
 			<div>

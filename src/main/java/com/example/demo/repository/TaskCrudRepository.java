@@ -37,6 +37,9 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * タスク登録
 	 */
 	@Modifying
-	@Query("insert into task values (:task_id, :taskCategory, :taskName, :taskContent, :taskStatus, :startDate, :endDate, :taskPriority, :taskLevel, :taskWeight, :progress, :taskFlg, :user_id, :group_id)")
-	public void registerTask(Task task);
+	@Query("insert into task(task_category, task_name, task_content, task_status, start_date, end_date, task_priority, task_level, task_weight, progress, task_flg, user_id, group_id)"
+			+ " select distinct :task_category, :task_name, :task_content, :task_status, '2024-12-19', '2024-12-30', :task_priority, :task_level, :task_weight, 0, 1, user.user_id, 1 from task"
+			+ " inner join user on task.user_id=user.user_id where user_name=:user_name;")
+	public boolean registerTask(String task_category, String task_name, String task_content, String task_status,
+			String start_date, String end_date, String task_priority, String task_level, String task_weight, String user_name, String group_id);
 }
