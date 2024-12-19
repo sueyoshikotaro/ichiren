@@ -3,8 +3,6 @@ package com.example.demo.controll;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -18,6 +16,9 @@ import com.example.demo.entity.User;
 import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.TaskServiceInterface;
+import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -26,6 +27,14 @@ public class UserCtrl {
 	//フィールド
 	@Autowired
 	UserCrudRepository userCrudRepo;
+
+	@Autowired
+	@Qualifier("userService")
+	UserServiceInterface userService;
+
+//	@Autowired
+//	@Qualifier("groupService")
+//	GroupServiceInterface groupService;
 
 	//湊原追加
 	@Autowired
@@ -36,40 +45,33 @@ public class UserCtrl {
 	@Autowired
 	HttpSession session;
 
-		/**
-		 * ログイン画面を表示 
-		 * @return
-		 */
-		@GetMapping("login")
-		public String login() {
-	
-			return "common/login";
-		}
+	/**
+	 * ログイン画面を表示 
+	 * @return
+	 */
+	@GetMapping("login")
+	public String login() {
 
-		//	/**
-		//	 * ログイン画面を表示 
-		//	 * @return
-		//	 */
-		//	@GetMapping("login")
-		//	public String login(@RequestParam("firstLogin") boolean firstLogin, String user_id, String user_pass) {
-		//
-		//		if (user_id.equals("admin") && user_pass.equals("admin")) {
-		//
-		//			//上位管理者の初回ログイン時の処理
-		//			return "admin/adminRegister";
-		//		} else {
-		//
-		//			if (firstLogin) {
-		//
-		//				// 初回ログイン時の処理
-		//				return "redirect:/common/resetPass";
-		//			} else {
-		//
-		//				// 通常のログイン処理
-		//				return "common/login";
-		//			}
-		//		}
-		//	}
+		return "common/login";
+	}
+
+	//	/**
+	//	 * ログイン画面を表示 
+	//	 * @return
+	//	 */
+	//	@GetMapping("login")
+	//	public String login(@RequestParam("firstLogin") boolean firstLogin, String user_id, String user_pass) {
+	//
+	//		if (firstLogin) {
+	//
+	//			// 初回ログイン時の処理
+	//			return "redirect:/common/resetPass";
+	//		} else {
+	//
+	//			// 通常・上位管理者ログイン時の処理
+	//			return "common/login";
+	//		}
+	//	}
 
 	/**
 	 * ID重複をチェック
@@ -77,16 +79,16 @@ public class UserCtrl {
 	@PostMapping("deptGroupList")
 	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
 
-		boolean flg;
+		
+		
 		Optional<User> user;
 
-		//flg = userCrudRepo.existsById(user_id);
 		user = userCrudRepo.findById(user_id);
 
 		if (user.get().getUser_id().equals(user_id)) {
 
 			mav.setViewName("common/deptGroupList");
-			session.setAttribute("user_id", user_id);
+			session.setAttribute("user", user);
 		} else {
 
 			mav.setViewName("common/login");
@@ -94,16 +96,6 @@ public class UserCtrl {
 		}
 
 		return mav;
-	}
-
-	/**
-	 * 所属グループ一覧画面を表示
-	 * @return
-	 */
-	@GetMapping("deptGroupList")
-	public String deptGroupList() {
-    
-		return "common/deptGroupList";
 	}
 
 	/**
@@ -117,13 +109,30 @@ public class UserCtrl {
 	}
 
 	/**
-	 * 管理者登録画面を表示
+	 * 所属グループ一覧画面を表示
 	 * @return
 	 */
-	@GetMapping("adminRegister")
-	public String adminRegister() {
+//	@GetMapping("deptGroupList")
+//	public ModelAndView deptGroupList() {
+//
+//		ModelAndView mav = new ModelAndView();
+//
+//		Iterable<Teams> deptGroupList = groupService.deptGroupList();
+//
+//		mav.addObject("groups", deptGroupList);
+//		mav.setViewName("common/deptGroupList");
+//
+//		return mav;
+//	}
 
-		return "admin/adminRegister";
+	/**
+	 * メニュー画面を表示
+	 * @return
+	 */
+	@GetMapping("menu_choose")
+	public String menu() {
+
+		return "leader/menu_choose";
 	}
 
 	/**
@@ -148,23 +157,22 @@ public class UserCtrl {
 	@GetMapping("taskRegister")
 	public ModelAndView taskRegister(ModelAndView mav) {
 		Iterable<Task> taskUser = TaskService.taskUserSearch();
-//		System.out.println(taskUser);
+		//		System.out.println(taskUser);
 		mav.addObject("taskuser", taskUser);
-		
-//		System.out.println(taskUser);
+
+		//		System.out.println(taskUser);
 		mav.setViewName("leader/taskRegist");
 		return mav;
 	}
-	
+
 	/**
 	 * タスク登録確認画面を表示するリクエストハンドラメソッド
 	 */
 	public ModelAndView taskRegisterConfirm(TaskForm t, ModelAndView mav) {
-		
+
 		mav.addObject("tasks", t);
 		mav.setViewName("leader/taskRegistConfirm");
 		return mav;
 	}
-	
-	
+
 }
