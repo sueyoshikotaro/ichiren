@@ -15,4 +15,7 @@ public interface SchoolDisplayCrudRepository extends CrudRepository<SchoolDispla
 	 */
 	@Query("select * from school inner join room on school.school_id = room.school_id order by room.room_name Desc")
 	public List<SchoolDisplay> selectSchoolDetails();
+
+	@Query("select * from school inner join room on school.school_id = room.school_id where school.school_id = 1 && room.room_id = :room_id")
+	public List<SchoolDisplay> schoolDetailsChange(String room_id);
 }

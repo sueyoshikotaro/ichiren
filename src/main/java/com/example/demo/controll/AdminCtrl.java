@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -69,11 +72,13 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("schoolDetails")
-	public ModelAndView schoolDetails(ModelAndView mav) {
+	public ModelAndView schoolDetails(ModelAndView mav, Model model) {
 
 		//schoolS.schoolDateils();
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
+		model.addAttribute("FormContent", new FormContents());
+		
 		mav.addObject("schoolS", SchoolDetails);
 		mav.setViewName("admin/schoolDetails");
 
@@ -86,33 +91,31 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolDetailsChange")
-//	public ModelAndView schoolDetails(@RequestParam("checkList") List<String> checkList,
-//			@RequestParam("button") String button, SchoolDisplay schoolDisplay, ModelAndView mav) {
-//		
-//		for(String a : checkList) {
-//			System.out.println(a);
-//		}
-//		return null;
-//	}
-	public ModelAndView schoolDetailsChange(@RequestParam("checkList") List<String> checkList, @RequestParam("button") String button, ModelAndView mav) {
+	public ModelAndView schoolDetailsChange(@RequestParam("button") String button, @ModelAttribute FormContents formcontents, ModelAndView mav) {
 		
-		if(button.equals("edit")) {
-			mav.addObject("schoolS", checkList);
-			mav.setViewName("admin/schoolDetails");
+		
+//		System.out.println(formcontents.getContent() + "が選択されました");
+		
+		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
+		
+		
+
+		//編集ボタンを押下
+		if (button.equals("edit")){
 			
-			return mav;
-		} else if(button.equals("add")) {
-			mav.addObject("schoolAdd", checkList);
-			mav.setViewName("admin/addSchoolDetails");
-			
-			return mav;
+			mav.addObject("schoolEdit", EditSchoolDetails);
+			mav.setViewName("admin/EditschoolDetails");
+
+		} else if (button.equals("add")) {
+			mav.setViewName(button);
+
 		} else {
-			mav.addObject("schoolEdit", checkList);
+			mav.addObject("schoolEdit", EditSchoolDetails);
 			mav.setViewName("admin/deleteSchoolDetails");
-			
-			return mav;
 		}
-		
+
+		return mav;
+
 	}
 
 	/*
