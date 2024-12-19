@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SchoolDisplay {
 	@Id
-	private Integer school_id;
+	private int school_id;
 	private String school_abb;
 	private String school_name;
 	
-	private Integer room_id;
+	private int room_id;
 	private String room_name;
-	private Integer pc_flg;
+	private int pc_flg;
 	private String hall;
 	private String floor;
 }
