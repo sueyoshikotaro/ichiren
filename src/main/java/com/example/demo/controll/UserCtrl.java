@@ -178,13 +178,9 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistComplete")
 	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
-		System.out.println(t);
-//		if () {
-//			
-//		}
-		TaskService.taskRegister(5, t.getTask_category(),t.getTask_name(),t.getTask_content(),"未着手"
+		TaskService.taskRegister(t.getTask_category(),t.getTask_name(),t.getTask_content(),"未着手"
 				, t.getStart_date(), t.getEnd_date(), t.getTask_priority(),t.getTask_level(),t.getTask_weight()
-				, 0,1,t.getUser_id(),t.getGroup_id());
+				, t.getUser_name(),t.getGroup_id());
 		mav.setViewName("leader/taskRegistComplete");
 		return mav;
 	}
