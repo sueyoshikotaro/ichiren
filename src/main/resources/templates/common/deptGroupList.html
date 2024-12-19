@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
 
 <head>
-	<meta charset="UTF-8">
 	<title>タスクどん_所属グループ一覧</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!--CSSリンク挿入欄-->
+	<link rel="stylesheet" href="../../static/css/deptGroupList.css">
+
 </head>
 
 <body>
-	<h2>所属グループ一覧画面</h2>
-	<center>
+	<h2>所属グループ一覧</h2>
+	<div>
 		<a th:href="@{/taskdon/user/logout}">ログアウト</a><br>
 		<a th:href="@{/taskdon/user/menulist}">メニュー画面</a>
-	</center>
+	</div>
 </body>
 
 </html>
