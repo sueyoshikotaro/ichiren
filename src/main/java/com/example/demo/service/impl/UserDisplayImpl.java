@@ -5,12 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.form.UserDisplay;
 import com.example.demo.repository.UserDisplayCrudRepository;
+import com.example.demo.repository.UserViewCrudRepository;
 import com.example.demo.service.UserDisplayServiceInterface;
 
 public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 	@Autowired
 	UserDisplayCrudRepository userCrudRepo;
+	
+	@Autowired
+	UserViewCrudRepository userViewCrudRepo;
 
 	/*
 	 * 向江
@@ -85,10 +89,9 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 * DBへ講師を登録する
 	 */
 	@Override
-	public void InsertTeach(String user_id, String user_name, String user_pass, String school_name, String enr_year,
-			int user_flg) {
+	public void InsertTeach(String user_id, String user_name, String user_pass, String school_name, String enr_year, int user_flg) {
 
-		userCrudRepo.teInfoRegist(user_id, user_name, user_pass, school_name, enr_year, user_flg);
+		userViewCrudRepo.save(user_id, user_name, user_pass, school_name, enr_year, user_flg);
 
 	}
 
