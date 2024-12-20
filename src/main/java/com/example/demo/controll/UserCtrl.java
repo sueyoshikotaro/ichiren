@@ -187,9 +187,11 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistComplete")
 	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
+
 		TaskService.taskRegister(t.getTask_category(),t.getTask_name(),t.getTask_content(),"未着手"
 				, t.getStart_date(), t.getEnd_date(), t.getTask_priority(),t.getTask_level(),t.getTask_weight()
 				, t.getUser_name(),t.getGroup_id());
+
 		mav.setViewName("leader/taskRegistComplete");
 		return mav;
 	}
