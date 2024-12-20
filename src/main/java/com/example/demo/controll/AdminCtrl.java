@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.form.FormContents;
+import com.example.demo.form.Room;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -55,6 +56,10 @@ public class AdminCtrl {
 	public String login() {
 		return "admin/login";
 	}
+	
+	public String logout() {
+		return "admin/login";
+	}
 
 	/**
 	 * 末吉
@@ -87,24 +92,19 @@ public class AdminCtrl {
 
 	/**
 	 * 末吉
-	 * 学校情報編集画面を表示する
+	 * 学校情報編集、削除、追加画面の表示する
 	 * @return
 	 */
 	@PostMapping("schoolDetailsChange")
 	public ModelAndView schoolDetailsChange(@RequestParam("button") String button, @ModelAttribute FormContents formcontents, ModelAndView mav) {
 		
-		
-//		System.out.println(formcontents.getContent() + "が選択されました");
-		
 		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
 		
-		
-
 		//編集ボタンを押下
 		if (button.equals("edit")){
 			
 			mav.addObject("schoolEdit", EditSchoolDetails);
-			mav.setViewName("admin/EditschoolDetails");
+			mav.setViewName("admin/schoolEdit");
 
 		} else if (button.equals("add")) {
 			mav.setViewName(button);
@@ -116,6 +116,29 @@ public class AdminCtrl {
 
 		return mav;
 	}
+	
+	
+	/**
+	 * 学校情報編集確認画面を表示する
+	 * @return
+	 */
+	@PostMapping("schoolEditConfirm")
+	public ModelAndView userEdit(Room r, ModelAndView mav) {
+
+		// サービスのメソッドを呼び出す
+		//				userDisplayService.DeleteUser(u.getUser_id());
+
+//		System.out.println(r);
+//		
+//		mav.addObject("schoolEdit", r);
+		mav.setViewName("admin/schoolEditConfirm");
+		
+		return mav;
+	}
+	
+	
+	
+	
 
 	/*
 	 * 向江

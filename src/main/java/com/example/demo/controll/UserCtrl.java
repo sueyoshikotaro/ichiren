@@ -18,6 +18,7 @@ import com.example.demo.entity.User;
 import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.TaskServiceInterface;
+import com.example.demo.service.UserServiceInterface;
 
 
 
@@ -29,6 +30,14 @@ public class UserCtrl {
 	@Autowired
 	UserCrudRepository userCrudRepo;
 
+	@Autowired
+	@Qualifier("userService")
+	UserServiceInterface userService;
+
+//	@Autowired
+//	@Qualifier("groupService")
+//	GroupServiceInterface groupService;
+
 	//湊原追加
 	@Autowired
 	@Qualifier("taskService")
@@ -38,40 +47,33 @@ public class UserCtrl {
 	@Autowired
 	HttpSession session;
 
-		/**
-		 * ログイン画面を表示 
-		 * @return
-		 */
-		@GetMapping("login")
-		public String login() {
-	
-			return "common/login";
-		}
+	/**
+	 * ログイン画面を表示 
+	 * @return
+	 */
+	@GetMapping("login")
+	public String login() {
 
-		//	/**
-		//	 * ログイン画面を表示 
-		//	 * @return
-		//	 */
-		//	@GetMapping("login")
-		//	public String login(@RequestParam("firstLogin") boolean firstLogin, String user_id, String user_pass) {
-		//
-		//		if (user_id.equals("admin") && user_pass.equals("admin")) {
-		//
-		//			//上位管理者の初回ログイン時の処理
-		//			return "admin/adminRegister";
-		//		} else {
-		//
-		//			if (firstLogin) {
-		//
-		//				// 初回ログイン時の処理
-		//				return "redirect:/common/resetPass";
-		//			} else {
-		//
-		//				// 通常のログイン処理
-		//				return "common/login";
-		//			}
-		//		}
-		//	}
+		return "common/login";
+	}
+
+	//	/**
+	//	 * ログイン画面を表示 
+	//	 * @return
+	//	 */
+	//	@GetMapping("login")
+	//	public String login(@RequestParam("firstLogin") boolean firstLogin, String user_id, String user_pass) {
+	//
+	//		if (firstLogin) {
+	//
+	//			// 初回ログイン時の処理
+	//			return "redirect:/common/resetPass";
+	//		} else {
+	//
+	//			// 通常・上位管理者ログイン時の処理
+	//			return "common/login";
+	//		}
+	//	}
 
 	/**
 	 * ID重複をチェック
@@ -79,16 +81,16 @@ public class UserCtrl {
 	@PostMapping("deptGroupList")
 	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
 
-		boolean flg;
+		
+		
 		Optional<User> user;
 
-		//flg = userCrudRepo.existsById(user_id);
 		user = userCrudRepo.findById(user_id);
 
 		if (user.get().getUser_id().equals(user_id)) {
 
 			mav.setViewName("common/deptGroupList");
-			session.setAttribute("user_id", user_id);
+			session.setAttribute("user", user);
 		} else {
 
 			mav.setViewName("common/login");
@@ -96,16 +98,6 @@ public class UserCtrl {
 		}
 
 		return mav;
-	}
-
-	/**
-	 * 所属グループ一覧画面を表示
-	 * @return
-	 */
-	@GetMapping("deptGroupList")
-	public String deptGroupList() {
-    
-		return "common/deptGroupList";
 	}
 
 	/**
@@ -119,13 +111,30 @@ public class UserCtrl {
 	}
 
 	/**
-	 * 管理者登録画面を表示
+	 * 所属グループ一覧画面を表示
 	 * @return
 	 */
-	@GetMapping("adminRegister")
-	public String adminRegister() {
+//	@GetMapping("deptGroupList")
+//	public ModelAndView deptGroupList() {
+//
+//		ModelAndView mav = new ModelAndView();
+//
+//		Iterable<Teams> deptGroupList = groupService.deptGroupList();
+//
+//		mav.addObject("groups", deptGroupList);
+//		mav.setViewName("common/deptGroupList");
+//
+//		return mav;
+//	}
 
-		return "admin/adminRegister";
+	/**
+	 * メニュー画面を表示
+	 * @return
+	 */
+	@GetMapping("menu_choose")
+	public String menu() {
+
+		return "leader/menu_choose";
 	}
 
 	/**
@@ -150,14 +159,14 @@ public class UserCtrl {
 	@GetMapping("taskRegister")
 	public ModelAndView taskRegister(ModelAndView mav) {
 		Iterable<Task> taskUser = TaskService.taskUserSearch();
-//		System.out.println(taskUser);
+		//		System.out.println(taskUser);
 		mav.addObject("taskuser", taskUser);
-		
-//		System.out.println(taskUser);
+
+		//		System.out.println(taskUser);
 		mav.setViewName("leader/taskRegist");
 		return mav;
 	}
-	
+
 	/**
 	 * タスク登録確認画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -165,7 +174,7 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
-		
+    
 		mav.addObject("tasks", t);
 		mav.setViewName("leader/taskRegistConfirm");
 		return mav;
@@ -178,17 +187,25 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistComplete")
 	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
-		System.out.println(t);
-//		if () {
-//			
-//		}
-//		TaskService.taskRegister(5, t.getTask_category(),t.getTask_name(),t.getTask_content(),"未着手"
-//				, t.getStart_date(), t.getEnd_date(), t.getTask_priority(),t.getTask_level(),t.getTask_weight()
-//				, 0,1,t.getUser_id(),t.getGroup_id());
+
+		TaskService.taskRegister(t.getTask_category(),t.getTask_name(),t.getTask_content(),"未着手"
+				, t.getStart_date(), t.getEnd_date(), t.getTask_priority(),t.getTask_level(),t.getTask_weight()
+				, t.getUser_name(),t.getGroup_id());
+
 		mav.setViewName("leader/taskRegistComplete");
 		return mav;
 	}
 	
-	
-	
+	/**
+	 * タスク詳細画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @return
+	 */
+	@PostMapping("taskDetail")
+	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
+		
+		mav.addObject("task", t);
+		mav.setViewName("leader/taskDetails");
+		return mav;
+	}
 }
