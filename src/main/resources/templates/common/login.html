@@ -25,7 +25,7 @@
 						d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
 				</svg>
 				<label for="inputPassword5" class="form-label">User-ID</label>
-				<input type="text" id="inputPassword5" class="form-control" aria-labelledby="passwordHelpBlock"
+				<input type="text" id="user_id" name="user_id" class="form-control" aria-labelledby="passwordHelpBlock"
 					placeholder="例:st○○○○○○○○" th:value="${user_id}" required>
 			</div>
 			<div id="passwordHelpBlock" class="form-text">
@@ -40,8 +40,8 @@
 					<path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
 				</svg>
 				<label for="inputPassword5" class="form-label">PASS</label>
-				<input type="password" id="inputPassword5" class="form-control" aria-labelledby="passwordHelpBlock"
-					th:value="${user_id}" required>
+				<input type="password" id="user_pass" name="user_pass" class="form-control" aria-labelledby="passwordHelpBlock"
+					th:value="${user_pass}" required>
 			</div>
 			<div id="passwordHelpBlock" class="form-text">
 				8桁以上,16桁未満の英数字.
