@@ -3,6 +3,8 @@ package com.example.demo.controll;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -17,8 +19,6 @@ import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 
 
@@ -191,6 +191,19 @@ public class UserCtrl {
 				, t.getStart_date(), t.getEnd_date(), t.getTask_priority(),t.getTask_level(),t.getTask_weight()
 				, t.getUser_name(),t.getGroup_id());
 		mav.setViewName("leader/taskRegistComplete");
+		return mav;
+	}
+	
+	/**
+	 * タスク詳細画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @return
+	 */
+	@PostMapping("taskDetail")
+	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
+		
+		mav.addObject("task", t);
+		mav.setViewName("leader/taskDetails");
 		return mav;
 	}
 }
