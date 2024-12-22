@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
@@ -15,6 +16,11 @@
 	<div>
 		<h2>タスク一覧画面</h2><br>
 		<div class="container">
+<!--			<select name="user_name"  th:if="${session.groupUser != null}">-->
+<!--				<p>担当者を選択してください</p>-->
+<!--				<option th:each="user : ${session.attribute.groupUser}" ta.value="${user.value}" th:text="${user.text">-->
+<!--				</option>-->
+<!--			</select>-->
 			<div th:each="task : ${tasks}">
 				<div th:text="${task.task_name}"></div>
 				<div th:text="'優先度：'+${task.task_priority}"></div>
@@ -27,7 +33,14 @@
 				</div>
 				<div>
 					<form th:action="@{taskDetail}" method="post">
-						<input type="hidden" name="task_id" th:value="${task.task_id}">
+						<input type="hidden" name="task_name" th:value="${task.task_name}">
+						<input type="hidden" name="task_category" th:value="${task.task_category}">
+						<input type="hidden" name="task_content" th:value="${task.task_content}">
+						<input type="hidden" name="task_priority" th:value="${task.task_priority}">
+						<input type="hidden" name="progress" th:value="${task.progress}">
+						<input type="hidden" name="start_date" th:value="${task.start_date}">
+						<input type="hidden" name="end_date" th:value="${task.end_date}">
+						<input type="hidden" name="user_name" th:value="${task.user_name}">
 						<input type="submit" value="詳細">
 					</form>
 				</div>

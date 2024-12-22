@@ -144,8 +144,10 @@ public class UserCtrl {
 	 */
 	@GetMapping("taskList")
 	public ModelAndView taskList(ModelAndView mav) {
+		session.setAttribute("groupUser", TaskService.taskUserSearch());
+		
+		System.out.println(session.getAttribute("groupUser"));
 		List<Task> task = TaskService.taskDisplayList();
-
 		mav.addObject("tasks", task);
 		mav.setViewName("leader/taskList");
 		return mav;
@@ -203,7 +205,7 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskDetail")
 	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
-		
+//		System.out.println(t);
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDetails");
 		return mav;
