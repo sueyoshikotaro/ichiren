@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 public class Room {
 	
 	@Id
-	private Integer room_id;
+	private int room_id;
 	private String room_name;
-	private Integer pc_flg;
+	private int pc_flg;
 	private String hall;
 	private String floor;
 	private int school_id;

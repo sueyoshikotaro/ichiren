@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.form.FormContents;
-import com.example.demo.form.Room;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -66,6 +65,7 @@ public class AdminCtrl {
 	 * メニュー画面を表示する
 	 * @return
 	 */
+//	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
 		return "admin/menu";
@@ -107,11 +107,11 @@ public class AdminCtrl {
 			mav.setViewName("admin/schoolEdit");
 
 		} else if (button.equals("add")) {
-			mav.setViewName(button);
+//			mav.setViewName("admin/schoolAdd");
       
 		} else {
-			mav.addObject("schoolEdit", EditSchoolDetails);
-			mav.setViewName("admin/deleteSchoolDetails");
+//			mav.addObject("schoolEdit", EditSchoolDetails);
+//			mav.setViewName("admin/deleteSchoolDetails");
 		}
 
 		return mav;
@@ -119,18 +119,15 @@ public class AdminCtrl {
 	
 	
 	/**
+	 * 末吉
 	 * 学校情報編集確認画面を表示する
 	 * @return
-	 */
+	 */	
 	@PostMapping("schoolEditConfirm")
-	public ModelAndView userEdit(Room r, ModelAndView mav) {
-
-		// サービスのメソッドを呼び出す
-		//				userDisplayService.DeleteUser(u.getUser_id());
-
-//		System.out.println(r);
-//		
-//		mav.addObject("schoolEdit", r);
+	public ModelAndView schoolEditConfirm(SchoolDisplay s, ModelAndView mav) {
+		
+		
+		
 		mav.setViewName("admin/schoolEditConfirm");
 		
 		return mav;
