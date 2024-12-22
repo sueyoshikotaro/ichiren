@@ -18,4 +18,7 @@ public interface SchoolDisplayCrudRepository extends CrudRepository<SchoolDispla
 
 	@Query("select * from school inner join room on school.school_id = room.school_id where school.school_id = 1 && room.room_id = :room_id")
 	public List<SchoolDisplay> schoolDetailsChange(String room_id);
+	
+	@Query("update room set room_id = :room_id, room_name = :room_name, pc_flg = :pc_flg, hall = :hall, floor = :floor, school_id = :school_id where room_id = :room_id")
+	public void EditSchoolDetailsComp(int room_id, String room_name, int pc_flg, String hall, String floor, int school_id);
 }
