@@ -44,9 +44,6 @@ body {
 
 .login-button:hover {
 	transform: scale(0.9, 0.9);
-}
-
-.login-button:hover {
 	background-color: #3e8e41;
 }
 
