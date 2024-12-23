@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.form.FormContents;
-import com.example.demo.form.Room;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -111,7 +110,8 @@ public class AdminCtrl {
 			mav.setViewName("admin/schoolEdit");
 
 		} else if (button.equals("add")) {
-//			mav.setViewName("admin/schoolAdd");
+			
+			mav.setViewName("admin/schoolAdd");
       
 		} else {
 //			mav.addObject("schoolEdit", EditSchoolDetails);
@@ -145,7 +145,7 @@ public class AdminCtrl {
 	 * @return
 	 */	
 	@PostMapping("schoolEditConp")
-	public ModelAndView schoolEditCo(Room r, ModelAndView mav) {
+	public ModelAndView schoolEditCo(SchoolDisplay r, ModelAndView mav) {
 		
 		System.out.println(r);
 		
