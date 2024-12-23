@@ -19,23 +19,21 @@
 			<form th:action="@{taskRegistConfirm}" method="post">
 				<div class="form-group">
 					<label for="exampleFormControlInput1" class="form-label">タスク名</label>
-					<input type="text" class="form-control" name="task_name" id="exampleFormControlInput1">
+					<input type="text" class="form-control" name="task_name" required>
 				</div>
 				<div class="form-group">
 					<label for="exampleFormControlInput1" class="form-label">カテゴリ名</label>
-					<input type="text" class="form-control" name="task_category" id="exampleFormControlInput1">
+					<input type="text" class="form-control" name="task_category" required>
 				</div>
 				<div class="form-group">
 					<label for="exampleFormControlTextarea1" class="form-label">タスク概要</label>
-					<textarea class="form-control" name="task_content" id="exampleFormControlTextarea1"
-						rows="3"></textarea>
+					<textarea class="form-control" name="task_content" rows="3"></textarea>
 				</div>
 				<div class="form-group">
 					<label>担当者</label>
-					<select class="form-select" aria-label="Default select example" required>
+					<select name="user_name" class="form-select" aria-label="Default select example" required>
 						<option selected disabled>担当者を選択してください</option>
-						<option name="user_name" th:each="user : ${taskuser}" th:value="${user.user_name}"
-							th:text="${user.user_name}">
+						<option th:each="user : ${taskuser}" th:value="${user.user_name}" th:text="${user.user_name}">
 						</option>
 					</select>
 				</div>
@@ -43,7 +41,7 @@
 					<div class="row">
 						<div class="col">
 							<label id="priority" class="form-label">優先度</label>
-							<select class="form-select" name="task-priority" aria-label="Default select example"
+							<select class="form-select" name="task_priority" aria-label="Default select example"
 								required>
 								<option value="1">1</option>
 								<option value="2">2</option>
@@ -54,7 +52,7 @@
 						</div>
 						<div class="col">
 							<label id="level" class="form-label">難易度</label>
-							<select class="form-select" name="task-level" aria-label="Default select example" required>
+							<select class="form-select" name="task_level" aria-label="Default select example" required>
 								<option value="1">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>
@@ -100,13 +98,12 @@
 					</div>
 				</div>
 
-				<input type="submit" value="確認">
-				<input type="submit" value="メニュー">
-				<input type="submit" value="戻る">
+				<input type="submit" class="confirm-button" value="確認">
 			</form>
 		</div>
 	</div>
-
+	<input type="submit" class="back-button" value="戻る">
+	<input type="submit" class="menu-button" value="メニュー">
 </body>
 
 </html>
