@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.entity.Task;
@@ -19,8 +20,6 @@ import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -34,9 +33,9 @@ public class UserCtrl {
 	@Qualifier("userService")
 	UserServiceInterface userService;
 
-//	@Autowired
-//	@Qualifier("groupService")
-//	GroupServiceInterface groupService;
+	//	@Autowired
+	//	@Qualifier("groupService")
+	//	GroupServiceInterface groupService;
 
 	//湊原追加
 	@Autowired
@@ -81,8 +80,6 @@ public class UserCtrl {
 	@PostMapping("deptGroupList")
 	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
 
-		
-		
 		Optional<User> user;
 
 		user = userCrudRepo.findById(user_id);
@@ -114,18 +111,18 @@ public class UserCtrl {
 	 * 所属グループ一覧画面を表示
 	 * @return
 	 */
-//	@GetMapping("deptGroupList")
-//	public ModelAndView deptGroupList() {
-//
-//		ModelAndView mav = new ModelAndView();
-//
-//		Iterable<Teams> deptGroupList = groupService.deptGroupList();
-//
-//		mav.addObject("groups", deptGroupList);
-//		mav.setViewName("common/deptGroupList");
-//
-//		return mav;
-//	}
+	//	@GetMapping("deptGroupList")
+	//	public ModelAndView deptGroupList() {
+	//
+	//		ModelAndView mav = new ModelAndView();
+	//
+	//		Iterable<Teams> deptGroupList = groupService.deptGroupList();
+	//
+	//		mav.addObject("groups", deptGroupList);
+	//		mav.setViewName("common/deptGroupList");
+	//
+	//		return mav;
+	//	}
 
 	/**
 	 * メニュー画面を表示
@@ -143,11 +140,25 @@ public class UserCtrl {
 	 * @return
 	 */
 	@GetMapping("taskList")
-	public ModelAndView taskList(ModelAndView mav) {
+	public ModelAndView taskList(ModelAndView mav,
+			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
+		//削除予定
 		session.setAttribute("groupUser", TaskService.taskUserSearch());
-		
-		System.out.println(session.getAttribute("groupUser"));
-		List<Task> task = TaskService.taskDisplayList();
+
+		System.out.println("konnnitihaaaaaaaa");
+		//		System.out.println(user_name);
+		List<Task> task = null;
+		//		task = TaskService.taskDisplayList(user_name);
+		String user = null;
+		if (selectedValue == null || selectedValue.equals("全員")) {
+			System.out.println("testooooooooooooooooooooooo");
+			task = TaskService.taskDisplayList(user);
+		} else {
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
+			user = ("and " + selectedValue);
+			System.out.println(user);
+			task = TaskService.taskDisplayList(user);
+		}
 		mav.addObject("tasks", task);
 		mav.setViewName("leader/taskList");
 		return mav;
@@ -160,11 +171,6 @@ public class UserCtrl {
 	 */
 	@GetMapping("taskRegister")
 	public ModelAndView taskRegister(ModelAndView mav) {
-		Iterable<Task> taskUser = TaskService.taskUserSearch();
-		//		System.out.println(taskUser);
-		mav.addObject("taskuser", taskUser);
-
-		//		System.out.println(taskUser);
 		mav.setViewName("leader/taskRegist");
 		return mav;
 	}
@@ -176,12 +182,12 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
-    
+
 		mav.addObject("tasks", t);
 		mav.setViewName("leader/taskRegistConfirm");
 		return mav;
 	}
-	
+
 	/**
 	 * タスク登録完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -190,14 +196,14 @@ public class UserCtrl {
 	@PostMapping("taskRegistComplete")
 	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
 
-		TaskService.taskRegister(t.getTask_category(),t.getTask_name(),t.getTask_content(),"未着手"
-				, t.getStart_date(), t.getEnd_date(), t.getTask_priority(),t.getTask_level(),t.getTask_weight()
-				, t.getUser_name(),t.getGroup_id());
+		TaskService.taskRegister(t.getTask_category(), t.getTask_name(), t.getTask_content(), "未着手", t.getStart_date(),
+				t.getEnd_date(), t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
+				t.getGroup_id());
 
 		mav.setViewName("leader/taskRegistComplete");
 		return mav;
 	}
-	
+
 	/**
 	 * タスク詳細画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -205,7 +211,7 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskDetail")
 	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
-//		System.out.println(t);
+		//		System.out.println(t);
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDetails");
 		return mav;
