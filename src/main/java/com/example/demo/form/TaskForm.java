@@ -1,16 +1,10 @@
 package com.example.demo.form;
 
-import org.springframework.data.annotation.Id;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class TaskForm {
-	@Id
+	
 	private Integer task_id;
 	private String task_category;
 	private String task_name;
