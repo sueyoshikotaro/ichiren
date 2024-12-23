@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.entity.Task;
-import com.example.demo.entity.Teams;
 import com.example.demo.entity.User;
+import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
@@ -76,7 +76,9 @@ public class UserCtrl {
 	//	}
 
 	/**
-	 * ID重複をチェック
+	 * ID重複チェック
+	 * 所属グループ一覧画面を表示
+	 * @return
 	 */
 	@PostMapping("deptGroupList")
 	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
@@ -87,8 +89,17 @@ public class UserCtrl {
 
 		if (user.get().getUser_id().equals(user_id)) {
 
+			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+
+			for (GroupDisplay a : deptGroupList) {
+				System.out.println(a);
+			}
+
+			mav.addObject("groupS", deptGroupList);
 			mav.setViewName("common/deptGroupList");
+
 			session.setAttribute("user", user);
+			session.setAttribute("groupUser", TaskService.taskUserSearch());
 		} else {
 
 			mav.setViewName("common/login");
@@ -106,27 +117,6 @@ public class UserCtrl {
 	public String resetPass() {
 
 		return "common/resetPass";
-	}
-
-	/**
-	 * 所属グループ一覧画面を表示
-	 * @return
-	 */
-	@GetMapping("deptGroupList")
-	public ModelAndView deptGroupList(ModelAndView mav) {
-
-		List<Teams> deptGroupList = groupService.deptGroupList();
-
-		mav.addObject("groupS", deptGroupList);
-		mav.setViewName("common/deptGroupList");
-		
-		for(Teams a : deptGroupList) {
-			System.out.println(a);
-		}
-
-		session.setAttribute("groupUser", TaskService.taskUserSearch());
-
-		return mav;
 	}
 
 	/**

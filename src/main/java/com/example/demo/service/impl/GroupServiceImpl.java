@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.entity.Teams;
+import com.example.demo.form.GroupDisplay;
 import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 
@@ -19,8 +19,8 @@ public class GroupServiceImpl implements GroupServiceInterface {
 	 * 所属グループ一覧画面表示
 	 */
 	@Override
-	public List<Teams> deptGroupList() {
+	public List<GroupDisplay> deptGroupList(String user_id) {
 
-		return groupCrudRepo.deptGroupList();
+		return groupCrudRepo.deptGroupList(user_id);
 	}
 }
