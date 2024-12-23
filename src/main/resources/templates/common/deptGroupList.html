@@ -19,37 +19,14 @@
 	<h2 th:if="${session.user}" th:text="${session.user.get().getUser_name()}+さん、ログイン中"></h2>
 
 	<table>
-
-		<tr th:each="deptGroupList : ${groupS}">
-			<p th:text="'グループ名:'+ $deptGroupList.group_name">a</p>
-			<p th:text="'ジャンル:'+ $deptGroupList.genre">b</p>
-			<p th:text="'役職:'+ $deptGroupList.roll_name">c</p>
-		</tr><br>
-
-		<form th:action="@{taskdon/user/menu}" method="get">
-			<table border="1">
-				<tr th:each="deptGroupList : ${groupS}">
-					<td th:text="${deptGroupList.group_nsme}"></td>
-					<td th:text="${deptGroupList.genre}"></td>
-					<td th:text="${deptGroupList.roll_name}"></td>
-					<td><button type="submit" name="button" value="menu">メニューへ</button></td>
-				</tr>
-			</table>
+		<form th:action="@{menu}" method="get">
+			<tr th:each="deptGroup : ${groupS}">
+				<td th:text="${deptGroup.group_name}"></td>
+				<td th:text="${deptGroup.genre}"></td>
+				<td th:text="${deptGroup.user_roll}"></td>
+				<td><button type="submit" name="button" value="menu">メニューへ</button></td>
+			</tr>
 		</form>
-
-		<!--		<tr th:if="group" th:each="group : ${groupList}">-->
-		<!--			<td th:text="${group.group_name}"></td>-->
-		<!--			<td th:text="${group.genre}"></td>-->
-		<!--			<td th:text="${group.work_status}"></td>-->
-		<!--			<td>-->
-		<!--				<form th:action="@{taskdon/user/menu}" method="get">-->
-		<!--					<input type="hidden" name="group_name" th:value="${group.group_name}">-->
-		<!--					<input type="hidden" name="genre" th:value="${group.genre}">-->
-		<!--					<input type="hidden" name="work_status" th:value="${group.work_status}">-->
-		<!--					<input type="submit" value="メニューへ">-->
-		<!--				</form>-->
-		<!--			</td>-->
-		<!--		</tr>-->
 	</table>
 </body>
 
