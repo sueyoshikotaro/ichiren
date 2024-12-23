@@ -13,5 +13,5 @@ public interface SchoolDisplayServiceInterface {
 	public List<SchoolDisplay> EditSchoolDetails(String room_id);
 	
 	//学校情報詳細編集
-	public void EditSchoolDetailsComp(int room_id, String room_name, int pc_flg,String hall, String floor, int school_id);
+	public void EditSchoolDetailsComp(String room_name, int pc_flg,String hall, String floor, int school_id, int room_id);
 }
