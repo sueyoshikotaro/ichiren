@@ -18,9 +18,9 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * タスク一覧表示
 	 */
 	@Override
-	public List<Task> taskDisplayList() {
+	public List<Task> taskDisplayList(String user) {
 
-		return repo.selectTask();
+		return repo.selectTask(user);
 	}
 	
 	/**
@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	}
 
 	@Override
-	public Iterable<Task> taskUserSearch() {
+	public Iterable<String> taskUserSearch() {
 //		
 		return repo.selectTaskByUser();
 	}

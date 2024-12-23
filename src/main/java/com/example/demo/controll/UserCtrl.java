@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.entity.Task;
@@ -20,7 +21,6 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
 
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -120,6 +120,7 @@ public class UserCtrl {
 	}
 
 	/**
+
 	 * メニュー画面を表示
 	 * @return
 	 */
@@ -135,11 +136,26 @@ public class UserCtrl {
 	 * @return
 	 */
 	@GetMapping("taskList")
-	public ModelAndView taskList(ModelAndView mav) {
+	public ModelAndView taskList(ModelAndView mav,
+			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
+		//削除予定
 		session.setAttribute("groupUser", TaskService.taskUserSearch());
 
-		System.out.println(session.getAttribute("groupUser"));
-		List<Task> task = TaskService.taskDisplayList();
+		System.out.println("konnnitihaaaaaaaa");
+		//		System.out.println(user_name);
+		List<Task> task = null;
+		//		task = TaskService.taskDisplayList(user_name);
+		String user = null;
+		if (selectedValue == null || selectedValue.equals("全員")) {
+			System.out.println("testooooooooooooooooooooooo");
+			task = TaskService.taskDisplayList(user);
+		} else {
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
+			user = ("and " + selectedValue);
+			System.out.println(user);
+			task = TaskService.taskDisplayList(user);
+		}
+
 		mav.addObject("tasks", task);
 		mav.setViewName("leader/taskList");
 		return mav;
@@ -152,11 +168,6 @@ public class UserCtrl {
 	 */
 	@GetMapping("taskRegister")
 	public ModelAndView taskRegister(ModelAndView mav) {
-		Iterable<Task> taskUser = TaskService.taskUserSearch();
-		//		System.out.println(taskUser);
-		mav.addObject("taskuser", taskUser);
-
-		//		System.out.println(taskUser);
 		mav.setViewName("leader/taskRegist");
 		return mav;
 	}

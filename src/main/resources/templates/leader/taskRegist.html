@@ -12,6 +12,7 @@
 </head>
 
 <body>
+
 	<button class="logoutButton" th:href="@{/taskdon/admin/logout}">ログアウト</button>
 	<div class="container">
 		<h2>【タスク登録】</h2>
@@ -33,7 +34,7 @@
 					<label>担当者</label>
 					<select name="user_name" class="form-select" aria-label="Default select example" required>
 						<option selected disabled>担当者を選択してください</option>
-						<option th:each="user : ${taskuser}" th:value="${user.user_name}" th:text="${user.user_name}">
+						<option name="user_name" th:each="user : ${session.groupUser}" th:value="${user}" th:text="${user}">
 						</option>
 					</select>
 				</div>
