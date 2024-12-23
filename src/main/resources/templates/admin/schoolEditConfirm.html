@@ -1,10 +1,74 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>タスクどん</title>
-</head>
-<body>
 
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+</head>
+
+<body>
+	<h1>学校情報編集</h1><br>
+
+	<tr th:each="schoolDetails : ${SchoolDisplay}" th:if="${schoolDetailsStat.index == 0}">
+		<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
+		<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
+	</tr><br>
+
+
+	<form th:action="@{schoolEditConfirm}" method="post">
+		<table th:each="schoolDetails : ${SchoolDisplay}">
+			<tr>
+				<th>教室名</th>
+				<td th:text="${schoolDetails.room_name}"></td>
+			</tr>
+
+			<tr>
+				<th>建物</th>
+				<td th:text="${schoolDetails.hall}"></td>
+			</tr>
+
+			<tr>
+				<th>階層</th>
+				<td th:text="${schoolDetails.floor}"></td>
+			</tr>
+
+			<tr>
+				<th>PC</th>
+				<td th:if="${schoolDetails.pc_flg == 1}">有</td>
+				<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
+			</tr>
+
+			<tr>
+				<td colspan="2" align="right">
+
+					<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
+					<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
+					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
+					<input type="submit" value="編集">
+				</td>
+			</tr>
+
+		</table>
+	</form>
+
+	<!--パスワード再設定説明(ポップアップ)-->
+	<p class="Ano">※<a href="#" class="popup-link">パスワードを忘れた場合</a></p>
+	<div class="popup" style="display: none;">
+		<div class="popup-content">
+			<span class="close">&times;</span>
+			<h3>【パスワードを忘れた場合の対処方法】</h3>
+			<p>・ユーザは以下の手続きをお願いします</p>
+			<ul>
+				<li>1.管理者にパスワードを忘れた旨を説明</li>
+				<li>2.パスワードの初期化をしてもらう</li>
+				<li>3.初期化後,デフォルトパスワードでログイン</li>
+				<li>4.パスワード再設定を行う</li>
+			</ul>
+			<p> ※管理者は、パスワード初期化できません。</p>
+		</div>
+	</div>
 </body>
+
 </html>
