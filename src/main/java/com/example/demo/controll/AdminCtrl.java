@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
+import com.example.demo.form.UserView;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
@@ -270,11 +271,107 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("teInfoRegistComp")
-	public ModelAndView dispTeInfoRegistComp(UserDisplay u, ModelAndView mav) {
+	public ModelAndView dispTeInfoRegistComp(UserView u, ModelAndView mav) {
 		
-		userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), u.getUser_pass(), u.getSchool_name(), u.getEnr_year(), 1);
+		userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
 		
-		mav.setViewName("teInfoRegistComp");
+		//userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
+		
+		mav.setViewName("admin/teInfoRegistComp");
+		
+		return mav;
+	}
+	
+	
+	/*
+	 * 向江
+	 * 講師一覧画面を表示するリクエストハンドラメソッド
+	 * @return 講師一覧
+	 */
+	@GetMapping("teList")
+	public ModelAndView dispTeList() {
+		
+		ModelAndView mav = new ModelAndView();
+		
+		Iterable<UserDisplay> teList = userDisplayService.teList();
+		
+		mav.addObject("tes", teList);
+		mav.setViewName("admin/teList");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師退職確認画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teDeleteConfirm")
+	public ModelAndView dispTeDelete(UserDisplay u, ModelAndView mav) {
+		
+		mav.addObject("te", u);
+		mav.setViewName("admin/teDeleteConfirm");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師情報退職完了画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teDeleteComp")
+	public ModelAndView TeDeleteComp(UserDisplay u, ModelAndView mav) {
+		
+		
+		// サービスのメソッドを呼び出す
+		userDisplayService.DeleteUser(u.getUser_id());
+	
+		mav.setViewName("admin/teUpdateComp");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師編集画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teUpdate")
+	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
+		
+		mav.addObject("te", u);
+		mav.setViewName("admin/teUpdate");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師情報編集確認画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teUpdateConfirm")
+	public ModelAndView dispTeUpdateConfirm(UserDisplay u, ModelAndView mav) {
+		
+		mav.addObject("te", u);
+		mav.setViewName("admin/teUpdateConfirm");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師情報編集完了画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teUpdateComp")
+	public ModelAndView dispTeUpdateComp(UserDisplay u, ModelAndView mav) {
+		
+		// サービスのメソッドを呼び出す
+		userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(),1);
+		
+		mav.setViewName("admin/teUpdateComp");
 		
 		return mav;
 	}
