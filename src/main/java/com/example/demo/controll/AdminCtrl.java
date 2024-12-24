@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+<<<<<<< HEAD
 import com.example.demo.entity.Teams;
+=======
+import com.example.demo.annotation.LoginRequired;
+>>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
@@ -72,7 +76,11 @@ public class AdminCtrl {
 	 * メニュー画面を表示する
 	 * @return
 	 */
+<<<<<<< HEAD
 	//	@LoginRequired
+=======
+	@LoginRequired
+>>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 	@GetMapping("menu")
 	public String menu() {
 		return "admin/menu";
@@ -89,6 +97,8 @@ public class AdminCtrl {
 		//schoolS.schoolDateils();
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
+		
+		//ラジオボタンの情報を取得
 		model.addAttribute("FormContent", new FormContents());
 
 		mav.addObject("schoolS", SchoolDetails);
@@ -115,8 +125,14 @@ public class AdminCtrl {
 			mav.setViewName("admin/schoolEdit");
 
 		} else if (button.equals("add")) {
+<<<<<<< HEAD
 			//			mav.setViewName("admin/schoolAdd");
 
+=======
+			
+			mav.setViewName("admin/schoolAdd");
+      
+>>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 		} else {
 			//			mav.addObject("schoolEdit", EditSchoolDetails);
 			//			mav.setViewName("admin/deleteSchoolDetails");
@@ -132,11 +148,41 @@ public class AdminCtrl {
 	 */
 	@PostMapping("schoolEditConfirm")
 	public ModelAndView schoolEditConfirm(SchoolDisplay s, ModelAndView mav) {
+<<<<<<< HEAD
 
+=======
+		
+		System.out.println(s);
+		
+		mav.addObject("SchoolDisplay", s);
+>>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 		mav.setViewName("admin/schoolEditConfirm");
 
 		return mav;
 	}
+<<<<<<< HEAD
+=======
+	
+	
+	/**
+	 * 末吉
+	 * 学校情報編集確認画面を表示する
+	 * @return
+	 */	
+	@PostMapping("schoolEditConp")
+	public ModelAndView schoolEditCo(SchoolDisplay r, ModelAndView mav) {
+		
+		System.out.println(r);
+		
+		
+		schoolDisplayService.EditSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id(), r.getRoom_id());
+		
+		mav.setViewName("admin/schoolEditConfirm");
+		
+		return mav;
+	}
+	
+>>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 
 	/*
 	 * 向江
@@ -373,6 +419,7 @@ public class AdminCtrl {
 		return mav;
 	}
 
+
 	/*
 	 * 向江
 	 * グループ一覧画面を表示する
@@ -457,4 +504,6 @@ public class AdminCtrl {
 		return "groopCreate";
 	}
 
+=======
+>>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 }
