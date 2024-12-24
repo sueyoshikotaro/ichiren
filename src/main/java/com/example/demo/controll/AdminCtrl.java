@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.annotation.LoginRequired;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
@@ -65,7 +66,7 @@ public class AdminCtrl {
 	 * メニュー画面を表示する
 	 * @return
 	 */
-//	@LoginRequired
+	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
 		return "admin/menu";
@@ -82,6 +83,8 @@ public class AdminCtrl {
 		//schoolS.schoolDateils();
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
+		
+		//ラジオボタンの情報を取得
 		model.addAttribute("FormContent", new FormContents());
 		
 		mav.addObject("schoolS", SchoolDetails);
@@ -107,7 +110,8 @@ public class AdminCtrl {
 			mav.setViewName("admin/schoolEdit");
 
 		} else if (button.equals("add")) {
-//			mav.setViewName("admin/schoolAdd");
+			
+			mav.setViewName("admin/schoolAdd");
       
 		} else {
 //			mav.addObject("schoolEdit", EditSchoolDetails);
@@ -126,15 +130,32 @@ public class AdminCtrl {
 	@PostMapping("schoolEditConfirm")
 	public ModelAndView schoolEditConfirm(SchoolDisplay s, ModelAndView mav) {
 		
+		System.out.println(s);
 		
-		
+		mav.addObject("SchoolDisplay", s);
 		mav.setViewName("admin/schoolEditConfirm");
 		
 		return mav;
 	}
 	
 	
-	
+	/**
+	 * 末吉
+	 * 学校情報編集確認画面を表示する
+	 * @return
+	 */	
+	@PostMapping("schoolEditConp")
+	public ModelAndView schoolEditCo(SchoolDisplay r, ModelAndView mav) {
+		
+		System.out.println(r);
+		
+		
+		schoolDisplayService.EditSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id(), r.getRoom_id());
+		
+		mav.setViewName("admin/schoolEditConfirm");
+		
+		return mav;
+	}
 	
 
 	/*
@@ -278,77 +299,4 @@ public class AdminCtrl {
 		
 		return mav;
 	}
-	
-	/**
-	 * グループ一覧画面を表示する
-	 * @return
-	 */
-	public String groopList() {
-		return "groopList";
-	}
-
-	/**
-	 * グループ詳細画面を表示する
-	 * @return
-	 */
-	public String groopDetail() {
-		return "groopDetail";
-	}
-
-	/**
-	 * グループメンバ詳細画面を表示する
-	 * @return
-	 */
-	public String memberDetails() {
-		return "memberDetails";
-	}
-
-	/**
-	 * グループ編集画面を表示する
-	 * @return
-	 */
-	public String userUpdate() {
-		return "userDetail";
-	}
-
-	/**
-	 * グループメンバ追加画面を表示する
-	 * @return
-	 */
-	public String memberAdd() {
-		return "memberAdd";
-	}
-
-	/**
-	 * グループメンバ追加確認画面を表示する
-	 * @return
-	 */
-	public String memberAddConfirm() {
-		return "memberAddConfirm";
-	}
-
-	/**
-	 * グループメンバ削除確認画面を表示する
-	 * @return
-	 */
-	public String memberDeleteConfirm() {
-		return "memberDeleteConfirm";
-	}
-
-	/**
-	 * グループ解散確認画面を表示する
-	 * @return
-	 */
-	public String groopDeleteConfirm() {
-		return "groopDeleteConfirm";
-	}
-
-	/**
-	 * 	グループ作成画面を表示する
-	 * @return
-	 */
-	public String groopCreate() {
-		return "groopCreate";
-	}
-
 }

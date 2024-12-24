@@ -1,5 +1,9 @@
 package com.example.demo.service;
 
+import java.util.List;
+
+import com.example.demo.form.GroupDisplay;
+
 public interface GroupServiceInterface {
 
 	/**
@@ -7,5 +11,5 @@ public interface GroupServiceInterface {
 	 * ユーザ
 	 * 所属グループ一覧
 	 */
-//	public List<Teams> deptGroupList();
+	public List<GroupDisplay> deptGroupList(String user_id);
 }

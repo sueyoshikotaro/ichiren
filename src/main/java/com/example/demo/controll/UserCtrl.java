@@ -16,10 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
+import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
+import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -33,9 +36,9 @@ public class UserCtrl {
 	@Qualifier("userService")
 	UserServiceInterface userService;
 
-	//	@Autowired
-	//	@Qualifier("groupService")
-	//	GroupServiceInterface groupService;
+	@Autowired
+	@Qualifier("groupService")
+	GroupServiceInterface groupService;
 
 	//湊原追加
 	@Autowired
@@ -75,7 +78,9 @@ public class UserCtrl {
 	//	}
 
 	/**
-	 * ID重複をチェック
+	 * ID重複チェック
+	 * 所属グループ一覧画面を表示
+	 * @return
 	 */
 	@PostMapping("deptGroupList")
 	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
@@ -86,8 +91,17 @@ public class UserCtrl {
 
 		if (user.get().getUser_id().equals(user_id)) {
 
+			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+
+			for (GroupDisplay a : deptGroupList) {
+				System.out.println(a);
+			}
+
+			mav.addObject("groupS", deptGroupList);
 			mav.setViewName("common/deptGroupList");
+
 			session.setAttribute("user", user);
+			session.setAttribute("groupUser", TaskService.taskUserSearch());
 		} else {
 
 			mav.setViewName("common/login");
@@ -108,23 +122,7 @@ public class UserCtrl {
 	}
 
 	/**
-	 * 所属グループ一覧画面を表示
-	 * @return
-	 */
-	//	@GetMapping("deptGroupList")
-	//	public ModelAndView deptGroupList() {
-	//
-	//		ModelAndView mav = new ModelAndView();
-	//
-	//		Iterable<Teams> deptGroupList = groupService.deptGroupList();
-	//
-	//		mav.addObject("groups", deptGroupList);
-	//		mav.setViewName("common/deptGroupList");
-	//
-	//		return mav;
-	//	}
 
-	/**
 	 * メニュー画面を表示
 	 * @return
 	 */
@@ -156,6 +154,7 @@ public class UserCtrl {
 			user = selectedValue;
 			task = TaskService.taskDisplayList(user);
 		}
+
 		mav.addObject("tasks", task);
 		System.out.println(task);
 		mav.setViewName("leader/taskList");
