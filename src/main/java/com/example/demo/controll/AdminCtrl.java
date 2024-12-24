@@ -69,7 +69,7 @@ public class AdminCtrl {
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
-		return "admin/menu";
+		return "admin/menuAdmin";
 	}
 
 	/**
@@ -109,8 +109,10 @@ public class AdminCtrl {
 			mav.addObject("schoolEdit", EditSchoolDetails);
 			mav.setViewName("admin/schoolEdit");
 
+		//追加ボタンを押下
 		} else if (button.equals("add")) {
 			
+			mav.addObject("schoolAdd", schoolDisplayService.SchoolDetails());
 			mav.setViewName("admin/schoolAdd");
       
 		} else {
@@ -130,8 +132,6 @@ public class AdminCtrl {
 	@PostMapping("schoolEditConfirm")
 	public ModelAndView schoolEditConfirm(SchoolDisplay s, ModelAndView mav) {
 		
-		System.out.println(s);
-		
 		mav.addObject("SchoolDisplay", s);
 		mav.setViewName("admin/schoolEditConfirm");
 		
@@ -141,14 +141,11 @@ public class AdminCtrl {
 	
 	/**
 	 * 末吉
-	 * 学校情報編集確認画面を表示する
+	 * 学校情報編集完了画面を表示する
 	 * @return
 	 */	
-	@PostMapping("schoolEditConp")
-	public ModelAndView schoolEditCo(SchoolDisplay r, ModelAndView mav) {
-		
-		System.out.println(r);
-		
+	@PostMapping("schoolEditComp")
+	public ModelAndView schoolEditComp(SchoolDisplay r, ModelAndView mav) {
 		
 		schoolDisplayService.EditSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id(), r.getRoom_id());
 		
@@ -157,6 +154,36 @@ public class AdminCtrl {
 		return mav;
 	}
 	
+	
+	/**
+	 * 末吉
+	 * 学校情報追加確認画面を表示する
+	 * @return
+	 */	
+	@PostMapping("schoolAddConfirm")
+	public ModelAndView schoolAddConfirm(SchoolDisplay s, ModelAndView mav) {
+		
+		mav.addObject("SchoolDisplay", s);
+		mav.setViewName("admin/schoolAddConfirm");
+		
+		return mav;
+	}
+	
+	
+	/**
+	 * 末吉
+	 * 学校情報追加完了
+	 * @return
+	 */
+	@PostMapping("schoolAddComp")
+	public ModelAndView schoolAddComp(SchoolDisplay r, ModelAndView mav) {
+		
+		schoolDisplayService.AddSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id());
+		
+		mav.setViewName("admin/menuAdmin");
+		
+		return mav;
+	}
 
 	/*
 	 * 向江

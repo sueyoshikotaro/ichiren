@@ -30,7 +30,6 @@
 			<tr th:each="schoolDetails : ${schoolS}">
 				<td><input type="radio" th:value="${schoolDetails.room_id}" name="roomId" th:field="*{content}" /></td>
 
-
 				<td th:text="${schoolDetails.room_name}"></td>
 				<td th:text="${schoolDetails.hall}"></td>
 				<td th:text="${schoolDetails.floor}"></td>
