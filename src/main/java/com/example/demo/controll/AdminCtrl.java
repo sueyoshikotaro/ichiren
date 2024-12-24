@@ -121,6 +121,7 @@ public class AdminCtrl {
 		//追加ボタンを押下
 		} else if (button.equals("add")) {
 			
+			mav.addObject("schoolAdd", schoolDisplayService.SchoolDetails());
 			mav.setViewName("admin/schoolAdd");
       
 		} else {
