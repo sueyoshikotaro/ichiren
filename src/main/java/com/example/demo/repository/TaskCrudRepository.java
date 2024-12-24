@@ -20,6 +20,9 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * タスク一覧表示
 	 */
 	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id where task_flg= 1;")
+	public List<Task> selectTask();
+	
+	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id where task_flg= 1 and user_name=:user;")
 	public List<Task> selectTask(String user);
 
 	/**
