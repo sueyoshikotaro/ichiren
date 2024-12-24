@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-<<<<<<< HEAD
+
 import com.example.demo.entity.Teams;
-=======
+
 import com.example.demo.annotation.LoginRequired;
->>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
@@ -76,14 +75,10 @@ public class AdminCtrl {
 	 * メニュー画面を表示する
 	 * @return
 	 */
-<<<<<<< HEAD
-	//	@LoginRequired
-=======
 	@LoginRequired
->>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 	@GetMapping("menu")
 	public String menu() {
-		return "admin/menu";
+		return "admin/menuAdmin";
 	}
 
 	/**
@@ -113,8 +108,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolDetailsChange")
-	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
-			@ModelAttribute FormContents formcontents, ModelAndView mav) {
+	public ModelAndView schoolDetailsChange(@RequestParam("button") String button, @ModelAttribute FormContents formcontents, ModelAndView mav) {
 
 		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
 
@@ -124,15 +118,11 @@ public class AdminCtrl {
 			mav.addObject("schoolEdit", EditSchoolDetails);
 			mav.setViewName("admin/schoolEdit");
 
+		//追加ボタンを押下
 		} else if (button.equals("add")) {
-<<<<<<< HEAD
-			//			mav.setViewName("admin/schoolAdd");
-
-=======
 			
 			mav.setViewName("admin/schoolAdd");
       
->>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 		} else {
 			//			mav.addObject("schoolEdit", EditSchoolDetails);
 			//			mav.setViewName("admin/deleteSchoolDetails");
@@ -148,32 +138,21 @@ public class AdminCtrl {
 	 */
 	@PostMapping("schoolEditConfirm")
 	public ModelAndView schoolEditConfirm(SchoolDisplay s, ModelAndView mav) {
-<<<<<<< HEAD
-
-=======
-		
-		System.out.println(s);
 		
 		mav.addObject("SchoolDisplay", s);
->>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 		mav.setViewName("admin/schoolEditConfirm");
 
 		return mav;
 	}
-<<<<<<< HEAD
-=======
 	
 	
 	/**
 	 * 末吉
-	 * 学校情報編集確認画面を表示する
+	 * 学校情報編集完了画面を表示する
 	 * @return
 	 */	
-	@PostMapping("schoolEditConp")
-	public ModelAndView schoolEditCo(SchoolDisplay r, ModelAndView mav) {
-		
-		System.out.println(r);
-		
+	@PostMapping("schoolEditComp")
+	public ModelAndView schoolEditComp(SchoolDisplay r, ModelAndView mav) {
 		
 		schoolDisplayService.EditSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id(), r.getRoom_id());
 		
@@ -182,7 +161,35 @@ public class AdminCtrl {
 		return mav;
 	}
 	
->>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
+	/**
+	 * 末吉
+	 * 学校情報追加確認画面を表示する
+	 * @return
+	 */	
+	@PostMapping("schoolAddConfirm")
+	public ModelAndView schoolAddConfirm(SchoolDisplay s, ModelAndView mav) {
+		
+		mav.addObject("SchoolDisplay", s);
+		mav.setViewName("admin/schoolAddConfirm");
+		
+		return mav;
+	}
+	
+
+	/**
+	 * 末吉
+	 * 学校情報追加完了
+	 * @return
+	 */
+	@PostMapping("schoolAddComp")
+	public ModelAndView schoolAddComp(SchoolDisplay r, ModelAndView mav) {
+		
+		schoolDisplayService.AddSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id());
+		
+		mav.setViewName("admin/menuAdmin");
+		
+		return mav;
+	}
 
 	/*
 	 * 向江
@@ -504,6 +511,4 @@ public class AdminCtrl {
 		return "groopCreate";
 	}
 
-=======
->>>>>>> branch 'master' of https://github.com/sueyoshikotaro/ichiren.git
 }
