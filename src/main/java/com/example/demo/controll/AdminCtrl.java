@@ -156,9 +156,9 @@ public class AdminCtrl {
 	public ModelAndView schoolEditComp(SchoolDisplay r, ModelAndView mav) {
 		
 		schoolDisplayService.EditSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id(), r.getRoom_id());
-		
+	
 		mav.setViewName("admin/schoolEditConfirm");
-		
+	
 		return mav;
 	}
 	
@@ -327,7 +327,7 @@ public class AdminCtrl {
 
 		userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(),
 				u.getEnr_year(), 1);
-
+		
 		//userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
 
 		mav.setViewName("admin/teInfoRegistComp");

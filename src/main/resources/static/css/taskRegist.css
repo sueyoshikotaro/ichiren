@@ -1,0 +1,105 @@
+
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Sawarabi+Mincho');
+
+body {
+	background-image: url(../img/backImage01.png);
+	font-family: 'Sawarabi Mincho', sans-serif;
+}
+
+.no-wrap {
+	display: inline;
+}
+
+.iconLink {
+	-webkit-transition: all .3s;
+	transition: all .3s;
+	cursor: pointer;
+}
+
+.iconLink:hover {
+	transform: scale(0.9, 0.9);
+}
+
+.form-group {
+	margin-top: 14px;
+}
+
+.form-label {
+	margin-bottom: 0px;
+}
+
+/* コンテナのスタイル */
+.container {
+	background-color: #FFFCDD;
+	max-width: 480px;
+	padding: 20px;
+	margin-top: 15px;
+	border: 3px solid black;
+	border-radius: 20px;
+}
+
+.logoutButton {
+	position: fixed;
+	width: 120px;
+	height: 40px;
+	padding: 10px;
+	background-color: #3399FF;
+	margin-top: 15px;
+	right: 20px;
+	font-size: 14px;
+	cursor: pointer;
+	-webkit-transition: all .3s;
+	transition: all .3s;
+	border-radius: 20px;
+}
+
+.logoutButton:hover {
+	transform: scale(0.9, 0.9);
+}
+
+.confirm-button {
+	width: 100px;
+	height: 40px;
+	padding: 10px;
+	background-color: #4CAF50;
+	color: #fff;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	font-size: 16px;
+	margin-top: 15px;
+	-webkit-transition: all .3s;
+	transition: all .3s;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+.confirm-button:hover {
+	transform: scale(0.9, 0.9);
+	background-color: #3e8e41;
+}
+.back-button {
+	width: 100px;
+	height: 40px;
+	padding: 10px;
+	background-color: #4CAF50;
+	color: #fff;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	font-size: 16px;
+	margin-top: 15px;
+	-webkit-transition: all .3s;
+	transition: all .3s;
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
+}
+
+.back-button:hover {
+	transform: scale(0.9, 0.9);
+	background-color: #3e8e41;
+}
