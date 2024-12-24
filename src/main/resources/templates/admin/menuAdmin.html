@@ -1,52 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<meta charset="UTF-8">
 
 <head>
-	<title>タスクどん|メニュー</title>
+	<title>タスクどん_メニュー</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-	<link rel="stylesheet" th:href="@{/css/menu1.css}">
-	<link rel="icon" type="image/png" th:href="@{/img/icon.png}">
+
+	<!--CSSリンク挿入欄-->
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
 </head>
 
 <body>
 	<h2>メニュー</h2>
-	<div class="container">
+	<div class="menu-container">
 		<form name="form1" th:action="@{schoolDetails}" method="get">
-			<div class="button-group">
-				<button type="submit" class="btn btn-outline-primary">グループ一覧</button>
-			</div>
+			<button type="submit">グループ一覧</button><br>
 		</form>
 
 		<form name="form1" th:action="@{schoolDetails}" method="get">
-			<div class="button-group">
-				<button type="submit" class="btn btn-outline-primary">学校情報詳細</button>
-			</div>
+			<button type="submit">学校情報詳細</button><br>
 		</form>
 
 		<form name="form1" th:action="@{userList}" method="get">
-			<div class="button-group">
-				<button type="submit" class="btn btn-outline-primary">ユーザ一覧</button>
-			</div>
+			<button type="submit">ユーザ一覧</button><br>
 		</form>
 
 		<form name="form1" th:action="@{/nextpage}" method="get">
-			<div class="button-group">
-				<button type="submit" class="btn btn-outline-primary">チャット</button>
-			</div>
+			<button type="submit">チャット</button><br>
 		</form>
-
+		
 		<!--ログインしているユーザが大ボスの場合-->
 		<div th:if="${#strings.startsWith(session.user.get().getUser_id(), 'ad')}">
 			<form name="form1" th:action="@{teInfoRegist}" method="get">
-				<div class="button-group">
-					<button type="submit" class="btn btn-outline-primary">講師一覧</button>
-				</div>
+				<button type="submit">講師一覧</button><br>
 			</form>
 		</div>
-
 	</div>
 </body>
 
