@@ -12,4 +12,6 @@ public interface GroupServiceInterface {
 	 * 所属グループ一覧
 	 */
 	public List<GroupDisplay> deptGroupList(String user_id);
+	
+	
 }

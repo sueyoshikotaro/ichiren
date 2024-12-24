@@ -3,8 +3,6 @@ package com.example.demo.controll;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -23,6 +21,7 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
 
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -78,6 +77,16 @@ public class UserCtrl {
 	//	}
 
 	/**
+	 * パスワード再設定画面を表示
+	 * @return
+	 */
+	@GetMapping("resetPass")
+	public String resetPass() {
+
+		return "common/resetPass";
+	}
+
+	/**
 	 * ID重複チェック
 	 * 所属グループ一覧画面を表示
 	 * @return
@@ -93,15 +102,14 @@ public class UserCtrl {
 
 			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
-			for (GroupDisplay a : deptGroupList) {
-				System.out.println(a);
-			}
+			//			for (GroupDisplay a : deptGroupList) {
+			//				System.out.println(a);
+			//			}
 
 			mav.addObject("groupS", deptGroupList);
 			mav.setViewName("common/deptGroupList");
 
 			session.setAttribute("user", user);
-			session.setAttribute("groupUser", TaskService.taskUserSearch());
 		} else {
 
 			mav.setViewName("common/login");
@@ -112,25 +120,21 @@ public class UserCtrl {
 	}
 
 	/**
-	 * パスワード再設定画面を表示
-	 * @return
-	 */
-	@GetMapping("resetPass")
-	public String resetPass() {
-
-		return "common/resetPass";
-	}
-
-	/**
-
 	 * メニュー画面を表示
 	 * @return
 	 */
-	@GetMapping("menu_choose")
+	@GetMapping("menu")
 	public String menu() {
 
-		return "leader/menu_choose";
+		session.setAttribute("groupUser", TaskService.taskUserSearch());
+
+		return "common/menuUser";
 	}
+
+	/**
+	 * メンバ一覧画面を表示
+	 * @return
+	 */
 
 	/**
 	 * タスク一覧画面を表示するリクエストハンドラメソッド
@@ -213,4 +217,19 @@ public class UserCtrl {
 		mav.setViewName("leader/taskDetails");
 		return mav;
 	}
+
+	/**
+	 * 連絡事項作成画面を表示
+	 * @return
+	 */
+
+	/**
+	 * ToDoリスト画面を表示
+	 * @return
+	 */
+
+	/**
+	 * チャット画面を表示
+	 * @return
+	 */
 }
