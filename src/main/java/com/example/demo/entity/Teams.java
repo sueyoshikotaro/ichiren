@@ -14,6 +14,9 @@ public class Teams {
 	@Id
 	private int group_id;
 	private String group_name;
+	
+	private int progress;
+	
 	private String school_id;
 	private int group_flg;
 	private String genre;
