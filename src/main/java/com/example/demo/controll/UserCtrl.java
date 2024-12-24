@@ -141,24 +141,22 @@ public class UserCtrl {
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
 		//削除予定
-		session.setAttribute("groupUser", TaskService.taskUserSearch());
+//		session.setAttribute("groupUser", TaskService.taskUserSearch());
 
-		System.out.println("konnnitihaaaaaaaa");
 		//		System.out.println(user_name);
 		List<Task> task = null;
 		//		task = TaskService.taskDisplayList(user_name);
-		String user = null;
+		String user = "all";
 		if (selectedValue == null || selectedValue.equals("全員")) {
-			System.out.println("testooooooooooooooooooooooo");
 			task = TaskService.taskDisplayList(user);
 		} else {
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
-			user = ("and " + selectedValue);
-			System.out.println(user);
+			mav.getModel().clear();
+			user = selectedValue;
 			task = TaskService.taskDisplayList(user);
 		}
 
 		mav.addObject("tasks", task);
+		System.out.println(task);
 		mav.setViewName("leader/taskList");
 		return mav;
 	}
