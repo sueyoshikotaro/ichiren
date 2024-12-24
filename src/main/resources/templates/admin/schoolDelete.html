@@ -1,10 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+	<title>タスクどん</title>
+
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 <body>
+	<h1>学校情報編集</h1><br>
+
+<!--	<tr th:each="schoolDetails : ${schoolEdit}" th:if="${schoolDetailsStat.index == 0}">-->
+<!--		<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>-->
+<!--		<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>-->
+<!--	</tr><br>-->
+
+
+<!--	<form th:action="@{schoolEditConfirm}" method="post">-->
+<!--		<table th:each="schoolDetails : ${schoolEdit}">-->
+<!--			<tr>-->
+<!--				<th>教室名</th>-->
+<!--				<td><input type="text" th:value="${schoolDetails.room_name}" name="room_name" required /></td>-->
+<!--			</tr>-->
+
+<!--			<tr>-->
+<!--				<th>建物</th>-->
+<!--				<td><input type="text" th:value="${schoolDetails.hall}" name="hall" required /></td>-->
+<!--			</tr>-->
+
+<!--			<tr>-->
+<!--				<th>階層</th>-->
+<!--				<td><input type="text" th:value="${schoolDetails.floor}" name="floor" required /></td>-->
+<!--			</tr>-->
+
+<!--			<tr>-->
+<!--				<th>PC</th>-->
+<!--				<td>-->
+<!--					<select name="pc_flg" th:value="${schoolDetails.pc_flg}">-->
+<!--						<option th:value="1" th:text="有" th:selected="${schoolDetails.pc_flg == 1}"></option>-->
+<!--						<option th:value="0" th:text="無" th:selected="${schoolDetails.pc_flg == 0}"></option>-->
+<!--					</select>-->
+<!--				</td>-->
+<!--			</tr>-->
+
+<!--			<tr>-->
+<!--				<td colspan="2" align="right">-->
+
+<!--					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">-->
+<!--					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">-->
+<!--					<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">-->
+<!--					<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">-->
+<!--					<input type="submit" value="確認">-->
+<!--				</td>-->
+<!--			</tr>-->
 
 </body>
 </html>
