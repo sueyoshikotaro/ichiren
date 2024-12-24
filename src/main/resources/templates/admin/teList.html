@@ -1,0 +1,68 @@
+<!-- 向江 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+	<center>
+		<h1>タスクどん</h1><br>
+		<h2>講師一覧画面</h2><br>
+
+		<table border="1">
+
+			<tr>
+				<th>ユーザID</th>
+				<th>ユーザ名</th>
+				<th>パスワード</th>
+				<th>所属学校</th>
+				<th>入社年度</th>
+				<td colspan="2"></td>
+				<!--					<td colspan></td>-->
+			</tr>
+
+			<tr th:each="te : ${tes}">
+				<td th:text="${te.user_id}"></td>
+				<td th:text="${te.user_name}"></td>
+				<td th:text="${te.user_pass}"></td>
+				<!--					<td th:text="${user.school_id}"></td>-->
+				<td th:text="${te.school_name}"></td>
+				<td th:text="${te.enr_year}"></td>
+				<td>
+
+					<!-- 削除 -->
+					<form th:action="@{teDeleteConfirm}" method="post">
+						<input type="hidden" name="user_id" th:value="${te.user_id}">
+						<input type="hidden" name="user_name" th:value="${te.user_name}">
+						<input type="hidden" name="user_pass" th:value="${te.user_pass}">
+						<input type="hidden" name="school_name" th:value="${te.school_name}">
+						<input type="hidden" name="enr_year" th:value="${te.enr_year}">
+						<input type="hidden" name="user_flg" th:value="${te.user_flg}">
+						<input type="submit" value="削除">
+					</form>
+				</td>
+				<td>
+					<!-- 編集 -->
+					<form th:action="@{teUpdate}" method="post">
+						<input type="hidden" name="user_id" th:value="${te.user_id}">
+						<input type="hidden" name="user_name" th:value="${te.user_name}">
+						<input type="hidden" name="user_pass" th:value="${te.user_pass}">
+						<input type="hidden" name="school_name" th:value="${te.school_name}">
+						<input type="hidden" name="enr_year" th:value="${te.enr_year}">
+						<input type="submit" value="編集">
+					</form>
+
+				</td>
+			</tr>
+
+		</table><br>
+
+
+	</center>
+</body>
+
+</html>

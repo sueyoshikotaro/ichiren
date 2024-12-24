@@ -13,10 +13,25 @@ public interface UserCrudRepository extends CrudRepository<User, String> {
 	@Query("select user.user_id,user.user_name,user.user_pass,user.school_id,user.enr_year,user.user_flg")
 	public List<User> findAll();
 
+	/*
+	 * 向江
+	 * 新規講師登録
+	 * userテーブルへデータを登録する
+	 */
+	@Modifying
+	@Query("insert into user (user_id, user_name, user_pass, school_id, enr_year, user_flg) values (:user_id, :user_name,'taskdon1', (select school_id from school where school_name = :school_name), :enr_year, 1)")
+	public void saveAll(String user_id, String user_name, String user_pass, String school_name, String enr_year,int user_flg);
+	
+	
+	
 	/**
 	 * 再設定したパスワードを登録
 	 */
 	@Modifying
 	@Query("update user set user_pass = :user_pass where user_id = :user_id")
 	public void passReset(String user_id, String user_pass);
+
+	
+
+	
 }
