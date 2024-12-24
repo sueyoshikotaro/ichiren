@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+
+import com.example.demo.entity.Teams;
+
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserView;
+import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
@@ -321,7 +325,8 @@ public class AdminCtrl {
 	@PostMapping("teInfoRegistComp")
 	public ModelAndView dispTeInfoRegistComp(UserView u, ModelAndView mav) {
 		
-		userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
+		userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(),
+				u.getEnr_year(), 1);
 		
 		//userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
 		
@@ -423,4 +428,90 @@ public class AdminCtrl {
 		
 		return mav;
 	}
+
+
+	/*
+	 * 向江
+	 * グループ一覧画面を表示する
+	 * @return
+	 */
+	@GetMapping("groupList")
+	public ModelAndView groupList(Teams t) {
+		
+		// インスタンス生成
+		ModelAndView mav = new ModelAndView();
+		
+		// サービスのメソッドを呼び出す
+		Iterable<Teams> groupList = groupDispService.groupList();
+		
+		mav.addObject("groups", groupList);
+		mav.setViewName("admin/groupList");
+		
+		return mav;
+	}
+
+	/**
+	 * グループ詳細画面を表示する
+	 * @return
+	 */
+	public String groopDetail() {
+		return "groopDetail";
+	}
+
+	/**
+	 * グループメンバ詳細画面を表示する
+	 * @return
+	 */
+	public String memberDetails() {
+		return "memberDetails";
+	}
+
+	/**
+	 * グループ編集画面を表示する
+	 * @return
+	 */
+	public String userUpdate() {
+		return "userDetail";
+	}
+
+	/**
+	 * グループメンバ追加画面を表示する
+	 * @return
+	 */
+	public String memberAdd() {
+		return "memberAdd";
+	}
+
+	/**
+	 * グループメンバ追加確認画面を表示する
+	 * @return
+	 */
+	public String memberAddConfirm() {
+		return "memberAddConfirm";
+	}
+
+	/**
+	 * グループメンバ削除確認画面を表示する
+	 * @return
+	 */
+	public String memberDeleteConfirm() {
+		return "memberDeleteConfirm";
+	}
+
+	/**
+	 * グループ解散確認画面を表示する
+	 * @return
+	 */
+	public String groopDeleteConfirm() {
+		return "groopDeleteConfirm";
+	}
+
+	/**
+	 * 	グループ作成画面を表示する
+	 * @return
+	 */
+	public String groopCreate() {
+		return "groopCreate";
+	}
+
 }
