@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
@@ -123,6 +124,7 @@ public class UserCtrl {
 	 * メニュー画面を表示
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
 
