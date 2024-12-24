@@ -159,10 +159,9 @@ public class AdminCtrl {
 		schoolDisplayService.EditSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id(), r.getRoom_id());
 		
 		mav.setViewName("admin/schoolEditConfirm");
-		
+	
 		return mav;
 	}
-	
 	
 	/**
 	 * 末吉
