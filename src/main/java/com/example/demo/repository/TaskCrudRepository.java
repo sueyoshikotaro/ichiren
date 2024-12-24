@@ -22,6 +22,9 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id where task_flg= 1;")
 	public List<Task> selectTask();
 
+	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id where task_flg= 1 and user_name=:user;")
+	public List<Task> selectTask(String user);
+
 	/**
 	 * 湊原
 	 * 担当者検索
@@ -30,7 +33,7 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 */
 	@Query("select user.user_name from teams inner join user_detail on teams.group_id = user_detail.group_id "
 			+ "inner join user on user.user_id = user_detail.user_id where user_detail.group_id=1;")
-	public Iterable<Task> selectTaskByUser();
+	public Iterable<String> selectTaskByUser();
 
 	/**
 	 * 湊原
