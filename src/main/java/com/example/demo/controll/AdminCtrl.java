@@ -53,6 +53,10 @@ public class AdminCtrl {
 	@Qualifier("userDisplayImpl")
 	UserDisplayServiceInterface userDisplayService;
 
+	@Autowired
+	@Qualifier("GroupDisplayImpl")
+	GroupDisplayServiceInterface groupDispService;
+
 	/**
 	 * ログイン画面を表示する
 	 * @return
