@@ -6,10 +6,32 @@ body {
 	font-family: 'Sawarabi Mincho', sans-serif;
 }
 
+.no-wrap {
+	display: inline;
+}
+
+.iconLink {
+	-webkit-transition: all .3s;
+	transition: all .3s;
+	cursor: pointer;
+}
+
+.iconLink:hover {
+	transform: scale(0.9, 0.9);
+}
+
+.form-group {
+	margin-top: 14px;
+}
+
+.form-label {
+	margin-bottom: 0px;
+}
+
 /* コンテナのスタイル */
 .container {
 	background-color: #FFFCDD;
-	max-width: 850px;
+	max-width: 480px;
 	padding: 20px;
 	margin-top: 15px;
 	border: 3px solid black;
