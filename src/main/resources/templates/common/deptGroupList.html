@@ -6,6 +6,8 @@
 	<title>タスクどん_所属グループ一覧</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+
 	<!--CSSリンク挿入欄-->
 	<link rel="stylesheet" href="../../static/css/deptGroupList.css">
 
@@ -16,10 +18,16 @@
 	<!-- ログイン中表示 -->
 	<h2 th:if="${session.user}" th:text="${session.user.get().getUser_name()}+さん、ログイン中"></h2>
 
-	<center>
-		<a th:href="@{/taskdon/user/menu_choose}">グループ１</a><br>
-		<a th:href="@{/taskdon/user/logout}">ログアウト</a><br>
-	</center>
+	<table>
+		<form th:action="@{menu}" method="get">
+			<tr th:each="deptGroup : ${groupS}">
+				<td th:text="${deptGroup.group_name}"></td>
+				<td th:text="${deptGroup.genre}"></td>
+				<td th:text="${deptGroup.user_roll}"></td>
+				<td><button type="submit" name="button" value="menu">メニューへ</button></td>
+			</tr>
+		</form>
+	</table>
 </body>
 
 </html>

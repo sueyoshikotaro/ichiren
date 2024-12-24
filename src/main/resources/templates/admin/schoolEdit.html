@@ -37,7 +37,7 @@
 			<tr>
 				<th>PC</th>
 				<td>
-					<select th:value="${schoolDetails.pc_flg}">
+					<select name="pc_flg" th:value="${schoolDetails.pc_flg}">
 						<option th:value="1" th:text="有"></option>
 						<option th:value="0" th:text="無"></option>
 					</select>
@@ -46,15 +46,11 @@
 
 			<tr>
 				<td colspan="2" align="right">
+					
 					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
-					<input type="hidden" name="school_abb" th:value="${schoolDetails.school_abb}">
 					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
 					<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
-					<input type="hidden" name="room_name" th:value="${schoolDetails.room_name}">
 					<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
-					<input type="hidden" name="hall" th:value="${schoolDetails.hall}">
-					<input type="hidden" name="floor" th:value="${schoolDetails.floor}">
-					<input type="hidden" name="button" value="submit">
 					<input type="submit" value="確認">
 				</td>
 			</tr>

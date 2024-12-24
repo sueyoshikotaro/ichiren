@@ -14,7 +14,7 @@
 <body>
 	<div class="container">
 		<h1>タスクどん</h1>
-		<h3>ログイン</h3>
+		<h3>【ログイン】</h3>
 
 		<!--入力情報(必須)-->
 		<form th:action="@{/taskdon/user/deptGroupList}" method="post">
@@ -40,8 +40,8 @@
 					<path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
 				</svg>
 				<label for="inputPassword5" class="form-label">PASS</label>
-				<input type="password" id="user_pass" name="user_pass" class="form-control" aria-labelledby="passwordHelpBlock"
-					th:value="${user_pass}" required>
+				<input type="password" id="user_pass" name="user_pass" class="form-control"
+					aria-labelledby="passwordHelpBlock" th:value="${user_pass}" required>
 			</div>
 			<div id="passwordHelpBlock" class="form-text">
 				8桁以上,16桁未満の英数字.

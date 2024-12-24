@@ -27,9 +27,9 @@ public class SchoolDisplayImpl implements SchoolDisplayServiceInterface {
 	}
 
 	@Override
-	public void EditSchoolDetailsComp(int room_id, String room_name, int pc_flg,String hall, String floor, int school_id) {
+	public void EditSchoolDetailsComp(String room_name, int pc_flg,String hall, String floor, int school_id, int room_id) {
 		
-		repo.EditSchoolDetailsComp(room_id, room_name, pc_flg,hall, floor, school_id);
+		repo.EditSchoolDetailsComp(room_name, pc_flg, hall, floor, school_id, room_id);
 	}
 
 }
