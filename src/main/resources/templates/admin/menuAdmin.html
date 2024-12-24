@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!--CSSリンク挿入欄-->
-	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/menu1.css}">
 </head>
 
 <body>
@@ -28,3 +28,13 @@
 		<form name="form1" th:action="@{/nextpage}" method="get">
 			<button type="submit">チャット</button><br>
 		</form>
+		<!--ログインしているユーザが大ボスの場合-->
+		<div th:if="${#strings.startsWith(session.user.get().getUser_id(), 'ad')}">
+			<form name="form1" th:action="@{teInfoRegist}" method="get">
+				<button type="submit">講師一覧</button><br>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>
