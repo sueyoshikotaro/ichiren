@@ -3,10 +3,13 @@ package com.example.demo.controll;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
+import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
@@ -22,7 +26,6 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
 
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -143,15 +146,12 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("taskList")
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
-		//削除予定
-//		session.setAttribute("groupUser", TaskService.taskUserSearch());
 
-		//		System.out.println(user_name);
 		List<Task> task = null;
-		//		task = TaskService.taskDisplayList(user_name);
 		String user = "all";
 		if (selectedValue == null || selectedValue.equals("全員")) {
 			task = TaskService.taskDisplayList(user);
@@ -162,7 +162,6 @@ public class UserCtrl {
 		}
 
 		mav.addObject("tasks", task);
-		System.out.println(task);
 		mav.setViewName("leader/taskList");
 		return mav;
 	}
@@ -212,13 +211,28 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	@PostMapping("taskDetail")
+	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
 		//		System.out.println(t);
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDetails");
 		return mav;
 	}
+	
+	/**
+	 * タスク詳細から編集、削除画面を表示する
+	 * 湊原
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("path")
+	public ModelAndView postMethodName(@RequestParam("button") String button, @ModelAttribute FormContents formcontents, ModelAndView mav) {
+		//TODO: process POST request
+		
+		return mav;
+	}
+	
+	
 
 	/**
 	 * 連絡事項作成画面を表示
