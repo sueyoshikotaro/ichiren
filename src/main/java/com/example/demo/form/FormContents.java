@@ -5,7 +5,7 @@ import lombok.Data;
 @Data 
 public class FormContents {
 	//フィールドの定義
-	private String content;
+	private int content;
 	//コンストラクタ
 	public FormContents() {};
 }
