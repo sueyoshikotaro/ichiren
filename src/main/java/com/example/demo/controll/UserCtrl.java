@@ -24,6 +24,7 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
 
+
 @Controller
 @RequestMapping("/taskdon/user")
 public class UserCtrl {
@@ -210,7 +211,6 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
-		//		System.out.println(t);
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDetails");
 		return mav;
@@ -232,9 +232,44 @@ public class UserCtrl {
 		} else if (button.equals("delete")) {
 			mav.setViewName("leader/taskDelete");
 		}
-		System.out.println(t);
 		return mav;
 	}
+	
+	/**
+	 * タスク編集確認画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @param mav
+	 * @param t
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("taskEditConfirm")
+	public ModelAndView taskEditConfirm(ModelAndView mav, TaskForm t) {
+		mav.addObject("taskedit", t);
+		mav.setViewName("leader/taskEditConfirm");
+		return mav;
+	}
+	
+	/**
+	 * タスク編集完了画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @param entity
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("taskEditComplete")
+	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
+		
+		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
+				t.getTask_priority(), t.getTask_weight(), t.getUser_name());
+		mav.addObject("taskedit", t);
+		mav.setViewName("leader/taskEditConfirm");
+		
+		return mav;
+	}
+	
+	
+	
 
 	/**
 	 * 連絡事項作成画面を表示

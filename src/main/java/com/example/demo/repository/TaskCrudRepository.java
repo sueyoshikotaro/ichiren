@@ -45,4 +45,21 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 			+ " inner join user on task.user_id=user.user_id where user_name=:user_name;")
 	public boolean registerTask(String task_category, String task_name, String task_content, String task_status,
 			String start_date, String end_date, String task_priority, String task_level, String task_weight, String user_name, String group_id);
+	
+	/**
+	 * タスク編集
+	 * @param task_id
+	 * @param task_category
+	 * @param task_name
+	 * @param task_content
+	 * @param task_status
+	 * @param task_priority
+	 * @param task_weight
+	 * @param user_id
+	 * @return
+	 */
+	@Modifying
+	@Query("update task set task_category=:task_category, task_content=:task_content, task_priority=:task_priority where task_id=:task_id")
+	public boolean updateTask(int task_id, String task_category, String task_name, String task_content,
+			String task_priority, String task_weight, String user_id);
 }
