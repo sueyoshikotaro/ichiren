@@ -27,11 +27,13 @@
 		<div class="progress-bar" th:style="'width:'+ ${task.progress}+'%'"></div>
 	</div>
 	<form th:action="@{taskDetailsChange}" method="post">
+		<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
 		<input type="hidden" name="task_name" th:value="${task.task_name}"></input>
 		<input type="hidden" name="task_category" th:value="${task.task_category}"></input>
 		<input type="hidden" name="task_content" th:value="${task.task_content}"></input>
 		<input type="hidden" name="user_name" th:value="${task.user_name}"></input>
 		<input type="hidden" name="task_priority" th:value="${task.task_priority}"></input>
+		<input type="hidden" name="task_level" th:value="${task.task_level}"></input>
 		<input type="hidden" name="start_date" th:value="${task.start_date}"></input>
 		<input type="hidden" name="end_date" th:value="${task.end_date}"></input>
 		<input type="hidden" name="progress" th:value="${task.progress}"></input>

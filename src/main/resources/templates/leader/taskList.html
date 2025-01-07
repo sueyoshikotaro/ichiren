@@ -61,6 +61,7 @@
 					</div>
 					<div>
 						<form th:action="@{taskDetails}" method="post">
+							<input type="hidden" name="task_id" th:value="${task.task_id}">
 							<input type="hidden" name="task_name" th:value="${task.task_name}">
 							<input type="hidden" name="task_category" th:value="${task.task_category}">
 							<input type="hidden" name="task_content" th:value="${task.task_content}">

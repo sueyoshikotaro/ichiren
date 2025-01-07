@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class TaskForm {
 	
-	private Integer task_id;
+	private int task_id;
 	private String task_category;
 	private String task_name;
 	private String task_content;
