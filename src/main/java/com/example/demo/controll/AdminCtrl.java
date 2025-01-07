@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
+import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
+import com.example.demo.form.UserView;
+import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
@@ -52,6 +55,10 @@ public class AdminCtrl {
 
 	@Autowired
 	HttpSession session;
+
+	@Autowired
+	@Qualifier("GroupDisplayImpl")
+	GroupDisplayServiceInterface groupDispService;
 
 	/**
 	 * ログイン画面を表示する
@@ -181,10 +188,10 @@ public class AdminCtrl {
 			mav.addObject("schoolEdit", s);
 			mav.setViewName("admin/schoolEdit");
 		}
-
 		return mav;
 	}
 
+	
 	/**
 	 * 末吉
 	 * 学校情報追加確認画面を表示する
@@ -447,13 +454,195 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("teInfoRegistComp")
-	public ModelAndView dispTeInfoRegistComp(UserDisplay u, ModelAndView mav) {
-
-		userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), u.getUser_pass(), u.getSchool_name(),
+	public ModelAndView dispTeInfoRegistComp(UserView u, ModelAndView mav) {
+		
+		userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(),
 				u.getEnr_year(), 1);
-
-		mav.setViewName("teInfoRegistComp");
-
+		
+		//userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
+		
+		mav.setViewName("admin/teInfoRegistComp");
+		
 		return mav;
 	}
+	
+	
+	/*
+	 * 向江
+	 * 講師一覧画面を表示するリクエストハンドラメソッド
+	 * @return 講師一覧
+	 */
+	@GetMapping("teList")
+	public ModelAndView dispTeList() {
+		
+		ModelAndView mav = new ModelAndView();
+		
+		Iterable<UserDisplay> teList = userDisplayService.teList();
+		
+		mav.addObject("tes", teList);
+		mav.setViewName("admin/teList");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師退職確認画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teDeleteConfirm")
+	public ModelAndView dispTeDelete(UserDisplay u, ModelAndView mav) {
+		
+		mav.addObject("te", u);
+		mav.setViewName("admin/teDeleteConfirm");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師情報退職完了画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teDeleteComp")
+	public ModelAndView TeDeleteComp(UserDisplay u, ModelAndView mav) {
+		
+		
+		// サービスのメソッドを呼び出す
+		userDisplayService.DeleteUser(u.getUser_id());
+	
+		mav.setViewName("admin/teUpdateComp");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師編集画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teUpdate")
+	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
+		
+		mav.addObject("te", u);
+		mav.setViewName("admin/teUpdate");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師情報編集確認画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teUpdateConfirm")
+	public ModelAndView dispTeUpdateConfirm(UserDisplay u, ModelAndView mav) {
+		
+		mav.addObject("te", u);
+		mav.setViewName("admin/teUpdateConfirm");
+		
+		return mav;
+	}
+	
+	/*
+	 * 向江
+	 * 講師情報編集完了画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("teUpdateComp")
+	public ModelAndView dispTeUpdateComp(UserDisplay u, ModelAndView mav) {
+		
+		// サービスのメソッドを呼び出す
+		userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(),1);
+		
+		mav.setViewName("admin/teUpdateComp");
+		
+		return mav;
+	}
+
+
+	/*
+	 * 向江
+	 * グループ一覧画面を表示する
+	 * @return
+	 */
+	@GetMapping("groupList")
+	public ModelAndView groupList(Teams t) {
+		
+		// インスタンス生成
+		ModelAndView mav = new ModelAndView();
+		
+		// サービスのメソッドを呼び出す
+		Iterable<Teams> groupList = groupDispService.groupList();
+		
+		mav.addObject("groups", groupList);
+		mav.setViewName("admin/groupList");
+		
+		return mav;
+	}
+
+	/**
+	 * グループ詳細画面を表示する
+	 * @return
+	 */
+	public String groopDetail() {
+		return "groopDetail";
+	}
+
+	/**
+	 * グループメンバ詳細画面を表示する
+	 * @return
+	 */
+	public String memberDetails() {
+		return "memberDetails";
+	}
+
+	/**
+	 * グループ編集画面を表示する
+	 * @return
+	 */
+	public String userUpdate() {
+		return "userDetail";
+	}
+
+	/**
+	 * グループメンバ追加画面を表示する
+	 * @return
+	 */
+	public String memberAdd() {
+		return "memberAdd";
+	}
+
+	/**
+	 * グループメンバ追加確認画面を表示する
+	 * @return
+	 */
+	public String memberAddConfirm() {
+		return "memberAddConfirm";
+	}
+
+	/**
+	 * グループメンバ削除確認画面を表示する
+	 * @return
+	 */
+	public String memberDeleteConfirm() {
+		return "memberDeleteConfirm";
+	}
+
+	/**
+	 * グループ解散確認画面を表示する
+	 * @return
+	 */
+	public String groopDeleteConfirm() {
+		return "groopDeleteConfirm";
+	}
+
+	/**
+	 * 	グループ作成画面を表示する
+	 * @return
+	 */
+	public String groopCreate() {
+		return "groopCreate";
+	}
+
 }

@@ -1,7 +1,4 @@
 <!-- 向江 -->
-<!-- 新規講師登録機能 -->
-<!-- 確認 & 完了 -->
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
@@ -11,40 +8,60 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+
+
 </head>
 
 <body>
-	<center>
-		<h1>タスクどん</h1>
-		<h2>新規講師登録確認画面</h2>
 
-	
-		
-		<form th:action="@{teInfoRegistComp}" method="post">
-			<table>
+	<center>
+		<h1>タスクどん</h1><br>
+		<h2>講師退職確認画面</h2><br>
+
+		<p>退職しますか？</p>
+
+		<form th:action="@{teDeleteComp}" method="post">
+			<!--		<div th:object="${user}">-->
+			<table border="1">
+
 				<tr>
-					<th>講師ID</th>
+					<th>項目</th>
+					<th>内容</th>
+				</tr>
+				<tr>
+					<th>ユーザID</th>
 					<td th:text="${te.user_id}"></td>
 				</tr>
 				<tr>
-					<th>講師名</th>
+					<th>ユーザ名</th>
 					<td th:text="${te.user_name}"></td>
 				</tr>
-
+				<tr>
+					<th>パスワード</th>
+					<td th:text="${te.user_pass}"></td>
+				</tr>
 				<tr>
 					<th>所属学校</th>
 					<td th:text="${te.school_name}"></td>
 				</tr>
 				<tr>
-					<th>入社年月日</th>
+					<th>入学年度</th>
 					<td th:text="${te.enr_year}"></td>
 				</tr>
-				<tr>
-					<td colspan="2" align="right">
-						<input type="submit" value="登録">
-					</td>
-				</tr>
+
 			</table>
+
+			<br>
+			<br>
+			<br>
+
+			<tr>
+				<td colspan="2" align="center">
+					<input type="submit" value="退職">
+				</td>
+			</tr>
+			<br>
+			<br>
 
 			<input type="hidden" name="user_id" th:value="${te.user_id}">
 			<input type="hidden" name="user_name" th:value="${te.user_name}">
@@ -53,26 +70,10 @@
 			<input type="hidden" name="enr_year" th:value="${te.enr_year}">
 			<input type="hidden" name="user_flg" th:value="${te.user_flg}">
 
-
 		</form>
-		
-		
 
-		<dialog>
-			<p>登録が完了しました</p>
-			<button type="submit" class="userList">ユーザ一覧</button>
-		</dialog>
-
-		
-		
-		
-		
-		
-		<br>
-		<br>
 
 	</center>
-
 </body>
 
 </html>

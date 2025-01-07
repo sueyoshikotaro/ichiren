@@ -19,8 +19,13 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 */
 	@Override
 	public List<Task> taskDisplayList(String user) {
-
-		return repo.selectTask(user);
+		List<Task> result;
+		if(user.equals("all")) {
+			result = repo.selectTask();
+		}else {
+			result = repo.selectTask(user);
+		}
+		return result;
 	}
 	
 	/**

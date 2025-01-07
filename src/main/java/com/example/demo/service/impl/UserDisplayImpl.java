@@ -4,6 +4,7 @@ package com.example.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.form.UserDisplay;
+import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.repository.UserDisplayCrudRepository;
 import com.example.demo.repository.UserViewCrudRepository;
 import com.example.demo.service.UserDisplayServiceInterface;
@@ -12,9 +13,12 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 	@Autowired
 	UserDisplayCrudRepository userCrudRepo;
-	
+
 	@Autowired
 	UserViewCrudRepository userViewCrudRepo;
+
+	@Autowired
+	UserCrudRepository userRepo;
 
 	/*
 	 * 向江
@@ -83,16 +87,61 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 	}
 
+
 	/*
-	 * 向江
+	 * 向江　
 	 * 新規講師登録
 	 * DBへ講師を登録する
 	 */
 	@Override
-	public void InsertTeach(String user_id, String user_name, String user_pass, String school_name, String enr_year, int user_flg) {
+	public void InsertTeach(String user_id, String user_name, String user_pass, String school_id, String enr_year,
+			int user_flg) {
 
-		userViewCrudRepo.save(user_id, user_name, user_pass, school_name, enr_year, user_flg);
+		userCrudRepo.teInfoRegist(user_id, user_name, user_pass, school_id, enr_year, user_flg);
 
 	}
 
+	/*
+	 * 向江
+	 * 新規講師登録2
+	 */
+	@Override
+	public void registerUser(String user_id, String user_name, String user_pass, String school_name, String enr_year,
+			int user_flg) {
+
+		userRepo.saveAll(user_id, user_name, user_pass, school_name, enr_year, user_flg);
+
+	}
+
+	/*
+	 * 向江
+	 * 講師一覧表示
+	 */
+	@Override
+	public Iterable<UserDisplay> teList() {
+
+		return userCrudRepo.teList();
+	}
+
+	/*
+	 * 向江
+	 * 講師情報編集
+	 */
+	@Override
+	public void teInfoUpdate(String user_id, String user_name, String school_name, String enr_year, int user_flg) {
+
+		userCrudRepo.teInfoUpdate(user_id, user_name, school_name, enr_year, 1);
+
+	}
+
+	/*
+	 * 向江
+	 * 講師退職
+	 */
+	@Override
+	public void teInfoDelete(String user_id) {
+
+		userCrudRepo.teInfoDelete(user_id);
+
+	}
 }

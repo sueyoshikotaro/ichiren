@@ -15,9 +15,7 @@ public class UserView {
 	private String user_id;
 	private String user_name;
 	private String user_pass;
-	
 	private String school_name;
-	
 	private String enr_year;
 	private int user_flg;
 	

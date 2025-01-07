@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
+import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
@@ -78,6 +81,16 @@ public class UserCtrl {
 	//	}
 
 	/**
+	 * パスワード再設定画面を表示
+	 * @return
+	 */
+	@GetMapping("resetPass")
+	public String resetPass() {
+
+		return "common/resetPass";
+	}
+
+	/**
 	 * ID重複チェック
 	 * 所属グループ一覧画面を表示
 	 * @return
@@ -93,15 +106,14 @@ public class UserCtrl {
 
 			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
-			for (GroupDisplay a : deptGroupList) {
-				System.out.println(a);
-			}
+			//			for (GroupDisplay a : deptGroupList) {
+			//				System.out.println(a);
+			//			}
 
 			mav.addObject("groupS", deptGroupList);
 			mav.setViewName("common/deptGroupList");
 
 			session.setAttribute("user", user);
-			session.setAttribute("groupUser", TaskService.taskUserSearch());
 		} else {
 
 			mav.setViewName("common/login");
@@ -112,49 +124,40 @@ public class UserCtrl {
 	}
 
 	/**
-	 * パスワード再設定画面を表示
-	 * @return
-	 */
-	@GetMapping("resetPass")
-	public String resetPass() {
-
-		return "common/resetPass";
-	}
-
-	/**
-
 	 * メニュー画面を表示
 	 * @return
 	 */
-	@GetMapping("menu_choose")
+	@LoginRequired
+	@GetMapping("menu")
 	public String menu() {
 
-		return "leader/menu_choose";
+		session.setAttribute("groupUser", TaskService.taskUserSearch());
+
+		return "common/menuUser";
 	}
+
+	/**
+	 * メンバ一覧画面を表示
+	 * @return
+	 */
 
 	/**
 	 * タスク一覧画面を表示するリクエストハンドラメソッド
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("taskList")
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
-		//削除予定
-		session.setAttribute("groupUser", TaskService.taskUserSearch());
 
-		System.out.println("konnnitihaaaaaaaa");
-		//		System.out.println(user_name);
 		List<Task> task = null;
-		//		task = TaskService.taskDisplayList(user_name);
-		String user = null;
+		String user = "all";
 		if (selectedValue == null || selectedValue.equals("全員")) {
-			System.out.println("testooooooooooooooooooooooo");
 			task = TaskService.taskDisplayList(user);
 		} else {
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
-			user = ("and " + selectedValue);
-			System.out.println(user);
+			mav.getModel().clear();
+			user = selectedValue;
 			task = TaskService.taskDisplayList(user);
 		}
 
@@ -208,11 +211,41 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	@PostMapping("taskDetail")
+	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
 		//		System.out.println(t);
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDetails");
 		return mav;
 	}
+	
+	/**
+	 * タスク詳細から編集、削除画面を表示する
+	 * 湊原
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("path")
+	public ModelAndView postMethodName(@RequestParam("button") String button, @ModelAttribute FormContents formcontents, ModelAndView mav) {
+		//TODO: process POST request
+		
+		return mav;
+	}
+	
+	
+
+	/**
+	 * 連絡事項作成画面を表示
+	 * @return
+	 */
+
+	/**
+	 * ToDoリスト画面を表示
+	 * @return
+	 */
+
+	/**
+	 * チャット画面を表示
+	 * @return
+	 */
 }

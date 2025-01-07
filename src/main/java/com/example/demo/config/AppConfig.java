@@ -3,12 +3,15 @@ package com.example.demo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import com.example.demo.service.impl.GroupDisplayImpl;
 import com.example.demo.service.impl.GroupServiceImpl;
 import com.example.demo.service.impl.SchoolDisplayImpl;
 import com.example.demo.service.impl.SchoolServiceImpl;
@@ -53,6 +56,11 @@ public class AppConfig {
 	@Bean(name = "groupService")
 	GroupServiceInterface groupService() {
 		return new GroupServiceImpl();
+	}
+	
+	@Bean(name = "GroupDisplayImpl")
+	GroupDisplayServiceInterface groupDispService() {
+		return new GroupDisplayImpl();
 	}
 	
 }

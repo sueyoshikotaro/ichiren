@@ -4,18 +4,16 @@ import org.springframework.data.annotation.Id;
 
 import lombok.Data;
 
-/*
- * リクエストパラメータをまとめて受け取めるためのformクラス
- */
 @Data
-public class UserForm {
- 
+public class UserView {
+	
 	@Id
 	private String user_id;
 	private String user_name;
 	private String user_pass;
-	private String school_id;
+	private String school_name;
 	private String enr_year;
 	private int user_flg;
- 
+	
+
 }

@@ -14,7 +14,8 @@
 
 <body>
 	<h1>タスク詳細画面</h1>
-	<div>
+<!--	name="button" value="edit"-->
+	<form method="post">
 		<div th:text="${task.task_name}"></div>
 		<div th:text="${task.task_category}"></div>
 		<div th:text="${task.task_content}"></div>
@@ -27,9 +28,9 @@
 			aria-valuemax="100">
 			<div class="progress-bar" th:style="'width:'+ ${task.progress}+'%'"></div>
 		</div>
-	<button type="submit" th:action="taskEdit">編集</button>
-	<button type="submit" th:action="taskDelete">削除</button>
-	</div>
+		<button type="submit" name="button" value="edit">編集</button>
+		<button type="submit" name="button" value="delete">削除</button>
+	</form>
 	<button th:onclick="|location.href='@{/taskdon/leader/taskList}'|">戻る</button>
 </body>
 
