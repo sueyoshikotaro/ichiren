@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,14 +17,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
-import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -218,21 +215,26 @@ public class UserCtrl {
 		mav.setViewName("leader/taskDetails");
 		return mav;
 	}
-	
+
 	/**
 	 * タスク詳細から編集、削除画面を表示する
 	 * 湊原
 	 * @return
 	 */
 	@LoginRequired
-	@PostMapping("path")
-	public ModelAndView postMethodName(@RequestParam("button") String button, @ModelAttribute FormContents formcontents, ModelAndView mav) {
-		//TODO: process POST request
-		
+	@PostMapping("taskDetailsChange")
+	public ModelAndView taskDetailChange(@RequestParam("button") String button, TaskForm t, ModelAndView mav) {
+		mav.addObject("task", t);
+		//編集ボタンを押下
+		if (button.equals("edit")) {
+			mav.setViewName("leader/taskEdit");
+		//削除ボタンを押下
+		} else if (button.equals("delete")) {
+			mav.setViewName("leader/taskDelete");
+		}
+		System.out.println(t);
 		return mav;
 	}
-	
-	
 
 	/**
 	 * 連絡事項作成画面を表示

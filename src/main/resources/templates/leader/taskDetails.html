@@ -14,20 +14,27 @@
 
 <body>
 	<h1>タスク詳細画面</h1>
-<!--	name="button" value="edit"-->
-	<form method="post">
-		<div th:text="${task.task_name}"></div>
-		<div th:text="${task.task_category}"></div>
-		<div th:text="${task.task_content}"></div>
-		<div th:text="'担当者：'+${task.user_name}"></div>
-		<div th:text="'優先度：'+${task.task_priority}"></div>
-		<div th:text="'開始日：'+${task.start_date}"></div>
-		<div th:text="'終了日：'+${task.end_date}"></div>
-		<div th:text="'進捗'+${task.progress}+'％'"></div>
-		<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0"
-			aria-valuemax="100">
-			<div class="progress-bar" th:style="'width:'+ ${task.progress}+'%'"></div>
-		</div>
+	<div th:text="${task.task_name}"></div>
+	<div th:text="${task.task_category}"></div>
+	<div th:text="${task.task_content}"></div>
+	<div th:text="'担当者：'+${task.user_name}"></div>
+	<div th:text="'優先度：'+${task.task_priority}"></div>
+	<div th:text="'開始日：'+${task.start_date}"></div>
+	<div th:text="'終了日：'+${task.end_date}"></div>
+	<div th:text="'進捗'+${task.progress}+'％'"></div>
+	<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0"
+		aria-valuemax="100">
+		<div class="progress-bar" th:style="'width:'+ ${task.progress}+'%'"></div>
+	</div>
+	<form th:action="@{taskDetailsChange}" method="post">
+		<input type="hidden" name="task_name" th:value="${task.task_name}"></input>
+		<input type="hidden" name="task_category" th:value="${task.task_category}"></input>
+		<input type="hidden" name="task_content" th:value="${task.task_content}"></input>
+		<input type="hidden" name="user_name" th:value="${task.user_name}"></input>
+		<input type="hidden" name="task_priority" th:value="${task.task_priority}"></input>
+		<input type="hidden" name="start_date" th:value="${task.start_date}"></input>
+		<input type="hidden" name="end_date" th:value="${task.end_date}"></input>
+		<input type="hidden" name="progress" th:value="${task.progress}"></input>
 		<button type="submit" name="button" value="edit">編集</button>
 		<button type="submit" name="button" value="delete">削除</button>
 	</form>
