@@ -298,28 +298,39 @@ public class AdminCtrl {
 	@PostMapping("schoolDeleteComp")
 	public ModelAndView schoolDeleteComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav, Model model) {
 
-		//はいボタンを押下
-		if(button.equals("はい")) {
-			
-			schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
-			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+		schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
+		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
-			//ラジオボタンの情報を取得
-			model.addAttribute("FormContent", new FormContents());
-			
-			mav.addObject("schoolS", SchoolDetails);
-			mav.setViewName("admin/schoolDetails");
-			
-			return mav;
-			
-			//いいえボタンを押下
-		} else {
-			
-			mav.addObject("schoolDelete", s);
-			mav.setViewName("admin/schoolDelete");
-			
-			return mav;
-		}
+		//ラジオボタンの情報を取得
+		model.addAttribute("FormContent", new FormContents());
+		
+		mav.addObject("schoolS", SchoolDetails);
+		mav.setViewName("admin/schoolDetails");
+		
+		return mav;
+		
+//		//はいボタンを押下
+//		if(button.equals("はい")) {
+//			
+//			schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
+//			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+//
+//			//ラジオボタンの情報を取得
+//			model.addAttribute("FormContent", new FormContents());
+//			
+//			mav.addObject("schoolS", SchoolDetails);
+//			mav.setViewName("admin/schoolDetails");
+//			
+//			return mav;
+//			
+//			//いいえボタンを押下
+//		} else {
+//			
+//			mav.addObject("schoolDelete", s);
+//			mav.setViewName("admin/schoolDelete");
+//			
+//			return mav;
+//		}
 		
 	}
 
