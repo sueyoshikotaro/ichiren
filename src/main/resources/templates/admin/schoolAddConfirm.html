@@ -5,6 +5,8 @@
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
@@ -41,6 +43,8 @@
 			</tr>
 
 			<tr>
+
+
 				<td colspan="2" align="right">
 
 					<input type="hidden" name="room_name" th:value="${schoolDetails.room_name}">
@@ -49,25 +53,74 @@
 					<input type="hidden" name="floor" th:value="${schoolDetails.floor}">
 					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
 					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
-					<input type="submit" name="button" value="追加">
-					
-					<input type="submit" name="button" value="戻る">
+					<button type="button" name="button" value="追加" class="btn btn-danger"
+						onclick="addAndShowPopup()">追加</button>
+
+					<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
 				</td>
 			</tr>
 		</table>
 	</form>
 
-	<!--パスワード再設定説明(ポップアップ)-->
-<!--	<div class="popup" style="display: none;">-->
-	<div class="popup">
-		<div class="popup-content">
-			<h3>学校情報の編集が完了しました。</h3>
-
-			<form name="form1" th:action="@{schoolDetails}" method="get">
-				<button type="submit">学校情報詳細へ</button><br>
-			</form>
+	<!-- ポップアップ -->
+	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addModalLabel">追加完了</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>追加が完了しました</p>
+				</div>
+				<div class="modal-footer">
+					<form th:action="@{schoolDetails}" method="get">
+						<button type="submit" class="btn btn-danger">学校情報詳細へ</button>
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<script>
+		function addAndShowPopup() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'schoolAddComp'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			// buttonパラメータを追加
+			var buttonInput = document.createElement('input');
+			buttonInput.type = 'hidden';
+			buttonInput.name = 'button';
+			buttonInput.value = '追加'; // または '戻る' など必要な値を設定
+			form.appendChild(buttonInput);
+
+			form.submit();
+		}
+	</script>
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var schoolAddComp = /*[[${schoolAddComp}]]*/ true;
+		$(document).ready(function () {
+			if (schoolAddComp == true) {
+				$('#AddModal').modal('show');
+			}
+		});
+		/*]]>*/
+	</script>
+
 </body>
 
 </html>
