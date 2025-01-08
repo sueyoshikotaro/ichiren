@@ -13,41 +13,41 @@
 		<form th:action="taskRegistComplete" method="post">
 			<div>
 				<label>タスク名</label>
-				<td th:text="${tasks.task_name}" readonly></td>
+				<div th:text="${tasks.task_name}" readonly></div>
 			</div>
 
 			<div>
 				<label>タスクカテゴリ</label>
-				<td th:text="${tasks.task_category}" readonly></td>
+				<div th:text="${tasks.task_category}" readonly></div>
 			</div>
 			<div>
 				<label>タスク概要</label>
-				<td th:text="${tasks.task_content}" readonly></td>
+				<div th:text="${tasks.task_content}" readonly></div>
 			</div>
 			<div>
 				<label>担当者</label>
-				<td th:text="${tasks.user_name}" readonly></td>
+				<div th:text="${tasks.user_name}" readonly></div>
 			</div>
 
 			<div>
 				<label>優先度</label>
-				<td th:text="${tasks.task_priority}" readonly></td>
+				<div th:text="${tasks.task_priority}" readonly></div>
 			</div>
 			<div>
 				<label>難易度</label>
-				<td th:text="${tasks.task_level}" readonly></td>
+				<div th:text="${tasks.task_level}" readonly></div>
 			</div>
 			<div>
 				<label>重み</label>
-				<td th:text="${tasks.task_weight}" readonly></td>
+				<div th:text="${tasks.task_weight}" readonly></div>
 			</div>
 			<div>
 				<label>開始予定日</label>
-				<td th:text="${tasks.start_date}" readonly></td>
+				<div th:text="${tasks.start_date}" readonly></div>
 			</div>
 			<div>
 				<label>終了予定日</label>
-				<td th:text="${tasks.end_date}" readonly></td>
+				<div th:text="${tasks.end_date}" readonly></div>
 			</div>
 
 			

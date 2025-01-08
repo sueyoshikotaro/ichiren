@@ -3,6 +3,8 @@ package com.example.demo.controll;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -22,7 +24,6 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
 
-import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -143,15 +144,12 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("taskList")
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
-		//削除予定
-//		session.setAttribute("groupUser", TaskService.taskUserSearch());
-		
-		//		System.out.println(user_name);
+
 		List<Task> task = null;
-		//		task = TaskService.taskDisplayList(user_name);
 		String user = "all";
 		if (selectedValue == null || selectedValue.equals("全員")) {
 			task = TaskService.taskDisplayList(user);
@@ -162,7 +160,6 @@ public class UserCtrl {
 		}
 
 		mav.addObject("tasks", task);
-		System.out.println(task);
 		mav.setViewName("leader/taskList");
 		return mav;
 	}
@@ -212,13 +209,68 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	@PostMapping("taskDetail")
+	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
-//		System.out.println(t);
+
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDetails");
 		return mav;
 	}
+
+	/**
+	 * タスク詳細から編集、削除画面を表示する
+	 * 湊原
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("taskDetailsChange")
+	public ModelAndView taskDetailChange(@RequestParam("button") String button, TaskForm t, ModelAndView mav) {
+		mav.addObject("task", t);
+		//編集ボタンを押下
+		if (button.equals("edit")) {
+			mav.setViewName("leader/taskEdit");
+		//削除ボタンを押下
+		} else if (button.equals("delete")) {
+			mav.setViewName("leader/taskDelete");
+		}
+		return mav;
+	}
+	
+	/**
+	 * タスク編集確認画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @param mav
+	 * @param t
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("taskEditConfirm")
+	public ModelAndView taskEditConfirm(ModelAndView mav, TaskForm t) {
+		mav.addObject("taskedit", t);
+		mav.setViewName("leader/taskEditConfirm");
+		return mav;
+	}
+	
+	/**
+	 * タスク編集完了画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @param entity
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("taskEditComplete")
+	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
+		
+		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
+				t.getTask_priority(), t.getTask_weight(), t.getUser_name());
+		mav.addObject("taskedit", t);
+		mav.setViewName("leader/taskEditConfirm");
+		
+		return mav;
+	}
+	
+	
+	
 
 	/**
 	 * 連絡事項作成画面を表示

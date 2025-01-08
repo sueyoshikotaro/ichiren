@@ -21,7 +21,7 @@ public class SchoolDisplayImpl implements SchoolDisplayServiceInterface {
 	}
 
 	@Override
-	public List<SchoolDisplay> EditSchoolDetails(String room_id) {
+	public List<SchoolDisplay> EditSchoolDetails(int room_id) {
 		
 		return repo.schoolDetailsChange(room_id);
 	}
@@ -37,6 +37,12 @@ public class SchoolDisplayImpl implements SchoolDisplayServiceInterface {
 		
 		repo.AddSchoolDetailsComp(room_name, pc_flg, hall, floor, school_id);
 		
+	}
+
+	@Override
+	public void DeleteSchoolDetails(int school_id, int room_id) {
+		
+		repo.DeleteSchoolDetails(school_id, room_id);
 	}
 
 }

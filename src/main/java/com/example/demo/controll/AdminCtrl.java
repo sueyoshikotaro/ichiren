@@ -2,6 +2,8 @@ package com.example.demo.controll;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
+import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
@@ -51,6 +54,9 @@ public class AdminCtrl {
 	UserDisplayServiceInterface userDisplayService;
 
 	@Autowired
+	HttpSession session;
+
+	@Autowired
 	@Qualifier("GroupDisplayImpl")
 	GroupDisplayServiceInterface groupDispService;
 
@@ -86,10 +92,8 @@ public class AdminCtrl {
 	@GetMapping("schoolDetails")
 	public ModelAndView schoolDetails(ModelAndView mav, Model model) {
 
-		//schoolS.schoolDateils();
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
-		
 		//ラジオボタンの情報を取得
 		model.addAttribute("FormContent", new FormContents());
 
@@ -105,7 +109,10 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolDetailsChange")
-	public ModelAndView schoolDetailsChange(@RequestParam("button") String button, @ModelAttribute FormContents formcontents, ModelAndView mav) {
+
+	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
+			@ModelAttribute FormContents formcontents, ModelAndView mav) {
+
 
 		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
 
@@ -115,15 +122,18 @@ public class AdminCtrl {
 			mav.addObject("schoolEdit", EditSchoolDetails);
 			mav.setViewName("admin/schoolEdit");
 
-		//追加ボタンを押下
+			//追加ボタンを押下
 		} else if (button.equals("add")) {
-			
+
 			mav.addObject("schoolAdd", schoolDisplayService.SchoolDetails());
 			mav.setViewName("admin/schoolAdd");
-      
+
+			//削除ボタンを押下
 		} else {
-			//			mav.addObject("schoolEdit", EditSchoolDetails);
-			//			mav.setViewName("admin/deleteSchoolDetails");
+
+			mav.addObject("schoolDelete", EditSchoolDetails);
+			mav.setViewName("admin/schoolDelete");
+
 		}
 
 		return mav;
@@ -135,44 +145,91 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolEditConfirm")
-	public ModelAndView schoolEditConfirm(SchoolDisplay s, ModelAndView mav) {
-		
-		mav.addObject("SchoolDisplay", s);
-		mav.setViewName("admin/schoolEditConfirm");
 
-		return mav;
+	public ModelAndView schoolEditConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
+			Model model) {
+
+		//確認ボタンを押下
+		if (button.equals("確認")) {
+
+			mav.addObject("SchoolDisplay", s);
+			mav.setViewName("admin/schoolEditConfirm");
+
+			return mav;
+
+			//戻るボタンを押下し学校情報詳細画面を表示
+		} else {
+
+			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+
+			//ラジオボタンの情報を取得
+			model.addAttribute("FormContent", new FormContents());
+
+			mav.addObject("schoolS", SchoolDetails);
+			mav.setViewName("admin/schoolDetails");
+
+			return mav;
+    }
 	}
-	
-	
+
 	/**
 	 * 末吉
 	 * 学校情報編集完了画面を表示する
 	 * @return
-	 */	
+	 */
 	@PostMapping("schoolEditComp")
-	public ModelAndView schoolEditComp(SchoolDisplay r, ModelAndView mav) {
-		
-		schoolDisplayService.EditSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id(), r.getRoom_id());
-	
-		mav.setViewName("admin/schoolEditConfirm");
-	
+
+	public ModelAndView schoolEditComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav) {
+
+		//編集ボタンを押下
+		if (button.equals("編集")) {
+			schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
+					s.getSchool_id(), s.getRoom_id());
+
+			mav.setViewName("admin/schoolEditConfirm");
+
+			//戻るボタンを押下
+		} else {
+			
+			mav.addObject("schoolEdit", s);
+			mav.setViewName("admin/schoolEdit");
+		}
+
 		return mav;
 	}
+
 	
 	/**
 	 * 末吉
 	 * 学校情報追加確認画面を表示する
 	 * @return
-	 */	
+	 */
 	@PostMapping("schoolAddConfirm")
-	public ModelAndView schoolAddConfirm(SchoolDisplay s, ModelAndView mav) {
+	public ModelAndView schoolAddConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav, Model model) {
+
+		//確認ボタンを押下
+		if(button.equals("確認")) {
+			mav.addObject("SchoolDisplay", s);
+			mav.setViewName("admin/schoolAddConfirm");
+
+			return mav;
+
+			//戻るボタンを押下し学校情報詳細画面を表示
+		} else {
+			
+			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+
+			//ラジオボタンの情報を取得
+			model.addAttribute("FormContent", new FormContents());
+			
+			mav.addObject("schoolS", SchoolDetails);
+			mav.setViewName("admin/schoolDetails");
+
+			return mav;
+		}
 		
-		mav.addObject("SchoolDisplay", s);
-		mav.setViewName("admin/schoolAddConfirm");
-		
-		return mav;
 	}
-	
+
 
 	/**
 	 * 末吉
@@ -180,13 +237,109 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolAddComp")
-	public ModelAndView schoolAddComp(SchoolDisplay r, ModelAndView mav) {
+	public ModelAndView schoolAddComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav, Model model) {
+
+		//追加ボタンを押下
+		if(button.equals("追加")) {
+			
+			schoolDisplayService.AddSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
+					s.getSchool_id());
+
+			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+
+			//ラジオボタンの情報を取得
+			model.addAttribute("FormContent", new FormContents());
+			
+			mav.addObject("schoolS", SchoolDetails);
+			mav.setViewName("admin/schoolDetails");
+			
+			return mav;
+			
+			//戻るボタンを押下
+		} else {
+			
+			mav.addObject("schoolAdd", s);
+			mav.setViewName("admin/schoolAdd");
+			
+			return mav;
+		}
 		
-		schoolDisplayService.AddSchoolDetailsComp(r.getRoom_name(), r.getPc_flg(), r.getHall(), r.getFloor(), r.getSchool_id());
+	}
+
+	/**
+	 * 末吉
+	 * 学校情報削除確認
+	 * @return
+	 */
+	@PostMapping("schoolDeleteConfirm")
+	public ModelAndView schoolDeleteConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav, Model model) {
+
+		//削除ボタンを押下
+		if(button.equals("削除")) {
+			
+			mav.addObject("schoolDelete", s);
+			mav.setViewName("admin/schoolDelete");
+
+			return mav;
+			
+			//戻るボタンを押下
+		} else {
+			
+			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+
+			//ラジオボタンの情報を取得
+			model.addAttribute("FormContent", new FormContents());
+			
+			mav.addObject("schoolS", SchoolDetails);
+			mav.setViewName("admin/schoolDetails");
+			
+			return mav;
+		}
 		
-		mav.setViewName("admin/menuAdmin");
+	}
+
+	/**
+	 * 末吉
+	 * 学校情報削除完了
+	 * @return
+	 */
+	@PostMapping("schoolDeleteComp")
+	public ModelAndView schoolDeleteComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav, Model model) {
+
+		schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
+		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+
+		//ラジオボタンの情報を取得
+		model.addAttribute("FormContent", new FormContents());
+		
+		mav.addObject("schoolS", SchoolDetails);
+		mav.setViewName("admin/schoolDetails");
 		
 		return mav;
+		
+//		//はいボタンを押下
+//		if(button.equals("はい")) {
+//			
+//			schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
+//			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+//
+//			//ラジオボタンの情報を取得
+//			model.addAttribute("FormContent", new FormContents());
+//			
+//			mav.addObject("schoolS", SchoolDetails);
+//			mav.setViewName("admin/schoolDetails");
+//			
+//			return mav;
+//			
+//			//いいえボタンを押下
+//		} else {
+//			
+//			mav.addObject("schoolDelete", s);
+//			mav.setViewName("admin/schoolDelete");
+//			
+//			return mav;
+//		}
+		
 	}
 
 	/*

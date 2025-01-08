@@ -47,11 +47,18 @@
 					<td colspan="2" align="right">
 						<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
 						<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
-						<input type="submit" value="確認">
+						<input type="submit" name="button" value="確認">
 					</td>
 				</tr>
 			</table>
 		</form>
+
+		<div>
+			<form name="form1" th:action="@{schoolDetails}" method="get">
+				<!-- 戻るボタン -->
+				<button type="submit">戻る</button>
+			</form>
+		</div>
 	</tr><br>
 </body>
 </html>

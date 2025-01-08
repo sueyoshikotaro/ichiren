@@ -5,58 +5,90 @@
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
 <body>
-	<h1>学校情報編集</h1><br>
+	<h1>学校情報削除</h1><br>
 
-<!--	<tr th:each="schoolDetails : ${schoolEdit}" th:if="${schoolDetailsStat.index == 0}">-->
-<!--		<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>-->
-<!--		<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>-->
-<!--	</tr><br>-->
+	<tr th:each="schoolDetails : ${schoolDelete}" th:if="${schoolDetailsStat.index == 0}">
+		<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
+		<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
+	</tr><br>
 
 
-<!--	<form th:action="@{schoolEditConfirm}" method="post">-->
-<!--		<table th:each="schoolDetails : ${schoolEdit}">-->
-<!--			<tr>-->
-<!--				<th>教室名</th>-->
-<!--				<td><input type="text" th:value="${schoolDetails.room_name}" name="room_name" required /></td>-->
-<!--			</tr>-->
+	<form th:action="@{schoolDeleteConfirm}" method="post">
+		<table th:each="schoolDetails : ${schoolDelete}">
+			<tr>
+				<th>教室名</th>
+				<td th:text="${schoolDetails.room_name}"></td>
+			</tr>
 
-<!--			<tr>-->
-<!--				<th>建物</th>-->
-<!--				<td><input type="text" th:value="${schoolDetails.hall}" name="hall" required /></td>-->
-<!--			</tr>-->
+			<tr>
+				<th>建物</th>
+				<td th:text="${schoolDetails.hall}"></td>
 
-<!--			<tr>-->
-<!--				<th>階層</th>-->
-<!--				<td><input type="text" th:value="${schoolDetails.floor}" name="floor" required /></td>-->
-<!--			</tr>-->
+			</tr>
 
-<!--			<tr>-->
-<!--				<th>PC</th>-->
-<!--				<td>-->
-<!--					<select name="pc_flg" th:value="${schoolDetails.pc_flg}">-->
-<!--						<option th:value="1" th:text="有" th:selected="${schoolDetails.pc_flg == 1}"></option>-->
-<!--						<option th:value="0" th:text="無" th:selected="${schoolDetails.pc_flg == 0}"></option>-->
-<!--					</select>-->
-<!--				</td>-->
-<!--			</tr>-->
+			<tr>
+				<th>階層</th>
+				<td th:text="${schoolDetails.floor}"></td>
+			</tr>
 
-<!--			<tr>-->
-<!--				<td colspan="2" align="right">-->
+			<tr>
+				<th>PC</th>
+				<td th:if="${schoolDetails.pc_flg == 1}">有</td>
+				<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
+			</tr>
 
-<!--					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">-->
-<!--					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">-->
-<!--					<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">-->
-<!--					<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">-->
-<!--					<input type="submit" value="確認">-->
-<!--				</td>-->
-<!--			</tr>-->
+			<tr>
+				<td colspan="2" align="right">
+					<button type="button" class="btn btn-danger" data-toggle="modal"
+						data-target="#deleteModal">削除</button>
+					<button type="submit" name="button" value="戻る">戻る</button>
+				</td>
+			</tr>
 
-<!--		</table>-->
-<!--	</form>-->
+		</table>
+	</form>
+
+	<!-- ポップアップ -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="deleteModalLabel">削除確認</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <p>本当に削除しますか?</p>
+	            </div>
+	            <div class="modal-footer">
+	                <table th:each="schoolDetails : ${schoolDelete}">
+	                    <form th:action="@{schoolDeleteComp}" method="post">
+	                        <input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
+	                        <input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
+	                        <input type="hidden" name="room_name" th:value="${schoolDetails.room_name}">
+	                        <input type="hidden" name="hall" th:value="${schoolDetails.hall}">
+	                        <input type="hidden" name="floor" th:value="${schoolDetails.floor}">
+	                        <input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
+	                        <input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
+	                        <button type="submit" name="button" value="はい" class="btn btn-danger">はい</button>
+	                        <button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
+	                    </form>
+	                </table>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 
 </html>

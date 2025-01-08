@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+</head>
+
+<body>
+	<form th:action="@{taskEditComplete}" method="post">
+		<input type="hidden" name="task_id" th:value="${taskedit.task_id}"></input>
+		<div>
+			<label>タスク名：</label>
+			<div th:text="${taskedit.task_name}"></div>
+			<input type="hidden" th:value="${taskedit.task_name}" name="task_name"></input>
+		</div>
+		<div>
+			<label>タスクカテゴリ：</label>
+			<div th:text="${taskedit.task_category}"></div>
+			<input type="hidden" th:value="${taskedit.task_category}" name="task_category"></input>
+		</div>
+		<div>
+			<label>タスク概要：</label>
+			<div th:text="${taskedit.task_content}"></div>
+			<input type="hidden" th:value="${taskedit.task_content}" name="task_content"></input>
+		</div>
+		<div>
+			<label>担当者：</label>
+			<div th:text="${taskedit.user_name}"></div>
+			<input type="hidden" th:value="${taskedit.user_name}" name="user_name"></input>
+		</div>
+		<div>
+			<label>優先度：</label>
+			<div th:text="${taskedit.task_priority}"></div>
+			<input type="hidden" th:value="${taskedit.task_priority}" name="task_priority"></input>
+		</div>
+		<button type="submit" name="button" value="edit">確認</button>
+	</form>
+</body>
+
+</html>

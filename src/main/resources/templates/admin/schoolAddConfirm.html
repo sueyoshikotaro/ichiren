@@ -43,21 +43,23 @@
 			<tr>
 				<td colspan="2" align="right">
 
-					<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
 					<input type="hidden" name="room_name" th:value="${schoolDetails.room_name}">
 					<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
 					<input type="hidden" name="hall" th:value="${schoolDetails.hall}">
 					<input type="hidden" name="floor" th:value="${schoolDetails.floor}">
 					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
-					<input type="submit" value="追加">
+					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
+					<input type="submit" name="button" value="追加">
+					
+					<input type="submit" name="button" value="戻る">
 				</td>
 			</tr>
-
 		</table>
 	</form>
 
 	<!--パスワード再設定説明(ポップアップ)-->
-	<div class="popup" style="display: none;">
+<!--	<div class="popup" style="display: none;">-->
+	<div class="popup">
 		<div class="popup-content">
 			<h3>学校情報の編集が完了しました。</h3>
 

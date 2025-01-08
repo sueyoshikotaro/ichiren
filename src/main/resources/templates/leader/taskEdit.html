@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+
+	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+</head>
+
+<body>
+	<form th:action="@{taskEditConfirm}" method="post">
+		<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
+		<div>
+			<label>タスク名：</label>
+			<input type="text" name="task_name" th:value="${task.task_name}"></input>
+		</div>
+		<div>
+			<label>タスクカテゴリ：</label>
+			<input type="text" name="task_category" th:value="${task.task_category}"></input>
+		</div>
+		<div>
+			<label>タスク概要：</label>
+			<input type="textarea" name="task_content" th:value="${task.task_content}"></input>
+		</div>
+		<div>
+			<label>担当者：</label>
+			<select name="user_name">
+				<option th:each="user : ${session.groupUser}" name="user_name" th:value="${user}"
+				 th:text="${user}" th:selected="${task.user_name == user}">
+				</option>
+			</select>
+		</div>
+		<div>
+			<label>優先度：</label>
+			<select name="task_priority" required>
+				<option value="1" th:selected="${task.task_priority == '1'}">1</option>
+				<option value="2" th:selected="${task.task_priority == '2'}">2</option>
+				<option value="3" th:selected="${task.task_priority == '3'}">3</option>
+				<option value="4" th:selected="${task.task_priority == '4'}">4</option>
+				<option value="5" th:selected="${task.task_priority == '5'}">5</option>
+			</select>
+		</div>
+		<button type="submit" name="button" value="edit">確認</button>
+	</form>
+</body>
+
+</html>

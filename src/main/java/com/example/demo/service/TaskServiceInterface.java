@@ -14,4 +14,8 @@ public interface TaskServiceInterface {
 		
 	//タスク担当者検索
 	public Iterable<String> taskUserSearch();
+	
+	//タスク編集
+	public void taskUpdate(int task_id, String task_category, String task_name, String task_content,
+			String task_priority, String task_weight, String user_id);
 }
