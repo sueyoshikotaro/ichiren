@@ -295,4 +295,5 @@ public class UserCtrl {
 	 * チャット画面を表示
 	 * @return
 	 */
+	
 }

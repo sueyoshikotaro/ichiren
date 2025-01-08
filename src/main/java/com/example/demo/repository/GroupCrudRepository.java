@@ -25,4 +25,5 @@ public interface GroupCrudRepository extends CrudRepository<GroupDisplay, Intege
 	 */
 	@Query("select user_roll from user_detail")
 	public List<GroupDisplay> selectRoll();
+	
 }

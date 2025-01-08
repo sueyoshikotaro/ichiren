@@ -19,4 +19,5 @@ public interface GroupServiceInterface {
 	 * メニュー
 	 */
 	public List<GroupDisplay> selectRoll();
+	
 }

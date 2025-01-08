@@ -33,5 +33,6 @@ public class GroupServiceImpl implements GroupServiceInterface {
 	public List<GroupDisplay> selectRoll() {
 
 		return groupCrudRepo.selectRoll();
+		
 	}
 }
