@@ -1,5 +1,9 @@
 package com.example.demo.controll;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
@@ -20,6 +25,7 @@ import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
+import com.example.demo.form.UserForm;
 import com.example.demo.form.UserView;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -391,6 +397,85 @@ public class AdminCtrl {
 		mav.setViewName("admin/updateComp");
 
 		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * ユーザ作成画面を表示する
+	 * @return
+	 */
+	@GetMapping("userRegist")
+	public String userRegist() {
+
+		return "admin/userRegist";
+	}
+
+	/**
+	 * 末吉
+	 * ユーザ作成確認画面を表示する
+	 * @return
+	 */
+	@PostMapping("userRegistConfirm")
+	public ModelAndView userRegistConfirm(@RequestParam("csvFile") MultipartFile csvFile, ModelAndView mav) {
+		// CSVファイルを読み込み、ユーザ情報を取得する
+		List<UserForm> users = new ArrayList<>();
+
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(csvFile.getInputStream()));
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] values = line.split(",");
+				UserForm user = new UserForm();
+				user.setUser_id(values[0]);
+				user.setUser_name(values[1]);
+				user.setUser_pass(values[2]);
+				user.setSchool_id(values[3]);
+				user.setEnr_year(values[4]);
+				user.setUser_flg(Integer.parseInt(values[5]));
+				users.add(user);
+			}
+		} catch (IOException e) {
+
+		}
+		
+		for(UserForm i:users) {
+			System.out.println(i);
+			
+		}
+		
+		mav.addObject("userRegist", users);
+		mav.setViewName("admin/userRegistConfirm");
+
+		return mav;
+	}
+	
+	/**
+	 * 末吉
+	 * 新規ユーザ作成完了
+	 * @return
+	 */
+	@PostMapping("userRegistComp")
+	public ModelAndView userRegistComplete(@RequestParam("button") String button, UserForm u, ModelAndView mav) {
+		
+		System.out.println(u);
+		
+		if(button.equals("作成")) {
+			userDisplayService.InsertUser(u.getUser_id(), u.getUser_name(), u.getUser_pass(), u.getSchool_id(), u.getEnr_year(), u.getUser_flg());
+			
+			mav.addObject("userRegistComp", true);
+			mav.setViewName("admin/userRegistConfirm");
+			
+			return mav;
+			
+		} else {
+			
+			mav.addObject("userRegist", u);
+			mav.setViewName("admin/userRegist");
+			
+			return mav;
+		}
+		
+		
 	}
 
 	/*

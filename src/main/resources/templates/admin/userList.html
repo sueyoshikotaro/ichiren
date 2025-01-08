@@ -55,12 +55,14 @@
 						<input type="hidden" name="enr_year" th:value="${user.enr_year}">
 						<input type="submit" value="パスワード初期化">
 					</form>
-
 				</td>
 			</tr>
 
 		</table><br>
 
+		<form name="form1" th:action="@{userRegist}" method="get">
+			<button type="submit">ユーザ作成</button><br>
+		</form>
 
 	</center>
 </body>

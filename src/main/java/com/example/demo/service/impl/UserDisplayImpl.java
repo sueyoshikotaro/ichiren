@@ -87,6 +87,13 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 	}
 
+	@Override
+	public void InsertUser(String user_id, String user_name, String user_pass, String school_id, String enr_year,
+			int user_flg) {
+		
+		userCrudRepo.userRegist(user_id, user_name, user_pass, school_id, enr_year, user_flg);
+
+	}
 
 	/*
 	 * 向江　
@@ -144,4 +151,5 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 		userCrudRepo.teInfoDelete(user_id);
 
 	}
+
 }
