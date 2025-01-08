@@ -421,11 +421,13 @@ public class AdminCtrl {
 		List<UserForm> users = new ArrayList<>();
 
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(csvFile.getInputStream()));
+			BufferedReader br = new BufferedReader(new InputStreamReader(csvFile.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
 				UserForm user = new UserForm();
+
+				values[0] = values[0].replaceAll("\\p{C}", "");
 				user.setUser_id(values[0]);
 				user.setUser_name(values[1]);
 				user.setUser_pass(values[2]);
@@ -437,45 +439,49 @@ public class AdminCtrl {
 		} catch (IOException e) {
 
 		}
-		
-		for(UserForm i:users) {
-			System.out.println(i);
-			
-		}
-		
+
 		mav.addObject("userRegist", users);
 		mav.setViewName("admin/userRegistConfirm");
 
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * 新規ユーザ作成完了
 	 * @return
 	 */
 	@PostMapping("userRegistComp")
-	public ModelAndView userRegistComplete(@RequestParam("button") String button, UserForm u, ModelAndView mav) {
-		
-		System.out.println(u);
-		
-		if(button.equals("作成")) {
-			userDisplayService.InsertUser(u.getUser_id(), u.getUser_name(), u.getUser_pass(), u.getSchool_id(), u.getEnr_year(), u.getUser_flg());
-			
+	public ModelAndView userRegistComplete(@RequestParam("button") String button,
+			@RequestParam("user_id") String[] userIds,
+			@RequestParam("user_name") String[] userNames, @RequestParam("user_pass") String[] userPasses,
+			@RequestParam("school_id") String[] schoolIds, @RequestParam("enr_year") String[] enrYears,
+			@RequestParam("user_flg") int[] userFlgs, ModelAndView mav) {
+
+		//作成ボタンを押下し、formに格納されているデータの数分繰り返しデータ追加
+		if (button.equals("作成")) {
+			for (int i = 0; i < userIds.length; i++) {
+				System.out.println("一致！！！");
+				System.out.println("ユーザID：" + userIds[i]);
+
+				userDisplayService.InsertUser(userIds[i], userNames[i], userPasses[i], schoolIds[i], enrYears[i],
+						userFlgs[i]);
+
+			}
+
 			mav.addObject("userRegistComp", true);
 			mav.setViewName("admin/userRegistConfirm");
-			
+
 			return mav;
-			
+
+			//戻るボタンを押下
 		} else {
-			
-			mav.addObject("userRegist", u);
+
+			mav.addObject("userRegist", userIds);
 			mav.setViewName("admin/userRegist");
-			
+
 			return mav;
 		}
-		
-		
 	}
 
 	/*
@@ -633,7 +639,7 @@ public class AdminCtrl {
 	@GetMapping("groupList")
 	public ModelAndView groupList(ModelAndView mav,
 			@RequestParam(required = false) String selectedValue) {
-		
+
 		System.out.println(selectedValue);
 		List<Teams> group = null;
 		//		group = groupService.groupDisplayList(user_name);

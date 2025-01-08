@@ -8,7 +8,7 @@
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
@@ -36,17 +36,21 @@
 				<td th:text="${user.school_id}"></td>
 				<td th:text="${user.enr_year}"></td>
 
-				<input type="hidden" th:value="${user.user_id}" name="userId">
-				<input type="hidden" th:value="${user.user_name}" name="userName">
-				<input type="hidden" th:value="${user.user_pass}" name="userPass">
-				<input type="hidden" th:value="${user.school_id}" name="schoolId">
-				<input type="hidden" th:value="${user.enr_year}" name="enrYear">
+				<input type="hidden" name="user_id" th:value="${user.user_id}">
+				<input type="hidden" name="user_name" th:value="${user.user_name}">
+				<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+				<input type="hidden" name="school_id" th:value="${user.school_id}">
+				<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+				<input type="hidden" name="user_flg" th:value="${user.user_flg}">
+
 
 			</tr>
 		</table>
 
-		<button type="button" name="button" value="作成" class="btn btn-danger" onclick="registAndShowPopup()">追加</button>
+		<button type="button" name="button" value="作成" class="btn btn-danger" onclick="registAndShowPopup()">作成</button>
+
 		<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
+
 	</form>
 
 	<!-- ポップアップ -->
