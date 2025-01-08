@@ -18,6 +18,6 @@ public interface GroupServiceInterface {
 	 * リーダ・メンバ
 	 * メニュー
 	 */
-	public List<GroupDisplay> selectRoll();
+//	public List<GroupDisplay> selectRoll();
 	
 }

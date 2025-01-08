@@ -27,7 +27,6 @@ import com.example.demo.service.UserServiceInterface;
 
 import jakarta.servlet.http.HttpSession;
 
-
 @Controller
 @RequestMapping("/taskdon/user")
 public class UserCtrl {
@@ -93,43 +92,45 @@ public class UserCtrl {
 
 		return "common/resetPass";
 	}
-	
+
 	/**
 	 * ログアウト画面を表示
 	 * @return
 	 */
 	@GetMapping("logout")
 	public String logout() {
-		
+
 		session.invalidate();
-		
+
 		return "common/login";
 	}
 
-
 	/**
 	 * ID重複チェック
+	 * パスワードチェック
 	 * 所属グループ一覧画面を表示
 	 * @return
 	 */
 	@PostMapping("deptGroupList")
-	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
-		
+	public ModelAndView userIdCheck(ModelAndView mav, String user_id, String user_pass) {
+
 		Optional<User> user;
+		Optional<User> pass;
 
 		user = userCrudRepo.findById(user_id);
+		//		pass = userCrudRepo.findById(user_pass);
 
-		if (user.get().getUser_id().equals(user_id)) {
+		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
 			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
 			mav.addObject("groupS", deptGroupList);
 			mav.setViewName("common/deptGroupList");
-			session.setAttribute("user", user);
+			session.setAttribute("user", user.get());
 		} else {
 
 			mav.setViewName("common/login");
-			mav.addObject("errMsg", "IDが一致しません。");
+			mav.addObject("errMsg", "ログインできませんでした");
 		}
 
 		return mav;
@@ -142,8 +143,8 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
-		
-//		session.setAttribute("roll", groupService.selectRoll());
+
+		//session.setAttribute("roll", groupService.selectRoll());
 
 		session.setAttribute("groupUser", TaskService.taskUserSearch());
 
@@ -198,12 +199,12 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
-    
+
 		mav.addObject("tasks", t);
 		mav.setViewName("leader/taskRegistConfirm");
 		return mav;
 	}
-	
+
 	/**
 	 * タスク登録完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -228,7 +229,7 @@ public class UserCtrl {
 		}
 		return mav;
 	}
-	
+
 	/**
 	 * タスク詳細画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -328,5 +329,5 @@ public class UserCtrl {
 	 * チャット画面を表示
 	 * @return
 	 */
-	
+
 }

@@ -12,7 +12,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
 	@Autowired
 	UserCrudRepository userCrudRepo;
-	
+
 	@Override
 	public List<User> userList() {
 
@@ -27,9 +27,28 @@ public class UserServiceImpl implements UserServiceInterface {
 	@Override
 	public boolean userIdCheck(String user_id) {
 
-		boolean flg = userCrudRepo.existsById(user_id);
+		boolean id_flg = userCrudRepo.existsById(user_id);
 
-		if (flg) {
+		if (id_flg) {
+
+			return true;
+		} else {
+
+			return false;
+		}
+	}
+
+	/**
+	 * 坂本
+	 * ユーザ
+	 * 入力したパスワードのチェック
+	 */
+	@Override
+	public boolean userPassCheck(String user_pass) {
+
+		boolean pass_flg = userCrudRepo.existsById(user_pass);
+
+		if (pass_flg) {
 
 			return true;
 		} else {
