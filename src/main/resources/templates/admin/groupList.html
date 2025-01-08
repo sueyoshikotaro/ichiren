@@ -7,11 +7,15 @@
 <head>
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
+
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
@@ -20,13 +24,8 @@
 		<h2>グループ一覧画面</h2><br>
 		<div class="container" id="container">
 			<select id="dropdown" name="selectedValue" th:onchange="groupList(this.value)">
-				<option>--</option>
-				<option name="est_year">2021年</option>
-				<option name="est_year">2022年</option>
-				<option name="est_year">2023年</option>
-				<option name="est_year">2024年</option>
-				<option name="est_year">2025年</option>
-				<option name="est_year" th:each="group : ${estYear}" th:value="${est_year}" th:text="${est_year}">
+				<option value="">グループ結成年度</option>
+				<option name="est_year" th:each="group : ${groups}" th:value="${group.est_year}" th:text="${group.est_year}">
 				</option>
 			</select>
 
@@ -37,22 +36,22 @@
 					var params = {
 						"selectedValue": slectedValue
 					};
-				}
-				/*HTML内容のクリア*/
-				var elements = document.getElementsByClassName("content_child");
-				for (var i = 0; i < elements.length; i++) {
-					elements[i].innerHTML = "";
-				}
-				/*グループ一覧表示メソッドの呼び出し*/
-				$.ajax({
-					type: "GET",
-					url: url,
-					data: params,
-					success: function (data) {
-						var html = $(data).find(".content").html();
-						document.getElementById("data").innerHTML = html;
+					/*HTML内容のクリア*/
+					var elements = document.getElementsByClassName("content_child");
+					for (var i = 0; i < elements.length; i++) {
+						elements[i].innerHTML = "";
 					}
-				});
+					/*グループ一覧表示メソッドの呼び出し*/
+					$.ajax({
+						type: "GET",
+						url: url,
+						data: params,
+						success: function (data) {
+							var html = $(data).find(".content").html();
+							document.getElementById("data").innerHTML = html;
+						}
+					});
+				}
 			</script>
 
 

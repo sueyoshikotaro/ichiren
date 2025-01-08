@@ -20,7 +20,13 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	@Override
 	public List<Teams> groupList(String estYear) {
 
-		return groupDispCrudRepo.groupList();
+		List<Teams> result;
+		if (estYear.equals(estYear)) {
+			result = groupDispCrudRepo.groupList();
+		} else {
+			result = groupDispCrudRepo.selectGroupByEstYear(estYear);
+		}
+		return result;
 	}
 
 //	/*
