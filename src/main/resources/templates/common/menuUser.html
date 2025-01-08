@@ -27,37 +27,35 @@
 	<button type="submit">削除</button>
 
 	<!-- 遷移ボタン -->
-	<div class="#">
-		<form name="form1" th:action="@{deptGroupList}" method="post">
-			<button type="submit">所属グループ一覧</button>
-		</form>
+	<form name="form1" th:action="@{deptGroupList}" method="post">
+		<button type="submit">所属グループ一覧</button>
+	</form>
 
-		<!--リーダのみ表示-->
-<!--		<div th:if="${session.user_detail.get().getUser_roll() == 'リーダ'}">-->
-			<form name="form1" th:action="@{memberList}" method="get">
-				<button type="submit">メンバ一覧</button>
-			</form>
-<!--		</div>-->
-
-		<form name="form1" th:action="@{taskList}" method="get">
-			<button type="submit">タスク一覧</button>
-		</form>
-
-		<!--リーダのみ表示-->
-<!--		<div th:if="${session.user_detail.get().getUser_roll() == 'リーダ'}">-->
-			<form name="form1" th:action="@{noticeRegist}" method="get">
-				<button type="submit">連絡事項作成</button>
-			</form>
-<!--		</div>-->
-
-		<form name="form1" th:action="@{tdList}" method="get">
-			<button type="submit">ToDoリスト</button>
-		</form>
-
-		<form name="form1" th:action="@{chat}" method="get">
-			<button type="submit">チャット</button>
+	<div th:if="${session.user_detail != null && session.user_detail.get().getUser_roll() != null && session.user_detail.get().getUser_roll().toString() == 'リーダ'}">
+		<!--<div th:if="${session.user_detail.get().getUser_roll() == 'リーダ'}">-->
+		<form name="form1" th:action="@{memberList}" method="get">
+			<button type="submit">メンバ一覧</button>
 		</form>
 	</div>
+
+	<form name="form1" th:action="@{taskList}" method="get">
+		<button type="submit">タスク一覧</button>
+	</form>
+
+	<div th:if="${session.user_detail != null && session.user_detail.get().getUser_roll() != null && session.user_detail.get().getUser_roll().toString() == 'リーダ'}">
+		<!--<div th:if="${session.user_detail.get().getUser_roll() == 'リーダ'}">-->
+		<form name="form1" th:action="@{noticeRegist}" method="get">
+			<button type="submit">連絡事項作成</button>
+		</form>
+	</div>
+
+	<form name="form1" th:action="@{tdList}" method="get">
+		<button type="submit">ToDoリスト</button>
+	</form>
+
+	<form name="form1" th:action="@{chat}" method="get">
+		<button type="submit">チャット</button>
+	</form>
 </body>
 
 </html>
