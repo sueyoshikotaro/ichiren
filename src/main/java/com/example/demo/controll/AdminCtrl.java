@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
+import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
@@ -112,7 +113,6 @@ public class AdminCtrl {
 	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
 			@ModelAttribute FormContents formcontents, ModelAndView mav) {
 
-
 		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
 
 		//編集ボタンを押下
@@ -168,7 +168,7 @@ public class AdminCtrl {
 			mav.setViewName("admin/schoolDetails");
 
 			return mav;
-    }
+		}
 	}
 
 	/**
@@ -185,9 +185,8 @@ public class AdminCtrl {
 			schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
 					s.getSchool_id(), s.getRoom_id());
 
-			
 			// ポップアップを表示するために、画面遷移をしないようにする
-	        mav.addObject("schoolEditComp", true);
+			mav.addObject("schoolEditComp", true);
 			mav.setViewName("admin/schoolEditConfirm");
 
 			//戻るボタンを押下
@@ -232,7 +231,6 @@ public class AdminCtrl {
 
 	}
 
-
 	/**
 	 * 末吉
 	 * 学校情報追加完了
@@ -241,23 +239,22 @@ public class AdminCtrl {
 	@PostMapping("schoolAddComp")
 	public ModelAndView schoolAddComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
-		
+
 		//追加ボタンを押下
 		if (button.equals("追加")) {
-			
+
 			schoolDisplayService.AddSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
 					s.getSchool_id());
-			
+
 			// ポップアップを表示するために、画面遷移をしないようにする
-	        mav.addObject("schoolAddComp", true);
-	        mav.setViewName("admin/schoolAddConfirm");
-			
+			mav.addObject("schoolAddComp", true);
+			mav.setViewName("admin/schoolAddConfirm");
 
 			return mav;
 
 			//戻るボタンを押下
 		} else {
-			
+
 			mav.addObject("schoolAdd", s);
 			mav.setViewName("admin/schoolAdd");
 
@@ -543,42 +540,37 @@ public class AdminCtrl {
 		return mav;
 	}
 
+	/*
+	 * 向江
+	 * グループ一覧画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@GetMapping("groupList")
+	public ModelAndView groupList(ModelAndView mav,
+			@RequestParam(required = false) String selectedValue) {
 
-//
-//	/*
-//	 * 向江
-//	 * グループ一覧画面を表示するリクエストハンドラメソッド
-//	 * @return
-//	 */
-//	@GetMapping("groupList")
-//	public ModelAndView groupList(ModelAndView mav,
-//			@RequestParam(required = false) String selectedValue) {
-//		
-//		
-//		
-//		
-//		//		group = groupService.groupDisplayList(user_name);
-//		String est_year = "--";
-//		if (selectedValue == null || selectedValue.equals("--")) {
-//			Iterable<Teams> group = null;
-//			group = groupDispService.groupList(est_year);
-//		} else {
-//			mav.getModel().clear();
-//			est_year = selectedValue;
-//			
-//			List<Teams> selectGroupByEstYear = groupDispService.selectGroupByEstYear(est_year);
-//			Iterable<Teams> group = selectGroupByEstYear;
-//			group = groupDispService.groupList();
-//		}
-//		
-//		// サービスのメソッドを呼び出す
-//		//Iterable<Teams> groupList = groupDispService.groupList();
-//		
-//		mav.addObject("groups", groupList(null, null));
-//		mav.setViewName("admin/groupList");
-//		
-//		return mav;
-//	}
+		Iterable<Teams> group = null;
+		//		group = groupService.groupDisplayList(user_name);
+		String est_year = "--";
+		if (selectedValue == null || selectedValue.equals("--")) {
+
+			group = groupDispService.groupList(est_year);
+		} else {
+			mav.getModel().clear();
+			est_year = selectedValue;
+
+			group = groupDispService.groupList(est_year);
+		}
+
+		// サービスのメソッドを呼び出す
+		//Iterable<Teams> groupList = groupDispService.groupList();
+
+		mav.addObject("groups", group);
+		System.out.println(group);
+		mav.setViewName("admin/groupList");
+
+		return mav;
+	}
 
 	/**
 	 * グループ詳細画面を表示する
