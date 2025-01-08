@@ -23,7 +23,7 @@ public interface GroupCrudRepository extends CrudRepository<GroupDisplay, Intege
 	 * リーダ・メンバ
 	 * メニュー
 	 */
-	@Query("select user_roll from user_detail")
-	public List<GroupDisplay> selectRoll();
+//	@Query("select user_roll from user_detail")
+//	public List<GroupDisplay> selectRoll();
 	
 }
