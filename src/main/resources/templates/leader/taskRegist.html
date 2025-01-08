@@ -3,19 +3,27 @@
 <meta charset="UTF-8">
 
 <head>
-	<title>タスクどん|タスク登録</title>
+	<title>タスクどん|タスク登録</title> <!--サイトタイトル-->
+
+	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-	<link rel="stylesheet" th:href="@{/css/taskRegist.css}">
+
+	<!--CSS接続-->
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<link rel="stylesheet" th:href="@{/css/taskS.css}">
+
+	<!--所属グループ一覧画面のみログアウト単体ボタン-->
 	<link rel="icon" type="image/png" th:href="@{/img/icon.png}">
+
 	<button class="logoutButton" th:href="@{/taskdon/admin/logout}">メニュー</button>
 </head>
 
 <body>
-
 	<div class="container">
-		<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:action="@{/}" alt="icon" width="48" height="48">
+		<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
+			width="48" height="48">
 		<h2 class="no-wrap">【タスク登録】</h2>
 		<div>
 			<form th:action="@{taskRegistConfirm}" method="post">
@@ -32,7 +40,7 @@
 					<textarea class="form-control" name="task_content" rows="3"></textarea>
 				</div>
 				<div class="form-group">
-					<label class="form-label">担当者</label>
+					<label>担当者</label>
 					<select name="user_name" class="form-select" aria-label="Default select example" required>
 						<option selected disabled>担当者を選択してください</option>
 						<option name="user_name" th:each="user : ${session.groupUser}" th:value="${user}"
@@ -86,7 +94,6 @@
 									document.getElementById("result").value = resultValue;
 								}
 							</script>
-
 							</input>
 						</div>
 					</div>
@@ -105,10 +112,12 @@
 				</div>
 
 				<input type="submit" class="back-button" value="戻る">
-				<input type="submit" class="confirm-button" value="確認">
+				<input type="submit" class="Under-button" value="確認">
 			</form>
 		</div>
 	</div>
+	</div>
+
 
 </body>
 

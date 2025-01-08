@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -21,10 +19,13 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
+import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -34,6 +35,9 @@ public class UserCtrl {
 	//フィールド
 	@Autowired
 	UserCrudRepository userCrudRepo;
+
+	@Autowired
+	GroupCrudRepository groupCrudRepo;
 
 	@Autowired
 	@Qualifier("userService")
@@ -71,11 +75,11 @@ public class UserCtrl {
 	//
 	//		if (firstLogin) {
 	//
-	//			// 初回ログイン時の処理
+	//			// 初期パスワードでのログイン時の処理
 	//			return "redirect:/common/resetPass";
 	//		} else {
 	//
-	//			// 通常・上位管理者ログイン時の処理
+	//			// 通常ログイン時の処理
 	//			return "common/login";
 	//		}
 	//	}
@@ -89,6 +93,19 @@ public class UserCtrl {
 
 		return "common/resetPass";
 	}
+	
+	/**
+	 * ログアウト画面を表示
+	 * @return
+	 */
+	@GetMapping("logout")
+	public String logout() {
+		
+		session.invalidate();
+		
+		return "common/login";
+	}
+
 
 	/**
 	 * ID重複チェック
@@ -97,7 +114,7 @@ public class UserCtrl {
 	 */
 	@PostMapping("deptGroupList")
 	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
-
+		
 		Optional<User> user;
 
 		user = userCrudRepo.findById(user_id);
@@ -106,13 +123,8 @@ public class UserCtrl {
 
 			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
-			//			for (GroupDisplay a : deptGroupList) {
-			//				System.out.println(a);
-			//			}
-
 			mav.addObject("groupS", deptGroupList);
 			mav.setViewName("common/deptGroupList");
-
 			session.setAttribute("user", user);
 		} else {
 
@@ -130,6 +142,8 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
+		
+//		session.setAttribute("roll", groupService.selectRoll());
 
 		session.setAttribute("groupUser", TaskService.taskUserSearch());
 
@@ -184,12 +198,12 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
-
+    
 		mav.addObject("tasks", t);
 		mav.setViewName("leader/taskRegistConfirm");
 		return mav;
 	}
-
+	
 	/**
 	 * タスク登録完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -214,7 +228,7 @@ public class UserCtrl {
 		}
 		return mav;
 	}
-
+	
 	/**
 	 * タスク詳細画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -222,6 +236,7 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
+
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDetails");
 		return mav;
@@ -239,13 +254,13 @@ public class UserCtrl {
 		//編集ボタンを押下
 		if (button.equals("edit")) {
 			mav.setViewName("leader/taskEdit");
-		//削除ボタンを押下
+			//削除ボタンを押下
 		} else if (button.equals("delete")) {
 			mav.setViewName("leader/taskDeleteConfirm");
 		}
 		return mav;
 	}
-	
+
 	/**
 	 * タスク編集確認画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -260,7 +275,7 @@ public class UserCtrl {
 		mav.setViewName("leader/taskEditConfirm");
 		return mav;
 	}
-	
+
 	/**
 	 * タスク編集完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -271,12 +286,12 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskEditComplete")
 	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
-		
+
 		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
 				t.getTask_priority(), t.getTask_weight(), t.getUser_name());
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskEditConfirm");
-		
+
 		return mav;
 	}
 	
@@ -313,4 +328,5 @@ public class UserCtrl {
 	 * チャット画面を表示
 	 * @return
 	 */
+	
 }

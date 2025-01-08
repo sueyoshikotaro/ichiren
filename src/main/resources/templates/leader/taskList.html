@@ -3,80 +3,115 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>タスクどん</title>
+	<title>タスクどん|タスク一覧</title> <!--サイトタイトル-->
+
+	<!--デザイン等-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+
+	<!--CSS接続-->
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<link rel="stylesheet" th:href="@{/css/taskS.css}">
+
+	<!--所属グループ一覧画面のみログアウト単体ボタン-->
+	<link rel="icon" type="image/png" th:href="@{/img/icon.png}">
+
+	<div class="btn-group">
+		<button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+			Action
+		</button>
+		<ul class="dropdown-menu">
+			<li><a class="dropdown-item" href="#">Action</a></li>
+			<li><a class="dropdown-item" href="#">Another action</a></li>
+			<li><a class="dropdown-item" href="#">Something else here</a></li>
+			<li>
+				<hr class="dropdown-divider">
+			</li>
+			<li><a class="dropdown-item" href="#">Separated link</a></li>
+		</ul>
+	</div>
 </head>
 
 <body>
-	<div>
-		<h2>タスク一覧画面</h2><br>
-		<div class="container" id="container">
-			<select id="dropdown" name="selectedValue" th:onchange="taskList(this.value)">
-				<option>全員</option>
-				<option name="group_user" th:each="user : ${session.groupUser}" th:value="${user}" th:text="${user}">
-				</option>
-			</select>
-			<script th:inline="javascript">
-				function taskList(selectedValue) {
-					/*URL指定＆ドロップダウンリストの値引き渡し*/
-					var url = "taskList";
-					var params = {
-						"selectedValue": selectedValue
-					};
-					/*HTML内容のクリア*/
-					var elements = document.getElementsByClassName("content_child");
-					for (var i = 0; i < elements.length; i++) {
-						elements[i].innerHTML = "";
-					}
-					/*タスク一覧表示メソッドの呼び出し*/
-					$.ajax({
-						type: "GET",
-						url: url,
-						data: params,
-						success: function (data) {
-							var html = $(data).find(".content").html();
-							document.getElementById("data").innerHTML = html;
-						}
-					});
-
-
+	<!--各画面ごとのメイン内容-->
+	<div class="container" id="container"> <!--コンテナ共通-->
+		<!--画面タイトル左のメニュー遷移機能を持つアイコン(ボタン)-->
+		<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
+			width="48" height="48">
+		<h2 class="no-wrap">【タスク一覧】</h2><br> <!--画面タイトル-->
+		<select id="dropdown" name="selectedValue" th:onchange="taskList(this.value)">
+			<option>全員</option>
+			<option name="group_user" th:each="user : ${session.groupUser}" th:value="${user}" th:text="${user}">
+			</option>
+		</select>
+		<script th:inline="javascript">
+			function taskList(selectedValue) {
+				/*URL指定＆ドロップダウンリストの値引き渡し*/
+				var url = "taskList";
+				var params = {
+					"selectedValue": selectedValue
+				};
+				/*HTML内容のクリア*/
+				var elements = document.getElementsByClassName("content_child");
+				for (var i = 0; i < elements.length; i++) {
+					elements[i].innerHTML = "";
 				}
-			</script>
-			<div class="content">
-				<div th:each="task : ${tasks}" class="content_child" id="data">
-					<div th:text="${task.task_name}"></div>
-					<div th:text="'優先度：'+${task.task_priority}"></div>
-					<div th:text="${task.task_status}"></div>
-					<div th:text="${task.end_date}"></div>
-					<div th:text="'進捗' + ${task.progress} + '％'"></div>
-					<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
-						aria-valuemin="0" aria-valuemax="100">
-						<div class="progress-bar" th:style="'width:'+ ${task.progress}+'%'"></div>
-					</div>
-					<div>
-						<form th:action="@{taskDetails}" method="post">
-							<input type="hidden" name="task_id" th:value="${task.task_id}">
-							<input type="hidden" name="task_name" th:value="${task.task_name}">
-							<input type="hidden" name="task_category" th:value="${task.task_category}">
-							<input type="hidden" name="task_content" th:value="${task.task_content}">
-							<input type="hidden" name="task_priority" th:value="${task.task_priority}">
-							<input type="hidden" name="progress" th:value="${task.progress}">
-							<input type="hidden" name="start_date" th:value="${task.start_date}">
-							<input type="hidden" name="end_date" th:value="${task.end_date}">
-							<input type="hidden" name="user_name" th:value="${task.user_name}">
-							<input type="submit" value="詳細">
-						</form>
-					</div>
+				/*タスク一覧表示メソッドの呼び出し*/
+				$.ajax({
+					type: "GET",
+					url: url,
+					data: params,
+					success: function (data) {
+						var html = $(data).find(".content").html();
+						document.getElementById("data").innerHTML = html;
+					}
+				});
+			}
+		</script>
+		<div class="content">
+			<div th:each="task : ${tasks}" class="content_child" id="data">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+					class="bi bi-clipboard2" viewBox="0 0 16 16">
+					<path
+						d="M3.5 2a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-12a.5.5 0 0 0-.5-.5H12a.5.5 0 0 1 0-1h.5A1.5 1.5 0 0 1 14 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-12A1.5 1.5 0 0 1 3.5 1H4a.5.5 0 0 1 0 1z" />
+					<path
+						d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5" />
+				</svg>
+				<div class="text_child" th:text="${task.task_name}"></div>
+				<div class="text_child" th:text="'優先度：'+${task.task_priority}"></div>
+				<div class="text_child" th:text="${task.task_status}"></div>
+				<div class="text_child" th:text="'締切日'+${task.end_date}"></div>
+				<div class="text_child" th:text="'進捗' + ${task.progress} + '％'"></div>
+				<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0"
+					aria-valuemax="100">
+					<div class="progress-bar" th:style="'width:'+ ${task.progress}+'%'"></div>
+				</div>
+				<div>
+					<form th:action="@{taskDetails}" method="post">
+						<input type="hidden" name="task_id" th:value="${task.task_id}">
+						<input type="hidden" name="task_name" th:value="${task.task_name}">
+						<input type="hidden" name="task_category" th:value="${task.task_category}">
+						<input type="hidden" name="task_content" th:value="${task.task_content}">
+						<input type="hidden" name="task_priority" th:value="${task.task_priority}">
+						<input type="hidden" name="progress" th:value="${task.progress}">
+						<input type="hidden" name="start_date" th:value="${task.start_date}">
+						<input type="hidden" name="end_date" th:value="${task.end_date}">
+						<input type="hidden" name="user_name" th:value="${task.user_name}">
+						<input type="submit" value="詳細">
+					</form>
 				</div>
 			</div>
-			<button th:onclick="|location.href='@{taskRegister}'|">登録</button>
 		</div>
+
+		<!--コンテナ最下のボタン-->
+		<button class="Under-button" th:onclick="|location.href='@{taskRegister}'|">登録</button>
+	</div>
 </body>
 
 </html>

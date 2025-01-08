@@ -23,6 +23,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 		List<Task> result;
 		if(user.equals("all")) {
 			result = repo.selectTask();
+
 		}else {
 			result = repo.selectTask(user);
 		}
