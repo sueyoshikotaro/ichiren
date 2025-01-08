@@ -1,5 +1,7 @@
 package com.example.demo.controll;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -195,12 +197,21 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistComplete")
 	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
-
-		TaskService.taskRegister(t.getTask_category(), t.getTask_name(), t.getTask_content(), "未着手", t.getStart_date(),
-				t.getEnd_date(), t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
-				t.getGroup_id());
-
-		mav.setViewName("leader/taskRegistComplete");
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date st_date = null;
+		Date end_date = null;
+		try {
+			st_date = sdf.parse(t.getStart_date());
+			end_date = sdf.parse(t.getEnd_date());
+			TaskService.taskRegister(t.getTask_category(), t.getTask_name(), t.getTask_content(), "未着手",
+					st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
+					t.getGroup_id());
+			mav.addObject("tasks", t);
+			mav.setViewName("leader/taskRegistConfirm");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		return mav;
 	}
 
@@ -230,7 +241,7 @@ public class UserCtrl {
 			mav.setViewName("leader/taskEdit");
 		//削除ボタンを押下
 		} else if (button.equals("delete")) {
-			mav.setViewName("leader/taskDelete");
+			mav.setViewName("leader/taskDeleteConfirm");
 		}
 		return mav;
 	}
@@ -245,7 +256,7 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskEditConfirm")
 	public ModelAndView taskEditConfirm(ModelAndView mav, TaskForm t) {
-		mav.addObject("taskedit", t);
+		mav.addObject("task", t);
 		mav.setViewName("leader/taskEditConfirm");
 		return mav;
 	}
@@ -253,7 +264,8 @@ public class UserCtrl {
 	/**
 	 * タスク編集完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
-	 * @param entity
+	 * (未)スコアの更新
+	 * @param mav
 	 * @return
 	 */
 	@LoginRequired
@@ -262,13 +274,29 @@ public class UserCtrl {
 		
 		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
 				t.getTask_priority(), t.getTask_weight(), t.getUser_name());
-		mav.addObject("taskedit", t);
+		mav.addObject("task", t);
 		mav.setViewName("leader/taskEditConfirm");
 		
 		return mav;
 	}
 	
-	
+	/**
+	 * タスク削除確認画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @param mav
+	 * @param t
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("taskDeleteConfirm")
+	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
+		
+		TaskService.taskUpFlg(t.getTask_id());
+		mav.addObject("task", t);
+		mav.setViewName("leader/taskDeleteConfirm");
+		
+		return mav;
+	}
 	
 
 	/**

@@ -4,67 +4,83 @@
 <head>
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
 <body>
-	<div>
-		<h2>タスク登録確認画面</h2><br>
-		<form th:action="taskRegistComplete" method="post">
-			<div>
-				<label>タスク名</label>
-				<div th:text="${tasks.task_name}" readonly></div>
-			</div>
+	<h2>タスク登録確認</h2><br>
+	<form th:action="taskRegistComplete" method="post">
+		<div>
+			<label>タスク名</label>
+			<div th:text="${tasks.task_name}" readonly></div>
+		</div>
 
-			<div>
-				<label>タスクカテゴリ</label>
-				<div th:text="${tasks.task_category}" readonly></div>
-			</div>
-			<div>
-				<label>タスク概要</label>
-				<div th:text="${tasks.task_content}" readonly></div>
-			</div>
-			<div>
-				<label>担当者</label>
-				<div th:text="${tasks.user_name}" readonly></div>
-			</div>
+		<div>
+			<label>タスクカテゴリ</label>
+			<div th:text="${tasks.task_category}" readonly></div>
+		</div>
+		<div>
+			<label>タスク概要</label>
+			<div th:text="${tasks.task_content}" readonly></div>
+		</div>
+		<div>
+			<label>担当者</label>
+			<div th:text="${tasks.user_name}" readonly></div>
+		</div>
 
-			<div>
-				<label>優先度</label>
-				<div th:text="${tasks.task_priority}" readonly></div>
-			</div>
-			<div>
-				<label>難易度</label>
-				<div th:text="${tasks.task_level}" readonly></div>
-			</div>
-			<div>
-				<label>重み</label>
-				<div th:text="${tasks.task_weight}" readonly></div>
-			</div>
-			<div>
-				<label>開始予定日</label>
-				<div th:text="${tasks.start_date}" readonly></div>
-			</div>
-			<div>
-				<label>終了予定日</label>
-				<div th:text="${tasks.end_date}" readonly></div>
-			</div>
+		<div>
+			<label>優先度</label>
+			<div th:text="${tasks.task_priority}" readonly></div>
+		</div>
+		<div>
+			<label>難易度</label>
+			<div th:text="${tasks.task_level}" readonly></div>
+		</div>
+		<div>
+			<label>重み</label>
+			<div th:text="${tasks.task_weight}" readonly></div>
+		</div>
+		<div>
+			<label>開始予定日</label>
+			<div th:text="${tasks.start_date}" readonly></div>
+		</div>
+		<div>
+			<label>終了予定日</label>
+			<div th:text="${tasks.end_date}" readonly></div>
+		</div>
 
-			
+		<input type="hidden" name="task_name" th:value="${tasks.task_name}">
+		<input type="hidden" name="task_category" th:value="${tasks.task_category}">
+		<input type="hidden" name="task_content" th:value="${tasks.task_content}">
+		<input type="hidden" name="task_priority" th:value="${tasks.task_priority}">
+		<input type="hidden" name="task_level" th:value="${tasks.task_level}">
+		<input type="hidden" name="task_weight" th:value="${tasks.task_weight}">
+		<input type="hidden" name="start_date" th:value="${tasks.start_date}">
+		<input type="hidden" name="end_date" th:value="${tasks.end_date}">
+		<input type="hidden" name="user_name" th:value="${tasks.user_name}">
 
-			<input type="hidden" name="task_name" th:value="${tasks.task_name}">
-			<input type="hidden" name="task_category" th:value="${tasks.task_category}">
-			<input type="hidden" name="task_content" th:value="${tasks.task_content}">
-			<input type="hidden" name="task_priority" th:value="${tasks.task_priority}">
-			<input type="hidden" name="task_level" th:value="${tasks.task_level}">
-			<input type="hidden" name="task_weight" th:value="${tasks.task_weight}">
-			<input type="hidden" name="start_date" th:value="${tasks.start_date}">
-			<input type="hidden" name="end_date" th:value="${tasks.end_date}">
-			<input type="hidden" name="user_name" th:value="${tasks.user_name}">
+		<input type="submit" value="登録">
+	</form>
 
-			<input type="submit" value="登録">
-		</form>
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">登録完了</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>登録が完了しました</p>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 
 </html>
