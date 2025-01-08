@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
-import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
@@ -109,8 +108,10 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolDetailsChange")
+
 	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
 			@ModelAttribute FormContents formcontents, ModelAndView mav) {
+
 
 		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
 
@@ -128,8 +129,10 @@ public class AdminCtrl {
 
 			//削除ボタンを押下
 		} else {
+
 			mav.addObject("schoolDelete", EditSchoolDetails);
 			mav.setViewName("admin/schoolDelete");
+
 		}
 
 		return mav;
@@ -141,6 +144,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolEditConfirm")
+
 	public ModelAndView schoolEditConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
 
@@ -164,7 +168,7 @@ public class AdminCtrl {
 			mav.setViewName("admin/schoolDetails");
 
 			return mav;
-		}
+    }
 	}
 
 	/**
@@ -173,6 +177,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolEditComp")
+
 	public ModelAndView schoolEditComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav) {
 
 		//編集ボタンを押下
@@ -180,28 +185,32 @@ public class AdminCtrl {
 			schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
 					s.getSchool_id(), s.getRoom_id());
 
+			
+			// ポップアップを表示するために、画面遷移をしないようにする
+	        mav.addObject("schoolEditComp", true);
 			mav.setViewName("admin/schoolEditConfirm");
 
 			//戻るボタンを押下
 		} else {
-			
+
 			mav.addObject("schoolEdit", s);
 			mav.setViewName("admin/schoolEdit");
 		}
+
 		return mav;
 	}
 
-	
 	/**
 	 * 末吉
 	 * 学校情報追加確認画面を表示する
 	 * @return
 	 */
 	@PostMapping("schoolAddConfirm")
-	public ModelAndView schoolAddConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav, Model model) {
+	public ModelAndView schoolAddConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
+			Model model) {
 
 		//確認ボタンを押下
-		if(button.equals("確認")) {
+		if (button.equals("確認")) {
 			mav.addObject("SchoolDisplay", s);
 			mav.setViewName("admin/schoolAddConfirm");
 
@@ -209,19 +218,20 @@ public class AdminCtrl {
 
 			//戻るボタンを押下し学校情報詳細画面を表示
 		} else {
-			
+
 			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
 			//ラジオボタンの情報を取得
 			model.addAttribute("FormContent", new FormContents());
-			
+
 			mav.addObject("schoolS", SchoolDetails);
 			mav.setViewName("admin/schoolDetails");
 
 			return mav;
 		}
-		
+
 	}
+
 
 	/**
 	 * 末吉
@@ -229,65 +239,52 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolAddComp")
-	public ModelAndView schoolAddComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav, Model model) {
-
+	public ModelAndView schoolAddComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
+			Model model) {
+		
 		//追加ボタンを押下
-		if(button.equals("追加")) {
+		if (button.equals("追加")) {
 			
 			schoolDisplayService.AddSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
 					s.getSchool_id());
-
-			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
-
-			//ラジオボタンの情報を取得
-			model.addAttribute("FormContent", new FormContents());
 			
-			mav.addObject("schoolS", SchoolDetails);
-			mav.setViewName("admin/schoolDetails");
+			// ポップアップを表示するために、画面遷移をしないようにする
+	        mav.addObject("schoolAddComp", true);
+	        mav.setViewName("admin/schoolAddConfirm");
 			
+
 			return mav;
-			
+
 			//戻るボタンを押下
 		} else {
 			
 			mav.addObject("schoolAdd", s);
 			mav.setViewName("admin/schoolAdd");
-			
+
 			return mav;
 		}
-		
+
 	}
 
 	/**
 	 * 末吉
-	 * 学校情報削除確認
+	 * 学校情報削除画面の戻るボタンを押下
 	 * @return
 	 */
 	@PostMapping("schoolDeleteConfirm")
-	public ModelAndView schoolDeleteConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav, Model model) {
+	public ModelAndView schoolDeleteConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
+			Model model) {
 
-		//削除ボタンを押下
-		if(button.equals("削除")) {
-			
-			mav.addObject("schoolDelete", s);
-			mav.setViewName("admin/schoolDelete");
+		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
-			return mav;
-			
-			//戻るボタンを押下
-		} else {
-			
-			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+		//ラジオボタンの情報を取得
+		model.addAttribute("FormContent", new FormContents());
 
-			//ラジオボタンの情報を取得
-			model.addAttribute("FormContent", new FormContents());
-			
-			mav.addObject("schoolS", SchoolDetails);
-			mav.setViewName("admin/schoolDetails");
-			
-			return mav;
-		}
-		
+		mav.addObject("schoolS", SchoolDetails);
+		mav.setViewName("admin/schoolDetails");
+
+		return mav;
+
 	}
 
 	/**
@@ -296,42 +293,19 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolDeleteComp")
-	public ModelAndView schoolDeleteComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav, Model model) {
+	public ModelAndView schoolDeleteComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
+			Model model) {
 
 		schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
 		//ラジオボタンの情報を取得
 		model.addAttribute("FormContent", new FormContents());
-		
+
 		mav.addObject("schoolS", SchoolDetails);
 		mav.setViewName("admin/schoolDetails");
-		
+
 		return mav;
-		
-//		//はいボタンを押下
-//		if(button.equals("はい")) {
-//			
-//			schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
-//			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
-//
-//			//ラジオボタンの情報を取得
-//			model.addAttribute("FormContent", new FormContents());
-//			
-//			mav.addObject("schoolS", SchoolDetails);
-//			mav.setViewName("admin/schoolDetails");
-//			
-//			return mav;
-//			
-//			//いいえボタンを押下
-//		} else {
-//			
-//			mav.addObject("schoolDelete", s);
-//			mav.setViewName("admin/schoolDelete");
-//			
-//			return mav;
-//		}
-		
 	}
 
 	/*
@@ -466,18 +440,17 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teInfoRegistComp")
 	public ModelAndView dispTeInfoRegistComp(UserView u, ModelAndView mav) {
-		
+
 		userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(),
 				u.getEnr_year(), 1);
-		
+
 		//userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
-		
+
 		mav.setViewName("admin/teInfoRegistComp");
-		
+
 		return mav;
 	}
-	
-	
+
 	/*
 	 * 向江
 	 * 講師一覧画面を表示するリクエストハンドラメソッド
@@ -485,17 +458,17 @@ public class AdminCtrl {
 	 */
 	@GetMapping("teList")
 	public ModelAndView dispTeList() {
-		
+
 		ModelAndView mav = new ModelAndView();
-		
+
 		Iterable<UserDisplay> teList = userDisplayService.teList();
-		
+
 		mav.addObject("tes", teList);
 		mav.setViewName("admin/teList");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師退職確認画面を表示するリクエストハンドラメソッド
@@ -503,13 +476,13 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teDeleteConfirm")
 	public ModelAndView dispTeDelete(UserDisplay u, ModelAndView mav) {
-		
+
 		mav.addObject("te", u);
 		mav.setViewName("admin/teDeleteConfirm");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師情報退職完了画面を表示するリクエストハンドラメソッド
@@ -517,16 +490,15 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teDeleteComp")
 	public ModelAndView TeDeleteComp(UserDisplay u, ModelAndView mav) {
-		
-		
+
 		// サービスのメソッドを呼び出す
 		userDisplayService.DeleteUser(u.getUser_id());
-	
+
 		mav.setViewName("admin/teUpdateComp");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師編集画面を表示するリクエストハンドラメソッド
@@ -534,13 +506,13 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teUpdate")
 	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
-		
+
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdate");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師情報編集確認画面を表示するリクエストハンドラメソッド
@@ -548,13 +520,13 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teUpdateConfirm")
 	public ModelAndView dispTeUpdateConfirm(UserDisplay u, ModelAndView mav) {
-		
+
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdateConfirm");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師情報編集完了画面を表示するリクエストハンドラメソッド
@@ -562,42 +534,58 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teUpdateComp")
 	public ModelAndView dispTeUpdateComp(UserDisplay u, ModelAndView mav) {
-		
+
 		// サービスのメソッドを呼び出す
-		userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(),1);
-		
+		userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(), 1);
+
 		mav.setViewName("admin/teUpdateComp");
-		
+
 		return mav;
 	}
 
 
-	/*
-	 * 向江
-	 * グループ一覧画面を表示する
-	 * @return
-	 */
-	@GetMapping("groupList")
-	public ModelAndView groupList(Teams t) {
-		
-		// インスタンス生成
-		ModelAndView mav = new ModelAndView();
-		
-		// サービスのメソッドを呼び出す
-		Iterable<Teams> groupList = groupDispService.groupList();
-		
-		mav.addObject("groups", groupList);
-		mav.setViewName("admin/groupList");
-		
-		return mav;
-	}
+//
+//	/*
+//	 * 向江
+//	 * グループ一覧画面を表示するリクエストハンドラメソッド
+//	 * @return
+//	 */
+//	@GetMapping("groupList")
+//	public ModelAndView groupList(ModelAndView mav,
+//			@RequestParam(required = false) String selectedValue) {
+//		
+//		
+//		
+//		
+//		//		group = groupService.groupDisplayList(user_name);
+//		String est_year = "--";
+//		if (selectedValue == null || selectedValue.equals("--")) {
+//			Iterable<Teams> group = null;
+//			group = groupDispService.groupList(est_year);
+//		} else {
+//			mav.getModel().clear();
+//			est_year = selectedValue;
+//			
+//			List<Teams> selectGroupByEstYear = groupDispService.selectGroupByEstYear(est_year);
+//			Iterable<Teams> group = selectGroupByEstYear;
+//			group = groupDispService.groupList();
+//		}
+//		
+//		// サービスのメソッドを呼び出す
+//		//Iterable<Teams> groupList = groupDispService.groupList();
+//		
+//		mav.addObject("groups", groupList(null, null));
+//		mav.setViewName("admin/groupList");
+//		
+//		return mav;
+//	}
 
 	/**
 	 * グループ詳細画面を表示する
 	 * @return
 	 */
-	public String groopDetail() {
-		return "groopDetail";
+	public String groupDetail() {
+		return "groupDetail";
 	}
 
 	/**
@@ -612,8 +600,8 @@ public class AdminCtrl {
 	 * グループ編集画面を表示する
 	 * @return
 	 */
-	public String userUpdate() {
-		return "userDetail";
+	public String groupUpdate() {
+		return "groupUpdate";
 	}
 
 	/**
@@ -644,16 +632,16 @@ public class AdminCtrl {
 	 * グループ解散確認画面を表示する
 	 * @return
 	 */
-	public String groopDeleteConfirm() {
-		return "groopDeleteConfirm";
+	public String groupDeleteConfirm() {
+		return "groupDeleteConfirm";
 	}
 
 	/**
 	 * 	グループ作成画面を表示する
 	 * @return
 	 */
-	public String groopCreate() {
-		return "groopCreate";
+	public String groupCreate() {
+		return "groupCreate";
 	}
 
 }
