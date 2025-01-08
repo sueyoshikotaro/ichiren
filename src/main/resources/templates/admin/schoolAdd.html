@@ -2,12 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
+<meta charset="UTF-8">
 	<title>タスクどん</title>
 
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
-
 <body>
 	<h1>学校情報追加</h1><br>
 
@@ -15,6 +14,7 @@
 
 		<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
 		<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
+
 
 		<form th:action="@{schoolAddConfirm}" method="post">
 			<table>
@@ -61,5 +61,4 @@
 		</div>
 	</tr><br>
 </body>
-
 </html>

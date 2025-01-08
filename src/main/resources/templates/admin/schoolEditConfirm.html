@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-	<meta charset="UTF-8">
-	<title>タスクどん</title>
+<meta charset="UTF-8">
+<title>タスクどん</title>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
-
 <body>
 	<h1>学校情報編集</h1><br>
 
@@ -17,6 +15,7 @@
 		<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
 		<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
 	</tr><br>
+
 
 
 	<form th:action="@{schoolEditComp}" method="post">
@@ -122,5 +121,4 @@
 
 
 </body>
-
 </html>
