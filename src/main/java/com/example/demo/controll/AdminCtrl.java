@@ -109,8 +109,10 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolDetailsChange")
+
 	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
 			@ModelAttribute FormContents formcontents, ModelAndView mav) {
+
 
 		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
 
@@ -128,8 +130,10 @@ public class AdminCtrl {
 
 			//削除ボタンを押下
 		} else {
+
 			mav.addObject("schoolDelete", EditSchoolDetails);
 			mav.setViewName("admin/schoolDelete");
+
 		}
 
 		return mav;
@@ -141,6 +145,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolEditConfirm")
+
 	public ModelAndView schoolEditConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
 
@@ -164,7 +169,7 @@ public class AdminCtrl {
 			mav.setViewName("admin/schoolDetails");
 
 			return mav;
-		}
+    }
 	}
 
 	/**
@@ -173,6 +178,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolEditComp")
+
 	public ModelAndView schoolEditComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav) {
 
 		//編集ボタンを押下
@@ -188,6 +194,7 @@ public class AdminCtrl {
 			mav.addObject("schoolEdit", s);
 			mav.setViewName("admin/schoolEdit");
 		}
+
 		return mav;
 	}
 
@@ -222,6 +229,7 @@ public class AdminCtrl {
 		}
 		
 	}
+
 
 	/**
 	 * 末吉
@@ -466,18 +474,17 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teInfoRegistComp")
 	public ModelAndView dispTeInfoRegistComp(UserView u, ModelAndView mav) {
-		
+
 		userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(),
 				u.getEnr_year(), 1);
 		
 		//userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
-		
+
 		mav.setViewName("admin/teInfoRegistComp");
-		
+
 		return mav;
 	}
-	
-	
+
 	/*
 	 * 向江
 	 * 講師一覧画面を表示するリクエストハンドラメソッド
@@ -485,17 +492,17 @@ public class AdminCtrl {
 	 */
 	@GetMapping("teList")
 	public ModelAndView dispTeList() {
-		
+
 		ModelAndView mav = new ModelAndView();
-		
+
 		Iterable<UserDisplay> teList = userDisplayService.teList();
-		
+
 		mav.addObject("tes", teList);
 		mav.setViewName("admin/teList");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師退職確認画面を表示するリクエストハンドラメソッド
@@ -503,13 +510,13 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teDeleteConfirm")
 	public ModelAndView dispTeDelete(UserDisplay u, ModelAndView mav) {
-		
+
 		mav.addObject("te", u);
 		mav.setViewName("admin/teDeleteConfirm");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師情報退職完了画面を表示するリクエストハンドラメソッド
@@ -517,16 +524,15 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teDeleteComp")
 	public ModelAndView TeDeleteComp(UserDisplay u, ModelAndView mav) {
-		
-		
+
 		// サービスのメソッドを呼び出す
 		userDisplayService.DeleteUser(u.getUser_id());
-	
+
 		mav.setViewName("admin/teUpdateComp");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師編集画面を表示するリクエストハンドラメソッド
@@ -534,13 +540,13 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teUpdate")
 	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
-		
+
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdate");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師情報編集確認画面を表示するリクエストハンドラメソッド
@@ -548,13 +554,13 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teUpdateConfirm")
 	public ModelAndView dispTeUpdateConfirm(UserDisplay u, ModelAndView mav) {
-		
+
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdateConfirm");
-		
+
 		return mav;
 	}
-	
+
 	/*
 	 * 向江
 	 * 講師情報編集完了画面を表示するリクエストハンドラメソッド
@@ -562,42 +568,57 @@ public class AdminCtrl {
 	 */
 	@PostMapping("teUpdateComp")
 	public ModelAndView dispTeUpdateComp(UserDisplay u, ModelAndView mav) {
-		
+
 		// サービスのメソッドを呼び出す
-		userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(),1);
-		
+		userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(), 1);
+
 		mav.setViewName("admin/teUpdateComp");
-		
+
 		return mav;
 	}
 
-
-	/*
-	 * 向江
-	 * グループ一覧画面を表示する
-	 * @return
-	 */
-	@GetMapping("groupList")
-	public ModelAndView groupList(Teams t) {
-		
-		// インスタンス生成
-		ModelAndView mav = new ModelAndView();
-		
-		// サービスのメソッドを呼び出す
-		Iterable<Teams> groupList = groupDispService.groupList();
-		
-		mav.addObject("groups", groupList);
-		mav.setViewName("admin/groupList");
-		
-		return mav;
-	}
+//
+//	/*
+//	 * 向江
+//	 * グループ一覧画面を表示するリクエストハンドラメソッド
+//	 * @return
+//	 */
+//	@GetMapping("groupList")
+//	public ModelAndView groupList(ModelAndView mav,
+//			@RequestParam(required = false) String selectedValue) {
+//		
+//		
+//		
+//		
+//		//		group = groupService.groupDisplayList(user_name);
+//		String est_year = "--";
+//		if (selectedValue == null || selectedValue.equals("--")) {
+//			Iterable<Teams> group = null;
+//			group = groupDispService.groupList(est_year);
+//		} else {
+//			mav.getModel().clear();
+//			est_year = selectedValue;
+//			
+//			List<Teams> selectGroupByEstYear = groupDispService.selectGroupByEstYear(est_year);
+//			Iterable<Teams> group = selectGroupByEstYear;
+//			group = groupDispService.groupList();
+//		}
+//		
+//		// サービスのメソッドを呼び出す
+//		//Iterable<Teams> groupList = groupDispService.groupList();
+//		
+//		mav.addObject("groups", groupList(null, null));
+//		mav.setViewName("admin/groupList");
+//		
+//		return mav;
+//	}
 
 	/**
 	 * グループ詳細画面を表示する
 	 * @return
 	 */
-	public String groopDetail() {
-		return "groopDetail";
+	public String groupDetail() {
+		return "groupDetail";
 	}
 
 	/**
@@ -612,8 +633,8 @@ public class AdminCtrl {
 	 * グループ編集画面を表示する
 	 * @return
 	 */
-	public String userUpdate() {
-		return "userDetail";
+	public String groupUpdate() {
+		return "groupUpdate";
 	}
 
 	/**
@@ -644,16 +665,16 @@ public class AdminCtrl {
 	 * グループ解散確認画面を表示する
 	 * @return
 	 */
-	public String groopDeleteConfirm() {
-		return "groopDeleteConfirm";
+	public String groupDeleteConfirm() {
+		return "groupDeleteConfirm";
 	}
 
 	/**
 	 * 	グループ作成画面を表示する
 	 * @return
 	 */
-	public String groopCreate() {
-		return "groopCreate";
+	public String groupCreate() {
+		return "groupCreate";
 	}
 
 }

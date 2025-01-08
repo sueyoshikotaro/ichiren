@@ -25,6 +25,7 @@ import com.example.demo.service.UserServiceInterface;
 
 import jakarta.servlet.http.HttpSession;
 
+
 @Controller
 @RequestMapping("/taskdon/user")
 public class UserCtrl {
@@ -103,6 +104,7 @@ public class UserCtrl {
 		return "common/login";
 	}
 
+
 	/**
 	 * ID重複チェック
 	 * 所属グループ一覧画面を表示
@@ -110,7 +112,7 @@ public class UserCtrl {
 	 */
 	@PostMapping("deptGroupList")
 	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
-
+		
 		Optional<User> user;
 
 		user = userCrudRepo.findById(user_id);
@@ -121,7 +123,6 @@ public class UserCtrl {
 
 			mav.addObject("groupS", deptGroupList);
 			mav.setViewName("common/deptGroupList");
-
 			session.setAttribute("user", user);
 		} else {
 
@@ -195,12 +196,12 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
-
+    
 		mav.addObject("tasks", t);
 		mav.setViewName("leader/taskRegistConfirm");
 		return mav;
 	}
-
+	
 	/**
 	 * タスク登録完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -216,7 +217,7 @@ public class UserCtrl {
 		mav.setViewName("leader/taskRegistComplete");
 		return mav;
 	}
-
+	
 	/**
 	 * タスク詳細画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -224,6 +225,7 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
+
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDetails");
 		return mav;

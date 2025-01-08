@@ -18,24 +18,79 @@
 <body>
 	<div>
 		<h2>グループ一覧画面</h2><br>
-		<div class="container">
+		<div class="container" id="container">
+			<select id="dropdown" name="selectedValue" th:onchange="groupList(this.value)">
+				<option>--</option>
+				<option name="est_year">2021年</option>
+				<option name="est_year">2022年</option>
+				<option name="est_year">2023年</option>
+				<option name="est_year">2024年</option>
+				<option name="est_year">2025年</option>
+				<option name="est_year" th:each="group : ${estYear}" th:value="${est_year}" th:text="${est_year}">
+				</option>
+			</select>
+
+			<script th:inline="javascript">
+				function groupList(selectedValue) {
+					/*URL指定＆ドロップダウンリストの値引き渡し*/
+					var url = "groupList";
+					var params = {
+						"selectedValue": slectedValue
+					};
+				}
+				/*HTML内容のクリア*/
+				var elements = document.getElementsByClassName("content_child");
+				for (var i = 0; i < elements.length; i++) {
+					elements[i].innerHTML = "";
+				}
+				/*グループ一覧表示メソッドの呼び出し*/
+				$.ajax({
+					type: "GET",
+					url: url,
+					data: params,
+					success: function (data) {
+						var html = $(data).find(".content").html();
+						document.getElementById("data").innerHTML = html;
+					}
+				});
+			</script>
+
+
+
+			<!-- codeium参考 -->
+			<!--		 発足年度の選択肢を追加する -->
+			<!--		<select id="establishedYear" name="establishedYear">-->
+			<!--			<option value="">すべて</option>-->
+			<!--			<c:forEach items="${establishedYears}" var="year">-->
+			<!--				<option value="${year}">${year}</option>-->
+			<!--			</c:forEach>-->
+			<!--		</select>-->
+
+			<!--		 発足年度の選択肢を送信する -->
+			<!--		<form id="filterForm" th:action="@{groupList}" method="get">-->
+			<!--			<input type="hidden" name="establishedYear" value="${establishedYear}">-->
+			<!--			<button type="submit">絞り込み</button>-->
+			<!--		</form>-->
+
 
 			<div th:each="group : ${groups}">
 				<div th:text="${group.group_name}"></div>
-				<div th:text="'進捗' + ${group.progress} + '％'"></div>
+				<div th:text="'進捗' + ${group.all_progress} + '％'"></div>
 				<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0"
 					aria-valuemax="100">
-					<div class="progress-bar" th:style="'width:'+ ${group.progress}+'%'"></div>
+					<div class="progress-bar" th:style="'width:'+ ${group.all_progress}+'%'"></div>
 				</div>
 				<div th:text="${group.work_status}"></div>
 				<div>
 					<form th:action="@{groupDetail}" method="post">
 						<input type="hidden" name="group_id" th:value="${group.group_id}">
 						<input type="hidden" name="group_name" th:value="${group.group_name}">
-						<input type="hidden" name="task_content" th:value="${group.school_id}">
-						<input type="hidden" name="task_priority" th:value="${group.group_flg}">
-						<input type="hidden" name="progress" th:value="${group.genre}">
-						<input type="hidden" name="start_date" th:value="${group.work_status}">
+						<input type="hidden" name="school_id" th:value="${group.school_id}">
+						<input type="hidden" name="group_flg" th:value="${group.group_flg}">
+						<input type="hidden" name="genre" th:value="${group.genre}">
+						<input type="hidden" name="work_status" th:value="${group.work_status}">
+						<input type="hidden" name="all_progress" th:value="${group.all_progress}">
+						<input type="hidden" name="est_year" th:value="${group.est_year}">
 						<input type="submit" value="詳細">
 					</form>
 				</div>
@@ -44,7 +99,7 @@
 
 			<button th:onclick="|location.href='@{groupCreate}'|">作成</button>
 			<button th:onclick="|location.href='@{menu}'|">メニュー</button>
-			
+
 		</div>
 </body>
 

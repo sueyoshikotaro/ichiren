@@ -9,13 +9,16 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
 <body>
 	<div>
 		<h2>タスク一覧画面</h2><br>
+
 		<div class="container" id="container">
 			<select id="dropdown" name="selectedValue" th:onchange="taskList(this.value)">
 				<option>全員</option>
@@ -73,6 +76,7 @@
 							<input type="submit" value="詳細">
 						</form>
 					</div>
+
 				</div>
 			</div>
 			<button th:onclick="|location.href='@{taskRegister}'|">登録</button>

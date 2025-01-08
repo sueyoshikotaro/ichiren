@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
-
+	
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
@@ -37,7 +37,7 @@
 			<tr>
 				<th>PC</th>
 				<td>
-					<select name="pc_flg" th:value="${schoolDetails.pc_flg}">
+					<select th:value="${schoolDetails.pc_flg}">
 						<option th:value="1" th:text="有" th:selected="${schoolDetails.pc_flg == 1}"></option>
 						<option th:value="0" th:text="無" th:selected="${schoolDetails.pc_flg == 0}"></option>
 					</select>
@@ -46,7 +46,6 @@
 
 			<tr>
 				<td colspan="2" align="right">
-
 					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
 					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
 					<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
@@ -60,7 +59,7 @@
 			<tr>
 				
 			</tr>
-
+			
 		</table>
 	</form>
 </body>
