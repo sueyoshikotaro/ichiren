@@ -548,11 +548,12 @@ public class AdminCtrl {
 	@GetMapping("groupList")
 	public ModelAndView groupList(ModelAndView mav,
 			@RequestParam(required = false) String selectedValue) {
-
-		Iterable<Teams> group = null;
+		
+		System.out.println(selectedValue);
+		List<Teams> group = null;
 		//		group = groupService.groupDisplayList(user_name);
 		String est_year = "--";
-		if (selectedValue == null || selectedValue.equals("--")) {
+		if (selectedValue == null || selectedValue.equals("グループ結成年度")) {
 
 			group = groupDispService.groupList(est_year);
 		} else {
