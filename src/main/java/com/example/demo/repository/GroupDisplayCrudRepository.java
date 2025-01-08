@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jdbc.repository.query.Query;
@@ -21,6 +22,13 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 管理者_グループ一覧
 	 * グループ発足年度で絞り込みをする
 	 */
-	@Query("selct * from teams where group_flg = 1 and est_year = :estYear")
-	public List<Teams> selectGroupByEstYear(String estYear);
+	@Query("select * from teams where group_flg = 1 and est_year = :estYear")
+	public List<Teams> groupList(String estYear);
+
+	/*
+	 * 管理者_グループ一覧
+	 * 年だけ抽出
+	 */
+	@Query("select est_year, YEAR(est_year) FROM teams")
+	public Collection<Teams> findDistinctEstYear();
 }

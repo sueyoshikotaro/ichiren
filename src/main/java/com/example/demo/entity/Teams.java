@@ -21,4 +21,8 @@ public class Teams {
 	private String work_status;
 	private int all_progress;
 	private String est_year;
+	public Object substring(int i, int j) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 }
