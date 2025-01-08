@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
+import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
@@ -624,41 +625,38 @@ public class AdminCtrl {
 		return mav;
 	}
 
-	//
-	//	/*
-	//	 * 向江
-	//	 * グループ一覧画面を表示するリクエストハンドラメソッド
-	//	 * @return
-	//	 */
-	//	@GetMapping("groupList")
-	//	public ModelAndView groupList(ModelAndView mav,
-	//			@RequestParam(required = false) String selectedValue) {
-	//		
-	//		
-	//		
-	//		
-	//		//		group = groupService.groupDisplayList(user_name);
-	//		String est_year = "--";
-	//		if (selectedValue == null || selectedValue.equals("--")) {
-	//			Iterable<Teams> group = null;
-	//			group = groupDispService.groupList(est_year);
-	//		} else {
-	//			mav.getModel().clear();
-	//			est_year = selectedValue;
-	//			
-	//			List<Teams> selectGroupByEstYear = groupDispService.selectGroupByEstYear(est_year);
-	//			Iterable<Teams> group = selectGroupByEstYear;
-	//			group = groupDispService.groupList();
-	//		}
-	//		
-	//		// サービスのメソッドを呼び出す
-	//		//Iterable<Teams> groupList = groupDispService.groupList();
-	//		
-	//		mav.addObject("groups", groupList(null, null));
-	//		mav.setViewName("admin/groupList");
-	//		
-	//		return mav;
-	//	}
+	/*
+	 * 向江
+	 * グループ一覧画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@GetMapping("groupList")
+	public ModelAndView groupList(ModelAndView mav,
+			@RequestParam(required = false) String selectedValue) {
+		
+		System.out.println(selectedValue);
+		List<Teams> group = null;
+		//		group = groupService.groupDisplayList(user_name);
+		String est_year = "--";
+		if (selectedValue == null || selectedValue.equals("グループ結成年度")) {
+
+			group = groupDispService.groupList(est_year);
+		} else {
+			mav.getModel().clear();
+			est_year = selectedValue;
+
+			group = groupDispService.groupList(est_year);
+		}
+
+		// サービスのメソッドを呼び出す
+		//Iterable<Teams> groupList = groupDispService.groupList();
+
+		mav.addObject("groups", group);
+		System.out.println(group);
+		mav.setViewName("admin/groupList");
+
+		return mav;
+	}
 
 	/**
 	 * グループ詳細画面を表示する

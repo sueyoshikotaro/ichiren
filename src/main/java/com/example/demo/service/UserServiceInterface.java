@@ -12,10 +12,17 @@ public interface UserServiceInterface {
 	public List<User> userList();
 	// return userCrudRepository.findAll()
 
-	/*
+	/**
 	 * 坂本
 	 * ユーザ
 	 * ID重複をチェック
 	 */
 	public boolean userIdCheck(String user_id);
+	
+	/**
+	 * 坂本
+	 * ユーザ
+	 * passをチェック
+	 */
+	public boolean userPassCheck(String user_pass);
 }

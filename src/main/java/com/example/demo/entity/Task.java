@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
@@ -11,13 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Task {
 	@Id
-	private Integer task_id;
+	private int task_id;
 	private String task_category;
 	private String task_name;
 	private String task_content;
 	private String task_status;
-	private String start_date;
-	private String end_date;
+	private Date start_date;
+	private Date end_date;
 	private int task_priority;
 	private int task_level;
 	private double task_weight;

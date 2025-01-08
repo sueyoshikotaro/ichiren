@@ -1,5 +1,7 @@
 package com.example.demo.controll;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +26,6 @@ import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
 
 import jakarta.servlet.http.HttpSession;
-
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -91,43 +92,45 @@ public class UserCtrl {
 
 		return "common/resetPass";
 	}
-	
+
 	/**
 	 * ログアウト画面を表示
 	 * @return
 	 */
 	@GetMapping("logout")
 	public String logout() {
-		
+
 		session.invalidate();
-		
+
 		return "common/login";
 	}
 
-
 	/**
 	 * ID重複チェック
+	 * パスワードチェック
 	 * 所属グループ一覧画面を表示
 	 * @return
 	 */
 	@PostMapping("deptGroupList")
-	public ModelAndView userIdCheck(ModelAndView mav, String user_id) {
-		
+	public ModelAndView userIdCheck(ModelAndView mav, String user_id, String user_pass) {
+
 		Optional<User> user;
+		Optional<User> pass;
 
 		user = userCrudRepo.findById(user_id);
+		//		pass = userCrudRepo.findById(user_pass);
 
-		if (user.get().getUser_id().equals(user_id)) {
+		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
 			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
 			mav.addObject("groupS", deptGroupList);
 			mav.setViewName("common/deptGroupList");
-			session.setAttribute("user", user);
+			session.setAttribute("user", user.get());
 		} else {
 
 			mav.setViewName("common/login");
-			mav.addObject("errMsg", "IDが一致しません。");
+			mav.addObject("errMsg", "ログインできませんでした");
 		}
 
 		return mav;
@@ -140,8 +143,8 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
-		
-//		session.setAttribute("roll", groupService.selectRoll());
+
+		//session.setAttribute("roll", groupService.selectRoll());
 
 		session.setAttribute("groupUser", TaskService.taskUserSearch());
 
@@ -196,12 +199,12 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
-    
+
 		mav.addObject("tasks", t);
 		mav.setViewName("leader/taskRegistConfirm");
 		return mav;
 	}
-	
+
 	/**
 	 * タスク登録完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -209,15 +212,24 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistComplete")
 	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
-
-		TaskService.taskRegister(t.getTask_category(), t.getTask_name(), t.getTask_content(), "未着手", t.getStart_date(),
-				t.getEnd_date(), t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
-				t.getGroup_id());
-
-		mav.setViewName("leader/taskRegistComplete");
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date st_date = null;
+		Date end_date = null;
+		try {
+			st_date = sdf.parse(t.getStart_date());
+			end_date = sdf.parse(t.getEnd_date());
+			TaskService.taskRegister(t.getTask_category(), t.getTask_name(), t.getTask_content(), "未着手",
+					st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
+					t.getGroup_id());
+			mav.addObject("tasks", t);
+			mav.setViewName("leader/taskRegistConfirm");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		return mav;
 	}
-	
+
 	/**
 	 * タスク詳細画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -245,7 +257,7 @@ public class UserCtrl {
 			mav.setViewName("leader/taskEdit");
 			//削除ボタンを押下
 		} else if (button.equals("delete")) {
-			mav.setViewName("leader/taskDelete");
+			mav.setViewName("leader/taskDeleteConfirm");
 		}
 		return mav;
 	}
@@ -260,7 +272,7 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskEditConfirm")
 	public ModelAndView taskEditConfirm(ModelAndView mav, TaskForm t) {
-		mav.addObject("taskedit", t);
+		mav.addObject("task", t);
 		mav.setViewName("leader/taskEditConfirm");
 		return mav;
 	}
@@ -268,7 +280,8 @@ public class UserCtrl {
 	/**
 	 * タスク編集完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
-	 * @param entity
+	 * (未)スコアの更新
+	 * @param mav
 	 * @return
 	 */
 	@LoginRequired
@@ -277,11 +290,30 @@ public class UserCtrl {
 
 		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
 				t.getTask_priority(), t.getTask_weight(), t.getUser_name());
-		mav.addObject("taskedit", t);
+		mav.addObject("task", t);
 		mav.setViewName("leader/taskEditConfirm");
 
 		return mav;
 	}
+	
+	/**
+	 * タスク削除確認画面を表示するリクエストハンドラメソッド
+	 * 湊原
+	 * @param mav
+	 * @param t
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("taskDeleteConfirm")
+	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
+		
+		TaskService.taskUpFlg(t.getTask_id());
+		mav.addObject("task", t);
+		mav.setViewName("leader/taskDeleteConfirm");
+		
+		return mav;
+	}
+	
 
 	/**
 	 * 連絡事項作成画面を表示
@@ -297,5 +329,5 @@ public class UserCtrl {
 	 * チャット画面を表示
 	 * @return
 	 */
-	
+
 }

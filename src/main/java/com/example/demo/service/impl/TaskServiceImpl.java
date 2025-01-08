@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 */
 	@Override
 	public void taskRegister(String task_category, String task_name, String task_content, String str,
-			String start_date, String end_date, String task_priority, String task_level, String task_weight, String user_name, String group_id) {
+			Date start_date, Date end_date, String task_priority, String task_level, String task_weight, String user_name, String group_id) {
 		
 		repo.registerTask(task_category, task_name, task_content, str,
 				start_date, end_date, task_priority, task_level, task_weight, user_name, group_id);
@@ -49,10 +50,16 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	
 	@Override
 	public void taskUpdate(int task_id, String task_category, String task_name, String task_content,
-			String task_priority, String task_weight, String user_id) {
+			String task_priority, String task_weight, String user_name) {
 		
 		repo.updateTask(task_id,task_category, task_name, task_content,
-				task_priority,task_weight, user_id);
+				task_priority,task_weight, user_name);
+		
+	}
+
+	@Override
+	public void taskUpFlg(int task_id) {
+		repo.updateFlg(task_id);
 		
 	}
 
