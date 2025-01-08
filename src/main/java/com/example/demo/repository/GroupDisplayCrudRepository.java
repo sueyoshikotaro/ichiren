@@ -16,4 +16,11 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Query("select * from teams where group_flg = 1")
 	public List<Teams> groupList();
 	
+	
+	/*
+	 * 管理者_グループ一覧
+	 * グループ発足年度で絞り込みをする
+	 */
+	@Query("selct * from teams where group_flg = 1 and est_year = :estYear")
+	public List<Teams> selectGroupByEstYear(String estYear);
 }
