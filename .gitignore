@@ -4,4 +4,3 @@ src/main/resources/application.properties
 *.log
 .idea/workspace.xml
 *.iml
-/.gradle/
