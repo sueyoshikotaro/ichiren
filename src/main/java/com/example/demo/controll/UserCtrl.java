@@ -142,15 +142,11 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu(int group_id) {
-		
-		System.out.println(group_id);
-		
+
 		session.setAttribute("groupId", group_id);
-		
-		System.out.println(group_id);
 
 		session.setAttribute("groupUser", TaskService.taskUserSearch());
-		
+
 		//session.setAttribute("roll", groupService.selectRoll());
 
 		return "common/menuUser";
