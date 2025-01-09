@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -24,8 +26,6 @@ import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -317,7 +317,18 @@ public class UserCtrl {
 		return mav;
 	}
 	
-
+	/**
+	 * タスク未承認画面を表示する
+	 * 湊原
+	 */
+	@LoginRequired
+	@GetMapping("taskUnapproved")
+	public ModelAndView taskUnapproved(ModelAndView mav) {
+		mav.addObject("tasks", TaskService.taskUnapproved());
+		mav.setViewName("leader/taskUnapproved");
+		return mav;
+	}
+	
 	/**
 	 * 連絡事項作成画面を表示
 	 * @return

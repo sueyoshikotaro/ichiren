@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.example.demo.entity.Task;
+import com.example.demo.entity.TaskRequest;
 
 public interface TaskServiceInterface {
 	//タスク一覧表示
@@ -23,4 +24,8 @@ public interface TaskServiceInterface {
 	//タスクフラグ更新(削除)
 	public void taskUpFlg(int task_id);
 	
+	//スコアを取得するメソッド
+	public int userScore(String user_id, String group_id);
+
+	public List<TaskRequest> taskUnapproved();
 }
