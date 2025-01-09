@@ -14,8 +14,8 @@ public interface GroupCrudRepository extends CrudRepository<GroupDisplay, Intege
 	 * ユーザ
 	 * 所属グループ一覧
 	 */
-	//	@Query("select group_name,genre,user_roll from teams inner join user_detail on teams.group_id = user_detail.group_id")
-	@Query("select group_name,genre,user_roll from teams inner join user_Detail on teams.group_id = user_Detail.group_id where user_Detail.user_id = :user_id")
+	//@Query("select group_name,genre,user_roll from teams inner join user_detail on teams.group_id = user_detail.group_id")
+	@Query("select user_detail.group_id,group_name,genre,user_roll from teams inner join user_Detail on teams.group_id = user_Detail.group_id where user_Detail.user_id = :user_id")
 	public List<GroupDisplay> deptGroupList(String user_id);
 
 	/**
@@ -23,7 +23,7 @@ public interface GroupCrudRepository extends CrudRepository<GroupDisplay, Intege
 	 * リーダ・メンバ
 	 * メニュー
 	 */
-//	@Query("select user_roll from user_detail")
-//	public List<GroupDisplay> selectRoll();
-	
+	//	@Query("select user_roll from user_detail")
+	//	public List<GroupDisplay> selectRoll();
+
 }
