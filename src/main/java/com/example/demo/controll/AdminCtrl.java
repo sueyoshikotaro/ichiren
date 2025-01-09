@@ -72,11 +72,21 @@ public class AdminCtrl {
 	 */
 	@GetMapping("login")
 	public String login() {
-		return "admin/login";
+		return "common/login";
 	}
 
+	
+	/**
+	 * 末吉
+	 * ログアウト
+	 * @return
+	 */
+	@GetMapping("logout")
 	public String logout() {
-		return "admin/login";
+		
+		session.invalidate();
+		
+		return "common/login";
 	}
 
 	/**
@@ -87,6 +97,7 @@ public class AdminCtrl {
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
+
 		return "admin/menuAdmin";
 	}
 
@@ -362,7 +373,8 @@ public class AdminCtrl {
 		// サービスのメソッドを呼び出す
 		userDisplayService.DeleteUser(u.getUser_id());
 
-		mav.setViewName("admin/updateComp");
+		mav.addObject("userDeleteConfirm", true);
+		mav.setViewName("admin/userDeleteConfirm");
 
 		return mav;
 	}
@@ -461,12 +473,9 @@ public class AdminCtrl {
 		//作成ボタンを押下し、formに格納されているデータの数分繰り返しデータ追加
 		if (button.equals("作成")) {
 			for (int i = 0; i < userIds.length; i++) {
-				System.out.println("一致！！！");
-				System.out.println("ユーザID：" + userIds[i]);
-
+				//一件ずつ作成
 				userDisplayService.InsertUser(userIds[i], userNames[i], userPasses[i], schoolIds[i], enrYears[i],
 						userFlgs[i]);
-
 			}
 
 			mav.addObject("userRegistComp", true);
@@ -721,11 +730,17 @@ public class AdminCtrl {
 	}
 
 	/**
-	 * 	グループ作成画面を表示する
+	 * 末吉
+	 * グループ作成画面を表示する
 	 * @return
 	 */
-	public String groupCreate() {
-		return "groupCreate";
+	@GetMapping("groupCreate")
+	public ModelAndView groupCreate(ModelAndView mav) {
+		
+		
+		
+		
+		return mav;
 	}
 
 }
