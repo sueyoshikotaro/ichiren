@@ -47,22 +47,19 @@
 			</tr>
 		</table>
 
-		<button type="button" name="button" value="作成" class="btn btn-danger" onclick="registAndShowPopup()">作成</button>
+		<button type="button" name="button" value="作成" class="btn btn-danger" onclick="userRegistAndShowPopup()">作成</button>
 
 		<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
 
 	</form>
 
 	<!-- ポップアップ -->
-	<div class="modal fade" id="RegistModal" tabindex="-1" role="dialog" aria-labelledby="registModalLabel"
+	<div class="modal fade" id="userRegistModal" tabindex="-1" role="dialog" aria-labelledby="userRegistModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="registModalLabel">ユーザ作成完了</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+					<h5 class="modal-title" id="userRegistModalLabel">ユーザ作成完了</h5>
 				</div>
 				<div class="modal-body">
 					<p>ユーザ作成が完了しました</p>
@@ -80,7 +77,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 	<script>
-		function registAndShowPopup() {
+		function userRegistAndShowPopup() {
 			// フォーム要素を取得
 			var form = document.querySelector('form');
 
@@ -105,7 +102,7 @@
 		var userRegistComp = /*[[${userRegistComp}]]*/ true;
 		$(document).ready(function () {
 			if (userRegistComp == true) {
-				$('#RegistModal').modal('show');
+				$('#userRegistModal').modal('show');
 			}
 		});
 		/*]]>*/

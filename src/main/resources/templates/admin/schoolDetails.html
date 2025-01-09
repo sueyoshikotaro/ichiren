@@ -7,6 +7,8 @@
 
 	<link rel="stylesheet" th:href="@{/css/header.css}">
 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 
 
@@ -33,8 +35,17 @@
 				</tr>
 
 				<tr th:each="schoolDetails : ${schoolS}">
-					<td><input type="radio" th:value="${schoolDetails.room_id}" name="roomId" th:field="*{content}" />
+					<!--					<td><input type="radio" th:value="${schoolDetails.room_id}" name="roomId" th:field="*{content}" />-->
+					<!--					</td>-->
+					<td>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="flexRadioDefault"
+								th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
+								th:field="*{content}" />
+							<label class="form-check-label" th:for="${schoolDetails.room_id}"></label>
+						</div>
 					</td>
+
 
 					<td th:text="${schoolDetails.room_name}"></td>
 					<td th:text="${schoolDetails.hall}"></td>
@@ -45,11 +56,30 @@
 				</tr>
 			</table><br>
 
-			<button type="submit" name="button" value="edit">編集</button>
 			<button type="submit" name="button" value="add">追加</button>
+			<button type="submit" name="button" value="edit">編集</button>
 			<button type="submit" name="button" value="delete">削除</button>
+			<!--			<button type="submit" name="button" value="edit" th:disabled="${flexRadioDefault == null}">編集</button>-->
+			<!--			<button type="submit" name="button" value="delete" th:disabled="${flexRadioDefault == null}">削除</button>-->
 		</form>
 	</div>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<script th:inline="javascript">
+		$(document).ready(function () {
+			$('input[type="radio"]').on('change', function () {
+				if ($('input[type="radio"]:checked').length > 0) {
+					$('button[name="button"][value="edit"]').prop('disabled', false);
+					$('button[name="button"][value="delete"]').prop('disabled', false);
+				} else {
+					$('button[name="button"][value="edit"]').prop('disabled', true);
+					$('button[name="button"][value="delete"]').prop('disabled', true);
+				}
+			});
+		});
+	</script>
+
 </body>
 
 </html>

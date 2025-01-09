@@ -72,11 +72,21 @@ public class AdminCtrl {
 	 */
 	@GetMapping("login")
 	public String login() {
-		return "admin/login";
+		return "common/login";
 	}
 
+	
+	/**
+	 * 末吉
+	 * ログアウト
+	 * @return
+	 */
+	@GetMapping("logout")
 	public String logout() {
-		return "admin/login";
+		
+		session.invalidate();
+		
+		return "common/login";
 	}
 
 	/**
@@ -87,6 +97,7 @@ public class AdminCtrl {
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
+
 		return "admin/menuAdmin";
 	}
 
@@ -362,7 +373,8 @@ public class AdminCtrl {
 		// サービスのメソッドを呼び出す
 		userDisplayService.DeleteUser(u.getUser_id());
 
-		mav.setViewName("admin/updateComp");
+		mav.addObject("userDeleteConfirm", true);
+		mav.setViewName("admin/userDeleteConfirm");
 
 		return mav;
 	}
@@ -461,12 +473,9 @@ public class AdminCtrl {
 		//作成ボタンを押下し、formに格納されているデータの数分繰り返しデータ追加
 		if (button.equals("作成")) {
 			for (int i = 0; i < userIds.length; i++) {
-				System.out.println("一致！！！");
-				System.out.println("ユーザID：" + userIds[i]);
-
+				//一件ずつ作成
 				userDisplayService.InsertUser(userIds[i], userNames[i], userPasses[i], schoolIds[i], enrYears[i],
 						userFlgs[i]);
-
 			}
 
 			mav.addObject("userRegistComp", true);
@@ -638,31 +647,69 @@ public class AdminCtrl {
 	 */
 	@GetMapping("groupList")
 	public ModelAndView groupList(ModelAndView mav,
-			@RequestParam(required = false) String selectedValue) {
+			@RequestParam(required = false) String selectedValue,
+			@RequestParam(name = "dropdown", required = false) String drop) {
 
-		System.out.println(selectedValue);
 		List<Teams> group = null;
-		//		group = groupService.groupDisplayList(user_name);
-		String est_year = "--";
-		if (selectedValue == null || selectedValue.equals("グループ結成年度")) {
-
-			group = groupDispService.groupList(est_year);
+		String dropid = null;
+		String dropdown = "--";
+		mav.getModel().clear();
+		if (drop != null) {
+			dropdown = selectedValue;
+			group = groupDispService.groupList(dropdown,drop);
 		} else {
-			mav.getModel().clear();
-			est_year = selectedValue;
-
-			group = groupDispService.groupList(est_year);
+			group = groupDispService.groupList(dropdown,dropid);
 		}
 
-		// サービスのメソッドを呼び出す
-		//Iterable<Teams> groupList = groupDispService.groupList();
-
-		mav.addObject("groups", group);
 		System.out.println(group);
+		mav.addObject("groups", group);
 		mav.setViewName("admin/groupList");
 
 		return mav;
 	}
+
+	//	/*
+	//	 * chatGPT
+	//	 * グループ一覧
+	//	 */
+	//	@GetMapping("groupList")
+	//	public ModelAndView getGroup(
+	//			@RequestParam(value = "est_year" , required = false) String est_year,
+	//			@RequestParam(value = "school_name", required = false) String school_name,
+	//			@RequestParam(value = "genre", required = false) String genre,
+	//			ModelAndView mav) {
+	//		
+	//		if (est_year == null) {
+	//			est_year = "0"; // または現在の年を取得して代入
+	//		}
+	//		
+	//		List<Teams> groups = groupDispService.getTeamsByCriteria(est_year, school_name, genre);
+	//		
+	//		mav.addObject("groups", groups);
+	//		mav.addObject("estYear", est_year);
+	//		mav.addObject("schoolName", school_name);
+	//		mav.addObject("genre", genre);
+	//		mav.setViewName("admin/groupList");
+	//		
+	//		return mav;
+	//	}
+
+	//	/*
+	//	 * Codeium
+	//	 * グループ一覧を表示するリクエストハンドラメソッド２
+	//	 */
+	//	// 絞り込み条件を変更する
+	//	@GetMapping("groupList")
+	//	public String groupList(@RequestParam(required = false) String estYear, Model model) {
+	//	  List<Teams> groups;
+	//	  if (estYear != null && !estYear.isEmpty()) {
+	//	    groups = groupDispService.findDistinctEstYear(estYear + "%");
+	//	  } else {
+	//	    groups = groupDispService.findAll();
+	//	  }
+	//	  model.addAttribute("groups", groups);
+	//	  return "admin/groupList";
+	//	}
 
 	/**
 	 * グループ詳細画面を表示する
@@ -721,11 +768,17 @@ public class AdminCtrl {
 	}
 
 	/**
-	 * 	グループ作成画面を表示する
+	 * 末吉
+	 * グループ作成画面を表示する
 	 * @return
 	 */
-	public String groupCreate() {
-		return "groupCreate";
+	@GetMapping("groupCreate")
+	public ModelAndView groupCreate(ModelAndView mav) {
+		
+		
+		
+		
+		return mav;
 	}
 
 }

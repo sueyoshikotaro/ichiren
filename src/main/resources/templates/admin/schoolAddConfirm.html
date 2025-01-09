@@ -54,7 +54,7 @@
 					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
 					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
 					<button type="button" name="button" value="追加" class="btn btn-danger"
-						onclick="addAndShowPopup()">追加</button>
+						onclick="schoolAddAndShowPopup()">追加</button>
 
 					<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
 				</td>
@@ -63,15 +63,12 @@
 	</form>
 
 	<!-- ポップアップ -->
-	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+	<div class="modal fade" id="schoolAddModal" tabindex="-1" role="dialog" aria-labelledby="schoolAddModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="addModalLabel">追加完了</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+					<h5 class="modal-title" id="schoolAddModalLabel">追加完了</h5>
 				</div>
 				<div class="modal-body">
 					<p>追加が完了しました</p>
@@ -90,7 +87,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 	<script>
-		function addAndShowPopup() {
+		function schoolAddAndShowPopup() {
 			// フォーム要素を取得
 			var form = document.querySelector('form');
 
@@ -115,7 +112,7 @@
 		var schoolAddComp = /*[[${schoolAddComp}]]*/ true;
 		$(document).ready(function () {
 			if (schoolAddComp == true) {
-				$('#AddModal').modal('show');
+				$('#schoolAddModal').modal('show');
 			}
 		});
 		/*]]>*/

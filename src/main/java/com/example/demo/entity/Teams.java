@@ -14,6 +14,8 @@ public class Teams {
 	@Id
 	private int group_id;
 	private String group_name;
+	
+	private String school_name;
 
 	private String school_id;
 	private int group_flg;
@@ -21,8 +23,5 @@ public class Teams {
 	private String work_status;
 	private int all_progress;
 	private String est_year;
-	public Object substring(int i, int j) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
+	
 }

@@ -1,20 +1,33 @@
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<meta charset="UTF-8">
 
 <head>
+	<!--必須項目-->
+	<meta charset="UTF-8">
+
+	<!--サイトタイトル-->
 	<title>タスクどん|ログイン</title>
+
+	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+	<!--CSS接続-->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/login.css}">
-	<link rel="icon" type="image/png" th:href="@{/img/icon.png}">
+
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 </head>
 
 <body>
-	<div class="container">
-		<h1>タスクどん</h1>
-		<h3>【ログイン】</h3>
+	<!--コンテナ(ログインのみ別種コンテナ)-->
+	<div class="login-container">
+
+		<h1 class="app-name">タスクどん</h1>
+		<h3 class="login-title">ログイン</h3>
 
 		<!--入力情報(必須)-->
 		<form th:action="@{/taskdon/user/deptGroupList}" method="post">
@@ -73,7 +86,7 @@
 		</form>
 
 		<!--パスワード再設定説明(ポップアップ)-->
-		<p class="Ano">※<a href="#" class="popup-link">パスワードを忘れた場合</a></p>
+		<p class="annotation">※<a href="#" class="popup-link">パスワードを忘れた場合</a></p>
 		<div class="popup" style="display: none;">
 			<div class="popup-content">
 				<span class="close">&times;</span>

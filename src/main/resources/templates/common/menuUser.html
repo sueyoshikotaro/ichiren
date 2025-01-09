@@ -22,24 +22,30 @@
 	<div style="overflow-y: scroll; height: 200px;"></div>
 
 	<!-- 削除ボタン -->
-	<button type="submit">削除</button>
+	<div th:if="${session.user_roll} == 'リーダ'">
+		<button type="submit">削除</button>
+	</div>
 
 	<!-- 遷移ボタン -->
 	<form name="form1" th:action="@{deptGroupList}" method="post">
 		<button type="submit">所属グループ一覧</button>
 	</form>
 
-	<form name="form1" th:action="@{memberList}" method="get">
-		<button type="submit">メンバ一覧</button>
-	</form>
+	<div th:if="${session.user_roll} == 'リーダ'">
+		<form name="form1" th:action="@{memberList}" method="get">
+			<button type="submit">メンバ一覧</button>
+		</form>
+	</div>
 
 	<form name="form1" th:action="@{taskList}" method="get">
 		<button type="submit">タスク一覧</button>
 	</form>
 
-	<form name="form1" th:action="@{noticeRegist}" method="get">
-		<button type="submit">連絡事項作成</button>
-	</form>
+	<div th:if="${session.user_roll} == 'リーダ'">
+		<form name="form1" th:action="@{noticeRegist}" method="get">
+			<button type="submit">連絡事項作成</button>
+		</form>
+	</div>
 
 	<form name="form1" th:action="@{tdList}" method="get">
 		<button type="submit">ToDoリスト</button>
