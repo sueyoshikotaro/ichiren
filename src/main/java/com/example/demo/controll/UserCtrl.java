@@ -5,13 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +24,8 @@ import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -142,11 +141,11 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@GetMapping("menu")
-	public String menu(@PathVariable int group_id, String user_roll) {
+	public String menu(int group_id, String user_roll) {
 
 		//セッション
 		session.setAttribute("groupId", group_id); //グループID
-		session.setAttribute("groupUser", TaskService.taskUserSearch()); //ユーザ情報
+		session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ情報
 		session.setAttribute("userRoll", user_roll); //役職
 
 		return "common/menuUser";
