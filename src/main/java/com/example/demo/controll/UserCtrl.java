@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -116,10 +117,8 @@ public class UserCtrl {
 	public ModelAndView userIdCheck(ModelAndView mav, String user_id, String user_pass) {
 
 		Optional<User> user;
-		Optional<User> pass;
 
 		user = userCrudRepo.findById(user_id);
-		//		pass = userCrudRepo.findById(user_pass);
 
 		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
@@ -143,13 +142,12 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@GetMapping("menu")
-	public String menu(int group_id) {
+	public String menu(@PathVariable int group_id, String user_roll) {
 
-		session.setAttribute("groupId", group_id);
-
-		session.setAttribute("groupUser", TaskService.taskUserSearch(group_id));
-
-		//session.setAttribute("roll", groupService.selectRoll());
+		//セッション
+		session.setAttribute("groupId", group_id); //グループID
+		session.setAttribute("groupUser", TaskService.taskUserSearch()); //ユーザ情報
+		session.setAttribute("userRoll", user_roll); //役職
 
 		return "common/menuUser";
 	}
@@ -215,7 +213,7 @@ public class UserCtrl {
 	 */
 	@PostMapping("taskRegistComplete")
 	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date st_date = null;
 		Date end_date = null;
@@ -298,7 +296,7 @@ public class UserCtrl {
 
 		return mav;
 	}
-	
+
 	/**
 	 * タスク削除確認画面を表示するリクエストハンドラメソッド
 	 * 湊原
@@ -309,13 +307,14 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskDeleteConfirm")
 	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
-		
+
 		TaskService.taskUpFlg(t.getTask_id());
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDeleteConfirm");
-		
+
 		return mav;
 	}
+
 	
 	/**
 	 * タスク未承認画面を表示する
