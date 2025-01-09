@@ -1,5 +1,9 @@
 package com.example.demo.controll;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
@@ -13,12 +17,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
+import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
+import com.example.demo.form.UserForm;
 import com.example.demo.form.UserView;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -112,7 +119,6 @@ public class AdminCtrl {
 	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
 			@ModelAttribute FormContents formcontents, ModelAndView mav) {
 
-
 		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
 
 		//編集ボタンを押下
@@ -168,7 +174,7 @@ public class AdminCtrl {
 			mav.setViewName("admin/schoolDetails");
 
 			return mav;
-    }
+		}
 	}
 
 	/**
@@ -185,9 +191,8 @@ public class AdminCtrl {
 			schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
 					s.getSchool_id(), s.getRoom_id());
 
-			
 			// ポップアップを表示するために、画面遷移をしないようにする
-	        mav.addObject("schoolEditComp", true);
+			mav.addObject("schoolEditComp", true);
 			mav.setViewName("admin/schoolEditConfirm");
 
 			//戻るボタンを押下
@@ -232,7 +237,6 @@ public class AdminCtrl {
 
 	}
 
-
 	/**
 	 * 末吉
 	 * 学校情報追加完了
@@ -241,23 +245,22 @@ public class AdminCtrl {
 	@PostMapping("schoolAddComp")
 	public ModelAndView schoolAddComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
-		
+
 		//追加ボタンを押下
 		if (button.equals("追加")) {
-			
+
 			schoolDisplayService.AddSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
 					s.getSchool_id());
-			
+
 			// ポップアップを表示するために、画面遷移をしないようにする
-	        mav.addObject("schoolAddComp", true);
-	        mav.setViewName("admin/schoolAddConfirm");
-			
+			mav.addObject("schoolAddComp", true);
+			mav.setViewName("admin/schoolAddConfirm");
 
 			return mav;
 
 			//戻るボタンを押下
 		} else {
-			
+
 			mav.addObject("schoolAdd", s);
 			mav.setViewName("admin/schoolAdd");
 
@@ -394,6 +397,91 @@ public class AdminCtrl {
 		mav.setViewName("admin/updateComp");
 
 		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * ユーザ作成画面を表示する
+	 * @return
+	 */
+	@GetMapping("userRegist")
+	public String userRegist() {
+
+		return "admin/userRegist";
+	}
+
+	/**
+	 * 末吉
+	 * ユーザ作成確認画面を表示する
+	 * @return
+	 */
+	@PostMapping("userRegistConfirm")
+	public ModelAndView userRegistConfirm(@RequestParam("csvFile") MultipartFile csvFile, ModelAndView mav) {
+		// CSVファイルを読み込み、ユーザ情報を取得する
+		List<UserForm> users = new ArrayList<>();
+
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(csvFile.getInputStream(), "UTF-8"));
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] values = line.split(",");
+				UserForm user = new UserForm();
+
+				values[0] = values[0].replaceAll("\\p{C}", "");
+				user.setUser_id(values[0]);
+				user.setUser_name(values[1]);
+				user.setUser_pass(values[2]);
+				user.setSchool_id(values[3]);
+				user.setEnr_year(values[4]);
+				user.setUser_flg(Integer.parseInt(values[5]));
+				users.add(user);
+			}
+		} catch (IOException e) {
+
+		}
+
+		mav.addObject("userRegist", users);
+		mav.setViewName("admin/userRegistConfirm");
+
+		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * 新規ユーザ作成完了
+	 * @return
+	 */
+	@PostMapping("userRegistComp")
+	public ModelAndView userRegistComplete(@RequestParam("button") String button,
+			@RequestParam("user_id") String[] userIds,
+			@RequestParam("user_name") String[] userNames, @RequestParam("user_pass") String[] userPasses,
+			@RequestParam("school_id") String[] schoolIds, @RequestParam("enr_year") String[] enrYears,
+			@RequestParam("user_flg") int[] userFlgs, ModelAndView mav) {
+
+		//作成ボタンを押下し、formに格納されているデータの数分繰り返しデータ追加
+		if (button.equals("作成")) {
+			for (int i = 0; i < userIds.length; i++) {
+				System.out.println("一致！！！");
+				System.out.println("ユーザID：" + userIds[i]);
+
+				userDisplayService.InsertUser(userIds[i], userNames[i], userPasses[i], schoolIds[i], enrYears[i],
+						userFlgs[i]);
+
+			}
+
+			mav.addObject("userRegistComp", true);
+			mav.setViewName("admin/userRegistConfirm");
+
+			return mav;
+
+			//戻るボタンを押下
+		} else {
+
+			mav.addObject("userRegist", userIds);
+			mav.setViewName("admin/userRegist");
+
+			return mav;
+		}
 	}
 
 	/*
@@ -543,42 +631,38 @@ public class AdminCtrl {
 		return mav;
 	}
 
+	/*
+	 * 向江
+	 * グループ一覧画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@GetMapping("groupList")
+	public ModelAndView groupList(ModelAndView mav,
+			@RequestParam(required = false) String selectedValue) {
 
-//
-//	/*
-//	 * 向江
-//	 * グループ一覧画面を表示するリクエストハンドラメソッド
-//	 * @return
-//	 */
-//	@GetMapping("groupList")
-//	public ModelAndView groupList(ModelAndView mav,
-//			@RequestParam(required = false) String selectedValue) {
-//		
-//		
-//		
-//		
-//		//		group = groupService.groupDisplayList(user_name);
-//		String est_year = "--";
-//		if (selectedValue == null || selectedValue.equals("--")) {
-//			Iterable<Teams> group = null;
-//			group = groupDispService.groupList(est_year);
-//		} else {
-//			mav.getModel().clear();
-//			est_year = selectedValue;
-//			
-//			List<Teams> selectGroupByEstYear = groupDispService.selectGroupByEstYear(est_year);
-//			Iterable<Teams> group = selectGroupByEstYear;
-//			group = groupDispService.groupList();
-//		}
-//		
-//		// サービスのメソッドを呼び出す
-//		//Iterable<Teams> groupList = groupDispService.groupList();
-//		
-//		mav.addObject("groups", groupList(null, null));
-//		mav.setViewName("admin/groupList");
-//		
-//		return mav;
-//	}
+		System.out.println(selectedValue);
+		List<Teams> group = null;
+		//		group = groupService.groupDisplayList(user_name);
+		String est_year = "--";
+		if (selectedValue == null || selectedValue.equals("グループ結成年度")) {
+
+			group = groupDispService.groupList(est_year);
+		} else {
+			mav.getModel().clear();
+			est_year = selectedValue;
+
+			group = groupDispService.groupList(est_year);
+		}
+
+		// サービスのメソッドを呼び出す
+		//Iterable<Teams> groupList = groupDispService.groupList();
+
+		mav.addObject("groups", group);
+		System.out.println(group);
+		mav.setViewName("admin/groupList");
+
+		return mav;
+	}
 
 	/**
 	 * グループ詳細画面を表示する

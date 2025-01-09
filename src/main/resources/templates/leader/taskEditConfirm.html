@@ -4,40 +4,64 @@
 <head>
 	<meta charset="UTF-8">
 	<title>タスクどん</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
 <body>
+	<h1>タスク編集確認</h1>
 	<form th:action="@{taskEditComplete}" method="post">
-		<input type="hidden" name="task_id" th:value="${taskedit.task_id}"></input>
+		<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
 		<div>
 			<label>タスク名：</label>
-			<div th:text="${taskedit.task_name}"></div>
-			<input type="hidden" th:value="${taskedit.task_name}" name="task_name"></input>
+			<div th:text="${task.task_name}"></div>
+			<input type="hidden" th:value="${task.task_name}" name="task_name"></input>
 		</div>
 		<div>
 			<label>タスクカテゴリ：</label>
-			<div th:text="${taskedit.task_category}"></div>
-			<input type="hidden" th:value="${taskedit.task_category}" name="task_category"></input>
+			<div th:text="${task.task_category}"></div>
+			<input type="hidden" th:value="${task.task_category}" name="task_category"></input>
 		</div>
 		<div>
 			<label>タスク概要：</label>
-			<div th:text="${taskedit.task_content}"></div>
-			<input type="hidden" th:value="${taskedit.task_content}" name="task_content"></input>
+			<div th:text="${task.task_content}"></div>
+			<input type="hidden" th:value="${task.task_content}" name="task_content"></input>
 		</div>
 		<div>
 			<label>担当者：</label>
-			<div th:text="${taskedit.user_name}"></div>
-			<input type="hidden" th:value="${taskedit.user_name}" name="user_name"></input>
+			<div th:text="${task.user_name}"></div>
+			<input type="hidden" th:value="${task.user_name}" name="user_name"></input>
 		</div>
 		<div>
 			<label>優先度：</label>
-			<div th:text="${taskedit.task_priority}"></div>
-			<input type="hidden" th:value="${taskedit.task_priority}" name="task_priority"></input>
+			<div th:text="${task.task_priority}"></div>
+			<input type="hidden" th:value="${task.task_priority}" name="task_priority"></input>
 		</div>
-		<button type="submit" name="button" value="edit">確認</button>
+		<button type="submit" name="button" value="edit">編集</button>
 	</form>
+	<!-- ポップアップ -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">削除確認</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>本当に削除しますか?</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 
 </html>

@@ -32,6 +32,5 @@ public interface UserCrudRepository extends CrudRepository<User, String> {
 	public void passReset(String user_id, String user_pass);
 
 	
-
 	
 }

@@ -9,6 +9,8 @@
 	<title>タスクどん</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
@@ -18,40 +20,96 @@
 	<h2>新規ユーザ登録確認</h2>
 
 	<form th:action="@{userRegistComp}" method="post">
-		<table>
+		<table border="1">
 			<tr>
-				<th>講師ID</th>
-				<td th:text="${user.user_id}"></td>
-			</tr>
-			<tr>
-				<th>講師名</th>
-				<td th:text="${user.user_name}"></td>
-			</tr>
-			<tr>
+				<th>ユーザID</th>
+				<th>ユーザ名</th>
 				<th>パスワード</th>
-				<td th:password="${user.user_pass}"></td>
+				<th>学校ID</th>
+				<th>入学年度</th>
 			</tr>
 
-			<tr>
-				<td colspan="2" align="right">
-					<input type="submit" value="登録">
-				</td>
-			</tr>
+			<tr th:each="user : ${userRegist}">
+				<td th:text="${user.user_id}"></td>
+				<td th:text="${user.user_name}"></td>
+				<td th:text="${user.user_pass}"></td>
+				<td th:text="${user.school_id}"></td>
+				<td th:text="${user.enr_year}"></td>
 
+				<input type="hidden" name="user_id" th:value="${user.user_id}">
+				<input type="hidden" name="user_name" th:value="${user.user_name}">
+				<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+				<input type="hidden" name="school_id" th:value="${user.school_id}">
+				<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+				<input type="hidden" name="user_flg" th:value="${user.user_flg}">
+
+
+			</tr>
 		</table>
 
-		<input type="hidden" name="user_id" th:value="${user.user_id}">
-		<input type="hidden" name="user_name" th:value="${user.user_name}">
-		<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+		<button type="button" name="button" value="作成" class="btn btn-danger" onclick="registAndShowPopup()">作成</button>
 
-		<!--		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;">エラーメッセージ</p>-->
-
+		<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
 
 	</form>
-	<br>
-	<br>
 
+	<!-- ポップアップ -->
+	<div class="modal fade" id="RegistModal" tabindex="-1" role="dialog" aria-labelledby="registModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="registModalLabel">ユーザ作成完了</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>ユーザ作成が完了しました</p>
+				</div>
+				<div class="modal-footer">
+					<form th:action="@{userList}" method="get">
+						<button type="submit" class="btn btn-danger">学校情報詳細へ</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<script>
+		function registAndShowPopup() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'userRegistComp'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			// buttonパラメータを追加
+			var buttonInput = document.createElement('input');
+			buttonInput.type = 'hidden';
+			buttonInput.name = 'button';
+			buttonInput.value = '作成'; // または '戻る' など必要な値を設定
+			form.appendChild(buttonInput);
+
+			form.submit();
+		}
+	</script>
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var userRegistComp = /*[[${userRegistComp}]]*/ true;
+		$(document).ready(function () {
+			if (userRegistComp == true) {
+				$('#RegistModal').modal('show');
+			}
+		});
+		/*]]>*/
+	</script>
 
 </body>
 

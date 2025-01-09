@@ -13,7 +13,7 @@
 </head>
 
 <body>
-	<h1>タスク詳細</h1>
+	<h1>タスク削除確認</h1>
 	<div th:text="${task.task_name}"></div>
 	<div th:text="${task.task_category}"></div>
 	<div th:text="${task.task_content}"></div>
@@ -26,7 +26,7 @@
 		aria-valuemax="100">
 		<div class="progress-bar" th:style="'width:'+ ${task.progress}+'%'"></div>
 	</div>
-	<form th:action="@{taskDetailsChange}" method="post">
+	<form th:action="@{taskDeleteConfirm}" method="post">
 		<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
 		<input type="hidden" name="task_name" th:value="${task.task_name}"></input>
 		<input type="hidden" name="task_category" th:value="${task.task_category}"></input>
@@ -37,10 +37,27 @@
 		<input type="hidden" name="start_date" th:value="${task.start_date}"></input>
 		<input type="hidden" name="end_date" th:value="${task.end_date}"></input>
 		<input type="hidden" name="progress" th:value="${task.progress}"></input>
-		<button type="submit" name="button" value="edit">編集</button>
 		<button type="submit" name="button" value="delete">削除</button>
 	</form>
-	<button th:onclick="|location.href='@{/taskdon/user/taskList}'|">戻る</button>
+
+	<button th:onclick="|location.href='@{/taskdon/user/taskDetails}'|">戻る</button>
+
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">削除完了</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>削除が完了しました</p>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>

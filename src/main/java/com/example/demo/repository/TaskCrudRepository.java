@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jdbc.repository.query.Modifying;
@@ -41,10 +42,10 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 */
 	@Modifying
 	@Query("insert into task(task_category, task_name, task_content, task_status, start_date, end_date, task_priority, task_level, task_weight, progress, task_flg, user_id, group_id)"
-			+ " select distinct :task_category, :task_name, :task_content, :task_status, '2024-12-19', '2024-12-30', :task_priority, :task_level, :task_weight, 0, 1, user.user_id, 1 from task"
+			+ " select distinct :task_category, :task_name, :task_content, :task_status, :start_date, :end_date, :task_priority, :task_level, :task_weight, 0, 1, user.user_id, 1 from task"
 			+ " inner join user on task.user_id=user.user_id where user_name=:user_name;")
 	public boolean registerTask(String task_category, String task_name, String task_content, String task_status,
-			String start_date, String end_date, String task_priority, String task_level, String task_weight, String user_name, String group_id);
+			Date start_date, Date end_date, String task_priority, String task_level, String task_weight, String user_name, String group_id);
 	
 	/**
 	 * タスク編集
@@ -55,11 +56,17 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * @param task_status
 	 * @param task_priority
 	 * @param task_weight
-	 * @param user_id
+	 * @param user_name
 	 * @return
 	 */
 	@Modifying
-	@Query("update task set task_category=:task_category, task_content=:task_content, task_priority=:task_priority where task_id=:task_id")
+	@Query("update task set task_name=:task_name, task_category=:task_category, task_content=:task_content, task_priority=:task_priority,user_id=(SELECT user_id FROM user WHERE user_name = :user_name) where task_id=:task_id")
 	public boolean updateTask(int task_id, String task_category, String task_name, String task_content,
-			String task_priority, String task_weight, String user_id);
+			String task_priority, String task_weight, String user_name);
+
+	@Modifying
+	@Query("update task set task_flg = 0 where task_id = :task_id")
+	public void updateFlg(int task_id);
+	
+	
 }

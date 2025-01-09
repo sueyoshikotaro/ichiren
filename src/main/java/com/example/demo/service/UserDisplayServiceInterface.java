@@ -18,6 +18,10 @@ public interface UserDisplayServiceInterface {
 
 	// passチェック
 	public boolean userPassCheck(String user_pass, String user_rpass);
+	
+	//新規ユーザ登録
+	public void InsertUser(String user_id, String user_name, String user_pass, String school_id, String enr_year,
+			int user_flg);
 
 	// 新規講師登録
 	public void InsertTeach(String user_id, String user_name, String user_pass, String school_id, String enr_year,
