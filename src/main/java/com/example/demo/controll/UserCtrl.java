@@ -143,7 +143,12 @@ public class UserCtrl {
 	@GetMapping("menu")
 	public String menu(int group_id, String user_roll) {
 
-		//セッション
+		//セッションの初期化
+		session.removeAttribute("groupId");
+		session.removeAttribute("groupUser");
+		session.removeAttribute("userRoll");
+
+		//セッションnに値を設定
 		session.setAttribute("groupId", group_id); //グループID
 		session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ情報
 		session.setAttribute("userRoll", user_roll); //役職
@@ -165,15 +170,15 @@ public class UserCtrl {
 	@GetMapping("taskList")
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
-		int groupId= (int)session.getAttribute("groupId");
+		int groupId = (int) session.getAttribute("groupId");
 		List<Task> task = null;
 		String user = "all";
 		if (selectedValue == null || selectedValue.equals("全員")) {
-			task = TaskService.taskDisplayList(user,groupId);
+			task = TaskService.taskDisplayList(user, groupId);
 		} else {
 			mav.getModel().clear();
 			user = selectedValue;
-			task = TaskService.taskDisplayList(user,groupId);
+			task = TaskService.taskDisplayList(user, groupId);
 		}
 
 		mav.addObject("tasks", task);
@@ -314,7 +319,6 @@ public class UserCtrl {
 		return mav;
 	}
 
-	
 	/**
 	 * タスク未承認画面を表示する
 	 * 湊原
@@ -326,7 +330,7 @@ public class UserCtrl {
 		mav.setViewName("leader/taskUnapproved");
 		return mav;
 	}
-	
+
 	/**
 	 * 連絡事項作成画面を表示
 	 * @return
