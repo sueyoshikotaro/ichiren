@@ -32,6 +32,7 @@
 					<td th:text="${deptGroup.group_name}"></td>
 					<td th:text="${deptGroup.genre}"></td>
 					<td th:text="${deptGroup.user_roll}"></td>
+					<input type="hidden" id="group_id" name="group_id" th:value="${deptGroup.group_id}"/>
 
 					<!--仮置き(後に削除)-->
 					<td><button type="submit" name="button" value="menu">メニューへ</button></td>

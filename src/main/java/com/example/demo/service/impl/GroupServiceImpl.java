@@ -29,10 +29,10 @@ public class GroupServiceImpl implements GroupServiceInterface {
 	 * リーダ・メンバ
 	 * メニュー
 	 */
-//	@Override
-//	public List<GroupDisplay> selectRoll() {
-//
-//		return groupCrudRepo.selectRoll();
-//		
-//	}
+	//	@Override
+	//	public List<GroupDisplay> selectRoll() {
+	//
+	//		return groupCrudRepo.selectRoll();
+	//		
+	//	}
 }

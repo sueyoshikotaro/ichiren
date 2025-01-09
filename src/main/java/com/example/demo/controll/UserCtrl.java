@@ -106,6 +106,7 @@ public class UserCtrl {
 	}
 
 	/**
+	 * 在籍チェック
 	 * ID重複チェック
 	 * パスワードチェック
 	 * 所属グループ一覧画面を表示
@@ -142,11 +143,13 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@GetMapping("menu")
-	public String menu() {
+	public String menu(int group_id) {
 
-		//session.setAttribute("roll", groupService.selectRoll());
+		session.setAttribute("groupId", group_id);
 
 		session.setAttribute("groupUser", TaskService.taskUserSearch());
+
+		//session.setAttribute("roll", groupService.selectRoll());
 
 		return "common/menuUser";
 	}
