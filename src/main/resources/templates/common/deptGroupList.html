@@ -5,7 +5,7 @@
 <head>
 	<!--必須項目-->
 	<meta charset="UTF-8">
-	
+
 	<!--サイトタイトル-->
 	<title>タスクどん|所属グループ一覧</title>
 
@@ -36,18 +36,18 @@
 
 		<!--所属グループを表示-->
 		<table>
-			<form th:action="@{menu}" method="get">
-				<tr th:each="deptGroup : ${groupS}">
-					<td th:text="${deptGroup.group_name}"></td>
-					<td th:text="${deptGroup.genre}"></td>
-					<td th:text="${deptGroup.user_roll}"></td>
+			<tr th:each="deptGroup : ${groupS}">
+				<td th:text="${deptGroup.group_name}"></td>
+				<td th:text="${deptGroup.genre}"></td>
+				<td th:text="${deptGroup.user_roll}"></td>
+				<form th:action="@{menu}" method="get">
 					<input type="hidden" id="group_id" name="group_id" th:value="${deptGroup.group_id}" />
 					<input type="hidden" id="user_roll" name="user_roll" th:value="${deptGroup.user_roll}" />
 
 					<!--仮置き(後に削除)-->
 					<td><button type="submit" name="button" value="menu">メニューへ</button></td>
-				</tr>
-			</form>
+				</form>
+			</tr>
 		</table>
 
 	</div>
