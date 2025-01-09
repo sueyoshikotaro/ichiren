@@ -123,6 +123,10 @@ public class UserCtrl {
 
 			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
+			//for (GroupDisplay i : deptGroupList) {
+			//	System.out.println(i);
+			//}
+
 			mav.addObject("groupS", deptGroupList);
 			mav.setViewName("common/deptGroupList");
 			session.setAttribute("user", user.get());
@@ -143,15 +147,13 @@ public class UserCtrl {
 	@GetMapping("menu")
 	public String menu(int group_id, String user_roll) {
 
-		//セッションの初期化
-		session.removeAttribute("groupId");
-		session.removeAttribute("groupUser");
-		session.removeAttribute("userRoll");
+		//セッションに値を設定
+		session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ名,担当者検索用
+		session.setAttribute("groupId", group_id); //グループID,
+		session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
 
-		//セッションnに値を設定
-		session.setAttribute("groupId", group_id); //グループID
-		session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ情報
-		session.setAttribute("userRoll", user_roll); //役職
+		//System.out.println(group_id);
+		//System.out.println(user_roll);
 
 		return "common/menuUser";
 	}
