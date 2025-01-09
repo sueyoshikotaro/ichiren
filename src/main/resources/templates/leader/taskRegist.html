@@ -1,9 +1,11 @@
+<!--必須情報(下記3項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 
 <head>
-	<title>タスクどん|タスク登録</title> <!--サイトタイトル-->
+	<!--サイトタイトル-->
+	<title>タスクどん|タスク登録</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,18 +13,25 @@
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
 	<!--CSS接続-->
-	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/taskS.css}">
 
-	<!--サイトアイコン-->
-	<link rel="icon" type="image/png" th:href="@{/img/icon.png}">
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
+	<!--ナビゲーションバー-->
+	<nav class="navigation">
+		<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
+			width="48" height="48">
+
+		<span class="nav-title">タスクどん</span>
+	</nav>
 </head>
 
 <body>
+	<!--コンテナ-->
 	<div class="container">
-		<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
-			width="48" height="48">
-		<h2 class="no-wrap">【タスク登録】</h2>
+		<h2>タスク登録</h2>
 		<div>
 			<form th:action="@{taskRegistConfirm}" method="post">
 				<div class="form-group">
@@ -109,14 +118,10 @@
 					</div>
 				</div>
 
-				<input type="submit" class="back-button" value="戻る">
 				<input type="submit" class="Under-button" value="確認">
 			</form>
 		</div>
 	</div>
-	</div>
-
-
 </body>
 
 </html>
