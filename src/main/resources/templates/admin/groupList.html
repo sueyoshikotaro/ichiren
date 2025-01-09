@@ -23,20 +23,45 @@
 	<div>
 		<h2>グループ一覧画面</h2><br>
 		<div class="container" id="container">
-			<select id="dropdown" name="selectedValue" th:onchange="groupList(this.value)">
+			<select id="year" name="selectedValue" th:onchange="groupList(this.value)">
 				<option>グループ結成年度</option>
 				<option name="est_year" th:each="group : ${groups}" th:value="${group.est_year}"
 					th:text="${group.est_year}">
 				</option>
 			</select>
 
+			<select id="school" name="selectedValue" th:onchange="groupList(this.value)">
+				<option>学校名</option>
+				<option name="school_name">北海道情報専門学校</option>
+				<option name="school_name">JOHO 新潟情報専門学校</option>
+				<option name="school_name">JOHO 大阪情報専門学校</option>
+				<option name="school_name">名古屋医療情報専門学校</option>
+				<option name="school_name">名古屋情報メディア専門学校</option>
+				<option name="school_name">JOHO 広島情報専門学校</option>
+				<option name="school_name">KCS福岡情報専門学校</option>
+				<option name="school_name">KCS北九州情報専門学校</option>
+				<option name="school_name">KCS大分情報専門学校</option>
+				<option name="school_name">KCS鹿児島情報専門学校</option>
+			</select>
+
+			<select id="genre" name="selectValue" th:onchange="groupList(this.value)">
+				<option>ジャンル</option>
+				<option name="genre" th:each="group : ${groups}" th:value="${group.genre}" th:text="${group.genre}">
+				</option>
+			</select>
+
 			<script th:inline="javascript">
+				/* グループ結成年度 */
 				function groupList(selectedValue) {
 					/*URL指定＆ドロップダウンリストの値引き渡し*/
 					var url = "groupList";
+					var dropdown = event.target.id;
 					var params = {
-						"selectedValue": selectedValue
+						"selectedValue": selectedValue,
+						"dropdown" : dropdown
 					};
+					
+					
 					/*HTML内容のクリア*/
 					var elements = document.getElementsByClassName("content_child");
 					for (var i = 0; i < elements.length; i++) {
@@ -54,23 +79,6 @@
 					});
 				}
 			</script>
-
-
-
-			<!-- codeium参考 -->
-			<!--		 発足年度の選択肢を追加する -->
-			<!--		<select id="establishedYear" name="establishedYear">-->
-			<!--			<option value="">すべて</option>-->
-			<!--			<c:forEach items="${establishedYears}" var="year">-->
-			<!--				<option value="${year}">${year}</option>-->
-			<!--			</c:forEach>-->
-			<!--		</select>-->
-
-			<!--		 発足年度の選択肢を送信する -->
-			<!--		<form id="filterForm" th:action="@{groupList}" method="get">-->
-			<!--			<input type="hidden" name="establishedYear" value="${establishedYear}">-->
-			<!--			<button type="submit">絞り込み</button>-->
-			<!--		</form>-->
 
 			<div class="content">
 				<div th:each="group : ${groups}" class="content_child" id="data">
