@@ -12,6 +12,7 @@ public class TaskReqForm {
 	private String req_name;
 	private String req_content;
 	private String req_reason;
-	private Date app_date;
+	private Date add_date;
+	private int request_flg;
 	private String user_id;
 }
