@@ -1,45 +1,55 @@
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<!--必須項目-->
 	<meta charset="UTF-8">
-	<title>タスクどん|所属グループ一覧</title> <!--サイトタイトル-->
+	
+	<!--サイトタイトル-->
+	<title>タスクどん|所属グループ一覧</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-	<link rel="icon" type="image/png" th:href="@{/img/icon.png}">
 
 	<!--CSS接続-->
-	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/deptGroupList.css}">
 
-	<!--所属グループ一覧画面のみログアウト単体ボタン-->
-	<button class="logoutButton" th:href="@{/taskdon/admin/logout}">ログアウト</button>
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
+	<!--ナビゲーションバー-->
+	<nav class="navigation">
+		<img class="iconLink" th:src="@{/img/icon.png}" alt="icon" width="48" height="48">
+
+		<span class="nav-title">タスクどん</span>
+	</nav>
 </head>
 
 <body>
-	<!--各画面ごとのメイン内容-->
-	<div class="container"> <!--コンテナ共通-->
-		<!--画面タイトル左のメニュー遷移機能を持つアイコン(ボタン)-->
-		<img class="iconLink no-wrap" th:src="@{/img/icon.png}" alt="icon" width="48" height="48">
-		<h2 class="no-wrap">【所属グループ一覧】</h2> <!--画面タイトル-->
+	<!--コンテナ-->
+	<div class="container">
+		<h2>所属グループ一覧</h2>
 
+		<!--所属グループを表示-->
 		<table>
 			<form th:action="@{menu}" method="get">
 				<tr th:each="deptGroup : ${groupS}">
 					<td th:text="${deptGroup.group_name}"></td>
 					<td th:text="${deptGroup.genre}"></td>
 					<td th:text="${deptGroup.user_roll}"></td>
-					<input type="hidden" id="group_id" name="group_id" th:value="${deptGroup.group_id}"/>
-					<input type="hidden" id="user_roll" name="user_roll" th:value="${deptGroup.user_roll}"/>
+					<input type="hidden" id="group_id" name="group_id" th:value="${deptGroup.group_id}" />
+					<input type="hidden" id="user_roll" name="user_roll" th:value="${deptGroup.user_roll}" />
 
 					<!--仮置き(後に削除)-->
 					<td><button type="submit" name="button" value="menu">メニューへ</button></td>
 				</tr>
 			</form>
 		</table>
+
 	</div>
 </body>
 
