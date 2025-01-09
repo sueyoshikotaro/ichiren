@@ -1,8 +1,6 @@
 package com.example.demo.service.impl;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,41 +18,71 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ一覧
 	 */
 	@Override
-	public List<Teams> groupList(String estYear) {
-		List<Teams> result;
-		if (estYear.equals("--")) {
+	public List<Teams> groupList(String dropdown, String dropid) {
+		List<Teams> result = null;
+		if (dropdown.equals("--")) {
 			result = groupDispCrudRepo.groupList();
 		} else {
-			result = groupDispCrudRepo.groupList(estYear);
+			if (dropid.equals("year")) {
+				if (dropdown.equals("グループ結成年度")) {
+					result = groupDispCrudRepo.groupList();
+				} else {
+					result = groupDispCrudRepo.groupListYear(dropdown);
+				}
+			} else if (dropid.equals("school")) {
+				if (dropdown.equals("学校名")) {
+					result = groupDispCrudRepo.groupList();
+				} else {
+					result = groupDispCrudRepo.groupListSchool(dropdown);
+				}
+			} else if (dropid.equals("genre")) {
+				if (dropdown.equals("ジャンル")) {
+					result = groupDispCrudRepo.groupList();
+				} else {
+					result = groupDispCrudRepo.groupListGenre(dropdown);
+				}
+			}
 		}
 		return result;
 	}
 
-	public Collection<Teams> findDistinctEstYear() {
-		// 結成年度を年だけに抽出する
-		List<Object> estYears = groupDispCrudRepo.findDistinctEstYear().stream()
-				.map(date -> date.substring(0, 4))
-				.collect(Collectors.toList());
+	/*
+	 * Codeium
+	 * 向江
+	 * 年だけ抽出
+	 */
+	@Override
+	public List<Teams> findAll() {
+		// TODO 自動生成されたメソッド・スタブ
 		return null;
-
+	}
+	
+	/*
+	 * 湊原
+	 * 管理者_グループ一覧
+	 * グループ一覧
+	 */
+	@Override
+	public List<Teams> getTeamsByCriteria(String schoolName) {
+		
+		return groupDispCrudRepo.findByCriteria(schoolName);
+	}
+	
+	/*
+	 * cahtGPT
+	 * 管理者_グループ一覧
+	 * グループ一覧
+	 */
+	@Override
+	public List<Teams> getTeamsByCriteria(String estYear, String schoolName, String genre) {
+		
+		return groupDispCrudRepo.findByCriteria(estYear, schoolName, genre);
 	}
 
-	//	/*
-	//	 * 管理者_グループ一覧
-	//	 * グループ発足年度で絞り込む
-	//	 */
-	//	@Override
-	//	public List<Teams> selectGroupByEstYear(String estYear) {
-	//
-	//		List<Teams> result;
-	//		if (estYear.equals(estYear)) {
-	//			result = groupDispCrudRepo.groupList();
-	//		} else {
-	//			result = groupDispCrudRepo.selectGroupByEstYear(estYear);
-	//		}
-	//		return result;
-	//
-	//		//		return groupDispCrudRepo.selectGroupByEstYear(estYear);
-	//	}
+	@Override
+	public List<Teams> findDistinctEstYear(String estYear) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 
 }
