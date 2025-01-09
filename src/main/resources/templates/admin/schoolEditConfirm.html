@@ -52,7 +52,7 @@
 					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
 					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
 					<button type="button" name="button" value="編集" class="btn btn-danger"
-						onclick="editAndShowPopup()">編集</button>
+						onclick="schoolEditAndShowPopup()">編集</button>
 
 					<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
 				</td>
@@ -62,15 +62,12 @@
 	</form>
 
 	<!-- ポップアップ -->
-	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+	<div class="modal fade" id="schoolEditModal" tabindex="-1" role="dialog" aria-labelledby="schoolEditModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="editModalLabel">編集完了</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+					<h5 class="modal-title" id="schoolEditModalLabel">編集完了</h5>
 				</div>
 				<div class="modal-body">
 					<p>編集が完了しました</p>
@@ -88,7 +85,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 	<script>
-		function editAndShowPopup() {
+		function schoolEditAndShowPopup() {
 			// フォーム要素を取得
 			var form = document.querySelector('form');
 
@@ -113,7 +110,7 @@
 		var schoolEditComp = /*[[${schoolEditComp}]]*/ true;
 		$(document).ready(function () {
 			if (schoolEditComp == true) {
-				$('#editModal').modal('show');
+				$('#schoolEditModal').modal('show');
 			}
 		});
 		/*]]>*/

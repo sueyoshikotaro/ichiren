@@ -7,6 +7,11 @@
 	<title>タスクどん</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+	<!--チェックボックスのチェックの有無-->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 
 
@@ -14,7 +19,7 @@
 
 <body>
 
-	<center>
+	<center th:if="${user != null}">
 		<h1>タスクどん</h1><br>
 		<h2>ユーザ削除確認画面</h2><br>
 
@@ -54,37 +59,26 @@
 			<br>
 
 			<tr>
-
-				<th>一度ユーザを削除すると元には戻せません</th>
-
-				<td>
-					<input type="checkbox">
-				</td>
+				<th>
+					<div class="form-check">
+						<label class="form-check-label" for="flexCheckDefault">
+							一度ユーザを削除すると元には戻せません
+						</label>
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+					</div>
+				</th>
 			</tr>
 			<br>
 			<br>
 
 			<tr>
 				<td colspan="2" align="center">
-					<input type="submit" value="削除">
+					<button type="button" name="button" value="削除" class="btn btn-danger"
+						onclick="userDereteAndShowPopup()">削除</button>
 				</td>
 			</tr>
 			<br>
 			<br>
-
-			<!--			 ユーザ削除確認画面での完了のポップアップ -->
-			<!--			<p><button href="#" class="btn btn-link popup-link">削除</button></p>-->
-			<!--			<div class="popup" style="display: none;">-->
-			<!--				<div class="popup-content">-->
-			<!--					<span class="close">&times;</span>-->
-			<!--					<p>ユーザは削除されました</p>-->
-			<!--					<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a><br>-->
-			<!--				</div>-->
-			<!--			</div>-->
-
-			<!--			 JavaScriptリンク挿入欄 -->
-			<!--			<script src="../js/userDeleteConfirm.js"></script>-->
-
 
 			<input type="hidden" name="user_id" th:value="${user.user_id}">
 			<input type="hidden" name="user_name" th:value="${user.user_name}">
@@ -94,21 +88,73 @@
 			<input type="hidden" name="user_flg" th:value="${user.user_flg}">
 
 		</form>
-
-
-<!--		 ポップアップ -->
-<!--		<div id="popup" class="popup">-->
-<!--			<div class="popup-content" style="display: none;">-->
-<!--				<p>ユーザ削除完了しました</p>-->
-<!--				<button id="userListBtn">ユーザ一覧</button>-->
-<!--			</div>-->
-<!--		</div>-->
-		
-<!--		<script src="../js/userDeleteConfirm.js"></script>		-->
-
-<!--		<a th:href="@{/taskdon/admin/userList}">ユーザ一覧</a>-->
-
 	</center>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<!-- ポップアップ -->
+	<div class="modal fade" id="userDeleteModal" tabindex="-1" role="dialog" aria-labelledby="userDeleteModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="userDeleteModalLabel">編集完了</h5>
+				</div>
+				<div class="modal-body">
+					<p>編集が完了しました</p>
+				</div>
+				<div class="modal-footer">
+					<form th:action="@{userList}" method="get">
+						<button type="submit" class="btn btn-danger">ユーザ一覧へ</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!--コントロールを呼び出す-->
+	<script>
+		function userDereteAndShowPopup() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'userDeleteConfirm'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			form.submit();
+		}
+	</script>
+
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var userDeleteConfirm = /*[[${userDeleteConfirm}]]*/ true;
+		$(document).ready(function () {
+			if (userDeleteConfirm == true) {
+				$('#userDeleteModal').modal('show');
+			}
+		});
+		/*]]>*/
+	</script>
+
+
+	<!--チェックボックスが押されていない間ボタンを無効化-->
+	<script>
+		$(document).ready(function () {
+			$('#flexCheckDefault').on('change', function () {
+				if ($(this).is(':checked')) {
+					$('button[name="button"]').prop('disabled', false);
+				} else {
+					$('button[name="button"]').prop('disabled', true);
+				}
+			});
+			$('button[name="button"]').prop('disabled', true);
+		});
+	</script>
 </body>
 
 </html>
