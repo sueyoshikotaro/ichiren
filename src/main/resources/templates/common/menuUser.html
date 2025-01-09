@@ -9,7 +9,7 @@
 	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
 </head>
 
-<body>
+<divbody>
 	<h2>メニュー</h2>
 
 	<!-- ドロップダウンリスト -->
@@ -25,6 +25,7 @@
 	<button type="submit">削除</button>
 
 	<!-- 遷移ボタン -->
+	<>
 	<form name="form1" th:action="@{deptGroupList}" method="post">
 		<button type="submit">所属グループ一覧</button>
 	</form>
@@ -48,6 +49,6 @@
 	<form name="form1" th:action="@{chat}" method="get">
 		<button type="submit">チャット</button>
 	</form>
-</body>
+	</body>
 
 </html>
