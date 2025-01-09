@@ -21,9 +21,14 @@
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
+	<!--ナビゲーションバー-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Navbar</a>
+			<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
+				width="48" height="48">
+			<span class="nav-title">タスクどん</span>
+
+			<!--ドロップダウンメニュー(開閉)-->
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 				data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
 				aria-label="Toggle navigation">
@@ -33,25 +38,25 @@
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown">
 						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-							Dropdown
+							メニュー
 						</button>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" href="#">Action</a></li>
-							<li><a class="dropdown-item" href="#">Another action</a></li>
-							<li><a class="dropdown-item" href="#">Something else here</a></li>
+							<li><a class="dropdown-item" href="#">メンバー</a></li>
+							<li><a class="dropdown-item" href="#">タスク</a></li>
+							<li><a class="dropdown-item" href="#">ToDo</a></li>
+							<li><a class="dropdown-item" href="#">連絡事項</a></li>
+							<li><a class="dropdown-item" href="#">チャット</a></li>
+							<li>
+								<hr class="dropdown-divider">
+							</li>
+							<li><a class="dropdown-item" href="#">ログアウト</a></li>
 						</ul>
-					</li>
+				</ul>
+				</li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-	<!--	ナビゲーションバー-->
-	<!--	<nav class="navigation">-->
-	<!--		<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"-->
-	<!--			width="48" height="48">-->
-
-	<!--		<span class="nav-title">タスクどん</span>-->
-	<!--	</nav>-->
 </head>
 
 <body>

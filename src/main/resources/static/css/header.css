@@ -13,20 +13,13 @@ body {
 }
 
 /*ナビゲーションバー*/
-.navigation {
-	background-color: black;
-	padding-top: 6px;
-	padding-bottom: 3px;
-	padding-left: 8px;
-}
-
 .nav-title {
 	display: inline;
 	padding-left: 10px;
 	color: white;
 	font-size: 28px;
 }
-
+						
 /*アイコン(メニューへ遷移する)*/
 .iconLink {
 	-webkit-transition: all .3s;
