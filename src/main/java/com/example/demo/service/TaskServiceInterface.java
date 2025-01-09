@@ -8,14 +8,14 @@ import com.example.demo.entity.TaskRequest;
 
 public interface TaskServiceInterface {
 	//タスク一覧表示
-	public List<Task> taskDisplayList(String user);
+	public List<Task> taskDisplayList(String user,int group_id);
 	
 	//タスク登録
 	public void taskRegister(String task_category, String task_name, String task_content, String string,
 			Date start_date, Date end_date, String task_priority, String task_level, String task_weight, String user_name, String group_id);
 		
 	//タスク担当者検索
-	public Iterable<String> taskUserSearch();
+	public Iterable<String> taskUserSearch(int group_id);
 	
 	//タスク編集
 	public void taskUpdate(int task_id, String task_category, String task_name, String task_content,
