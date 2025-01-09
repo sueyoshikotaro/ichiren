@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -24,8 +26,6 @@ import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -322,8 +322,20 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("taskUnapproved")
 	public ModelAndView taskUnapproved(ModelAndView mav) {
-		mav.addObject("taskNonapp", TaskService.taskUnapproved());
+		mav.addObject("taskNonapp", TaskService.selectTaskUnapproved());
 		mav.setViewName("leader/taskUnapproved");
+		return mav;
+	}
+	
+	/*
+	 * タスク承認確認画面を表示するリクエストハンドラメソッド
+	 * 向江
+	 */
+	@LoginRequired
+	@PostMapping("taskAppConfirm")
+	public ModelAndView taskAppConfirm(ModelAndView mav, TaskForm t) {
+		mav.addObject("task", t);
+		mav.setViewName("leader/taskAppConfirm");
 		return mav;
 	}
 	

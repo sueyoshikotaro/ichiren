@@ -6,14 +6,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.entity.Task;
-import com.example.demo.entity.TaskRequest;
+import com.example.demo.entity.TaskReqView;
 import com.example.demo.repository.TaskCrudRepository;
+import com.example.demo.repository.TaskReqCrudRepository;
 import com.example.demo.service.TaskServiceInterface;
 
 public class TaskServiceImpl implements TaskServiceInterface {
 	//湊原
 	@Autowired
 	TaskCrudRepository repo;
+	
+	@Autowired
+	TaskReqCrudRepository repo_req;
 
 	/**
 	 * 湊原
@@ -82,13 +86,26 @@ public class TaskServiceImpl implements TaskServiceInterface {
 		return 0;
 	}
 
-	/**
+	/*
+	 * 向江
 	 * 未承認タスク一覧
-	 * 湊原
 	 */
 	@Override
-	public List<TaskRequest> taskUnapproved() {
-		// TODO 自動生成されたメソッド・スタブ
+	public List<TaskReqView> selectTaskUnapproved() {
+		
+		return repo_req.selectTaskUnapproved();
+	}
+	
+	/*
+	 * 未承認確認表示
+	 * 向江
+	 * まだ手を付けていません。
+	 */
+	@Override
+	public List<TaskReqView> taskUnapprovedConfirm() {
+		
 		return null;
 	}
+
+	
 }

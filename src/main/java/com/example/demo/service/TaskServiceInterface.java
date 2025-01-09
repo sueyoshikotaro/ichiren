@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.example.demo.entity.Task;
-import com.example.demo.entity.TaskRequest;
+import com.example.demo.entity.TaskReqView;
 
 public interface TaskServiceInterface {
 	//タスク一覧表示
@@ -26,6 +26,10 @@ public interface TaskServiceInterface {
 	
 	//スコアを取得するメソッド
 	public int userScore(String user_id, String group_id);
-
-	public List<TaskRequest> taskUnapproved();
+	
+	//タスク未承認一覧表示
+	public List<TaskReqView> selectTaskUnapproved();
+	
+	//タスク未承認確認表示
+	public List<TaskReqView> taskUnapprovedConfirm();
 }
