@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.entity.Task;
+import com.example.demo.entity.TaskRequest;
 import com.example.demo.repository.TaskCrudRepository;
 import com.example.demo.service.TaskServiceInterface;
 
@@ -19,13 +20,13 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * タスク一覧表示
 	 */
 	@Override
-	public List<Task> taskDisplayList(String user) {
+	public List<Task> taskDisplayList(String user,int group_id) {
 		List<Task> result;
 		if(user.equals("all")) {
-			result = repo.selectTask();
+			result = repo.selectTask(group_id);
 
 		}else {
-			result = repo.selectTask(user);
+			result = repo.selectTask(user, group_id);
 		}
 		return result;
 	}
@@ -42,25 +43,52 @@ public class TaskServiceImpl implements TaskServiceInterface {
 				start_date, end_date, task_priority, task_level, task_weight, user_name, group_id);
 		
 	}
-
+	
+	/**
+	 * タスク担当者検索
+	 * 湊原
+	 */
 	@Override
-	public Iterable<String> taskUserSearch() {
-		return repo.selectTaskByUser();
+	public Iterable<String> taskUserSearch(int group_id) {
+		return repo.selectTaskByUser(group_id);
 	}
 	
+	/**
+	 * 湊原
+	 * タスク編集
+	 */
 	@Override
 	public void taskUpdate(int task_id, String task_category, String task_name, String task_content,
 			String task_priority, String task_weight, String user_name) {
 		
 		repo.updateTask(task_id,task_category, task_name, task_content,
 				task_priority,task_weight, user_name);
-		
 	}
-
+	
+	/**
+	 * タスク削除(フラグ更新のみ)
+	 */
 	@Override
 	public void taskUpFlg(int task_id) {
 		repo.updateFlg(task_id);
-		
+	}
+	
+	/**
+	 * スコアを取得するメソッド
+	 * 湊原
+	 */
+	@Override
+	public int userScore(String user_id, String group_id) {
+		return 0;
 	}
 
+	/**
+	 * 未承認タスク一覧
+	 * 湊原
+	 */
+	@Override
+	public List<TaskRequest> taskUnapproved() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 }
