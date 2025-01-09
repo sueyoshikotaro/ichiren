@@ -21,20 +21,18 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * タスク一覧表示
 	 */
 	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id where task_flg= 1;")
-	public List<Task> selectTask();
+	public List<Task> selectTask(int group_id);
 
-	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id where task_flg= 1 and user_name=:user;")
-	public List<Task> selectTask(String user);
+	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id inner join teams on task.group_id=teams.group_id where teams.group_id=:group_id and task_flg= 1 and user_name=:user;")
+	public List<Task> selectTask(String user, int group_id);
 
 	/**
 	 * 湊原
 	 * 担当者検索
-	 * 今の段階ではグループIDを判別できないので仮で値を設定しています。
-	 * 所属グループ一覧で選択したグループのIDを取得してください
 	 */
 	@Query("select user.user_name from teams inner join user_detail on teams.group_id = user_detail.group_id "
-			+ "inner join user on user.user_id = user_detail.user_id where user_detail.group_id=1;")
-	public Iterable<String> selectTaskByUser();
+			+ "inner join user on user.user_id = user_detail.user_id where user_detail.group_id=:group_id;")
+	public Iterable<String> selectTaskByUser(int group_id);
 
 	/**
 	 * 湊原

@@ -147,7 +147,7 @@ public class UserCtrl {
 
 		session.setAttribute("groupId", group_id);
 
-		session.setAttribute("groupUser", TaskService.taskUserSearch());
+		session.setAttribute("groupUser", TaskService.taskUserSearch(group_id));
 
 		//session.setAttribute("roll", groupService.selectRoll());
 
@@ -168,15 +168,15 @@ public class UserCtrl {
 	@GetMapping("taskList")
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
-
+		int groupId= (int)session.getAttribute("groupId");
 		List<Task> task = null;
 		String user = "all";
 		if (selectedValue == null || selectedValue.equals("全員")) {
-			task = TaskService.taskDisplayList(user);
+			task = TaskService.taskDisplayList(user,groupId);
 		} else {
 			mav.getModel().clear();
 			user = selectedValue;
-			task = TaskService.taskDisplayList(user);
+			task = TaskService.taskDisplayList(user,groupId);
 		}
 
 		mav.addObject("tasks", task);
@@ -324,7 +324,7 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("taskUnapproved")
 	public ModelAndView taskUnapproved(ModelAndView mav) {
-		mav.addObject("tasks", TaskService.taskUnapproved());
+		mav.addObject("taskNonapp", TaskService.taskUnapproved());
 		mav.setViewName("leader/taskUnapproved");
 		return mav;
 	}

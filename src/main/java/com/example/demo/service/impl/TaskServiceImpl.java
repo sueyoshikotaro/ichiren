@@ -20,13 +20,13 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * タスク一覧表示
 	 */
 	@Override
-	public List<Task> taskDisplayList(String user) {
+	public List<Task> taskDisplayList(String user,int group_id) {
 		List<Task> result;
 		if(user.equals("all")) {
-			result = repo.selectTask();
+			result = repo.selectTask(group_id);
 
 		}else {
-			result = repo.selectTask(user);
+			result = repo.selectTask(user, group_id);
 		}
 		return result;
 	}
@@ -49,8 +49,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * 湊原
 	 */
 	@Override
-	public Iterable<String> taskUserSearch() {
-		return repo.selectTaskByUser();
+	public Iterable<String> taskUserSearch(int group_id) {
+		return repo.selectTaskByUser(group_id);
 	}
 	
 	/**
