@@ -21,9 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
-import com.example.demo.entity.GroupDetailView;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
+import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
@@ -676,11 +676,11 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("groupDetail")
-	public ModelAndView groupDetail(ModelAndView mav, Model model) {
+	public ModelAndView groupDetail(ModelAndView mav, GroupDetailView g) {
 		
-		List<GroupDetailView> group = groupDispService.groupDetail(1);
+		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
 		
-		mav.addObject("groups",group);
+		mav.addObject("group",group);
 		mav.setViewName("admin/groupDetails");
 		
 		

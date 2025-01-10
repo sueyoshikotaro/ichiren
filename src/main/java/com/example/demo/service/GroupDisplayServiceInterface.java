@@ -2,8 +2,8 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.entity.GroupDetailView;
 import com.example.demo.entity.Teams;
+import com.example.demo.form.GroupDetailView;
 
 public interface GroupDisplayServiceInterface {
 
@@ -22,5 +22,5 @@ public interface GroupDisplayServiceInterface {
 	public List<Teams> getTeamsByCriteria(String schoolName);
 	
 	//グループ詳細表示
-	public List<GroupDetailView> groupDetail(int group_id);
+	public List<GroupDetailView> groupDetail(String group_id);
 }

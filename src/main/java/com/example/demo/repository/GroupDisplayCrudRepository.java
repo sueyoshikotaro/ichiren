@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.example.demo.entity.GroupDetailView;
 import com.example.demo.entity.Teams;
+import com.example.demo.form.GroupDetailView;
 
 public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Integer> {
 
@@ -55,6 +55,6 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * グループ詳細表示
 	 */
-	@Query("select * from teams where group_id = :group_id")
-	public List<GroupDetailView> groupDetail(int group_id);
+	@Query("select t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id")
+	public List<GroupDetailView> groupDetail(String group_id);
 }
