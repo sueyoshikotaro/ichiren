@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 
 import com.example.demo.entity.Teams;
+import com.example.demo.form.GroupDetailView;
 
 public interface GroupDisplayServiceInterface {
 
@@ -19,4 +20,7 @@ public interface GroupDisplayServiceInterface {
 
 	//湊原
 	public List<Teams> getTeamsByCriteria(String schoolName);
+	
+	//グループ詳細表示
+	public List<GroupDetailView> groupDetail(String group_id);
 }

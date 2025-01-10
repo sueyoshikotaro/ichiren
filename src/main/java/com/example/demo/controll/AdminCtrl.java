@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
+import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
@@ -668,55 +669,22 @@ public class AdminCtrl {
 		return mav;
 	}
 
-	//	/*
-	//	 * chatGPT
-	//	 * グループ一覧
-	//	 */
-	//	@GetMapping("groupList")
-	//	public ModelAndView getGroup(
-	//			@RequestParam(value = "est_year" , required = false) String est_year,
-	//			@RequestParam(value = "school_name", required = false) String school_name,
-	//			@RequestParam(value = "genre", required = false) String genre,
-	//			ModelAndView mav) {
-	//		
-	//		if (est_year == null) {
-	//			est_year = "0"; // または現在の年を取得して代入
-	//		}
-	//		
-	//		List<Teams> groups = groupDispService.getTeamsByCriteria(est_year, school_name, genre);
-	//		
-	//		mav.addObject("groups", groups);
-	//		mav.addObject("estYear", est_year);
-	//		mav.addObject("schoolName", school_name);
-	//		mav.addObject("genre", genre);
-	//		mav.setViewName("admin/groupList");
-	//		
-	//		return mav;
-	//	}
-
-	//	/*
-	//	 * Codeium
-	//	 * グループ一覧を表示するリクエストハンドラメソッド２
-	//	 */
-	//	// 絞り込み条件を変更する
-	//	@GetMapping("groupList")
-	//	public String groupList(@RequestParam(required = false) String estYear, Model model) {
-	//	  List<Teams> groups;
-	//	  if (estYear != null && !estYear.isEmpty()) {
-	//	    groups = groupDispService.findDistinctEstYear(estYear + "%");
-	//	  } else {
-	//	    groups = groupDispService.findAll();
-	//	  }
-	//	  model.addAttribute("groups", groups);
-	//	  return "admin/groupList";
-	//	}
 
 	/**
+	 * 向江
 	 * グループ詳細画面を表示する
 	 * @return
 	 */
-	public String groupDetail() {
-		return "groupDetail";
+	@GetMapping("groupDetail")
+	public ModelAndView groupDetail(ModelAndView mav, GroupDetailView g) {
+		
+		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
+		
+		mav.addObject("group",group);
+		mav.setViewName("admin/groupDetails");
+		
+		
+		return mav;
 	}
 
 	/**

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.entity.Teams;
+import com.example.demo.form.GroupDetailView;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.service.GroupDisplayServiceInterface;
 
@@ -83,6 +84,17 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	public List<Teams> findDistinctEstYear(String estYear) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
+	}
+
+	
+	/*
+	 * 向江
+	 * グループ詳細
+	 */
+	@Override
+	public List<GroupDetailView> groupDetail(String group_id) {
+		
+		return groupDispCrudRepo.groupDetail(group_id);
 	}
 
 }
