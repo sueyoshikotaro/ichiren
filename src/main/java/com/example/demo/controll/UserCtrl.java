@@ -19,6 +19,8 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
+import com.example.demo.form.TaskReqForm;
+import com.example.demo.form.TaskView;
 import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
@@ -218,12 +220,14 @@ public class UserCtrl {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date st_date = null;
 		Date end_date = null;
+		int group_id = (int) session.getAttribute("groupId");
 		try {
 			st_date = sdf.parse(t.getStart_date());
 			end_date = sdf.parse(t.getEnd_date());
 			TaskService.taskRegister(t.getTask_category(), t.getTask_name(), t.getTask_content(), "未着手",
 					st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
-					t.getGroup_id());
+					group_id);
+			System.out.println(t.getGroup_id());
 			mav.addObject("tasks", t);
 			mav.setViewName("leader/taskRegistConfirm");
 		} catch (Exception e) {
@@ -334,9 +338,19 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("taskAppConfirm")
-	public ModelAndView taskAppConfirm(ModelAndView mav, TaskForm t) {
-		mav.addObject("task", t);
-		mav.setViewName("leader/taskAppConfirm");
+	public ModelAndView taskAppConfirm(ModelAndView mav, TaskReqForm t) {
+		System.out.println(t);
+		mav.addObject("taskAppConf", t);
+		mav.setViewName("leader/taskUnapprovedConfirm");
+		return mav;
+	}
+	
+	@LoginRequired
+	@PostMapping("taskAppComplete")
+	public ModelAndView taskAppComplete(ModelAndView mav, TaskView t) {
+		System.out.println(t);
+		mav.addObject("taskAppConf", t);
+		mav.setViewName("leader/taskUnapprovedConfirm");
 		return mav;
 	}
 

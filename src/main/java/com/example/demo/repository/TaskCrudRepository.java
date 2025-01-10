@@ -20,7 +20,7 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * 湊原
 	 * タスク一覧表示
 	 */
-	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id where task_flg= 1;")
+	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id inner join teams on task.group_id=teams.group_id where teams.group_id=:group_id and task_flg= 1;")
 	public List<Task> selectTask(int group_id);
 
 	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id inner join teams on task.group_id=teams.group_id where teams.group_id=:group_id and task_flg= 1 and user_name=:user;")
@@ -40,10 +40,10 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 */
 	@Modifying
 	@Query("insert into task(task_category, task_name, task_content, task_status, start_date, end_date, task_priority, task_level, task_weight, progress, task_flg, user_id, group_id)"
-			+ " select distinct :task_category, :task_name, :task_content, :task_status, :start_date, :end_date, :task_priority, :task_level, :task_weight, 0, 1, user.user_id, 1 from task"
+			+ " select distinct :task_category, :task_name, :task_content, :task_status, :start_date, :end_date, :task_priority, :task_level, :task_weight, 0, 1, user.user_id, :group_id from task"
 			+ " inner join user on task.user_id=user.user_id where user_name=:user_name;")
 	public boolean registerTask(String task_category, String task_name, String task_content, String task_status,
-			Date start_date, Date end_date, String task_priority, String task_level, String task_weight, String user_name, String group_id);
+			Date start_date, Date end_date, String task_priority, String task_level, String task_weight, String user_name, int group_id);
 	
 	/**
 	 * タスク編集

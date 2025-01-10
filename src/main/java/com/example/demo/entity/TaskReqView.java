@@ -14,6 +14,7 @@ public class TaskReqView {
 
 	@Id
 	private int request_id;
+	private String req_category;
 	private String user_name;
 	private String req_name;
 	private String req_content;

@@ -24,9 +24,11 @@
 					<div class="text_child" th:text="${task.add_date}"></div>
 					<div>
 						<form th:action="@{taskAppConfirm}" method="post">
-							<input type="hidden" name="task_id" th:value="${task.request_id}">
+							<input type="hidden" name="request_id" th:value="${task.request_id}">
+							<input type="hidden" name="req_category" th:value="${task.req_category}">
+							<input type="hidden" name="user_name" th:value="${task.user_name}">
 							<input type="hidden" name="add_date" th:value="${task.add_date}">
-							<input type="hidden" name="task_name" th:value="${task.req_name}">
+							<input type="hidden" name="req_name" th:value="${task.req_name}">
 							<input type="hidden" name="req_content" th:value="${task.req_content}">
 							<input type="hidden" name="req_reason" th:value="${task.req_reason}">
 							<input type="hidden" name="request_flg" th:value="${task.request_flg}">
