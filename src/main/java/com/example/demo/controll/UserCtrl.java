@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -26,6 +24,8 @@ import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -65,34 +65,6 @@ public class UserCtrl {
 		return "common/login";
 	}
 
-	//	/**
-	//	 * ログイン画面を表示 
-	//	 * @return
-	//	 */
-	//	@GetMapping("login")
-	//	public String login(@RequestParam("firstLogin") boolean firstLogin, String user_id, String user_pass) {
-	//
-	//		if (firstLogin) {
-	//
-	//			// 初期パスワードでのログイン時の処理
-	//			return "redirect:/common/resetPass";
-	//		} else {
-	//
-	//			// 通常ログイン時の処理
-	//			return "common/login";
-	//		}
-	//	}
-
-	/**
-	 * パスワード再設定画面を表示
-	 * @return
-	 */
-	@GetMapping("resetPass")
-	public String resetPass() {
-
-		return "common/resetPass";
-	}
-
 	/**
 	 * ログアウト画面を表示
 	 * @return
@@ -103,6 +75,16 @@ public class UserCtrl {
 		session.invalidate();
 
 		return "common/login";
+	}
+
+	/**
+	 * パスワード再設定画面を表示
+	 * @return
+	 */
+	@GetMapping("resetPass")
+	public String resetPass() {
+
+		return "common/resetPass";
 	}
 
 	/**
@@ -121,23 +103,36 @@ public class UserCtrl {
 
 		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
-			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+			if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
 
-			//for (GroupDisplay i : deptGroupList) {
-			//	System.out.println(i);
-			//}
+				//admin無効化のSQL挿入欄
+				
+				mav.setViewName("admin/menuAdmin"); //管理者ログイン(大ボス,初回のみ)
+			} else if (user.get().getUser_id().contains("te")) {
 
-			mav.addObject("groupS", deptGroupList);
-			mav.setViewName("common/deptGroupList");
-			session.setAttribute("user", user.get());
+				mav.setViewName("admin/menuAdmin"); //管理者ログイン(通常)
+			} else if (user.get().getUser_pass().equals("taskdon1")) {
+
+				mav.setViewName("common/passReset"); //パスワード再設定
+			} else {
+
+				List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+
+				mav.setViewName("common/deptGroupList");
+				mav.addObject("groupS", deptGroupList);
+				session.setAttribute("user", user.get());
+			}
 		} else {
 
 			mav.setViewName("common/login");
 			mav.addObject("errMsg", "ログインできませんでした");
 		}
-
 		return mav;
 	}
+
+	//for (GroupDisplay i : deptGroupList) {
+	//	System.out.println(i);
+	//}
 
 	/**
 	 * メニュー画面を表示
@@ -344,7 +339,6 @@ public class UserCtrl {
 		mav.setViewName("leader/taskAppConfirm");
 		return mav;
 	}
-	
 
 	/**
 	 * 連絡事項作成画面を表示
