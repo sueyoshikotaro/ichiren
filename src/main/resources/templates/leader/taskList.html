@@ -1,35 +1,79 @@
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<!--必須項目-->
 	<meta charset="UTF-8">
-	<title>タスクどん|タスク一覧</title> <!--サイトタイトル-->
+
+	<!--サイトタイトル-->
+	<title>タスクどん|タスク一覧</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-		crossorigin="anonymous"></script>
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 	<!--CSS接続-->
-	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/taskS.css}">
 
-	<!--サイトアイコン-->
-	<link rel="icon" type="image/png" th:href="@{/img/icon.png}">
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
+	<!--ナビゲーションバー-->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
+				width="48" height="48">
+			<span class="nav-title">タスクどん</span>
+
+			<!--ドロップダウンメニュー(開閉)-->
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+				<ul class="navbar-nav">
+					<li class="nav-item dropdown">
+						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+							メニュー
+						</button>
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<li><a class="dropdown-item" href="#">ホーム</a></li> <!--メニュー画面への遷移-->
+
+							<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
+								<li><a class="dropdown-item" href="#">メンバー一覧</a></li>
+							</div>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
+							<li><a class="dropdown-item" href="#">ToDoリスト</a></li>
+
+							<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
+								<li><a class="dropdown-item" href="#">連絡事項作成</a></li>
+							</div>
+							<li><a class="dropdown-item" href="#">チャット</a></li>
+							<li><a class="dropdown-item" href="#">所属グループ</a></li>
+							<li>
+								<hr class="dropdown-divider">
+							</li>
+							<li><a class="dropdown-item" href="#">ログアウト</a></li>
+						</ul>
+				</ul>
+				</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
 </head>
 
 <body>
-	<!--各画面ごとのメイン内容-->
-	<div class="container" id="container"> <!--コンテナ共通-->
-		<!--画面タイトル左のメニュー遷移機能を持つアイコン(ボタン)-->
-		<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
-			width="48" height="48">
-		<h2 class="no-wrap">【タスク一覧】</h2><br> <!--画面タイトル-->
+	<!--コンテナ-->
+	<div class="container" id="container">
+		
+		<h2>タスク一覧</h2>
+		
 		<select id="dropdown" name="selectedValue" th:onchange="taskList(this.value)">
 			<option>全員</option>
 			<option name="group_user" th:each="user : ${session.groupUser}" th:value="${user}" th:text="${user}">
@@ -98,6 +142,12 @@
 		<button class="Under-button" th:onclick="|location.href='@{taskUnapproved}'|">未承認</button>
 		<button class="Under-button" th:onclick="|location.href='@{taskRegister}'|">登録</button>
 	</div>
+
+	<!--bootstrapのjsリンク接続-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </body>
 
 </html>

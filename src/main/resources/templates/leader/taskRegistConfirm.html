@@ -1,86 +1,146 @@
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<!--必須項目-->
 	<meta charset="UTF-8">
-	<title>タスクどん</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+	<title>タスクどん|タスク登録</title>
+
+	<!--デザイン等-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+	<!--CSS接続-->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/taskS.css}">
+
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
+	<!--ナビゲーションバー-->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
+				width="48" height="48">
+			<span class="nav-title">タスクどん</span>
+
+			<!--ドロップダウンメニュー(開閉)-->
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+				<ul class="navbar-nav">
+					<li class="nav-item dropdown">
+						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+							メニュー
+						</button>
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<li><a class="dropdown-item" href="#">メンバー</a></li>
+							<li><a class="dropdown-item" href="#">タスク</a></li>
+							<li><a class="dropdown-item" href="#">ToDo</a></li>
+							<li><a class="dropdown-item" href="#">連絡事項</a></li>
+							<li><a class="dropdown-item" href="#">チャット</a></li>
+							<li>
+								<hr class="dropdown-divider">
+							</li>
+							<li><a class="dropdown-item" href="#">ログアウト</a></li>
+						</ul>
+				</ul>
+				</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
 </head>
 
 <body>
-	<h2>タスク登録確認</h2><br>
-	<form th:action="taskRegistComplete" method="post">
-		<div>
-			<label>タスク名</label>
-			<div th:text="${tasks.task_name}" readonly></div>
-		</div>
+	<!--コンテナ-->
+	<div class="container">
+		
+		<h2>タスク登録</h2>
+		<h3>[登録内容確認]</h3> <!--確認画面用の説明用テキスト-->
+		
+		<form th:action="taskRegistComplete" method="post">
+			<div>
+				<label>タスク名</label>
+				<div th:text="${tasks.task_name}" readonly></div>
+			</div>
 
-		<div>
-			<label>タスクカテゴリ</label>
-			<div th:text="${tasks.task_category}" readonly></div>
-		</div>
-		<div>
-			<label>タスク概要</label>
-			<div th:text="${tasks.task_content}" readonly></div>
-		</div>
-		<div>
-			<label>担当者</label>
-			<div th:text="${tasks.user_name}" readonly></div>
-		</div>
+			<div>
+				<label>タスクカテゴリ</label>
+				<div th:text="${tasks.task_category}" readonly></div>
+			</div>
+			<div>
+				<label>タスク概要</label>
+				<div th:text="${tasks.task_content}" readonly></div>
+			</div>
+			<div>
+				<label>担当者</label>
+				<div th:text="${tasks.user_name}" readonly></div>
+			</div>
 
-		<div>
-			<label>優先度</label>
-			<div th:text="${tasks.task_priority}" readonly></div>
-		</div>
-		<div>
-			<label>難易度</label>
-			<div th:text="${tasks.task_level}" readonly></div>
-		</div>
-		<div>
-			<label>重み</label>
-			<div th:text="${tasks.task_weight}" readonly></div>
-		</div>
-		<div>
-			<label>開始予定日</label>
-			<div th:text="${tasks.start_date}" readonly></div>
-		</div>
-		<div>
-			<label>終了予定日</label>
-			<div th:text="${tasks.end_date}" readonly></div>
-		</div>
+			<div>
+				<label>優先度</label>
+				<div th:text="${tasks.task_priority}" readonly></div>
+			</div>
+			<div>
+				<label>難易度</label>
+				<div th:text="${tasks.task_level}" readonly></div>
+			</div>
+			<div>
+				<label>重み</label>
+				<div th:text="${tasks.task_weight}" readonly></div>
+			</div>
+			<div>
+				<label>開始予定日</label>
+				<div th:text="${tasks.start_date}" readonly></div>
+			</div>
+			<div>
+				<label>終了予定日</label>
+				<div th:text="${tasks.end_date}" readonly></div>
+			</div>
 
-		<input type="hidden" name="task_name" th:value="${tasks.task_name}">
-		<input type="hidden" name="task_category" th:value="${tasks.task_category}">
-		<input type="hidden" name="task_content" th:value="${tasks.task_content}">
-		<input type="hidden" name="task_priority" th:value="${tasks.task_priority}">
-		<input type="hidden" name="task_level" th:value="${tasks.task_level}">
-		<input type="hidden" name="task_weight" th:value="${tasks.task_weight}">
-		<input type="hidden" name="start_date" th:value="${tasks.start_date}">
-		<input type="hidden" name="end_date" th:value="${tasks.end_date}">
-		<input type="hidden" name="user_name" th:value="${tasks.user_name}">
+			<input type="hidden" name="task_name" th:value="${tasks.task_name}">
+			<input type="hidden" name="task_category" th:value="${tasks.task_category}">
+			<input type="hidden" name="task_content" th:value="${tasks.task_content}">
+			<input type="hidden" name="task_priority" th:value="${tasks.task_priority}">
+			<input type="hidden" name="task_level" th:value="${tasks.task_level}">
+			<input type="hidden" name="task_weight" th:value="${tasks.task_weight}">
+			<input type="hidden" name="start_date" th:value="${tasks.start_date}">
+			<input type="hidden" name="end_date" th:value="${tasks.end_date}">
+			<input type="hidden" name="user_name" th:value="${tasks.user_name}">
 
-		<input type="submit" value="登録">
-	</form>
+			<input type="submit" value="登録">
+		</form>
 
-	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="deleteModalLabel">登録完了</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<p>登録が完了しました</p>
+		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="deleteModalLabel">登録完了</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p>登録が完了しました</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<!--bootstrapのjsリンク接続-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
+
 </body>
 
 </html>
