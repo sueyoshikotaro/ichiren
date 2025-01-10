@@ -107,7 +107,7 @@ public class UserCtrl {
 
 				//admin無効化のSQL挿入欄
 				
-				mav.setViewName("admin/menuAdmin"); //管理者ログイン(大ボス,初回のみ)
+				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
 			} else if (user.get().getUser_id().contains("te")) {
 
 				mav.setViewName("admin/menuAdmin"); //管理者ログイン(通常)
