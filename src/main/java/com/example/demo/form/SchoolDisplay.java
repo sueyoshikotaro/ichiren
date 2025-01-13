@@ -17,6 +17,7 @@ public class SchoolDisplay {
 	
 	private int room_id;
 	private String room_name;
+	private String before_room_name;
 	private int pc_flg;
 	private String hall;
 	private String floor;
