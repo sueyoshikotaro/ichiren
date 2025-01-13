@@ -1,112 +1,165 @@
-<!-- 向江 -->
-<!-- 新規ユーザ登録機能 -->
-
+<!-- 新規ユーザ登録機能/確認&完了 (担当:向江)-->
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<!--必須項目-->
 	<meta charset="UTF-8">
-	<title>タスクどん</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+	<!--サイトタイトル-->
+	<title>タスクどん|ユーザ登録</title>
+
+	<!--デザイン等-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+	<!--CSS接続-->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
+	<!--ナビゲーションバー-->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
+				width="48" height="48">
+			<span class="nav-title">タスクどん</span>
+
+			<!--ドロップダウンメニュー(開閉)-->
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+				<ul class="navbar-nav">
+					<li class="nav-item dropdown">
+						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+							メニュー
+						</button>
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<li>
+								<hr class="dropdown-divider"> <!--線-->
+							</li>
+							<li><a class="dropdown-item" href="#">ログアウト</a></li>
+							<!--リンク例-->
+							<!--<li><a class="dropdown-item" href="#">遷移先の画面名</a></li>-->
+						</ul>
+				</ul>
+				</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 </head>
 
 <body>
+	<!--コンテナ-->
+	<div class="container" id="container">
 
-	<h1>タスクどん</h1>
-	<h2>新規ユーザ登録確認</h2>
+		<h2>新規ユーザ登録</h2>
+		<h3>[登録内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
-	<form th:action="@{userRegistComp}" method="post">
-		<table border="1">
-			<tr>
-				<th>ユーザID</th>
-				<th>ユーザ名</th>
-				<th>パスワード</th>
-				<th>学校ID</th>
-				<th>入学年度</th>
-			</tr>
+		<form th:action="@{userRegistComp}" method="post">
+			<table border="1">
+				<tr>
+					<th>ユーザID</th>
+					<th>ユーザ名</th>
+					<th>パスワード</th>
+					<th>学校ID</th>
+					<th>入学年度</th>
+				</tr>
 
-			<tr th:each="user : ${userRegist}">
-				<td th:text="${user.user_id}"></td>
-				<td th:text="${user.user_name}"></td>
-				<td th:text="${user.user_pass}"></td>
-				<td th:text="${user.school_id}"></td>
-				<td th:text="${user.enr_year}"></td>
+				<tr th:each="user : ${userRegist}">
+					<td th:text="${user.user_id}"></td>
+					<td th:text="${user.user_name}"></td>
+					<td th:text="${user.user_pass}"></td>
+					<td th:text="${user.school_id}"></td>
+					<td th:text="${user.enr_year}"></td>
 
-				<input type="hidden" name="user_id" th:value="${user.user_id}">
-				<input type="hidden" name="user_name" th:value="${user.user_name}">
-				<input type="hidden" name="user_pass" th:value="${user.user_pass}">
-				<input type="hidden" name="school_id" th:value="${user.school_id}">
-				<input type="hidden" name="enr_year" th:value="${user.enr_year}">
-				<input type="hidden" name="user_flg" th:value="${user.user_flg}">
+					<input type="hidden" name="user_id" th:value="${user.user_id}">
+					<input type="hidden" name="user_name" th:value="${user.user_name}">
+					<input type="hidden" name="user_pass" th:value="${user.user_pass}">
+					<input type="hidden" name="school_id" th:value="${user.school_id}">
+					<input type="hidden" name="enr_year" th:value="${user.enr_year}">
+					<input type="hidden" name="user_flg" th:value="${user.user_flg}">
 
 
-			</tr>
-		</table>
+				</tr>
+			</table>
 
-		<button type="button" name="button" value="作成" class="btn btn-danger" onclick="userRegistAndShowPopup()">作成</button>
+			<button type="button" name="button" value="作成" class="btn btn-danger"
+				onclick="userRegistAndShowPopup()">作成</button>
 
-		<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
+			<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
 
-	</form>
+		</form>
 
-	<!-- ポップアップ -->
-	<div class="modal fade" id="userRegistModal" tabindex="-1" role="dialog" aria-labelledby="userRegistModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="userRegistModalLabel">ユーザ作成完了</h5>
-				</div>
-				<div class="modal-body">
-					<p>ユーザ作成が完了しました</p>
-				</div>
-				<div class="modal-footer">
-					<form th:action="@{userList}" method="get">
-						<button type="submit" class="btn btn-danger">学校情報詳細へ</button>
-					</form>
+		<!-- ポップアップ -->
+		<div class="modal fade" id="userRegistModal" tabindex="-1" role="dialog" aria-labelledby="userRegistModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="userRegistModalLabel">ユーザ作成完了</h5>
+					</div>
+					<div class="modal-body">
+						<p>ユーザ作成が完了しました</p>
+					</div>
+					<div class="modal-footer">
+						<form th:action="@{userList}" method="get">
+							<button type="submit" class="btn btn-danger">学校情報詳細へ</button>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+		<script>
+			function userRegistAndShowPopup() {
+				// フォーム要素を取得
+				var form = document.querySelector('form');
+
+				// コントローラメソッドを呼び出すためにフォームを送信
+				form.action = 'userRegistComp'; // コントローラメソッドの実際のURLに置き換えてください
+				form.method = 'post';
+
+				// buttonパラメータを追加
+				var buttonInput = document.createElement('input');
+				buttonInput.type = 'hidden';
+				buttonInput.name = 'button';
+				buttonInput.value = '作成'; // または '戻る' など必要な値を設定
+				form.appendChild(buttonInput);
+
+				form.submit();
+			}
+		</script>
+
+		<!--ポップアップを表示するためのコード-->
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			var userRegistComp = /*[[${userRegistComp}]]*/ true;
+			$(document).ready(function () {
+				if (userRegistComp == true) {
+					$('#userRegistModal').modal('show');
+				}
+			});
+			/*]]>*/
+		</script>
+
 	</div>
 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-	<script>
-		function userRegistAndShowPopup() {
-			// フォーム要素を取得
-			var form = document.querySelector('form');
-
-			// コントローラメソッドを呼び出すためにフォームを送信
-			form.action = 'userRegistComp'; // コントローラメソッドの実際のURLに置き換えてください
-			form.method = 'post';
-
-			// buttonパラメータを追加
-			var buttonInput = document.createElement('input');
-			buttonInput.type = 'hidden';
-			buttonInput.name = 'button';
-			buttonInput.value = '作成'; // または '戻る' など必要な値を設定
-			form.appendChild(buttonInput);
-
-			form.submit();
-		}
-	</script>
-
-	<!--ポップアップを表示するためのコード-->
-	<script th:inline="javascript">
-		/*<![CDATA[*/
-		var userRegistComp = /*[[${userRegistComp}]]*/ true;
-		$(document).ready(function () {
-			if (userRegistComp == true) {
-				$('#userRegistModal').modal('show');
-			}
-		});
-		/*]]>*/
-	</script>
+	<!--bootstrapのjsリンク接続-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
 
 </body>
 
