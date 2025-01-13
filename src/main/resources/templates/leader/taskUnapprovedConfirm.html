@@ -72,58 +72,50 @@
 							<th>終了日</th>
 							<td><input type="date" id="end_date" name="end_date" min="1900-01-01" max="9999-12-31"></td>
 						</tr>
-						<tr>
-							<th id="priority">優先度</th>
-							<td>
-								<select name="task_priority" required>
-									<option>--選択してください</option>
-									<option name="task_priority">1</option>
-									<option name="task_priority">2</option>
-									<option name="task_priority">3</option>
-									<option name="task_priority">4</option>
-									<option name="task_priority">5</option>
-
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th id="level">難易度</th>
-							<td>
-								<select name="task_level" required>
-									<option>--選択してください</option>
-									<option name="task_level">1</option>
-									<option name="task_level">2</option>
-									<option name="task_level">3</option>
-									<option name="task_level">4</option>
-									<option name="task_level">5</option>
-								</select>
-							</td>
-						</tr>
-						<!--参照のみ-->
-						<tr class="col">
-							<th class="form-label">重み</th>
-							<td><input class="form-control" type="text" id="result" name="task_weight"
-								aria-label="readonly input example" readonly></td>
-
-							<!--JavaScript挿入欄(重み計算)-->
-							<script th:inline="javascript">
-								const priority = document.getElementById("priority").nextElementSibling;
-								const level = document.getElementById("level").nextElementSibling;
-
-								priority.addEventListener('change', calculate);
-								level.addEventListener('change', calculate);
-								calculate();
-
-								function calculate() {
-									const value1 = priority.value;
-									const value2 = level.value;
-									const resultValue = parseInt(value1) * parseInt(value2);
-									document.getElementById("result").value = resultValue;
-								}
-							</script>
-							</input>
-						</tr>
 					</table>
+					<label id="priority">優先度</label>
+					<select name="task_priority" required>
+						<option value="0">--選択してください</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+					<label id="level">難易度</label>
+					<select name="task_level" required>
+						<option value="0">--選択してください</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+					<div>
+						<label class="form-label">重み</label>
+						<input class="form-control" type="text" id="result" name="task_weight"
+								aria-label="readonly input example" readonly>
+
+						<!--JavaScript挿入欄(重み計算)-->
+						<script th:inline="javascript">
+							const priority = document.getElementById("priority").nextElementSibling;
+							const level = document.getElementById("level").nextElementSibling;
+
+							priority.addEventListener('change', calculate);
+							level.addEventListener('change', calculate);
+							calculate();
+
+							function calculate() {
+								const value1 = priority.value;
+								const value2 = level.value;
+								console.log(value1);
+								console.log(value2);
+								const resultValue = parseInt(value1) * parseInt(value2);
+								document.getElementById("result").value = resultValue;
+							}
+						</script>
+						</input>
+					</div>
 					<div>
 
 						<input type="hidden" name="request_id" th:value="${task.request_id}">
