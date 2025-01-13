@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -26,8 +28,6 @@ import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -345,6 +345,13 @@ public class UserCtrl {
 		return mav;
 	}
 	
+	/**
+	 * タスク承認を行う
+	 * 湊原
+	 * @param mav
+	 * @param t
+	 * @return
+	 */
 	@LoginRequired
 	@PostMapping("taskAppComplete")
 	public ModelAndView taskAppComplete(ModelAndView mav, TaskView t) {
