@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import com.example.demo.form.SchoolDisplay;
 
 public interface SchoolDisplayCrudRepository extends CrudRepository<SchoolDisplay, Integer> {
-	
+
 	/**
 	 * 末吉
 	 * 学校情報詳細
@@ -22,7 +22,7 @@ public interface SchoolDisplayCrudRepository extends CrudRepository<SchoolDispla
 	//選択した学校情報を表示
 	@Query("select * from school inner join room on school.school_id = room.school_id where school.school_id = 1 && room.room_id = :room_id")
 	public List<SchoolDisplay> schoolDetailsChange(int room_id);
-	
+
 	//学校情報編集
 	@Modifying
 	@Query("update room set room_name = :room_name, pc_flg = :pc_flg, hall = :hall, floor = :floor, school_id = :school_id where room_id = :room_id")
@@ -32,9 +32,13 @@ public interface SchoolDisplayCrudRepository extends CrudRepository<SchoolDispla
 	@Modifying
 	@Query("insert into room (room_name, pc_flg, hall, floor, school_id) values (:room_name, :pc_flg, :hall, :floor, :school_id)")
 	public void AddSchoolDetailsComp(String room_name, int pc_flg, String hall, String floor, int school_id);
-	
+
 	//学校情報削除
 	@Modifying
 	@Query("delete from room where school_id = :school_id && room_id = :room_id")
 	public void DeleteSchoolDetails(int school_id, int room_id);
+
+	//同じ教室名が登録されているか検索
+	@Query("select exists (select 1 from room where room_name = :room_name && school_id = :school_id)")
+	public boolean isExistRoomName(String room_name, int school_id);
 }

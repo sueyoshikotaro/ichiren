@@ -44,5 +44,11 @@ public class SchoolDisplayImpl implements SchoolDisplayServiceInterface {
 		
 		repo.DeleteSchoolDetails(school_id, room_id);
 	}
+	
+	@Override
+	public boolean isExistRoomName(String room_name, int school_id) {
+
+		return repo.isExistRoomName(room_name, school_id);
+	}
 
 }
