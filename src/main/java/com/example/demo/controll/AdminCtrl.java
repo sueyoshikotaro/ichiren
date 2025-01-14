@@ -23,10 +23,10 @@ import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupMenberDetailView;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
-import com.example.demo.form.UserView;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
@@ -557,8 +557,8 @@ public class AdminCtrl {
 
 		if (userDisplayService.userIDCheck(u.getUser_id())) {
 
-			mav.setViewName("admin/teInfoRegistConfirm");
 			mav.addObject("te", u);
+			mav.setViewName("admin/teInfoRegistConfirm");
 
 		} else {
 
@@ -572,22 +572,34 @@ public class AdminCtrl {
 
 	/*
 	 * 向江
-	 * 新規講師登録完了画面を表示するリクエストハンドラメソッド
+	 * 新規講師登録完了
 	 * @param t
 	 * @param mav 
 	 * @return
 	 */
 	@PostMapping("teInfoRegistComp")
-	public ModelAndView dispTeInfoRegistComp(UserView u, ModelAndView mav) {
+	public ModelAndView teInfoRegistComp(@RequestParam("button") String button, UserDisplay u, ModelAndView mav,
+			Model model) {
 
-		userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(),
-				u.getEnr_year(), 1);
+		//登録ボタンを押下
+		if (button.equals("登録")) {
+			userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(),
+					u.getEnr_year(), 1);
 
-		//userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
+			// ポップアップを表示するために、画面遷移をしないようにする
+			mav.addObject("teInfoRegistComp", true);
+			mav.setViewName("admin/teInfoRegistConfirm");
 
-		mav.setViewName("admin/teInfoRegistComp");
+			return mav;
 
-		return mav;
+			// 戻るボタンを押下	
+		} else {
+
+			mav.addObject("teInfoRegist", u);
+			mav.setViewName("admin/teInfoRegist");
+			return mav;
+		}
+
 	}
 
 	/*
@@ -727,11 +739,19 @@ public class AdminCtrl {
 	}
 
 	/**
+	 * 向江
 	 * グループメンバ詳細画面を表示する
 	 * @return
 	 */
-	public String memberDetails() {
-		return "memberDetails";
+	@GetMapping("groupMenberDetails")
+	public ModelAndView memberDetails(ModelAndView mav, GroupMenberDetailView gm) {
+
+		List<GroupMenberDetailView> group = groupDispService.groupMemberDetail(gm.getUser_id());
+
+		mav.addObject("group", group);
+		mav.setViewName("admin/groupMenberDetails");
+
+		return mav;
 	}
 
 	/**

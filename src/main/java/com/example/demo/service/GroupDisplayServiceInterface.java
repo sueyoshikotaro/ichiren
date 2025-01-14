@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupMenberDetailView;
 
 public interface GroupDisplayServiceInterface {
 
@@ -23,4 +24,7 @@ public interface GroupDisplayServiceInterface {
 	
 	//グループ詳細表示
 	public List<GroupDetailView> groupDetail(String group_id);
+	
+	//グループメンバ詳細表示
+	public List<GroupMenberDetailView> groupMemberDetail(String user_id);
 }
