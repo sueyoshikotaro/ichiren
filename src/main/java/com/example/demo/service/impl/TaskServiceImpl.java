@@ -26,7 +26,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	@Override
 	public List<Task> taskDisplayList(String user,int group_id) {
 		List<Task> result;
-		if(user.equals("all")) {
+		if(user.equals("全員")) {
 			result = repo.selectTask(group_id);
 
 		}else {
@@ -82,8 +82,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * 湊原
 	 */
 	@Override
-	public int userScore(String user_id, String group_id) {
-		return 0;
+	public int userScore(String user_name, int group_id) {
+		return repo.selectScore(user_name,group_id);
 	}
 
 	/*
@@ -98,13 +98,13 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	
 	/*
 	 * 未承認確認表示
-	 * 向江
-	 * まだ手を付けていません。
+	 * 湊原
+	 * 未承認テーブルフラグ更新
 	 */
 	@Override
-	public List<TaskReqView> taskUnapprovedConfirm() {
+	public void taskReqFlg() {
 		
-		return null;
+		
 	}
 
 	
