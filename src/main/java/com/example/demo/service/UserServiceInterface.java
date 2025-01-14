@@ -18,11 +18,18 @@ public interface UserServiceInterface {
 	 * ID重複をチェック
 	 */
 	public boolean userIdCheck(String user_id);
-	
+
 	/**
 	 * 坂本
 	 * ユーザ
 	 * passをチェック
 	 */
 	public boolean userPassCheck(String user_pass);
+
+	/**
+	 * 坂本
+	 * ユーザ
+	 * パスワード再設定
+	 */
+	public void userPassReset(String user_pass);
 }

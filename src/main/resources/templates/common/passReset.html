@@ -5,6 +5,8 @@
 	<meta charset="UTF-8">
 	<title>タスクどん_パスワード再設定</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -19,7 +21,8 @@
 		</div>
 		<!--パスワード再設定確認(ポップアップ)-->
 		<div>
-			<button>確認</button>
+			<button type="button" name="button" value="reset" class="btn btn-danger" data-toggle="modal"
+				data-target="#passReset">確認</button>
 		</div>
 		<div class="popup" style="display: none;">
 			<div class="popup-content">
@@ -30,6 +33,32 @@
 			</div>
 		</div>
 	</form>
+
+	<div class="modal fade" id="passReset" tabindex="-1" role="dialog" aria-labelledby="passResetModal"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="passResetModal">パスワード再設定確認</h5>
+				</div>
+				<div class="modal-body">
+					<p>パスワードを更新しますか?</p>
+				</div>
+				<div class="modal-footer">
+					<table th:each="schoolDetails : ${schoolDelete}">
+						<form th:action="@{schoolDeleteComp}" method="post">
+							<input type="hidden" name="user_pass" th:value="${schoolDetails.user_pass}">
+							<button type="submit" name="button" value="はい" class="btn btn-danger">はい</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
+						</form>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 
 </html>

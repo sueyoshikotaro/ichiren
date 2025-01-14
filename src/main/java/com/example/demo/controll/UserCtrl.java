@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -28,6 +26,8 @@ import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -84,9 +84,50 @@ public class UserCtrl {
 	 * @return
 	 */
 	@GetMapping("resetPass")
-	public String resetPass() {
+	public ModelAndView resetPass(@RequestParam("newPass") String user_pass, String button, ModelAndView mav) {
 
-		return "common/resetPass";
+		//確認ボタンを押下
+		if (button.equals("reset")) {
+			mav.addObject("user_pass", user_pass);
+			mav.setViewName("common/resetPass");
+		}
+
+		return mav;
+	}
+
+	/**
+	 * 在籍チェック
+	 * ID重複チェック
+	 * パスワードチェック
+	 * メニュー画面(管理者)を表示
+	 * @return
+	 */
+	@PostMapping("menu")
+	public ModelAndView userIdCheckForAdmin(ModelAndView mav, String user_id, String user_pass) {
+
+		Optional<User> user;
+
+		user = userCrudRepo.findById(user_id);
+
+		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+
+			if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
+
+				//admin無効化のSQL
+
+				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
+				mav.addObject("");
+			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+
+				mav.setViewName("admin/menuAdmin"); //管理者ログイン(通常)
+				mav.addObject("");
+			}
+		} else {
+
+			mav.setViewName("common/login");
+			mav.addObject("errMsg", "ログインできませんでした");
+		}
+		return mav;
 	}
 
 	/**
@@ -97,32 +138,25 @@ public class UserCtrl {
 	 * @return
 	 */
 	@PostMapping("deptGroupList")
-	public ModelAndView userIdCheck(ModelAndView mav, String user_id, String user_pass) {
+	public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
 
 		Optional<User> user;
+
+		List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
 		user = userCrudRepo.findById(user_id);
 
 		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
-			if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
-
-				//admin無効化のSQL挿入欄
-
-				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
-			} else if (user.get().getUser_id().contains("te")) {
-
-				mav.setViewName("admin/menuAdmin"); //管理者ログイン(通常)
-			} else if (user.get().getUser_pass().equals("taskdon1")) {
-
-				mav.setViewName("common/passReset"); //パスワード再設定
-			} else {
-
-				List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+			if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
 
 				mav.setViewName("common/deptGroupList");
 				mav.addObject("groupS", deptGroupList);
 				session.setAttribute("user", user.get());
+			} else {
+
+				mav.setViewName("common/login");
+				mav.addObject("errMsg", "ログインできませんでした");
 			}
 		} else {
 
@@ -132,9 +166,35 @@ public class UserCtrl {
 		return mav;
 	}
 
-	//for (GroupDisplay i : deptGroupList) {
-	//	System.out.println(i);
-	//}
+	/**
+	 * 在籍チェック
+	 * ID重複チェック
+	 * パスワードチェック
+	 * パスワード再設定画面を表示
+	 * @return
+	 */
+	@PostMapping("resetPass")
+	public ModelAndView userIdCheckForResetPass(ModelAndView mav, String user_id, String user_pass) {
+
+		Optional<User> user;
+
+		user = userCrudRepo.findById(user_id);
+
+		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+
+			if (user.get().getUser_pass().equals("taskdon1")) {
+
+				mav.setViewName("common/passReset"); //パスワード再設定
+				mav.addObject("");
+			}
+		} else {
+
+			mav.setViewName("common/login");
+			mav.addObject("errMsg", "ログインできませんでした");
+		}
+
+		return mav;
+	}
 
 	/**
 	 * メニュー画面を表示
