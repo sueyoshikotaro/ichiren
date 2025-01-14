@@ -1,3 +1,4 @@
+<!--管理者用メニュー(名称:ホーム)-->
 <!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -16,6 +17,7 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/menuS.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -39,17 +41,17 @@
 						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							メニュー
 						</button>
+						<!--各画面遷移-->
 						<ul class="dropdown-menu dropdown-menu-dark">
+							<!--メニュー画面遷移-->
 							<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
-
-							<!--ログインしているユーザが大ボスの場合-->
+							<!--役職判断処理(管理者のBOSS)-->
 							<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
 								<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
 								</li>
 							</div>
-
 							<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a></li>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
 							<li>
@@ -69,32 +71,20 @@
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2>メニュー</h2>
+		<h2 class="menu-text">ホーム</h2>
 
 		<!--遷移先(ボタン)-->
-		<div class="menu-container">
-			<form name="form1" th:action="@{groupList}" method="get">
-				<button type="submit">グループ一覧</button><br>
-			</form>
+		<a class="menu-btn" th:onclick="|location.href='@{groupList}'|">グループ一覧</a>
 
-			<form name="form1" th:action="@{userList}" method="get">
-				<button type="submit">ユーザ一覧</button><br>
-			</form>
+		<a class="menu-btn" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a>
 
-			<form name="form1" th:action="@{schoolDetails}" method="get">
-				<button type="submit">学校情報詳細</button><br>
-			</form>
+		<a class="menu-btn" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
 
-			<form name="form1" th:action="@{/nextpage}" method="get">
-				<button type="submit">チャット</button><br>
-			</form>
+		<a class="menu-btn" th:onclick="|location.href='@{/nextpage}'|">チャット</a>
 
-			<!--ログインしているユーザが大ボスの場合-->
-			<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
-				<form name="form1" th:action="@{teList}" method="get">
-					<button type="submit">講師一覧</button><br>
-				</form>
-			</div>
+		<!--ログインしているユーザが大ボスの場合-->
+		<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
+			<a class="menu-btn" th:onclick="|location.href='@{teList}'|">講師一覧</a>
 		</div>
 	</div>
 
