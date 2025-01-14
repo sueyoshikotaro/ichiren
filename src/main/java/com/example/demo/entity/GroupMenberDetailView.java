@@ -9,16 +9,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupDetailView {
+public class GroupMenberDetailView {
 
 	@Id
-	private String group_id;
-	private String group_name;
-	private String genre;
-	private int all_progress;
-	
+	private String user_id;
 	private String user_name;
-	private int user_progress;
 	private int score;
+	private int user_progress;
+	
+	private String task_name;
+	private int task_priority;
+	private int progress;
 	
 }
