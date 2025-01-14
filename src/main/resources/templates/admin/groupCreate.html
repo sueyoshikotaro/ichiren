@@ -15,8 +15,8 @@
 		<form th:action="@{groupCreateConfirm}" method="post">
 			<table border="1">
 				<tr>
-					<th>グループID</th>
-					<td><input type="text" name="group_id"></td>
+					<th>グループ名</th>
+					<td><input type="text" name="group_name"　required></td>
 				</tr>
 
 				<!--プルダウンメニュー-->
@@ -42,13 +42,12 @@
 						<td>
 							<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
 								id="flexCheckDefault">
+							<input type="hidden" name="userId" th:value="${user.user_id}">
 						</td>
 						<td th:text="${user.user_name}"></td>
 					</tr>
-
-					<input type="hidden" name="user_id">
-
 				</tbody>
+
 				<tbody th:unless="${selectUser != null}">
 					<tr>
 						<td colspan="2">&nbsp;</td>
@@ -71,6 +70,10 @@
 
 			<input type="submit" name="button" value="確認">
 			<input type="submit" name="button" value="戻る">
+
+			<!-- グループ名と選択されたジャンル名を送信 -->
+			<input type="hidden" name="group_name" th:value="${group_name}">
+			<input type="hidden" name="genre" th:value="${genre}">
 		</form>
 	</div>
 
