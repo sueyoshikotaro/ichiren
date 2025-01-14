@@ -45,9 +45,9 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 * パスワード初期化
 	 */
 	@Override
-	public void PassReset(String user_id) {
+	public void PassFormat(String user_id) {
 
-		userCrudRepo.PassReset(user_id);
+		userCrudRepo.PassFormat(user_id);
 	}
 
 	/*

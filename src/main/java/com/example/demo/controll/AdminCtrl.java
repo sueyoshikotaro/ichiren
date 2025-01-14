@@ -375,9 +375,6 @@ public class AdminCtrl {
 		//ModelAndViewのインスタンス生成
 		ModelAndView mav = new ModelAndView();
 
-		//サービスのインスタンス生成
-		//UserListServiceInterface userListService = new UserListServiceImpl();
-
 		//サービスのメソッドを呼び出す
 		Iterable<UserDisplay> userList = userDisplayService.userList();
 
@@ -445,7 +442,7 @@ public class AdminCtrl {
 	public ModelAndView passClearConfirm(UserDisplay u, ModelAndView mav) {
 
 		// サービスのメソッドを呼び出す
-		userDisplayService.PassReset(u.getUser_id());
+		userDisplayService.PassFormat(u.getUser_id());
 
 		//mav.addObject("user",u);
 		mav.setViewName("admin/updateComp");
@@ -684,14 +681,27 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("teUpdateComp")
-	public ModelAndView dispTeUpdateComp(UserDisplay u, ModelAndView mav) {
+	public ModelAndView teUpdateComp(@RequestParam("button") String button,UserDisplay u, ModelAndView mav) {
 
-		// サービスのメソッドを呼び出す
-		userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(), 1);
-
-		mav.setViewName("admin/teUpdateComp");
-
-		return mav;
+		// 編集ボタンを押下
+		if(button.equals("編集")) {
+			
+			userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(), 1);
+		
+			// ポップアップを表示するために、画面遷移しないようにする
+			mav.addObject("teUpdateComp", true);
+			mav.setViewName("admin/teUpdateConfirm");
+			
+			return mav;
+			
+			//戻るボタンを押下
+		
+		} else {
+			
+			mav.addObject("te", u);
+			mav.setViewName("admin/teUpdate");
+			return mav;
+		}
 	}
 
 	/*

@@ -11,7 +11,7 @@ public interface UserDisplayServiceInterface {
 	public void DeleteUser(String user_id);
 
 	// パスワード初期化
-	public void PassReset(String user_id);
+	public void PassFormat(String user_id);
 
 	// IDチェック
 	public boolean userIDCheck(String user_id);
