@@ -41,12 +41,25 @@
 							メニュー
 						</button>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li>
-								<hr class="dropdown-divider"> <!--線-->
-							</li>
-							<li><a class="dropdown-item" href="#">ログアウト</a></li>
-							<!--リンク例-->
-							<!--<li><a class="dropdown-item" href="#">遷移先の画面名</a></li>-->
+							<ul class="dropdown-menu dropdown-menu-dark">
+								<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+								<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
+								<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
+
+								<!--ログインしているユーザが大ボスの場合-->
+								<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
+									<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
+									</li>
+								</div>
+
+								<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
+								</li>
+								<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
+								<li>
+									<hr class="dropdown-divider"> <!--線-->
+								</li>
+								<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
+							</ul>
 						</ul>
 				</ul>
 				</li>
