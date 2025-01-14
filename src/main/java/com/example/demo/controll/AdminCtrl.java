@@ -780,9 +780,57 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("groupCreate")
-	public ModelAndView groupCreate(ModelAndView mav) {
+	public ModelAndView groupCreate(ModelAndView mav,
+			@RequestParam(name = "check", required = false) String[] check,
+			@RequestParam(name = "userId", required = false) String[] userId,
+			@RequestParam(name = "userName", required = false) String[] userName) {
+
+		//グループ一覧の作成ボタンから遷移してきた場合
+		if (userId == null) {
+			mav.addObject("Msg", "ユーザを選択してください");
+			mav.setViewName("admin/groupCreate");
+
+			//ユーザ選択画面から遷移してきた場合
+		} else {
+
+			//チェックボックスで選択したユーザIDとユーザ名を格納
+			List<UserDisplay> userList = new ArrayList<>();
+			for (int i = 0; i < check.length; i++) {
+				UserDisplay user = new UserDisplay();
+				user.setUser_id(userId[i]);
+				user.setUser_name(userName[i]);
+				userList.add(user);
+			}
+
+			mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
+			mav.addObject("selectUser", userList);
+			mav.setViewName("admin/groupCreate");
+		}
 
 		return mav;
 	}
+
+	/**
+	 * 末吉
+	 * ユーザ選択画面を表示する
+	 * @return
+	 */
+	@PostMapping("groupMemberSelect")
+	public ModelAndView groupMemberSelect(ModelAndView mav) {
+
+		//サービスのメソッドを呼び出す
+		Iterable<UserDisplay> userList = userDisplayService.userList();
+
+		mav.addObject("users", userList);
+		mav.setViewName("admin/userSelectList");
+
+		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * グループ作成確認画面
+	 * @return
+	 */
 
 }
