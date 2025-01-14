@@ -28,4 +28,13 @@ public interface TaskReqCrudRepository extends CrudRepository<TaskReqView, Integ
 	 */
 	@Query("update task_req set request_flg = 1 where request_id = :request_id;")
 	public boolean updateTaskUnapproved(int request_id);
+	
+	/**
+	 * 湊原
+	 * タスク未承認フラグ更新(承認済み)
+	 */
+//	@Query("update task_req set request_flg = 2 where request_id = :request_id;")
+//	public boolean updateTaskApproved(int request_id);
+	
+	
 }

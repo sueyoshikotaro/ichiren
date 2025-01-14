@@ -108,7 +108,7 @@ public class UserCtrl {
 			if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
 
 				//admin無効化のSQL挿入欄
-				
+
 				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
 			} else if (user.get().getUser_id().contains("te")) {
 
@@ -170,18 +170,20 @@ public class UserCtrl {
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
 		int groupId = (int) session.getAttribute("groupId");
+		User user = (User) session.getAttribute("user");
+		String score = "--";
 		List<Task> task = null;
-		String user = "all";
 		if (selectedValue == null || selectedValue.equals("全員")) {
-			task = TaskService.taskDisplayList(user, groupId);
+			selectedValue = "全員";
 		} else {
-			mav.getModel().clear();
-			user = selectedValue;
-			task = TaskService.taskDisplayList(user, groupId);
+			score = String.valueOf(TaskService.userScore(selectedValue, groupId));
 		}
 
+		task = TaskService.taskDisplayList(selectedValue, groupId);
+		mav.addObject("score", score);
+		mav.addObject("user", selectedValue);
 		mav.addObject("tasks", task);
-		mav.setViewName("leader/taskList");
+		mav.setViewName("common/taskList");
 		return mav;
 	}
 
@@ -245,7 +247,7 @@ public class UserCtrl {
 	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
 
 		mav.addObject("task", t);
-		mav.setViewName("leader/taskDetails");
+		mav.setViewName("common/taskDetails");
 		return mav;
 	}
 
@@ -344,7 +346,7 @@ public class UserCtrl {
 		mav.setViewName("leader/taskUnapprovedConfirm");
 		return mav;
 	}
-	
+
 	/**
 	 * タスク承認を行う
 	 * 湊原

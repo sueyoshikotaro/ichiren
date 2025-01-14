@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupMenberDetailView;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.service.GroupDisplayServiceInterface;
 
@@ -96,5 +97,18 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		
 		return groupDispCrudRepo.groupDetail(group_id);
 	}
+
+	/*
+	 * 向江
+	 * グループメンバ詳細
+	 */
+	@Override
+	public List<GroupMenberDetailView> groupMemberDetail(String user_id) {
+		
+		return groupDispCrudRepo.groupMemberDetail(user_id);
+	}
+
+	
+	
 
 }

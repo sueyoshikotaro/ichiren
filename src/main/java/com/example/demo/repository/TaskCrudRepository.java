@@ -62,9 +62,21 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	public boolean updateTask(int task_id, String task_category, String task_name, String task_content,
 			String task_priority, String task_weight, String user_name);
 
+	
+	/**
+	 * タスクフラグ更新(削除)
+	 * @param task_id
+	 */
 	@Modifying
 	@Query("update task set task_flg = 0 where task_id = :task_id")
 	public void updateFlg(int task_id);
 	
+	
+	/**
+	 * 湊原
+	 * スコアを取得するメソッド
+	 */
+	@Query("select score from user_detail where user_detail.user_id=(select user_id from user where user_name=:user_name) and group_id=:group_id;")
+	public int selectScore(String user_name, int group_id);
 	
 }
