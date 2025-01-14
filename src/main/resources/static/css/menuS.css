@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+.menu-text {
+	text-align: center;
+}
+
+a.menu-btn {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	position: relative;
+	width: 192px;
+	margin: auto;
+	font-size: 21px;
+	color: black;
+	background: #EEEEEE;
+	transition: 0.3s ease-in-out;
+	margin-top: 19px;
+}
+
+a.menu-btn::before {
+	content: '';
+	position: absolute;
+	top: -5px;
+	left: -5px;
+	width: calc(100% - 2px);
+	height: calc(100% - 2px);
+	border: 2px solid black;
+	transition: 0.2s;
+}
+
+a.menu-btn:hover {
+	background: black;
+	color: white;
+}
+
+a.menu-btn:hover::before {
+	top: 0;
+	left: 0;
+}
