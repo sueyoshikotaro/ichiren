@@ -25,11 +25,11 @@ public interface TaskServiceInterface {
 	public void taskUpFlg(int task_id);
 	
 	//スコアを取得するメソッド
-	public int userScore(String user_id, String group_id);
+	public int userScore(String user_name, int group_id);
 	
 	//タスク未承認一覧表示
 	public List<TaskReqView> selectTaskUnapproved();
 	
 	//タスク未承認確認表示
-	public List<TaskReqView> taskUnapprovedConfirm();
+	public void taskReqFlg();
 }
