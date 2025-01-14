@@ -20,17 +20,13 @@ public interface UserCrudRepository extends CrudRepository<User, String> {
 	 */
 	@Modifying
 	@Query("insert into user (user_id, user_name, user_pass, school_id, enr_year, user_flg) values (:user_id, :user_name,'taskdon1', (select school_id from school where school_name = :school_name), :enr_year, 1)")
-	public void saveAll(String user_id, String user_name, String user_pass, String school_name, String enr_year,int user_flg);
-	
-	
-	
+	public void saveAll(String user_id, String user_name, String user_pass, String school_name, String enr_year,
+			int user_flg);
+
 	/**
 	 * 再設定したパスワードを登録
 	 */
 	@Modifying
-	@Query("update user set user_pass = :user_pass where user_id = :user_id")
-	public void passReset(String user_id, String user_pass);
-
-	
-	
+	@Query("update user set user_pass = :user_pass where user_pass = :user_pass")
+	public void userPassReset(String user_pass);
 }

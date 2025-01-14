@@ -62,7 +62,7 @@
 					<input type="password" id="user_pass" name="user_pass" class="form-control"
 						aria-labelledby="passwordHelpBlock" th:value="${user_pass}" required>
 					<span class="input-group-text">
-						
+
 						<!--入力内容の目マーク機能-->
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 							class="bi bi-eye" id="eye" viewBox="0 0 16 16">
@@ -80,7 +80,7 @@
 							<path
 								d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z" />
 						</svg>
-						
+
 					</span>
 				</div>
 			</div>
@@ -90,9 +90,16 @@
 
 			<!--ログインボタン-->
 			<div class="button-group">
-				<button type="submit" class="login-button">ログイン</button>
+				<button type="submit" class="login-button"
+					th:action="${user_id.startsWith('ad') || user_id.startsWith('te') ? '/taskdon/admin/menu' : '/taskdon/user/deptGroupList'}"
+					method="get">ログイン
+				</button>
 			</div>
 
+			<!--ログインボタン-->
+			<!--<div class="button-group">-->
+			<!--	<button type="submit" class="login-button">ログイン</button>-->
+			<!--</div>-->
 		</form>
 
 		<!--パスワード再設定説明(ポップアップ機能)-->
