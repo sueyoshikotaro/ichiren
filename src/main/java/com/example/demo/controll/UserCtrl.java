@@ -230,7 +230,6 @@ public class UserCtrl {
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
 		int groupId = (int) session.getAttribute("groupId");
-		User user = (User) session.getAttribute("user");
 		String score = "--";
 		List<Task> task = null;
 		if (selectedValue == null || selectedValue.equals("全員")) {
@@ -283,13 +282,18 @@ public class UserCtrl {
 		Date st_date = null;
 		Date end_date = null;
 		int group_id = (int) session.getAttribute("groupId");
+		int score = TaskService.userScore(t.getUser_name(), group_id);
 		try {
 			st_date = sdf.parse(t.getStart_date());
 			end_date = sdf.parse(t.getEnd_date());
 			TaskService.taskRegister(t.getTask_category(), t.getTask_name(), t.getTask_content(), "未着手",
 					st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
 					group_id);
-			System.out.println(t.getGroup_id());
+			System.out.println(t);
+			//スコアの足しこみ
+			score = score + Integer.valueOf(t.getTask_weight());
+			TaskService.userUpScore(score, t.getUser_name(), group_id);
+
 			mav.addObject("tasks", t);
 			mav.setViewName("leader/taskRegistConfirm");
 		} catch (Exception e) {
@@ -319,14 +323,21 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskDetailsChange")
 	public ModelAndView taskDetailChange(@RequestParam("button") String button, TaskForm t, ModelAndView mav) {
-		mav.addObject("task", t);
+		//セッション情報の取得
+		int groupId = (int) session.getAttribute("groupId");
 		//編集ボタンを押下
 		if (button.equals("edit")) {
+			//古いスコアの減算
+			int score = TaskService.userScore(t.getUser_name(), groupId);
+			score = score - Integer.valueOf(t.getTask_weight());
+			TaskService.userUpScore(score, t.getUser_name(), groupId);
+			t.setTask_weight(String.valueOf(score));
 			mav.setViewName("leader/taskEdit");
 			//削除ボタンを押下
 		} else if (button.equals("delete")) {
 			mav.setViewName("leader/taskDeleteConfirm");
 		}
+		mav.addObject("task", t);
 		return mav;
 	}
 
@@ -348,16 +359,25 @@ public class UserCtrl {
 	/**
 	 * タスク編集完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
-	 * (未)スコアの更新
 	 * @param mav
 	 * @return
 	 */
 	@LoginRequired
 	@PostMapping("taskEditComplete")
 	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
+		//セッション情報の取得
+		int groupId = (int) session.getAttribute("groupId");
 
+		//スコアの足しこみ
+		int score = TaskService.userScore(t.getUser_name(), groupId);
+		score = score + Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level());
+		TaskService.userUpScore(score, t.getUser_name(), groupId);
+
+		String weight = String.valueOf(Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level()));
 		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
-				t.getTask_priority(), t.getTask_weight(), t.getUser_name());
+				t.getTask_priority(), weight, t.getUser_name());
+
+		mav.addObject("taskEditComp", true);
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskEditConfirm");
 
@@ -372,8 +392,16 @@ public class UserCtrl {
 	 * @return
 	 */
 	@LoginRequired
-	@PostMapping("taskDeleteConfirm")
+	@PostMapping("taskDeleteComplete")
 	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
+		//セッション情報の取得
+		int groupId = (int) session.getAttribute("groupId");
+		System.out.println(t.getTask_weight());
+		//スコアの足しこみ
+		int score = TaskService.userScore(t.getUser_name(), groupId);
+		System.out.println(score);
+		score = score - Integer.valueOf(t.getTask_weight());
+		TaskService.userUpScore(score, t.getUser_name(), groupId);
 
 		TaskService.taskUpFlg(t.getTask_id());
 		mav.addObject("task", t);

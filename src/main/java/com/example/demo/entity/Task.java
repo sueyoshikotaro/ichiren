@@ -22,7 +22,7 @@ public class Task {
 	private Date end_date;
 	private int task_priority;
 	private int task_level;
-	private double task_weight;
+	private int task_weight;
 	private int progress;
 	private boolean task_flg;
 	private String user_id;
