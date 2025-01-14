@@ -40,7 +40,7 @@
 							メニュー
 						</button>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" href="#">ホーム</a></li> <!--メニュー画面への遷移-->
+							<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li> <!--メニュー画面への遷移-->
 
 							<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
 								<li><a class="dropdown-item" href="#">メンバー一覧</a></li>
