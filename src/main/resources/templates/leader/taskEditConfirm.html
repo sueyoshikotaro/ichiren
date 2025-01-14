@@ -64,51 +64,70 @@
 <body>
 	<!--コンテナ-->
 	<div class="container">
-		
+
 		<h2>タスク編集確認</h2>
-		
 		<form th:action="@{taskEditComplete}" method="post">
-			<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
 			<div>
 				<label>タスク名：</label>
 				<div th:text="${task.task_name}"></div>
-				<input type="hidden" th:value="${task.task_name}" name="task_name"></input>
 			</div>
 			<div>
 				<label>タスクカテゴリ：</label>
 				<div th:text="${task.task_category}"></div>
-				<input type="hidden" th:value="${task.task_category}" name="task_category"></input>
 			</div>
 			<div>
 				<label>タスク概要：</label>
 				<div th:text="${task.task_content}"></div>
-				<input type="hidden" th:value="${task.task_content}" name="task_content"></input>
 			</div>
 			<div>
 				<label>担当者：</label>
 				<div th:text="${task.user_name}"></div>
-				<input type="hidden" th:value="${task.user_name}" name="user_name"></input>
 			</div>
 			<div>
 				<label>優先度：</label>
 				<div th:text="${task.task_priority}"></div>
-				<input type="hidden" th:value="${task.task_priority}" name="task_priority"></input>
 			</div>
-			<button type="submit" name="button" value="edit">編集</button>
+
+			<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
+			<input type="hidden" name="task_name" th:value="${task.task_name}"></input>
+			<input type="hidden" name="task_category" th:value="${task.task_category}"></input>
+			<input type="hidden" name="task_content" th:value="${task.task_content}"></input>
+			<input type="hidden" name="user_name" th:value="${task.user_name}"></input>
+			<input type="hidden" name="task_priority" th:value="${task.task_priority}"></input>
+			<input type="hidden" name="task_level" th:value="${task.task_level}"></input>
+			<input type="hidden" name="task_weight" th:value="${task.task_weight}"></input>
+			<input type="hidden" name="start_date" th:value="${task.start_date}"></input>
+			<input type="hidden" name="end_date" th:value="${task.end_date}"></input>
+			<input type="hidden" name="progress" th:value="${task.progress}"></input>
+			<button type="button" name="button" value="edit" class="btn btn-danger"
+				onclick="schoolEditAndShowPopup()">編集</button>
 		</form>
 		<!-- ポップアップ -->
-		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+		<div class="modal fade" id="taskEditModal" tabindex="-1" role="dialog" aria-labelledby="taskEditModalLabel"
 			aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="deleteModalLabel">削除確認</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
+						<h5 class="modal-title" id="taskEditModalLabel">編集完了</h5>
 					</div>
 					<div class="modal-body">
-						<p>本当に削除しますか?</p>
+						<p>編集が完了しました</p>
+					</div>
+					<div class="modal-footer">
+						<form th:action="@{taskDetails}" method="post">
+							<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
+							<input type="hidden" name="task_name" th:value="${task.task_name}"></input>
+							<input type="hidden" name="task_category" th:value="${task.task_category}"></input>
+							<input type="hidden" name="task_content" th:value="${task.task_content}"></input>
+							<input type="hidden" name="user_name" th:value="${task.user_name}"></input>
+							<input type="hidden" name="task_priority" th:value="${task.task_priority}"></input>
+							<input type="hidden" name="task_level" th:value="${task.task_level}"></input>
+							<input type="hidden" name="task_weight" th:value="${task.task_weight}"></input>
+							<input type="hidden" name="start_date" th:value="${task.start_date}"></input>
+							<input type="hidden" name="end_date" th:value="${task.end_date}"></input>
+							<input type="hidden" name="progress" th:value="${task.progress}"></input>
+							<button type="submit" class="btn btn-danger">タスク詳細へ</button>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -117,6 +136,38 @@
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<script>
+		function schoolEditAndShowPopup() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'taskEditComplete'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			// buttonパラメータを追加
+			var buttonInput = document.createElement('input');
+			buttonInput.type = 'hidden';
+			buttonInput.name = 'button';
+			buttonInput.value = 'edit'; // または '戻る' など必要な値を設定
+			form.appendChild(buttonInput);
+
+			form.submit();
+		}
+	</script>
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var taskEditComp = /*[[${taskEditComp}]]*/ true;
+		$(document).ready(function () {
+			if (taskEditComp == true) {
+				$('#taskEditModal').modal('show');
+			}
+		});
+		/*]]>*/
+	</script>
 </body>
 
 </html>

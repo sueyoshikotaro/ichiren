@@ -40,11 +40,10 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 */
 	@Modifying
 	@Query("insert into task(task_category, task_name, task_content, task_status, start_date, end_date, task_priority, task_level, task_weight, progress, task_flg, user_id, group_id)"
-			+ " select distinct :task_category, :task_name, :task_content, :task_status, :start_date, :end_date, :task_priority, :task_level, :task_weight, 0, 1, user.user_id, :group_id from task"
-			+ " inner join user on task.user_id=user.user_id where user_name=:user_name;")
+			+ "	VALUES(:task_category, :task_name, :task_content, :task_status, :start_date, :end_date, :task_priority,:task_level, :task_weight, 0, 1, (SELECT user_id FROM user WHERE user_name=:user_name), 1);")
 	public boolean registerTask(String task_category, String task_name, String task_content, String task_status,
 			Date start_date, Date end_date, String task_priority, String task_level, String task_weight, String user_name, int group_id);
-	
+
 	/**
 	 * タスク編集
 	 * @param task_id
@@ -58,11 +57,10 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * @return
 	 */
 	@Modifying
-	@Query("update task set task_name=:task_name, task_category=:task_category, task_content=:task_content, task_priority=:task_priority,user_id=(SELECT user_id FROM user WHERE user_name = :user_name) where task_id=:task_id")
+	@Query("update task set task_name=:task_name, task_category=:task_category, task_content=:task_content, task_priority=:task_priority,task_weight=:task_weight,user_id=(SELECT user_id FROM user WHERE user_name = :user_name) where task_id=:task_id")
 	public boolean updateTask(int task_id, String task_category, String task_name, String task_content,
 			String task_priority, String task_weight, String user_name);
 
-	
 	/**
 	 * タスクフラグ更新(削除)
 	 * @param task_id
@@ -70,13 +68,19 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	@Modifying
 	@Query("update task set task_flg = 0 where task_id = :task_id")
 	public void updateFlg(int task_id);
-	
-	
+
 	/**
 	 * 湊原
 	 * スコアを取得するメソッド
 	 */
 	@Query("select score from user_detail where user_detail.user_id=(select user_id from user where user_name=:user_name) and group_id=:group_id;")
 	public int selectScore(String user_name, int group_id);
-	
+
+	/**
+	 * 湊原
+	 * タスクの登録、編集、削除に伴うスコアの更新
+	 */
+	@Modifying
+	@Query("update user_detail set score=:score where user_id=(select user_id from user where user_name=:user_name) and group_id=:group_id;")
+	public void updateScore(int score, String user_name, int group_id);
 }
