@@ -20,5 +20,8 @@ public interface SchoolDisplayServiceInterface {
 
 	//学校情報削除
 	public void DeleteSchoolDetails(int school_id, int room_id);
+	
+	//同じ教室名が登録されているか検索
+	public boolean isExistRoomName(String room_name, int school_id);
 
 }

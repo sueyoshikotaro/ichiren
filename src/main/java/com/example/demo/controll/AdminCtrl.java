@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -76,7 +75,6 @@ public class AdminCtrl {
 		return "common/login";
 	}
 
-	
 	/**
 	 * 末吉
 	 * ログアウト
@@ -84,9 +82,9 @@ public class AdminCtrl {
 	 */
 	@GetMapping("logout")
 	public String logout() {
-		
+
 		session.invalidate();
-		
+
 		return "common/login";
 	}
 
@@ -127,11 +125,22 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolDetailsChange")
-
 	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
-			@ModelAttribute FormContents formcontents, ModelAndView mav) {
+			@RequestParam("flexRadioDefault") int room_id, @RequestParam("before_room_name") String room_name,
+			ModelAndView mav) {
 
-		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(formcontents.getContent());
+		//ラジオボタンで選択したデータを取得
+		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(room_id);
+
+		//選択したデータの教室名を編集前の教室名として保持
+		EditSchoolDetails.get(0).setBefore_room_name(EditSchoolDetails.get(0).getRoom_name());
+
+		//学校IDと学校名のみ表示
+		List<SchoolDisplay> SchoolDetails = new ArrayList<SchoolDisplay>();
+
+		SchoolDetails.add(new SchoolDisplay());
+		SchoolDetails.get(0).setSchool_id(EditSchoolDetails.get(0).getSchool_id());
+		SchoolDetails.get(0).setSchool_name(EditSchoolDetails.get(0).getSchool_name());
 
 		//編集ボタンを押下
 		if (button.equals("edit")) {
@@ -142,7 +151,7 @@ public class AdminCtrl {
 			//追加ボタンを押下
 		} else if (button.equals("add")) {
 
-			mav.addObject("schoolAdd", schoolDisplayService.SchoolDetails());
+			mav.addObject("schoolAdd", SchoolDetails);
 			mav.setViewName("admin/schoolAdd");
 
 			//削除ボタンを押下
@@ -162,9 +171,10 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolEditConfirm")
-
 	public ModelAndView schoolEditConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
+
+		System.out.println(s.getBefore_room_name());
 
 		//確認ボタンを押下
 		if (button.equals("確認")) {
@@ -195,17 +205,43 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("schoolEditComp")
-
 	public ModelAndView schoolEditComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav) {
 
 		//編集ボタンを押下
 		if (button.equals("編集")) {
-			schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
-					s.getSchool_id(), s.getRoom_id());
 
-			// ポップアップを表示するために、画面遷移をしないようにする
-			mav.addObject("schoolEditComp", true);
-			mav.setViewName("admin/schoolEditConfirm");
+			//編集前と編集後の教室名が同じ場合
+			if (s.getRoom_name().equals(s.getBefore_room_name())) {
+
+				schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(),
+						s.getFloor(),
+						s.getSchool_id(), s.getRoom_id());
+
+				// ポップアップを表示するために、画面遷移をしないようにする
+				mav.addObject("schoolEditComp", true);
+				mav.setViewName("admin/schoolEditConfirm");
+
+			} else {
+				//同じ教室名が登録されている場合
+				if (schoolDisplayService.isExistRoomName(s.getRoom_name(), s.getSchool_id())) {
+
+					mav.addObject("errMsg", "※同じ教室名がすでに登録されています。");
+					mav.addObject("schoolEdit", s);
+					mav.setViewName("admin/schoolEdit");
+
+					//まだ同じ教室名が登録されていない場合
+				} else {
+
+					schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(),
+							s.getFloor(),
+							s.getSchool_id(), s.getRoom_id());
+
+					// ポップアップを表示するために、画面遷移をしないようにする
+					mav.addObject("schoolEditComp", true);
+					mav.setViewName("admin/schoolEditConfirm");
+
+				}
+			}
 
 			//戻るボタンを押下
 		} else {
@@ -238,9 +274,6 @@ public class AdminCtrl {
 
 			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
 
-			//ラジオボタンの情報を取得
-			model.addAttribute("FormContent", new FormContents());
-
 			mav.addObject("schoolS", SchoolDetails);
 			mav.setViewName("admin/schoolDetails");
 
@@ -261,24 +294,32 @@ public class AdminCtrl {
 		//追加ボタンを押下
 		if (button.equals("追加")) {
 
-			schoolDisplayService.AddSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
-					s.getSchool_id());
+			//同じ教室名が登録されている場合
+			if (schoolDisplayService.isExistRoomName(s.getRoom_name(), s.getSchool_id())) {
+				mav.addObject("errMsg", "※同じ教室名がすでに登録されています。");
+				mav.addObject("schoolAdd", s);
+				mav.setViewName("admin/schoolAdd");
 
-			// ポップアップを表示するために、画面遷移をしないようにする
-			mav.addObject("schoolAddComp", true);
-			mav.setViewName("admin/schoolAddConfirm");
+				//まだ同じ教室名が登録されていない場合
+			} else {
+				schoolDisplayService.AddSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
+						s.getSchool_id());
 
-			return mav;
+				// ポップアップを表示するために、画面遷移をしないようにする
+				mav.addObject("schoolAddComp", true);
+				mav.setViewName("admin/schoolAddConfirm");
+			}
 
 			//戻るボタンを押下
 		} else {
 
+			System.out.println(s);
 			mav.addObject("schoolAdd", s);
 			mav.setViewName("admin/schoolAdd");
 
-			return mav;
 		}
 
+		return mav;
 	}
 
 	/**
@@ -657,9 +698,9 @@ public class AdminCtrl {
 		mav.getModel().clear();
 		if (drop != null) {
 			dropdown = selectedValue;
-			group = groupDispService.groupList(dropdown,drop);
+			group = groupDispService.groupList(dropdown, drop);
 		} else {
-			group = groupDispService.groupList(dropdown,dropid);
+			group = groupDispService.groupList(dropdown, dropid);
 		}
 
 		System.out.println(group);
@@ -669,7 +710,6 @@ public class AdminCtrl {
 		return mav;
 	}
 
-
 	/**
 	 * 向江
 	 * グループ詳細画面を表示する
@@ -677,13 +717,12 @@ public class AdminCtrl {
 	 */
 	@GetMapping("groupDetail")
 	public ModelAndView groupDetail(ModelAndView mav, GroupDetailView g) {
-		
+
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
-		
-		mav.addObject("group",group);
+
+		mav.addObject("group", group);
 		mav.setViewName("admin/groupDetails");
-		
-		
+
 		return mav;
 	}
 
@@ -742,10 +781,7 @@ public class AdminCtrl {
 	 */
 	@GetMapping("groupCreate")
 	public ModelAndView groupCreate(ModelAndView mav) {
-		
-		
-		
-		
+
 		return mav;
 	}
 

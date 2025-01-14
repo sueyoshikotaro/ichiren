@@ -71,14 +71,20 @@
 <body>
 	<!--コンテナ-->
 	<div class="container" id="container">
-		
+
 		<h2>タスク一覧</h2>
-		
-		<select id="dropdown" name="selectedValue" th:onchange="taskList(this.value)">
-			<option>全員</option>
-			<option name="group_user" th:each="user : ${session.groupUser}" th:value="${user}" th:text="${user}">
-			</option>
-		</select>
+		<div>
+			<select id="dropdown" name="selectedValue" th:onchange="taskList(this.value)">
+				<option>全員</option>
+				<option name="group_user" th:each="user : ${session.groupUser}" th:value="${user}" th:text="${user}">
+				</option>
+			</select>
+			<div id="userScore">
+				<label class="content_child" th:text="${user}"></label>
+				<label class="content_child" th:text="${score}"></label>
+			</div>
+		</div>
+
 		<script th:inline="javascript">
 			function taskList(selectedValue) {
 				/*URL指定＆ドロップダウンリストの値引き渡し*/
@@ -98,6 +104,8 @@
 					data: params,
 					success: function (data) {
 						var html = $(data).find(".content").html();
+						var user = $(data).find("#userScore").html();
+						document.getElementById("userScore").innerHTML = user
 						document.getElementById("data").innerHTML = html;
 					}
 				});
@@ -137,7 +145,6 @@
 				</div>
 			</div>
 		</div>
-
 		<!--コンテナ最下のボタン-->
 		<button class="Under-button" th:onclick="|location.href='@{taskUnapproved}'|">未承認</button>
 		<button class="Under-button" th:onclick="|location.href='@{taskRegister}'|">登録</button>

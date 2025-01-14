@@ -74,6 +74,9 @@
 
 		<h2>学校情報編集</h2>
 
+    <!-- エラー文を表示する -->
+	  <p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
+    
 		<tr th:each="schoolDetails : ${schoolEdit}" th:if="${schoolDetailsStat.index == 0}">
 			<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
 			<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
@@ -112,16 +115,13 @@
 						<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
 						<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
 						<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
-						<input type="submit" name="button" value="確認">
+						<input type="hidden" name="before_room_name" th:value="${schoolDetails.before_room_name}">
+					
+					  <input type="submit" name="button" value="確認">
 					</td>
 
 					<td><input type="submit" name="button" value="戻る"></td>
 				</tr>
-
-				<tr>
-
-				</tr>
-
 			</table>
 		</form>
 	</div>

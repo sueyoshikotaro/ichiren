@@ -94,8 +94,7 @@
 					<td>
 						<div class="form-check">
 							<input class="form-check-input" type="radio" name="flexRadioDefault"
-								th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
-								th:field="*{content}" />
+								th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}" th:checked="${schoolDetailsStat.index == 0}">
 							<label class="form-check-label" th:for="${schoolDetails.room_id}"></label>
 						</div>
 					</td>
@@ -108,9 +107,11 @@
 				</tr>
 			</table><br>
 
+			<input type="hidden" id="before_room_name" name="before_room_name">
+
 			<button type="submit" name="button" value="add">追加</button>
 			<button type="submit" name="button" value="edit">編集</button>
-			<button type=" submit" name="button" value="delete">削除</button>
+			<button type="submit" name="button" value="delete">削除</button>
 		</form>
 	</div>
 
