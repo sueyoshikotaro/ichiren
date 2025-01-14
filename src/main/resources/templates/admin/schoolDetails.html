@@ -1,37 +1,94 @@
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<!--必須項目-->
 	<meta charset="UTF-8">
-	<title>タスクどん</title>
 
-	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<!--サイトタイトル-->
+	<title>タスクどん|学校情報詳細</title>
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<!--デザイン等-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
-	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+	<!--CSS接続-->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/schoolS.css}">
 
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
+	<!--ナビゲーションバー-->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
+				width="48" height="48">
+			<span class="nav-title">タスクどん</span>
+
+			<!--ドロップダウンメニュー(開閉)-->
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+				<ul class="navbar-nav">
+					<li class="nav-item dropdown">
+						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+							メニュー
+						</button>
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<ul class="dropdown-menu dropdown-menu-dark">
+								<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+								<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
+								<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
+
+								<!--ログインしているユーザが大ボスの場合-->
+								<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
+									<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
+									</li>
+								</div>
+
+								<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
+								</li>
+								<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
+								<li>
+									<hr class="dropdown-divider"> <!--線-->
+								</li>
+								<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
+							</ul>
+						</ul>
+				</ul>
+				</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 </head>
 
 <body>
-	<div class="container" id="container"> <!--コンテナ共通-->
-		<h1>学校情報詳細</h1><br>
+	<!--コンテナ-->
+	<div class="container">
+
+		<h2>学校情報詳細</h2>
 
 		<tr th:each="schoolDetails : ${schoolS}" th:if="${schoolDetailsStat.index == 0}">
-			<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
-			<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
-		</tr><br>
+			<p class="info-text" th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
+			<p class="info-text" th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
+		</tr>
 
 		<form th:action="@{schoolDetailsChange}" th:object="${FormContent}" method="post">
 			<!--教室情報一覧表示-->
 			<table border="1">
 				<tr>
 					<th></th>
-					<th>教室名▼</th>
+					<th>教室名</th>
 					<th>建物</th>
 					<th>階層</th>
-					<th>PC▼</th>
+					<th>PC</th>
 				</tr>
 
 				<tr th:each="schoolDetails : ${schoolS}">
@@ -43,15 +100,13 @@
 						</div>
 					</td>
 
-
 					<td th:text="${schoolDetails.room_name}"></td>
 					<td th:text="${schoolDetails.hall}"></td>
 					<td th:text="${schoolDetails.floor}"></td>
 					<td th:if="${schoolDetails.pc_flg == 1}">有</td>
 					<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
-
 				</tr>
-			</table><br>
+			</table>
 
 			<input type="hidden" id="before_room_name" name="before_room_name">
 
@@ -60,8 +115,6 @@
 			<button type="submit" name="button" value="delete">削除</button>
 		</form>
 	</div>
-
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 	<script th:inline="javascript">
 		$(document).ready(function () {
@@ -76,6 +129,11 @@
 			});
 		});
 	</script>
+
+	<!--bootstrapのjsリンク接続-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
 
 </body>
 

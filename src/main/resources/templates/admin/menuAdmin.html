@@ -1,46 +1,98 @@
-
+<!--管理者用メニュー(名称:ホーム)-->
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>タスクどん_メニュー</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--必須項目-->
+	<meta charset="UTF-8">
 
-	<!--CSSリンク挿入欄-->
-	<link rel="stylesheet" th:href="@{/css/menu1.css}">
-	
-	<!--後で消す(末吉)-->
-	<a th:href="@{logout}">ログアウト</a>
-	
-	
+	<!--サイトタイトル-->
+	<title>タスクどん|メニュー</title>
+
+	<!--デザイン等-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+	<!--CSS接続-->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/menuS.css}">
+
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
+	<!--ナビゲーションバー-->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
+				width="48" height="48">
+			<span class="nav-title">タスクどん</span>
+
+			<!--ドロップダウンメニュー(開閉)-->
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+				<ul class="navbar-nav">
+					<li class="nav-item dropdown">
+						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+							メニュー
+						</button>
+						<!--各画面遷移-->
+						<ul class="dropdown-menu dropdown-menu-dark">
+							<!--メニュー画面遷移-->
+							<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
+							<!--役職判断処理(管理者のBOSS)-->
+							<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
+								<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
+								</li>
+							</div>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
+							<li>
+								<hr class="dropdown-divider"> <!--線-->
+							</li>
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
+						</ul>
+				</ul>
+				</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 </head>
 
 <body>
-	<h2>メニュー</h2>
-	<div class="menu-container">
-		<form name="form1" th:action="@{schoolDetails}" method="get">
-			<button type="submit">グループ一覧</button><br>
-		</form>
+	<!--コンテナ-->
+	<div class="container">
 
-		<form name="form1" th:action="@{schoolDetails}" method="get">
-			<button type="submit">学校情報詳細</button><br>
-		</form>
+		<h2 class="menu-text">ホーム</h2>
 
-		<form name="form1" th:action="@{userList}" method="get">
-			<button type="submit">ユーザ一覧</button><br>
-		</form>
+		<!--遷移先(ボタン)-->
+		<a class="menu-btn" th:onclick="|location.href='@{groupList}'|">グループ一覧</a>
 
-		<form name="form1" th:action="@{/nextpage}" method="get">
-			<button type="submit">チャット</button><br>
-		</form>
-		
+		<a class="menu-btn" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a>
+
+		<a class="menu-btn" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
+
+		<a class="menu-btn" th:onclick="|location.href='@{/nextpage}'|">チャット</a>
+
 		<!--ログインしているユーザが大ボスの場合-->
 		<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
-			<form name="form1" th:action="@{teInfoRegist}" method="get">
-				<button type="submit">講師一覧</button><br>
-			</form>
+			<a class="menu-btn" th:onclick="|location.href='@{teList}'|">講師一覧</a>
 		</div>
 	</div>
+
+	<!--bootstrapのjsリンク接続-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
+
 </body>
 
 </html>

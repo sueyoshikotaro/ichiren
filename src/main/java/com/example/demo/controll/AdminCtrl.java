@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
@@ -23,10 +24,11 @@ import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupMenberDetailView;
 import com.example.demo.form.SchoolDisplay;
+import com.example.demo.form.TeamsDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
-import com.example.demo.form.UserView;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
@@ -557,8 +559,8 @@ public class AdminCtrl {
 
 		if (userDisplayService.userIDCheck(u.getUser_id())) {
 
-			mav.setViewName("admin/teInfoRegistConfirm");
 			mav.addObject("te", u);
+			mav.setViewName("admin/teInfoRegistConfirm");
 
 		} else {
 
@@ -572,22 +574,34 @@ public class AdminCtrl {
 
 	/*
 	 * 向江
-	 * 新規講師登録完了画面を表示するリクエストハンドラメソッド
+	 * 新規講師登録完了
 	 * @param t
 	 * @param mav 
 	 * @return
 	 */
 	@PostMapping("teInfoRegistComp")
-	public ModelAndView dispTeInfoRegistComp(UserView u, ModelAndView mav) {
+	public ModelAndView teInfoRegistComp(@RequestParam("button") String button, UserDisplay u, ModelAndView mav,
+			Model model) {
 
-		userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(),
-				u.getEnr_year(), 1);
+		//登録ボタンを押下
+		if (button.equals("登録")) {
+			userDisplayService.registerUser(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(),
+					u.getEnr_year(), 1);
 
-		//userDisplayService.InsertTeach(u.getUser_id(), u.getUser_name(), "taskdon1", u.getSchool_name(), u.getEnr_year(), 1);
+			// ポップアップを表示するために、画面遷移をしないようにする
+			mav.addObject("teInfoRegistComp", true);
+			mav.setViewName("admin/teInfoRegistConfirm");
 
-		mav.setViewName("admin/teInfoRegistComp");
+			return mav;
 
-		return mav;
+			// 戻るボタンを押下	
+		} else {
+
+			mav.addObject("teInfoRegist", u);
+			mav.setViewName("admin/teInfoRegist");
+			return mav;
+		}
+
 	}
 
 	/*
@@ -727,11 +741,19 @@ public class AdminCtrl {
 	}
 
 	/**
+	 * 向江
 	 * グループメンバ詳細画面を表示する
 	 * @return
 	 */
-	public String memberDetails() {
-		return "memberDetails";
+	@GetMapping("groupMenberDetails")
+	public ModelAndView memberDetails(ModelAndView mav, GroupMenberDetailView gm) {
+
+		List<GroupMenberDetailView> group = groupDispService.groupMemberDetail(gm.getUser_id());
+
+		mav.addObject("group", group);
+		mav.setViewName("admin/groupMenberDetails");
+
+		return mav;
 	}
 
 	/**
@@ -780,7 +802,93 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("groupCreate")
-	public ModelAndView groupCreate(ModelAndView mav) {
+	public ModelAndView groupCreate(ModelAndView mav,
+			@RequestParam(name = "check", required = false) String[] check,
+			@RequestParam(name = "userId", required = false) String[] userId,
+			@RequestParam(name = "userName", required = false) String[] userName) {
+
+		//グループ一覧の作成ボタンから遷移してきた場合
+		if (userId == null) {
+			mav.addObject("Msg", "ユーザを選択してください");
+			mav.setViewName("admin/groupCreate");
+
+			//ユーザ選択画面から遷移してきた場合
+		} else {
+
+			//チェックボックスで選択したユーザIDとユーザ名を格納
+			List<UserDisplay> userList = new ArrayList<>();
+			for (int i = 0; i < check.length; i++) {
+				UserDisplay user = new UserDisplay();
+				user.setUser_id(userId[i]);
+				user.setUser_name(userName[i]);
+				userList.add(user);
+			}
+
+			mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
+			mav.addObject("selectUser", userList);
+			mav.setViewName("admin/groupCreate");
+		}
+
+		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * ユーザ選択画面を表示する
+	 * @return
+	 */
+	@PostMapping("groupMemberSelect")
+	public ModelAndView groupMemberSelect(ModelAndView mav) {
+
+		//サービスのメソッドを呼び出す
+		Iterable<UserDisplay> userList = userDisplayService.userList();
+
+		mav.addObject("users", userList);
+		mav.setViewName("admin/userSelectList");
+
+		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * グループ作成確認画面
+	 * @return
+	 */
+	@PostMapping("groupCreateConfirm")
+	public ModelAndView groupCreateConfirm(ModelAndView mav, TeamsDisplay t,
+			@RequestParam(name = "check", required = false) String[] check,
+			@RequestParam(name = "userId", required = false) String[] userId) {
+
+		//リーダに任命するメンバ
+		List<String> checkedUserId = new ArrayList<>();
+		
+		//リーダ以外のメンバ
+		List<String> uncheckedUserId = new ArrayList<>();
+
+		
+		if (userId != null) {
+			for (int i = 0; i < userId.length; i++) {
+				if (check != null && Arrays.asList(check).contains(userId[i])) {
+					checkedUserId.add(userId[i]);
+				} else {
+					uncheckedUserId.add(userId[i]);
+				}
+			}
+		}
+		
+		System.out.println("checkyu-zaId");
+		for(String id1 : checkedUserId) {
+			System.out.println(id1);
+		}
+		
+		System.out.println("uncheckyu-zaId");
+		for(String id2 : uncheckedUserId) {
+			System.out.println(id2);
+		}
+
+		mav.addObject("checkedUserId", checkedUserId);
+		mav.addObject("uncheckedUserId", uncheckedUserId);
+		mav.setViewName("admin/groupCreateConfirm");
 
 		return mav;
 	}

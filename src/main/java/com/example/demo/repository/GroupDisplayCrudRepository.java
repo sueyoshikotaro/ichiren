@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupMenberDetailView;
 
 public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Integer> {
 
@@ -55,6 +56,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * グループ詳細表示
 	 */
-	@Query("select t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id")
+	@Query("select t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.group_id = :group_id")
 	public List<GroupDetailView> groupDetail(String group_id);
+	
+	/*
+	 * 向江
+	 * グループメンバ詳細表示
+	 */
+	@Query("select u.user_name, ud.score, ud.user_progress, t.task_name, t.task_priority, t.progress from task tk ud join user u on tk.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where ud.group_id = :group_id")
+	public List<GroupMenberDetailView> groupMemberDetail(String user_id);
 }
+	

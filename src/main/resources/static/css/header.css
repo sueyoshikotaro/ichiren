@@ -19,7 +19,7 @@ body {
 	color: white;
 	font-size: 28px;
 }
-						
+
 /*アイコン(メニューへ遷移する)*/
 .iconLink {
 	-webkit-transition: all .3s;

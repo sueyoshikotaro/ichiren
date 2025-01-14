@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクどん</title>
+</head>
+
+<body>
+	<div class="container" id="container"> <!-- コンテナ共通 -->
+		<h1>グループ作成</h1>
+
+		<p th:text="${Msg}" style="color: red;"></p>
+
+		<form th:action="@{groupCreateConfirm}" method="post">
+			<table border="1">
+				<tr>
+					<th>グループ名</th>
+					<td><input type="text" name="group_name"　required></td>
+				</tr>
+
+				<!--プルダウンメニュー-->
+				<tr>
+					<th>ジャンル名</th>
+					<td>
+						<select th:name="category">
+							<option th:value="卒業研究" th:text="卒業研究">卒業研究</option>
+							<option th:value="インターン" th:text="インターン">インターン</option>
+							<option th:value="設計" th:text="設計">設計</option>
+							<option th:value="イベント" th:text="イベント">イベント</option>
+							<option th:value="その他" th:text="その他">その他</option>
+						</select>
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="2">選択したユーザ</td>
+				</tr>
+
+				<tbody th:if="${selectUser != null}">
+					<tr th:each="user : ${selectUser}">
+						<td>
+							<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
+								id="flexCheckDefault">
+							<input type="hidden" name="userId" th:value="${user.user_id}">
+						</td>
+						<td th:text="${user.user_name}"></td>
+					</tr>
+				</tbody>
+
+				<tbody th:unless="${selectUser != null}">
+					<tr>
+						<td colspan="2">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="2">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="2">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="2">&nbsp;</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+			<button type="button" name="button" value="ユーザを選択" class="btn btn-danger"
+				onclick="userSelect()">ユーザを選択</button>
+
+			<input type="submit" name="button" value="確認">
+			<input type="submit" name="button" value="戻る">
+
+			<!-- グループ名と選択されたジャンル名を送信 -->
+			<input type="hidden" name="group_name" th:value="${group_name}">
+			<input type="hidden" name="genre" th:value="${genre}">
+		</form>
+	</div>
+
+
+	<script>
+		function userSelect() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'groupMemberSelect'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			form.submit();
+		}
+	</script>
+</body>
+
+</html>

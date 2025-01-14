@@ -1,3 +1,4 @@
+<!--ユーザ用メニュー(名称:ホーム)-->
 <!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -16,6 +17,7 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/menuS.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -39,24 +41,26 @@
 						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							メニュー
 						</button>
+						<!--各画面遷移-->
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" href="#">ホーム</a></li> <!--メニュー画面への遷移-->
-
-							<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
-								<li><a class="dropdown-item" href="#">メンバー一覧</a></li>
+							<!--メニュー画面遷移-->
+							<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+							<!--役職判断処理-->
+							<div th:if="${session.user_roll} == 'リーダ'">
+								<li><a class="dropdown-item" href="#">メンバ一覧</a></li>
 							</div>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
 							<li><a class="dropdown-item" href="#">ToDoリスト</a></li>
-
-							<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
+							<!--役職判断処理-->
+							<div th:if="${session.user_roll} == 'リーダ'">
 								<li><a class="dropdown-item" href="#">連絡事項作成</a></li>
 							</div>
 							<li><a class="dropdown-item" href="#">チャット</a></li>
-							<li><a class="dropdown-item" href="#">所属グループ</a></li>
 							<li>
-								<hr class="dropdown-divider">
+								<hr class="dropdown-divider"> <!--線-->
 							</li>
-							<li><a class="dropdown-item" href="#">ログアウト</a></li>
+							<li><a class="dropdown-item" href="#">所属グループ</a></li>
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
 				</ul>
 				</li>
@@ -64,47 +68,34 @@
 			</div>
 		</div>
 	</nav>
-
 </head>
 
 <body>
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2>ホーム</h2>
+		<h2 class="menu-text">ホーム</h2>
 
 		<!-- 連絡事項表示領域(仮配置) -->
 		<div style="overflow-y: scroll; height: 100px;"></div>
 
-		<!-- 遷移ボタン -->
+		<!-- 遷移先(ボタン) -->
 		<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
-			<form name="form1" th:action="@{memberList}" method="get">
-				<button type="submit">メンバ一覧</button>
-			</form>
+			<a class="menu-btn" th:onclick="|location.href='@{memberList}'|">メンバ一覧</a>
 		</div>
 
-		<form name="form1" th:action="@{taskList}" method="get">
-			<button type="submit">タスク一覧</button>
-		</form>
+		<a class="menu-btn" th:onclick="|location.href='@{taskList}'|">タスク一覧</a>
 
-		<form name="form1" th:action="@{tdList}" method="get">
-			<button type="submit">ToDoリスト</button>
-		</form>
+		<a class="menu-btn" th:onclick="|location.href='@{tdList}'|">ToDoリスト</a>
 
 		<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
-			<form name="form1" th:action="@{noticeRegist}" method="get">
-				<button type="submit">連絡事項作成</button>
-			</form>
+			<a class="menu-btn" th:onclick="|location.href='@{noticeRegist}'|">連絡事項作成</a>
 		</div>
 
-		<form name="form1" th:action="@{chat}" method="get">
-			<button type="submit">チャット</button>
-		</form>
-		
-		<form name="form1" th:action="@{deptGroupList}" method="post">
-			<button type="submit">所属グループ一覧</button>
-		</form>
-		
+		<a class="menu-btn" th:onclick="|location.href='@{chat}'|">チャット</a>
+
+		<a class="menu-btn" th:onclick="|location.href='@{deptGroupList}'|">所属グループ一覧</a>
+
 	</div>
 
 	<!--bootstrapのjsリンク接続-->
