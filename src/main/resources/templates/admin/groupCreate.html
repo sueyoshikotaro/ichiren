@@ -10,25 +10,36 @@
 	<div class="container" id="container"> <!-- コンテナ共通 -->
 		<h1>グループ作成</h1>
 
-		<p th:text="${Msg}" style="color: red;"></p>
+		<!--指示文を表示-->
+		<p th:if="${Msg}" th:text="${Msg}"></p>
+
+		<!-- エラー文を表示する -->
+		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:action="@{groupCreateConfirm}" method="post">
 			<table border="1">
 				<tr>
 					<th>グループ名</th>
-					<td><input type="text" name="group_name"　required></td>
+
+					<td th:if="${group_name != null}">
+						<input type="text" name="group_name" th:value="${group_name}">
+					</td>
+
+					<td th:unless="${group_name != null}">
+						<input type="text" name="group_name" required>
+					</td>
 				</tr>
 
 				<!--プルダウンメニュー-->
 				<tr>
 					<th>ジャンル名</th>
 					<td>
-						<select th:name="category">
-							<option th:value="卒業研究" th:text="卒業研究">卒業研究</option>
-							<option th:value="インターン" th:text="インターン">インターン</option>
-							<option th:value="設計" th:text="設計">設計</option>
-							<option th:value="イベント" th:text="イベント">イベント</option>
-							<option th:value="その他" th:text="その他">その他</option>
+						<select th:name="genre" th:selected="${genre}">
+						    <option th:value="卒業研究" th:text="卒業研究" th:selected="${genre == '卒業研究'}">卒業研究</option>
+						    <option th:value="インターン" th:text="インターン" th:selected="${genre == 'インターン'}">インターン</option>
+						    <option th:value="設計" th:text="設計" th:selected="${genre == '設計'}">設計</option>
+						    <option th:value="イベント" th:text="イベント" th:selected="${genre == 'イベント'}">イベント</option>
+						    <option th:value="その他" th:text="その他" th:selected="${genre == 'その他'}">その他</option>
 						</select>
 					</td>
 				</tr>
@@ -42,7 +53,7 @@
 						<td>
 							<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
 								id="flexCheckDefault">
-							<input type="hidden" name="userId" th:value="${user.user_id}">
+							<input type="hidden" name="selectedUserId" th:value="${user.user_id}">
 						</td>
 						<td th:text="${user.user_name}"></td>
 					</tr>
@@ -64,16 +75,12 @@
 
 				</tbody>
 			</table>
-
+			
 			<button type="button" name="button" value="ユーザを選択" class="btn btn-danger"
 				onclick="userSelect()">ユーザを選択</button>
 
-				<button type="button" name="button" value="確認" onclick="formSubmit('確認')">確認</button>
-				<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>
-
-			<!-- グループ名と選択されたジャンル名を送信 -->
-			<input type="hidden" name="group_name" th:value="${group_name}">
-			<input type="hidden" name="genre" th:value="${genre}">
+			<button type="button" name="button" value="確認" onclick="formSubmit('確認')">確認</button>
+			<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>
 		</form>
 	</div>
 
@@ -91,27 +98,27 @@
 			form.submit();
 		}
 	</script>
-	
-	
+
+
 	<!--確認と戻るボタンを押した場合-->
 	<script>
-	    function formSubmit(buttonValue) {
-	        // フォーム要素を取得
-	        var form = document.querySelector('form');
+		function formSubmit(buttonValue) {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
 
-	        // ボタンの値をhiddenフィールドに設定
-	        var hiddenField = document.createElement('input');
-	        hiddenField.type = 'hidden';
-	        hiddenField.name = 'button';
-	        hiddenField.value = buttonValue;
-	        form.appendChild(hiddenField);
+			// ボタンの値をhiddenフィールドに設定
+			var hiddenField = document.createElement('input');
+			hiddenField.type = 'hidden';
+			hiddenField.name = 'button';
+			hiddenField.value = buttonValue;
+			form.appendChild(hiddenField);
 
-	        // コントローラメソッドを呼び出すためにフォームを送信
-	        form.action = 'groupCreateConfirm'; // グループ作成確認画面を表示するコントロールのURL
-	        form.method = 'post';
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'groupCreateConfirm'; // グループ作成確認画面を表示するコントロールのURL
+			form.method = 'post';
 
-	        form.submit();
-	    }
+			form.submit();
+		}
 	</script>
 </body>
 

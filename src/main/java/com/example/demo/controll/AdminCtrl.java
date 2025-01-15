@@ -684,23 +684,23 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("teUpdateComp")
-	public ModelAndView teUpdateComp(@RequestParam("button") String button,UserDisplay u, ModelAndView mav) {
+	public ModelAndView teUpdateComp(@RequestParam("button") String button, UserDisplay u, ModelAndView mav) {
 
 		// 編集ボタンを押下
-		if(button.equals("編集")) {
-			
+		if (button.equals("編集")) {
+
 			userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(), 1);
-		
+
 			// ポップアップを表示するために、画面遷移しないようにする
 			mav.addObject("teUpdateComp", true);
 			mav.setViewName("admin/teUpdateConfirm");
-			
+
 			return mav;
-			
+
 			//戻るボタンを押下
-		
+
 		} else {
-			
+
 			mav.addObject("te", u);
 			mav.setViewName("admin/teUpdate");
 			return mav;
@@ -838,28 +838,48 @@ public class AdminCtrl {
 	public ModelAndView groupCreate(ModelAndView mav,
 			@RequestParam(name = "check", required = false) String[] check,
 			@RequestParam(name = "userId", required = false) String[] userId,
-			@RequestParam(name = "userName", required = false) String[] userName) {
+			@RequestParam(name = "userName", required = false) String[] userName,
+			@RequestParam(name = "group_name", required = false) String group_name,
+			@RequestParam(name = "genre", required = false) String genre) {
 
 		//グループ一覧の作成ボタンから遷移してきた場合
 		if (userId == null) {
-			mav.addObject("Msg", "ユーザを選択してください");
+			mav.addObject("Msg", "ユーザ選択ボタンを押下し、メンバを選択してください。");
 			mav.setViewName("admin/groupCreate");
 
 			//ユーザ選択画面から遷移してきた場合
 		} else {
 
-			//チェックボックスで選択したユーザIDとユーザ名を格納
-			List<UserDisplay> userList = new ArrayList<>();
-			for (int i = 0; i < check.length; i++) {
-				UserDisplay user = new UserDisplay();
-				user.setUser_id(userId[i]);
-				user.setUser_name(userName[i]);
-				userList.add(user);
-			}
+			if (check == null || check.length == 0) {
+				Iterable<UserDisplay> userList = userDisplayService.userList();
 
-			mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
-			mav.addObject("selectUser", userList);
-			mav.setViewName("admin/groupCreate");
+				mav.addObject("users", userList);
+				mav.addObject("errMsg", "メンバを選択してください");
+				mav.setViewName("admin/userSelectList");
+				return mav;
+
+			} else {
+				
+				//チェックボックスで選択したユーザIDとユーザ名を格納
+				List<UserDisplay> userList = new ArrayList<>();
+				for (int i = 0; i < userId.length; i++) {
+				    for (int j = 0; j < check.length; j++) {
+				        if (check[j].equals(userId[i])) {
+				            UserDisplay user = new UserDisplay();
+				            user.setUser_id(userId[i]);
+				            user.setUser_name(userName[i]);
+				            userList.add(user);
+				        }
+				    }
+				}
+				
+				mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
+				mav.addObject("group_name", group_name);
+				mav.addObject("genre", genre);
+				mav.addObject("selectUser", userList);
+				mav.setViewName("admin/groupCreate");
+
+			}
 		}
 
 		return mav;
@@ -871,11 +891,33 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("groupMemberSelect")
-	public ModelAndView groupMemberSelect(ModelAndView mav) {
+	public ModelAndView groupMemberSelect(ModelAndView mav,
+			@RequestParam(name = "selectedUserId", required = false) String selectedUserId,
+			@RequestParam(name = "group_name", required = false) String group_name,
+			@RequestParam(name = "genre", required = false) String genre) {
 
 		//サービスのメソッドを呼び出す
 		Iterable<UserDisplay> userList = userDisplayService.userList();
 
+		//選択しているユーザのIDを元に、チェックボックスをチェックする
+		List<String> selectedUserIds = new ArrayList<>();
+		if (selectedUserId != null) {
+			String[] ids = selectedUserId.split(",");
+		    selectedUserIds = Arrays.asList(ids);
+		}
+
+		
+		//選択されているユーザのチェックボックスをチェックする
+		for (UserDisplay user : userList) {
+			if (selectedUserIds.contains(user.getUser_id())) {
+				user.setChecked(true);
+			} else {
+				user.setChecked(false);
+			}
+		}
+		
+		mav.addObject("group_name", group_name);
+		mav.addObject("genre", genre);
 		mav.addObject("users", userList);
 		mav.setViewName("admin/userSelectList");
 
@@ -890,48 +932,53 @@ public class AdminCtrl {
 	@PostMapping("groupCreateConfirm")
 	public ModelAndView groupCreateConfirm(ModelAndView mav, TeamsDisplay t,
 			@RequestParam(name = "check", required = false) String[] check,
-			@RequestParam(name = "userId", required = false) String[] userId) {
+			@RequestParam(name = "userId", required = false) String[] userId,
+			@RequestParam(name = "group_name", required = false) String group_name,
+			@RequestParam(name = "genre", required = false) String genre) {
 
 		//リーダに任命するメンバ
 		List<String> checkedUserId = new ArrayList<>();
-		
+
 		//リーダ以外のメンバ
 		List<String> uncheckedUserId = new ArrayList<>();
 
-		System.out.println("kita!!!");
-		
-		if (userId != null && check != null) {
-			for (int i = 0; i < userId.length; i++) {
-				if (check != null && Arrays.asList(check).contains(userId[i])) {
-					checkedUserId.add(userId[i]);
-				} else {
-					uncheckedUserId.add(userId[i]);
-				}
-			}
-			//ユーザが選択されていない場合
-		} else if(userId == null) {
-			
-			mav.addObject("Msg", "ユーザを選択してください");
-			mav.setViewName("admin/groupCreate");
-			
-		} else {
-			mav.addObject("Msg", "一人以上のリーダを選択してください");
-			mav.setViewName("admin/groupCreate");
-		}
-		
-		System.out.println("checkyu-zaId");
-		for(String id1 : checkedUserId) {
-			System.out.println(id1);
-		}
-		
-		System.out.println("uncheckyu-zaId");
-		for(String id2 : uncheckedUserId) {
-			System.out.println(id2);
-		}
+		System.out.println(Arrays.toString(userId));
 
-		mav.addObject("checkedUserId", checkedUserId);
-		mav.addObject("uncheckedUserId", uncheckedUserId);
-		mav.setViewName("admin/groupCreateConfirm");
+		System.out.println(Arrays.toString(check));
+
+		System.out.println("グループ名: " + group_name);
+		
+		System.out.println("ジャンル名" + genre);
+		
+		if (group_name == null || group_name.isEmpty()) {
+
+			mav.addObject("errMsg", "グループ名を入力してください");
+			mav.setViewName("admin/groupCreate");
+
+		} else {
+			if (userId != null && check != null) {
+				for (int i = 0; i < userId.length; i++) {
+					if (check != null && Arrays.asList(check).contains(userId[i])) {
+						checkedUserId.add(userId[i]);
+					} else {
+						uncheckedUserId.add(userId[i]);
+					}
+				}
+				mav.addObject("checkedUserId", checkedUserId);
+				mav.addObject("uncheckedUserId", uncheckedUserId);
+				mav.setViewName("admin/groupCreateConfirm");
+
+				//ユーザが選択されていない場合
+			} else if (userId == null) {
+
+				mav.addObject("errMsg", "ユーザを選択してください");
+				mav.setViewName("admin/groupCreate");
+
+			} else {
+				mav.addObject("errMsg", "一人以上のリーダを選択してください");
+				mav.setViewName("admin/groupCreate");
+			}
+		}
 
 		return mav;
 	}
