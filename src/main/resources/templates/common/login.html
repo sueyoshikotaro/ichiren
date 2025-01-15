@@ -89,17 +89,17 @@
 			</div>
 
 			<!--ログインボタン-->
-			<div class="button-group">
-				<button type="submit" class="login-button"
-					th:action="${user_id.startsWith('ad') || user_id.startsWith('te') ? '/taskdon/admin/menu' : '/taskdon/user/deptGroupList'}"
-					method="get">ログイン
-				</button>
-			</div>
+			<!--			<div class="button-group">-->
+			<!--				<button type="submit" class="login-button"-->
+			<!--					th:action="${user_id.startsWith('ad') || user_id.startsWith('te') ? '/taskdon/admin/menu' : '/taskdon/user/deptGroupList'}"-->
+			<!--					method="get">ログイン-->
+			<!--				</button>-->
+			<!--			</div>-->
 
 			<!--ログインボタン-->
-			<!--<div class="button-group">-->
-			<!--	<button type="submit" class="login-button">ログイン</button>-->
-			<!--</div>-->
+			<div class="button-group">
+				<button type="submit" class="login-button">ログイン</button>
+			</div>
 		</form>
 
 		<!--パスワード再設定説明(ポップアップ機能)-->
