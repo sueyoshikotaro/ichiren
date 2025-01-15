@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|所属グループ一覧</title>
+	<title>タスクどん|所属グループ</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,6 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
-	<link rel="stylesheet" th:href="@{/css/deptGroupList.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -60,20 +59,34 @@
 		<h2>所属グループ一覧</h2>
 
 		<!--所属グループを表示-->
-		<table>
-			<tr th:each="deptGroup : ${groupS}">
-				<td th:text="${deptGroup.group_name}"></td>
-				<td th:text="${deptGroup.genre}"></td>
-				<td th:text="${deptGroup.user_roll}"></td>
-				<form th:action="@{menu}" method="get">
-					<input type="hidden" id="group_id" name="group_id" th:value="${deptGroup.group_id}" />
-					<input type="hidden" id="user_roll" name="user_roll" th:value="${deptGroup.user_roll}" />
+		<div class="input-group" th:each="deptGroup : ${groupS}">
+			<select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+				<option selected><a th:text="'グループ名：'+${deptGroup.group_name}"></a></option>
+				<option value="1"><a th:text="'ジャンル　：'+${deptGroup.genre}"></a></option>
+				<option value="2"><a th:text="'役職　　　：'+${deptGroup.user_roll}"></a></option>
+			</select>
+			<form th:action="@{menu}" method="get">
+				<input type="hidden" id="group_id" name="group_id" th:value="${deptGroup.group_id}" />
+				<input type="hidden" id="user_roll" name="user_roll" th:value="${deptGroup.user_roll}" />
 
-					<!--仮置き(後に削除)-->
-					<td><button type="submit" name="button" value="menu">メニューへ</button></td>
-				</form>
-			</tr>
-		</table>
+				<button class="btn btn-outline-secondary" name="button" type="submit" value="menu">選択</button>
+			</form>
+		</div>
+
+		<!--<table>-->
+		<!--	<tr th:each="deptGroup : ${groupS}">-->
+		<!--		<td th:text="${deptGroup.group_name}"></td>-->
+		<!--		<td th:text="${deptGroup.genre}"></td>-->
+		<!--		<td th:text="${deptGroup.user_roll}"></td>-->
+		<!--		<form th:action="@{menu}" method="get">-->
+		<!--			<input type="hidden" id="group_id" name="group_id" th:value="${deptGroup.group_id}" />-->
+		<!--			<input type="hidden" id="user_roll" name="user_roll" th:value="${deptGroup.user_roll}" />-->
+
+		<!--			仮置き(後に削除)-->
+		<!--			<td><button type="submit" name="button" value="menu">メニューへ</button></td>-->
+		<!--		</form>-->
+		<!--	</tr>-->
+		<!--</table>-->
 
 	</div>
 
