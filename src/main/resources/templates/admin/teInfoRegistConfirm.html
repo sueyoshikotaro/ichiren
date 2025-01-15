@@ -18,114 +18,6 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 
-
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
-</head>
-
-<body>
-
-	<h1>タスクどん</h1>
-	<h2>新規講師登録確認画面</h2>
-
-
-
-	<form th:action="@{teInfoRegistComp}" method="post">
-		<table th:each="te : ${te}">
-			<tr>
-				<th>講師ID</th>
-				<td th:text="${te.user_id}"></td>
-			</tr>
-			<tr>
-				<th>講師名</th>
-				<td th:text="${te.user_name}"></td>
-			</tr>
-
-			<tr>
-				<th>所属学校</th>
-				<td th:text="${te.school_name}"></td>
-			</tr>
-			<tr>
-				<th>入社年月日</th>
-				<td th:text="${te.enr_year}"></td>
-			</tr>
-			<tr>
-				<td colspan="2" align="right">
-
-					<input type="hidden" name="user_id" th:value="${te.user_id}">
-					<input type="hidden" name="user_name" th:value="${te.user_name}">
-					<input type="hidden" name="user_pass" th:value="${te.user_pass}">
-					<input type="hidden" name="school_name" th:value="${te.school_name}">
-					<input type="hidden" name="enr_year" th:value="${te.enr_year}">
-					<input type="hidden" name="user_flg" th:value="${te.user_flg}">
-					<button type="button" name="button" value="登録" class="btn btn-danger"
-						onclick="teInfoRegistAndShowPopup()">登録</button>
-						
-					<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
-				</td>
-			</tr>
-		</table>
-	</form>
-
-
-
-	<!-- ポップアップ -->
-	<div class="modal fade" id="teInfoRegistModel" tabindex="-1" role="dialog" aria-labelledby="teInfoRegistModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="teInfoRegistModalLabel">登録完了</h5>
-				</div>
-				<div class="modal-body">
-					<p>登録が完了しました</p>
-				</div>
-				<div class="modal-footer">
-					<form th:action="@{teList}" method="get">
-						<button type="submit" class="btn btn-danger">講師情報一覧へ</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-	<script>
-		function teInfoRegistAndShowPopup() {
-			// フォーム要素を取得
-			var form = document.querySelector('form');
-
-			// コントローラメソッドを呼び出すためにフォームを送信
-			form.action = 'teInfoRegistComp'; // コントローラメソッドの実際のURLに置き換えてください
-			form.method = 'post';
-
-			// buttonパラメータを追加
-			var buttonInput = document.createElement('input');
-			buttonInput.type = 'hidden';
-			buttonInput.name = 'button';
-			buttonInput.value = '登録'; // または '戻る' など必要な値を設定
-			form.appendChild(buttonInput);
-
-			form.submit();
-		}
-	</script>
-
-	<!--ポップアップを表示するためのコード-->
-	<script th:inline="javascript">
-		/*<![CDATA[*/
-		var teInfoRegistComp = /*[[${teInfoRegistComp}]]*/ true;
-		$(document).ready(function () {
-			if (teInfoRegistComp == true) {
-				$('#teInfoRegistModel').modal('show');
-			}
-		});
-		/*]]>*/
-	</script>
-
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
@@ -149,12 +41,23 @@
 							メニュー
 						</button>
 						<ul class="dropdown-menu dropdown-menu-dark">
+							<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
+
+							<!--ログインしているユーザが大ボスの場合-->
+							<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
+								<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
+								</li>
+							</div>
+
+							<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
+							</li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
 							<li>
 								<hr class="dropdown-divider"> <!--線-->
 							</li>
-							<li><a class="dropdown-item" href="#">ログアウト</a></li>
-							<!--リンク例-->
-							<!--<li><a class="dropdown-item" href="#">遷移先の画面名</a></li>-->
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
 				</ul>
 				</li>
@@ -172,7 +75,7 @@
 		<h3>[登録内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
 		<form th:action="@{teInfoRegistComp}" method="post">
-			<table>
+			<table th:each="te : ${te}">
 				<tr>
 					<th>講師ID</th>
 					<td th:text="${te.user_id}"></td>
@@ -195,21 +98,83 @@
 						<input type="submit" value="登録">
 					</td>
 				</tr>
+
+				<tr>
+					<td colspan="2" align="right">
+
+						<input type="hidden" name="user_id" th:value="${te.user_id}">
+						<input type="hidden" name="user_name" th:value="${te.user_name}">
+						<input type="hidden" name="user_pass" th:value="${te.user_pass}">
+						<input type="hidden" name="school_name" th:value="${te.school_name}">
+						<input type="hidden" name="enr_year" th:value="${te.enr_year}">
+						<input type="hidden" name="user_flg" th:value="${te.user_flg}">
+						<button type="button" name="button" value="登録" class="btn btn-danger"
+							onclick="teInfoRegistAndShowPopup()">登録</button>
+
+						<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
+					</td>
+				</tr>
 			</table>
-
-			<input type="hidden" name="user_id" th:value="${te.user_id}">
-			<input type="hidden" name="user_name" th:value="${te.user_name}">
-			<input type="hidden" name="user_pass" th:value="${te.user_pass}">
-			<input type="hidden" name="school_name" th:value="${te.school_name}">
-			<input type="hidden" name="enr_year" th:value="${te.enr_year}">
-			<input type="hidden" name="user_flg" th:value="${te.user_flg}">
-
 		</form>
 
-		<dialog>
-			<p>登録が完了しました</p> <!--メッセージ-->
-			<button type="submit" class="userList">ユーザ一覧</button>
-		</dialog>
+		<!-- ポップアップ -->
+		<div class="modal fade" id="teInfoRegistModel" tabindex="-1" role="dialog"
+			aria-labelledby="teInfoRegistModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="teInfoRegistModalLabel">登録完了</h5>
+					</div>
+					<div class="modal-body">
+						<p>登録が完了しました</p>
+					</div>
+					<div class="modal-footer">
+						<form th:action="@{teList}" method="get">
+							<button type="submit" class="btn btn-danger">講師情報一覧へ</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+		<script>
+			function teInfoRegistAndShowPopup() {
+				// フォーム要素を取得
+				var form = document.querySelector('form');
+
+				// コントローラメソッドを呼び出すためにフォームを送信
+				form.action = 'teInfoRegistComp'; // コントローラメソッドの実際のURLに置き換えてください
+				form.method = 'post';
+
+				// buttonパラメータを追加
+				var buttonInput = document.createElement('input');
+				buttonInput.type = 'hidden';
+				buttonInput.name = 'button';
+				buttonInput.value = '登録'; // または '戻る' など必要な値を設定
+				form.appendChild(buttonInput);
+
+				form.submit();
+			}
+		</script>
+
+		<!--ポップアップを表示するためのコード-->
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			var teInfoRegistComp = /*[[${teInfoRegistComp}]]*/ true;
+			$(document).ready(function () {
+				if (teInfoRegistComp == true) {
+					$('#teInfoRegistModel').modal('show');
+				}
+			});
+			/*]]>*/
+		</script>
+
+
+
 
 	</div>
 

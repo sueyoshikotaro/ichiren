@@ -34,8 +34,16 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	 */
 	@Modifying
 	@Query("update user set user_pass = 'taskdon1' where user_id = :user_id")
-	public void PassReset(String user_id);
+	public void PassFormat(String user_id);
 
+	/*
+	 * 向江
+	 * パスワード再設定
+	 */
+	@Modifying
+	@Query("update user set user_pass = :user_pass where user_id = :user_id")
+	public void passReset(String user_id, String user_pass);
+	
 	/**
 	 * 末吉
 	 * 新規ユーザ登録
