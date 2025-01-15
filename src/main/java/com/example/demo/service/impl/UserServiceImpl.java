@@ -56,4 +56,15 @@ public class UserServiceImpl implements UserServiceInterface {
 			return false;
 		}
 	}
+
+	/*
+	 * 坂本
+	 * ユーザ
+	 * パスワード再設定
+	 */
+	@Override
+	public void userPassReset(String user_pass) {
+
+		userCrudRepo.userPassReset(user_pass);
+	}
 }

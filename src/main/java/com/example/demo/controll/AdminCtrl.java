@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +26,7 @@ import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMenberDetailView;
 import com.example.demo.form.SchoolDisplay;
+import com.example.demo.form.TeamsDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
 import com.example.demo.service.GroupDisplayServiceInterface;
@@ -862,5 +864,43 @@ public class AdminCtrl {
 	 * グループ作成確認画面
 	 * @return
 	 */
+	@PostMapping("groupCreateConfirm")
+	public ModelAndView groupCreateConfirm(ModelAndView mav, TeamsDisplay t,
+			@RequestParam(name = "check", required = false) String[] check,
+			@RequestParam(name = "userId", required = false) String[] userId) {
+
+		//リーダに任命するメンバ
+		List<String> checkedUserId = new ArrayList<>();
+		
+		//リーダ以外のメンバ
+		List<String> uncheckedUserId = new ArrayList<>();
+
+		
+		if (userId != null) {
+			for (int i = 0; i < userId.length; i++) {
+				if (check != null && Arrays.asList(check).contains(userId[i])) {
+					checkedUserId.add(userId[i]);
+				} else {
+					uncheckedUserId.add(userId[i]);
+				}
+			}
+		}
+		
+		System.out.println("checkyu-zaId");
+		for(String id1 : checkedUserId) {
+			System.out.println(id1);
+		}
+		
+		System.out.println("uncheckyu-zaId");
+		for(String id2 : uncheckedUserId) {
+			System.out.println(id2);
+		}
+
+		mav.addObject("checkedUserId", checkedUserId);
+		mav.addObject("uncheckedUserId", uncheckedUserId);
+		mav.setViewName("admin/groupCreateConfirm");
+
+		return mav;
+	}
 
 }

@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -28,6 +26,8 @@ import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -84,9 +84,50 @@ public class UserCtrl {
 	 * @return
 	 */
 	@GetMapping("resetPass")
-	public String resetPass() {
+	public ModelAndView resetPass(@RequestParam("newPass") String user_pass, String button, ModelAndView mav) {
 
-		return "common/resetPass";
+		//確認ボタンを押下
+		if (button.equals("reset")) {
+			mav.addObject("user_pass", user_pass);
+			mav.setViewName("common/resetPass");
+		}
+
+		return mav;
+	}
+
+	/**
+	 * 在籍チェック
+	 * ID重複チェック
+	 * パスワードチェック
+	 * メニュー画面(管理者)を表示
+	 * @return
+	 */
+	@PostMapping("menu")
+	public ModelAndView userIdCheckForAdmin(ModelAndView mav, String user_id, String user_pass) {
+
+		Optional<User> user;
+
+		user = userCrudRepo.findById(user_id);
+
+		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+
+			if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
+
+				//admin無効化のSQL
+
+				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
+				mav.addObject("");
+			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+
+				mav.setViewName("admin/menuAdmin"); //管理者ログイン(通常)
+				mav.addObject("");
+			}
+		} else {
+
+			mav.setViewName("common/login");
+			mav.addObject("errMsg", "ログインできませんでした");
+		}
+		return mav;
 	}
 
 	/**
@@ -97,32 +138,25 @@ public class UserCtrl {
 	 * @return
 	 */
 	@PostMapping("deptGroupList")
-	public ModelAndView userIdCheck(ModelAndView mav, String user_id, String user_pass) {
+	public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
 
 		Optional<User> user;
+
+		List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
 		user = userCrudRepo.findById(user_id);
 
 		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
-			if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
-
-				//admin無効化のSQL挿入欄
-
-				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
-			} else if (user.get().getUser_id().contains("te")) {
-
-				mav.setViewName("admin/menuAdmin"); //管理者ログイン(通常)
-			} else if (user.get().getUser_pass().equals("taskdon1")) {
-
-				mav.setViewName("common/passReset"); //パスワード再設定
-			} else {
-
-				List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+			if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
 
 				mav.setViewName("common/deptGroupList");
 				mav.addObject("groupS", deptGroupList);
 				session.setAttribute("user", user.get());
+			} else {
+
+				mav.setViewName("common/login");
+				mav.addObject("errMsg", "ログインできませんでした");
 			}
 		} else {
 
@@ -132,9 +166,35 @@ public class UserCtrl {
 		return mav;
 	}
 
-	//for (GroupDisplay i : deptGroupList) {
-	//	System.out.println(i);
-	//}
+	/**
+	 * 在籍チェック
+	 * ID重複チェック
+	 * パスワードチェック
+	 * パスワード再設定画面を表示
+	 * @return
+	 */
+	@PostMapping("resetPass")
+	public ModelAndView userIdCheckForResetPass(ModelAndView mav, String user_id, String user_pass) {
+
+		Optional<User> user;
+
+		user = userCrudRepo.findById(user_id);
+
+		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+
+			if (user.get().getUser_pass().equals("taskdon1")) {
+
+				mav.setViewName("common/passReset"); //パスワード再設定
+				mav.addObject("");
+			}
+		} else {
+
+			mav.setViewName("common/login");
+			mav.addObject("errMsg", "ログインできませんでした");
+		}
+
+		return mav;
+	}
 
 	/**
 	 * メニュー画面を表示
@@ -170,7 +230,6 @@ public class UserCtrl {
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
 		int groupId = (int) session.getAttribute("groupId");
-		User user = (User) session.getAttribute("user");
 		String score = "--";
 		List<Task> task = null;
 		if (selectedValue == null || selectedValue.equals("全員")) {
@@ -223,13 +282,18 @@ public class UserCtrl {
 		Date st_date = null;
 		Date end_date = null;
 		int group_id = (int) session.getAttribute("groupId");
+		int score = TaskService.userScore(t.getUser_name(), group_id);
 		try {
 			st_date = sdf.parse(t.getStart_date());
 			end_date = sdf.parse(t.getEnd_date());
 			TaskService.taskRegister(t.getTask_category(), t.getTask_name(), t.getTask_content(), "未着手",
 					st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
 					group_id);
-			System.out.println(t.getGroup_id());
+			System.out.println(t);
+			//スコアの足しこみ
+			score = score + Integer.valueOf(t.getTask_weight());
+			TaskService.userUpScore(score, t.getUser_name(), group_id);
+
 			mav.addObject("tasks", t);
 			mav.setViewName("leader/taskRegistConfirm");
 		} catch (Exception e) {
@@ -259,14 +323,21 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskDetailsChange")
 	public ModelAndView taskDetailChange(@RequestParam("button") String button, TaskForm t, ModelAndView mav) {
-		mav.addObject("task", t);
+		//セッション情報の取得
+		int groupId = (int) session.getAttribute("groupId");
 		//編集ボタンを押下
 		if (button.equals("edit")) {
+			//古いスコアの減算
+			int score = TaskService.userScore(t.getUser_name(), groupId);
+			score = score - Integer.valueOf(t.getTask_weight());
+			TaskService.userUpScore(score, t.getUser_name(), groupId);
+			t.setTask_weight(String.valueOf(score));
 			mav.setViewName("leader/taskEdit");
 			//削除ボタンを押下
 		} else if (button.equals("delete")) {
 			mav.setViewName("leader/taskDeleteConfirm");
 		}
+		mav.addObject("task", t);
 		return mav;
 	}
 
@@ -288,16 +359,25 @@ public class UserCtrl {
 	/**
 	 * タスク編集完了画面を表示するリクエストハンドラメソッド
 	 * 湊原
-	 * (未)スコアの更新
 	 * @param mav
 	 * @return
 	 */
 	@LoginRequired
 	@PostMapping("taskEditComplete")
 	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
+		//セッション情報の取得
+		int groupId = (int) session.getAttribute("groupId");
 
+		//スコアの足しこみ
+		int score = TaskService.userScore(t.getUser_name(), groupId);
+		score = score + Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level());
+		TaskService.userUpScore(score, t.getUser_name(), groupId);
+
+		String weight = String.valueOf(Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level()));
 		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
-				t.getTask_priority(), t.getTask_weight(), t.getUser_name());
+				t.getTask_priority(), weight, t.getUser_name());
+
+		mav.addObject("taskEditComp", true);
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskEditConfirm");
 
@@ -312,8 +392,16 @@ public class UserCtrl {
 	 * @return
 	 */
 	@LoginRequired
-	@PostMapping("taskDeleteConfirm")
+	@PostMapping("taskDeleteComplete")
 	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
+		//セッション情報の取得
+		int groupId = (int) session.getAttribute("groupId");
+		System.out.println(t.getTask_weight());
+		//スコアの足しこみ
+		int score = TaskService.userScore(t.getUser_name(), groupId);
+		System.out.println(score);
+		score = score - Integer.valueOf(t.getTask_weight());
+		TaskService.userUpScore(score, t.getUser_name(), groupId);
 
 		TaskService.taskUpFlg(t.getTask_id());
 		mav.addObject("task", t);

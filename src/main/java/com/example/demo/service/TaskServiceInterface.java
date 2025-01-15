@@ -27,6 +27,9 @@ public interface TaskServiceInterface {
 	//スコアを取得するメソッド
 	public int userScore(String user_name, int group_id);
 	
+	//スコアを更新するメソッド
+	public void userUpScore(int score,String user_name, int group_id);
+	
 	//タスク未承認一覧表示
 	public List<TaskReqView> selectTaskUnapproved();
 	
