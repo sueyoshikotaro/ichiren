@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMenberDetailView;
+import com.example.demo.form.TaskForm;
 
 public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Integer> {
 
@@ -43,14 +44,6 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Query("select * from teams where group_flg = 1 and school_name = :schoolName")
 	public List<Teams> findByCriteria(String schoolName);
-	
-	/*
-	 * cahtGPT
-	 * 管理者_グループ一覧
-	 * グループ一覧
-	 */
-	@Query("SELECT t.group_id,t.group_name,s.school_name,t.group_flg,t.genre,t.work_status,t.all_progress,YEAR(t.est_year) AS formation_year FROM Teams t JOIN School s ON t.school_id = s.school_id WHERE (:estYear IS NULL OR YEAR(t.est_year) = :year) AND :schoolName IS NULL OR s.school_name = :schoolName AND :genre IS NULL OR t.genre = :genre")
-	public List<Teams> findByCriteria(String estYear, String schoolName, String genre);
 
 	/*
 	 * 向江
@@ -63,7 +56,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * グループメンバ詳細表示
 	 */
-	@Query("select u.user_name, ud.score, ud.user_progress, t.task_name, t.task_priority, t.progress from task tk ud join user u on tk.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where ud.group_id = :group_id")
-	public List<GroupMenberDetailView> groupMemberDetail(String user_id);
+	@Query("select u.user_name, ud.score, ud.user_progress, t.task_name, t.task_priority, t.progress from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_name = :user_name")
+	public List<GroupMenberDetailView> groupMemberDetail(String user_name);
+	
+	/*
+	 * 向江
+	 * タスク詳細表示
+	 */
+	@Query("select t.task_name, t.task_priority, t.task_category, t.progress, t.start_date, t.end_date, t.task_content from task t where t.user_id = :user_id and t.task_id = :task_id")
+	public List<TaskForm> taskDetail(int task_id);
 }
 	

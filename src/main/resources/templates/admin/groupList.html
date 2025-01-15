@@ -58,10 +58,10 @@
 					var dropdown = event.target.id;
 					var params = {
 						"selectedValue": selectedValue,
-						"dropdown" : dropdown
+						"dropdown": dropdown
 					};
-					
-					
+
+
 					/*HTML内容のクリア*/
 					var elements = document.getElementsByClassName("content_child");
 					for (var i = 0; i < elements.length; i++) {
@@ -82,13 +82,15 @@
 
 			<div class="content">
 				<div th:each="group : ${groups}" class="content_child" id="data">
-					<div th:text="${group.group_name}"></div>
-					<div th:text="'進捗' + ${group.all_progress} + '％'"></div>
-					<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
-						aria-valuemin="0" aria-valuemax="100">
-						<div class="progress-bar" th:style="'width:'+ ${group.all_progress}+'%'"></div>
+					<div th:text="'グループ：' + ${group.group_name}"></div>
+					<div class="w-50 p-3">
+						<div th:text="'進捗：' + ${group.all_progress} + '％'"></div>
+						<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
+							aria-valuemin="0" aria-valuemax="100">
+							<div class="progress-bar" th:style="'width:'+ ${group.all_progress}+'%'"></div>
+						</div>
 					</div>
-					<div th:text="${group.work_status}"></div>
+					<div th:text="'居場所：' + ${group.work_status}"></div>
 					<div>
 						<form th:action="@{groupDetail}" method="get">
 							<input type="hidden" name="group_id" th:value="${group.group_id}">
