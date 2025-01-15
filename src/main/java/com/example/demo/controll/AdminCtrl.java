@@ -780,7 +780,7 @@ public class AdminCtrl {
 	@GetMapping("taskDeails")
 	public ModelAndView taskDeails(ModelAndView mav, TaskForm t) {
 		
-		List<TaskForm> task = groupDispService.taskDetail(t.getUser_id(), t.getTask_id());
+		List<TaskForm> task = groupDispService.taskDetail(t.getTask_id());
 		
 		mav.addObject("task", task);
 		mav.setViewName("admin/taskDeails");

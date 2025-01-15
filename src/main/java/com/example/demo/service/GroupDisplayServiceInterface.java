@@ -27,5 +27,5 @@ public interface GroupDisplayServiceInterface {
 	public List<GroupMenberDetailView> groupMemberDetail(String user_name);
 	
 	//タスク詳細表示
-	public List<TaskForm> taskDetail(String user_id, int task_id);
+	public List<TaskForm> taskDetail(int task_id);
 }
