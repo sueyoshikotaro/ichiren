@@ -68,8 +68,8 @@
 			<button type="button" name="button" value="ユーザを選択" class="btn btn-danger"
 				onclick="userSelect()">ユーザを選択</button>
 
-			<input type="submit" name="button" value="確認">
-			<input type="submit" name="button" value="戻る">
+				<button type="button" name="button" value="確認" onclick="formSubmit('確認')">確認</button>
+				<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>
 
 			<!-- グループ名と選択されたジャンル名を送信 -->
 			<input type="hidden" name="group_name" th:value="${group_name}">
@@ -78,6 +78,7 @@
 	</div>
 
 
+	<!--ユーザを選択ボタンを押した場合-->
 	<script>
 		function userSelect() {
 			// フォーム要素を取得
@@ -89,6 +90,28 @@
 
 			form.submit();
 		}
+	</script>
+	
+	
+	<!--確認と戻るボタンを押した場合-->
+	<script>
+	    function formSubmit(buttonValue) {
+	        // フォーム要素を取得
+	        var form = document.querySelector('form');
+
+	        // ボタンの値をhiddenフィールドに設定
+	        var hiddenField = document.createElement('input');
+	        hiddenField.type = 'hidden';
+	        hiddenField.name = 'button';
+	        hiddenField.value = buttonValue;
+	        form.appendChild(hiddenField);
+
+	        // コントローラメソッドを呼び出すためにフォームを送信
+	        form.action = 'groupCreateConfirm'; // グループ作成確認画面を表示するコントロールのURL
+	        form.method = 'post';
+
+	        form.submit();
+	    }
 	</script>
 </body>
 
