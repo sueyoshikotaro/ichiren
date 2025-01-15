@@ -37,8 +37,8 @@ body {
 	background-size: cover;
 	max-width: 480px;
 	padding: 20px;
-	margin-top: 5px;
+	margin-top: 8px;
 	border: 2px solid black;
-	border-radius: 20px;
+	border-radius: 10px;
 	font-weight: bold;
 }
