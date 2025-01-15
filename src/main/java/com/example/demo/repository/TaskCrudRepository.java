@@ -27,6 +27,15 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	public List<Task> selectTask(String user, int group_id);
 
 	/**
+	 * タスク詳細データ取得
+	 * 湊原
+	 * @param task_id
+	 * @return
+	 */
+	@Query("select * ,user.user_name from task inner join user on task.user_id=user.user_id inner join teams on task.group_id=teams.group_id where teams.group_id=:group_id and task_flg= 1 and task_id = :task_id;")
+	public List<Task> selectTaskDetails(int task_id, int group_id);
+	
+	/**
 	 * 湊原
 	 * 担当者検索
 	 */
@@ -83,4 +92,14 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	@Modifying
 	@Query("update user_detail set score=:score where user_id=(select user_id from user where user_name=:user_name) and group_id=:group_id;")
 	public void updateScore(int score, String user_name, int group_id);
+	
+	/**
+	 * 湊原
+	 * タスクの進捗を更新するメソッド
+	 */
+	@Modifying
+	@Query("update task set progress=:progress where task_id=:task_id;")
+	public void updateProgress(int task_id, int progress);
+
+	
 }
