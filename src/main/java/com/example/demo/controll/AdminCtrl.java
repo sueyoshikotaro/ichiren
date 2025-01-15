@@ -26,6 +26,7 @@ import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMenberDetailView;
 import com.example.demo.form.SchoolDisplay;
+import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsDisplay;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
@@ -742,6 +743,8 @@ public class AdminCtrl {
 	@GetMapping("groupDetail")
 	public ModelAndView groupDetail(ModelAndView mav, GroupDetailView g) {
 
+		System.out.println(g.getGroup_id());
+		
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
 
 		mav.addObject("group", group);
@@ -756,16 +759,36 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("groupMenberDetails")
-	public ModelAndView memberDetails(ModelAndView mav, GroupMenberDetailView gm) {
+	public ModelAndView memberDetails(ModelAndView mav,
+			@RequestParam(name="user_name") String user_name) {
 
-		List<GroupMenberDetailView> group = groupDispService.groupMemberDetail(gm.getUser_id());
-
+		System.out.println(user_name);
+		
+		List<GroupMenberDetailView> group = groupDispService.groupMemberDetail(user_name);
+		
 		mav.addObject("group", group);
 		mav.setViewName("admin/groupMenberDetails");
 
 		return mav;
 	}
 
+	/*
+	 * 向江
+	 * タスク詳細閲覧画面を表示する
+	 * @return
+	 */
+	@GetMapping("taskDeails")
+	public ModelAndView taskDeails(ModelAndView mav, TaskForm t) {
+		
+		List<TaskForm> task = groupDispService.taskDetail(t.getUser_id(), t.getTask_id());
+		
+		mav.addObject("task", task);
+		mav.setViewName("admin/taskDeails");
+		
+		return mav;
+		
+	}
+	
 	/**
 	 * グループ編集画面を表示する
 	 * @return

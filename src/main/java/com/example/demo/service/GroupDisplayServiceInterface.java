@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMenberDetailView;
+import com.example.demo.form.TaskForm;
 
 public interface GroupDisplayServiceInterface {
 
@@ -16,9 +17,6 @@ public interface GroupDisplayServiceInterface {
 
 	public List<Teams> findAll();
 
-	// cahtGPT
-	public List<Teams> getTeamsByCriteria(String estYear, String schoolName, String genre);
-
 	//湊原
 	public List<Teams> getTeamsByCriteria(String schoolName);
 	
@@ -26,5 +24,8 @@ public interface GroupDisplayServiceInterface {
 	public List<GroupDetailView> groupDetail(String group_id);
 	
 	//グループメンバ詳細表示
-	public List<GroupMenberDetailView> groupMemberDetail(String user_id);
+	public List<GroupMenberDetailView> groupMemberDetail(String user_name);
+	
+	//タスク詳細表示
+	public List<TaskForm> taskDetail(String user_id, int task_id);
 }
