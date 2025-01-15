@@ -866,7 +866,7 @@ public class AdminCtrl {
 		List<String> uncheckedUserId = new ArrayList<>();
 
 		
-		if (userId != null) {
+		if (userId != null && check != null) {
 			for (int i = 0; i < userId.length; i++) {
 				if (check != null && Arrays.asList(check).contains(userId[i])) {
 					checkedUserId.add(userId[i]);
@@ -874,6 +874,9 @@ public class AdminCtrl {
 					uncheckedUserId.add(userId[i]);
 				}
 			}
+		} else if(userId == null) {
+			mav.addObject("Msg", "ユーザを選択してください");
+			mav.setViewName(null);
 		}
 		
 		System.out.println("checkyu-zaId");
