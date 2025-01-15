@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -28,6 +26,8 @@ import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -80,7 +80,37 @@ public class UserCtrl {
 	}
 
 	/**
-	 * パスワード再設定画面を表示
+	 * 在籍チェック
+	 * ID重複チェック
+	 * パスワードチェック
+	 * パスワード再設定画面に遷移
+	 * @return
+	 */
+	@PostMapping("resetPass")
+	public ModelAndView userIdCheckForResetPass(ModelAndView mav, String user_id, String user_pass) {
+
+		Optional<User> user;
+
+		user = userCrudRepo.findById(user_id);
+
+		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+
+			if (user.get().getUser_pass().equals("taskdon1")) {
+
+				mav.setViewName("common/passReset"); //パスワード再設定
+				mav.addObject("");
+			}
+		} else {
+
+			mav.setViewName("common/login");
+			mav.addObject("errMsg", "ログインできませんでした");
+		}
+
+		return mav;
+	}
+
+	/**
+	 * パスワード再設定
 	 * @return
 	 */
 	@GetMapping("resetPass")
@@ -99,7 +129,7 @@ public class UserCtrl {
 	 * 在籍チェック
 	 * ID重複チェック
 	 * パスワードチェック
-	 * メニュー画面(管理者)を表示
+	 * ログイン後、メニュー(管理者)画面に遷移
 	 * @return
 	 */
 	@PostMapping("menu")
@@ -134,7 +164,7 @@ public class UserCtrl {
 	 * 在籍チェック
 	 * ID重複チェック
 	 * パスワードチェック
-	 * 所属グループ一覧画面を表示
+	 * ログイン後、所属グループ一覧画面に遷移
 	 * @return
 	 */
 	@PostMapping("deptGroupList")
@@ -167,49 +197,49 @@ public class UserCtrl {
 	}
 
 	/**
-	 * 所属グループ一覧画面表示
+	 * 所属グループ一覧
 	 * @return
 	 */
 	@GetMapping("deptGroupList")
-	public String viewDeptGroupList(String user_id, String user_pass) {
+	public ModelAndView viewDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
 
-		return "common/deptGroupList";
-	}
+		session.removeAttribute("groupId"); //グループIDのセッション破棄
 
-	/**
-	 * 在籍チェック
-	 * ID重複チェック
-	 * パスワードチェック
-	 * パスワード再設定画面を表示
-	 * @return
-	 */
-	@PostMapping("resetPass")
-	public ModelAndView userIdCheckForResetPass(ModelAndView mav, String user_id, String user_pass) {
+		//グループ情報の取得
+		List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
-		Optional<User> user;
-
-		user = userCrudRepo.findById(user_id);
-
-		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
-
-			if (user.get().getUser_pass().equals("taskdon1")) {
-
-				mav.setViewName("common/passReset"); //パスワード再設定
-				mav.addObject("");
-			}
-		} else {
-
-			mav.setViewName("common/login");
-			mav.addObject("errMsg", "ログインできませんでした");
-		}
+		mav.setViewName("common/deptGroupList");
+		mav.addObject("groupS", deptGroupList);
 
 		return mav;
 	}
 
 	/**
-	 * メニュー画面を表示
+	 * メニュー(ユーザ)
 	 * @return
 	 */
+	//	@LoginRequired
+	//	@GetMapping("menu")
+	//	public String menu(@RequestParam(name = "group_id", required = false) Integer group_id,
+	//			@RequestParam(name = "user_roll", required = false) String user_roll) {
+	//
+	//		if (group_id != null && user_roll != null) {
+	//			//セッションに値を設定
+	//			session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ名,担当者検索用
+	//			session.setAttribute("groupId", group_id); //グループID,
+	//			session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
+	//		}
+	//		
+	//		if() {
+	//			session.removeAttribute("groupUser");
+	//			session.removeAttribute("groupId");
+	//			session.removeAttribute("user_roll");
+	//			return "redirect:/taskdon/user/deptGroupList";
+	//		}
+	//
+	//		return "common/menuUser";
+	//	}
+
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu(@RequestParam(name = "group_id", required = false) Integer group_id,
@@ -467,12 +497,12 @@ public class UserCtrl {
 	}
 
 	/**
-	 * 連絡事項作成画面を表示
+	 * ToDoリスト画面を表示
 	 * @return
 	 */
 
 	/**
-	 * ToDoリスト画面を表示
+	 * 連絡事項作成画面を表示
 	 * @return
 	 */
 
