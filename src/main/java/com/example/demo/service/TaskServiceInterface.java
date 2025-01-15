@@ -8,31 +8,39 @@ import com.example.demo.entity.TaskReqView;
 
 public interface TaskServiceInterface {
 	//タスク一覧表示
-	public List<Task> taskDisplayList(String user,int group_id);
-	
+	public List<Task> taskDisplayList(String user, int group_id);
+
+	//タスクの詳細データを取得
+	public List<Task> taskDetails(int task_id, int group_id);
+
 	//タスク登録
 	public void taskRegister(String task_category, String task_name, String task_content, String string,
-			Date start_date, Date end_date, String task_priority, String task_level, String task_weight, String user_name, int group_id);
-		
+			Date start_date, Date end_date, String task_priority, String task_level, String task_weight,
+			String user_name, int group_id);
+
 	//タスク担当者検索
 	public Iterable<String> taskUserSearch(int group_id);
-	
+
 	//タスク編集
 	public void taskUpdate(int task_id, String task_category, String task_name, String task_content,
 			String task_priority, String task_weight, String user_name);
-	
+
 	//タスクフラグ更新(削除)
 	public void taskUpFlg(int task_id);
-	
+
 	//スコアを取得するメソッド
 	public int userScore(String user_name, int group_id);
-	
+
 	//スコアを更新するメソッド
-	public void userUpScore(int score,String user_name, int group_id);
-	
+	public void userUpScore(int score, String user_name, int group_id);
+
+	//タスクの進捗を更新するメソッド
+	public void taskUpProgress(int task_id, int progress);
+
 	//タスク未承認一覧表示
 	public List<TaskReqView> selectTaskUnapproved();
-	
+
 	//タスク未承認確認表示
 	public void taskReqFlg();
+
 }

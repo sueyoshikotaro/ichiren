@@ -28,11 +28,20 @@ public class TaskServiceImpl implements TaskServiceInterface {
 		List<Task> result;
 		if (user.equals("全員")) {
 			result = repo.selectTask(group_id);
-
 		} else {
 			result = repo.selectTask(user, group_id);
 		}
 		return result;
+	}
+	
+	/**
+	 * タスクの詳細データを取得
+	 * 湊原
+	 * @param group_id 
+	 */
+	@Override
+	public List<Task> taskDetails(int task_id, int group_id) {
+		return repo.selectTaskDetails(task_id,group_id);
 	}
 
 	/**
@@ -95,6 +104,17 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	public void userUpScore(int score, String user_name, int group_id) {
 		repo.updateScore(score, user_name, group_id);
 	}
+	
+	/**
+	 * 湊原
+	 * タスクの進捗を更新するメソッド
+	 */
+	@Override
+	public void taskUpProgress(int task_id, int progress) {
+		
+		repo.updateProgress(task_id, progress);
+		
+	}
 
 	/*
 	 * 向江
@@ -115,5 +135,4 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	public void taskReqFlg() {
 
 	}
-
 }

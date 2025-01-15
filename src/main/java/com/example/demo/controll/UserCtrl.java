@@ -307,10 +307,15 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskDetails")
-	public ModelAndView taskDetail(ModelAndView mav, TaskForm t) {
-
-		mav.addObject("task", t);
+	public ModelAndView taskDetail(@RequestParam(name = "taskProgress", required = false) String progress,
+			@RequestParam(name="task_id") Integer task_id, ModelAndView mav) {
+		mav.getModel().clear();
+		if (progress != null) {
+			TaskService.taskUpProgress(task_id, Integer.valueOf(progress));
+		}
+		mav.addObject("task", TaskService.taskDetails(task_id,(int) session.getAttribute("groupId")));
 		mav.setViewName("common/taskDetails");
 		return mav;
 	}
