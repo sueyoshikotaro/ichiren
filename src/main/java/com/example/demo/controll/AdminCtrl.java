@@ -875,6 +875,7 @@ public class AdminCtrl {
 		//リーダ以外のメンバ
 		List<String> uncheckedUserId = new ArrayList<>();
 
+		System.out.println("kita!!!");
 		
 		if (userId != null && check != null) {
 			for (int i = 0; i < userId.length; i++) {
@@ -884,9 +885,15 @@ public class AdminCtrl {
 					uncheckedUserId.add(userId[i]);
 				}
 			}
+			//ユーザが選択されていない場合
 		} else if(userId == null) {
+			
 			mav.addObject("Msg", "ユーザを選択してください");
-			mav.setViewName(null);
+			mav.setViewName("admin/groupCreate");
+			
+		} else {
+			mav.addObject("Msg", "一人以上のリーダを選択してください");
+			mav.setViewName("admin/groupCreate");
 		}
 		
 		System.out.println("checkyu-zaId");
