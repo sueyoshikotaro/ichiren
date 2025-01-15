@@ -116,11 +116,11 @@ public class UserCtrl {
 				//admin無効化のSQL
 
 				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
-				mav.addObject("");
+				session.setAttribute("user", user.get());
 			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
 
 				mav.setViewName("admin/menuAdmin"); //管理者ログイン(通常)
-				mav.addObject("");
+				session.setAttribute("user", user.get());
 			}
 		} else {
 
