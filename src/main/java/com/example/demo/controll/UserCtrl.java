@@ -84,7 +84,7 @@ public class UserCtrl {
 	 * @return
 	 */
 	@GetMapping("resetPass")
-	public ModelAndView resetPass(@RequestParam("newPass") String user_pass, String button, ModelAndView mav) {
+	public ModelAndView resetPass(String user_pass, String button, ModelAndView mav) {
 
 		//確認ボタンを押下
 		if (button.equals("reset")) {
@@ -167,6 +167,16 @@ public class UserCtrl {
 	}
 
 	/**
+	 * 所属グループ一覧画面表示
+	 * @return
+	 */
+	@GetMapping("deptGroupList")
+	public String viewDeptGroupList(String user_id, String user_pass) {
+
+		return "common/deptGroupList";
+	}
+
+	/**
 	 * 在籍チェック
 	 * ID重複チェック
 	 * パスワードチェック
@@ -202,15 +212,15 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@GetMapping("menu")
-	public String menu(int group_id, String user_roll) {
+	public String menu(@RequestParam(name = "group_id", required = false) Integer group_id,
+			@RequestParam(name = "user_roll", required = false) String user_roll) {
 
-		//セッションに値を設定
-		session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ名,担当者検索用
-		session.setAttribute("groupId", group_id); //グループID,
-		session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
-
-		//System.out.println(group_id);
-		//System.out.println(user_roll);
+		if (group_id != null && user_roll != null) {
+			//セッションに値を設定
+			session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ名,担当者検索用
+			session.setAttribute("groupId", group_id); //グループID,
+			session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
+		}
 
 		return "common/menuUser";
 	}

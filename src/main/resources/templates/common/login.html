@@ -22,6 +22,7 @@
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 </head>
 
+
 <body>
 	<!--コンテナ(ログインのみ別種コンテナ)-->
 	<div class="login-container">
@@ -91,7 +92,7 @@
 			<!--ログインボタン-->
 			<!--			<div class="button-group">-->
 			<!--				<button type="submit" class="login-button"-->
-			<!--					th:action="${user_id.startsWith('ad') || user_id.startsWith('te') ? '/taskdon/admin/menu' : '/taskdon/user/deptGroupList'}"-->
+			<!--					th:action="${user_id.startsWith('te') || user_id.startsWith('ad') ? '/taskdon/admin/menu' : '/taskdon/user/deptGroupList'}"-->
 			<!--					method="get">ログイン-->
 			<!--				</button>-->
 			<!--			</div>-->
