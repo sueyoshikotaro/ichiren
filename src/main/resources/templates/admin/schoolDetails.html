@@ -40,29 +40,25 @@
 						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							メニュー
 						</button>
+						<!--各画面遷移-->
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<ul class="dropdown-menu dropdown-menu-dark">
-								<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
-								<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
-								<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
-
-								<!--ログインしているユーザが大ボスの場合-->
-								<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
-									<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
-									</li>
-								</div>
-
-								<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
+							<!--メニュー画面遷移-->
+							<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
+							<!--役職判断処理(管理者のBOSS)-->
+							<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
+								<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
 								</li>
-								<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
-								<li>
-									<hr class="dropdown-divider"> <!--線-->
-								</li>
-								<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
-							</ul>
+							</div>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
+							<li>
+								<hr class="dropdown-divider"> <!--線-->
+							</li>
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
-				</ul>
-				</li>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -75,9 +71,22 @@
 
 		<h2>学校情報詳細</h2>
 
+		<!--学校IDと学校名(表示)-->
 		<tr th:each="schoolDetails : ${schoolS}" th:if="${schoolDetailsStat.index == 0}">
-			<p class="info-text" th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
-			<p class="info-text" th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="basic-addon1">学校ID</span>
+				<input type="text" class="form-control info-text" th:value="${schoolDetails.school_id}"
+					aria-label="Username" aria-describedby="basic-addon1" readonly>
+			</div>
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="basic-addon1">学校名</span>
+				<input type="text" class="form-control info-text" th:value="${schoolDetails.school_name}"
+					aria-label="Username" aria-describedby="basic-addon1" readonly>
+			</div>
+
+			<!-- [旧] -->
+			<!--<p class="info-text" th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>-->
+			<!--<p class="info-text" th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>-->
 		</tr>
 
 		<form th:action="@{schoolDetailsChange}" th:object="${FormContent}" method="post">
@@ -95,7 +104,8 @@
 					<td>
 						<div class="form-check">
 							<input class="form-check-input" type="radio" name="flexRadioDefault"
-								th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}" th:checked="${schoolDetailsStat.index == 0}">
+								th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
+								th:checked="${schoolDetailsStat.index == 0}">
 							<label class="form-check-label" th:for="${schoolDetails.room_id}"></label>
 						</div>
 					</td>
@@ -110,9 +120,16 @@
 
 			<input type="hidden" id="before_room_name" name="before_room_name">
 
-			<button type="submit" name="button" value="add">追加</button>
-			<button type="submit" name="button" value="edit">編集</button>
-			<button type="submit" name="button" value="delete">削除</button>
+			<div class="muveS">
+				<button type="submit" name="button" class="move-btn" value="add">追加</button>
+				<button type="submit" name="button" class="move-btn" value="edit">編集</button>
+				<button type="submit" name="button" class="move-btn" value="delete">削除</button>
+			</div>
+
+			<!-- [旧] -->
+			<!--<button type="submit" name="button" value="add">追加</button>-->
+			<!--<button type="submit" name="button" value="edit">編集</button>-->
+			<!--<button type="submit" name="button" value="delete">削除</button>-->
 		</form>
 	</div>
 
