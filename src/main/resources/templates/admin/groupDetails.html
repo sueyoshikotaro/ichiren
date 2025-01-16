@@ -64,13 +64,20 @@
 				<form th:action="@{groupMenberDetails}" method="get">
 					<input type="hidden" name="user_name" th:value="${group.user_name}">
 					<input type="hidden" name="group_name" th:value="${group.group_name}">
-					<button type="submit" name="button" class="btn btn-detail" value="詳細">
+					<button type="submit" name="button" class="btn btn-detail" value="詳細">詳細</button>
 				</form>
 			</div>
 		</div>
 
 		<!-- コンテナ最下のボタン -->
-		<button th:onclick="|location.href='@{groupUpdate}'|">編集</button>
+		<div>
+			<form th:acthion="@{gorupUpdate}" method="post">
+				<input type="hidden" name="group_id" th:value="${group.group_id}">
+				<!--				<input type="hidden" name="group_name" th:value="${group.group_name}">-->
+				<button type="submit" name="button" class="btn btn-update" value="編集">編集</button>
+			</form>
+		</div>
+
 		<button th:onclick="|location.href='@{groupAdd}'|">追加</button>
 		<button th:onclick="|location.href='@{groupDiss}'|">解散</button>
 

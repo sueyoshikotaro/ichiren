@@ -107,6 +107,15 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		return groupDispCrudRepo.taskDetail(task_name);
 	}
 
+	/*
+	 * 向江
+	 * グループ編集
+	 */
+	@Override
+	public void groupEdit(String user_roll) {
+
+		groupDispCrudRepo.groupEdit(user_roll);
+
 	/**
 	 * 末吉
 	 * グループ作成
