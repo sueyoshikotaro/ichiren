@@ -101,40 +101,44 @@
 
 		<!--タスク内容(繰返し)-->
 		<div class="content">
-			<div th:each="task : ${tasks}" class="content_child content-boxS" id="data">
-				<div class="task-name" th:text="'【'+${task.task_name}+'】'"></div>
-				<div class="input-group mb-3 detail-contents">
-					<span class="input-group-text" id="basic-addon1">優先度</span>
-					<input type="text" class="form-control" th:value="${task.task_priority}" aria-label="Username"
-						aria-describedby="basic-addon1" readonly>
-				</div>
-				<div class="input-group mb-3 detail-contents">
-					<span class="input-group-text" id="basic-addon1">ステータス</span>
-					<input type="text" class="form-control" th:value="${task.task_status}" aria-label="Username"
-						aria-describedby="basic-addon1" readonly>
-				</div>
-				<div class="input-group mb-3 detail-contents">
-					<span class="input-group-text" id="basic-addon1">締切日</span>
-					<input type="text" class="form-control" th:value="${task.end_date}" aria-label="Username"
-						aria-describedby="basic-addon1" readonly>
-				</div>
-				<div class="input-group mb-3 detail-contents">
-					<span class="input-group-text" id="basic-addon1">進捗</span>
-					<input type="text" class="form-control" th:value="${task.progress}+'％'" aria-label="Username"
-						aria-describedby="basic-addon1" readonly>
-				</div>
+			<div th:each="task : ${tasks}" class="content_child" id="data">
+				<div class="box1">
+					<div class="task-name" th:text="'【'+${task.task_name}+'】'"></div>
+					<div class="input-group mb-3">
+						<span class="input-group-text" id="basic-addon1">優先度　　</span>
+						<input type="text" class="form-control" th:value="${task.task_priority}" aria-label="Username"
+							aria-describedby="basic-addon1" readonly>
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text" id="basic-addon1" style="margin-top: -9px;">ステータス</span>
+						<input type="text" class="form-control" th:value="${task.task_status}" aria-label="Username"
+							aria-describedby="basic-addon1" style="margin-top: -9px;" readonly>
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text" id="basic-addon1" style="margin-top: -9px;">締切日　　</span>
+						<input type="text" class="form-control" th:value="${task.end_date}" aria-label="Username"
+							aria-describedby="basic-addon1" style="margin-top: -9px;" readonly>
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text" id="basic-addon1" style="margin-top: -9px;">進捗　　　</span>
+						<input type="text" class="form-control" th:value="${task.progress}+'％'" aria-label="Username"
+							aria-describedby="basic-addon1" style="margin-top: -9px;" readonly>
+					</div>
+					<!--優先度等のテキストにはサイズ調整するため直接空白を入れています-->
+					<!--余白も直接書き込んでます-->
 
-				<div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50"
-					aria-valuemin="0" aria-valuemax="100" style="height:25px">
-					<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
-						th:style="'width:'+ ${task.progress}+'%'"><label class="var-text"
-							th:text="${task.progress}+'%'"></div>
-				</div>
-				<div>
-					<form th:action="@{taskDetails}" method="post">
-						<input type="hidden" name="task_id" th:value="${task.task_id}">
-						<button type="submit" class="detail-btn">詳細</a>
-					</form>
+					<div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50"
+						aria-valuemin="0" aria-valuemax="100" style="height:25px">
+						<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
+							th:style="'width:'+ ${task.progress}+'%'"><label class="var-text"
+								th:text="${task.progress}+'%'"></div>
+					</div>
+					<div>
+						<form th:action="@{taskDetails}" method="post">
+							<input type="hidden" name="task_id" th:value="${task.task_id}">
+							<button type="submit" class="detail-btn">詳細</a>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
