@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMenberDetailView;
+import com.example.demo.form.TaskForm;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.service.GroupDisplayServiceInterface;
 
@@ -58,7 +59,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
-	
+
 	/*
 	 * 湊原
 	 * 管理者_グループ一覧
@@ -66,35 +67,17 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 */
 	@Override
 	public List<Teams> getTeamsByCriteria(String schoolName) {
-		
+
 		return groupDispCrudRepo.findByCriteria(schoolName);
 	}
-	
-	/*
-	 * cahtGPT
-	 * 管理者_グループ一覧
-	 * グループ一覧
-	 */
-	@Override
-	public List<Teams> getTeamsByCriteria(String estYear, String schoolName, String genre) {
-		
-		return groupDispCrudRepo.findByCriteria(estYear, schoolName, genre);
-	}
 
-	@Override
-	public List<Teams> findDistinctEstYear(String estYear) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
-
-	
 	/*
 	 * 向江
 	 * グループ詳細
 	 */
 	@Override
 	public List<GroupDetailView> groupDetail(String group_id) {
-		
+
 		return groupDispCrudRepo.groupDetail(group_id);
 	}
 
@@ -103,12 +86,25 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ詳細
 	 */
 	@Override
-	public List<GroupMenberDetailView> groupMemberDetail(String user_id) {
-		
-		return groupDispCrudRepo.groupMemberDetail(user_id);
+	public List<GroupMenberDetailView> groupMemberDetail(String user_name) {
+
+		return groupDispCrudRepo.groupMemberDetail(user_name);
 	}
 
-	
-	
+	@Override
+	public List<Teams> findDistinctEstYear(String estYear) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	/*
+	 * 向江
+	 * タスク詳細
+	 */
+	@Override
+	public List<TaskForm> taskDetail(String user_id, int task_id) {
+
+		return groupDispCrudRepo.taskDetail(task_id);
+	}
 
 }

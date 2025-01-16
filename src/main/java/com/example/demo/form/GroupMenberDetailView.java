@@ -8,8 +8,8 @@ import lombok.Data;
 public class GroupMenberDetailView {
 
 	@Id
-	private String user_id;
 	private String user_name;
+	private String user_id;
 	private int score;
 	private int user_progress;
 	
