@@ -23,16 +23,4 @@ public class GroupServiceImpl implements GroupServiceInterface {
 
 		return groupCrudRepo.deptGroupList(user_id);
 	}
-
-	/**
-	 * 坂本
-	 * リーダ・メンバ
-	 * メニュー
-	 */
-	//	@Override
-	//	public List<GroupDisplay> selectRoll() {
-	//
-	//		return groupCrudRepo.selectRoll();
-	//		
-	//	}
 }
