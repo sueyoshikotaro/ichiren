@@ -780,16 +780,17 @@ public class AdminCtrl {
 	@GetMapping("taskDeails")
 	public ModelAndView taskDeails(ModelAndView mav, TaskForm t) {
 		
-		List<TaskForm> task = groupDispService.taskDetail(t.getTask_id());
+		List<TaskForm> task = groupDispService.taskDetail(t.getTask_name());
 		
 		mav.addObject("task", task);
-		mav.setViewName("admin/taskDeails");
+		mav.setViewName("admin/groupMenberTaskDetails");
 		
 		return mav;
 		
 	}
 	
 	/**
+	 * 向江
 	 * グループ編集画面を表示する
 	 * @return
 	 */

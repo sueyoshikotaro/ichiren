@@ -63,7 +63,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * タスク詳細表示
 	 */
-	@Query("select t.task_name, t.task_priority, t.task_category, t.progress, t.start_date, t.end_date, t.task_content from task t where t.user_id = :user_id and t.task_id = :task_id")
-	public List<TaskForm> taskDetail(int task_id);
+	@Query("select t.task_name, t.task_priority, t.task_category, t.progress, t.start_date, t.end_date, t.task_content from task t where t.task_name = :task_name")
+	public List<TaskForm> taskDetail(String task_name);
 }
 	
