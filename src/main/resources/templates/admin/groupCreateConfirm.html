@@ -1,5 +1,5 @@
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
-<html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|グループ作成確認</title>
+	<title>タスクどん|グループ作成</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,6 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
-
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -47,10 +46,10 @@
 							<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
 							<!--役職判断処理(管理者のBOSS)-->
-<!--							<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">-->
-<!--								<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>-->
-<!--								</li>-->
-<!--							</div>-->
+							<!--<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
+								<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
+								</li>
+							</div>-->
 							<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a></li>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
 							<li>
@@ -69,12 +68,47 @@
 <body>
 	<!--コンテナ-->
 	<div class="container">
-
 		<h2 class="menu-text">グループ作成確認</h2>
-		
-		<table>
+
+		<!-- エラー文を表示する -->
+		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
+
+		<form th:action="@{groupCreateComp}" method="post">
+			<table border="1">
+				<tr>
+					<th>グループ名</th>
+					<td th:text="${groupDetail.group_name}"></td>
+					<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+				</tr>
+
+				<tr>
+					<th>ジャンル名</th>
+					<td th:text="${groupDetail.genre}"></td>
+					<input type="hidden" name="genre" th:value="${groupDetail.genre}">
+				</tr>
+
+				<tr>
+					<th>リーダ</th>
+				</tr>
+				<tr th:each="leader : ${leaderUser}">
+					<td th:text="${leader.user_name}"></td>
+					<input type="hidden" name="user_id" th:value="${leader.user_id}">
+					<input type="hidden" name="user_name" th:value="${leader.user_name}">
+				</tr>
+
+				<tr>
+					<th>メンバ</th>
+				</tr>
+				<tr th:each="member : ${memberUser}">
+					<td th:text="${member.user_name}"></td>
+					<input type="hidden" name="user_id" th:value="${member.user_id}">
+					<input type="hidden" name="user_name" th:value="${member.user_name}">
+				</tr>
+			</table>
 			
-		</table>
+			<button type="submit" name="button">登録</button>
+		</form>
+
 	</div>
 </body>
 

@@ -107,4 +107,15 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		return groupDispCrudRepo.taskDetail(task_name);
 	}
 
+	/**
+	 * 末吉
+	 * グループ作成
+	 */
+	@Override
+	public void groupCreate(String group_name, int school_id, String genre, String user_id, String user_roll) {
+		
+		groupDispCrudRepo.groupCreate(group_name, school_id, genre, user_id, user_roll);
+		
+	}
+
 }

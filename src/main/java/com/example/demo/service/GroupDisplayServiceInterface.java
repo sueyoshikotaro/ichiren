@@ -28,4 +28,7 @@ public interface GroupDisplayServiceInterface {
 	
 	//タスク詳細表示
 	public List<TaskForm> taskDetail(String task_name);
+	
+	//グループ作成
+	public void groupCreate(String group_name, int school_id, String genre, String user_id, String user_roll);
 }
