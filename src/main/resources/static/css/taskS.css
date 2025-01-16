@@ -39,16 +39,30 @@
 	margin-top: 34px;
 }
 
-/**/
+.box1 {
+	margin-top: 12px;
+	border-bottom: 2px solid black;
+}
+
+.content {
+	border-top: 2px solid black;
+}
+
+.progress {
+	border: 1.5px solid black;
+	margin-top: -12px;
+}
+
+/*詳細ボタン*/
 .detail-btn {
 	display: block;
 	text-align: center;
 	text-decoration: none;
 	width: 80px;
 	margin: auto;
-	margin-top: 12px;
-	margin-bottom: 5px;
-	font-size: 17px;
+	margin-top: 19px;
+	margin-bottom: 24px;
+	font-size: 18px;
 	font-weight: bold;
 	border: 2px solid black;
 	color: black;
