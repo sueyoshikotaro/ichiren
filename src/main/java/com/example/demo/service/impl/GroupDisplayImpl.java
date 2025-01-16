@@ -116,6 +116,8 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 		groupDispCrudRepo.groupEdit(user_roll);
 
+	}
+	
 	/**
 	 * 末吉
 	 * グループ作成
