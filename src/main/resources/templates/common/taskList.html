@@ -61,8 +61,7 @@
 							<li><a class="dropdown-item" href="#">所属グループ</a></li>
 							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
-				</ul>
-				</li>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -146,10 +145,20 @@
 		<!--遷移-->
 		<div class="row moveS">
 			<div class="col-md-6">
-				<a class="move-btn" th:onclick="|location.href='@{taskUnapproved}'|">未承認一覧</a>
+				<div th:if="${session.user_roll} eq 'リーダ'">
+					<a class="move-btn" th:onclick="|location.href='@{taskUnapproved}'|">未承認一覧</a>
+				</div>
 			</div>
 			<div class="col-md-6">
-				<a class="move-btn" th:onclick="|location.href='@{taskRegister}'|">新規登録</a>
+				<div th:if="${session.user_roll} eq 'リーダ'">
+					<a class="move-btn" th:onclick="|location.href='@{taskRegister}'|">新規登録</a>
+				</div>
+			</div>
+
+			<div>
+				<div th:if="${session.user_roll} eq 'メンバ'">
+					<a class="move-btn" th:onclick="|location.href='@{taskRequest}'|">申請</a>
+				</div>
 			</div>
 		</div>
 

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -26,8 +28,6 @@ import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -350,12 +350,12 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(@RequestParam(name = "taskProgress", required = false) String progress,
-			@RequestParam(name="task_id") Integer task_id, ModelAndView mav) {
+			@RequestParam(name = "task_id") Integer task_id, ModelAndView mav) {
 		mav.getModel().clear();
 		if (progress != null) {
 			TaskService.taskUpProgress(task_id, Integer.valueOf(progress));
 		}
-		mav.addObject("task", TaskService.taskDetails(task_id,(int) session.getAttribute("groupId")));
+		mav.addObject("task", TaskService.taskDetails(task_id, (int) session.getAttribute("groupId")));
 		mav.setViewName("common/taskDetails");
 		return mav;
 	}
@@ -505,10 +505,10 @@ public class UserCtrl {
 			if (TaskService.taskRegister(t.getReq_category(), t.getReq_name(), t.getReq_content(), "未着手",
 					st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
 					group_id)) {
-				
+
 				//タスク承認(フラグ更新)
 				TaskService.taskReqFlg(t.getRequest_id());
-				
+
 				//スコアの足しこみ
 				score = score + Integer.valueOf(t.getTask_weight());
 				TaskService.userUpScore(score, t.getUser_name(), group_id);
@@ -519,6 +519,46 @@ public class UserCtrl {
 		mav.addObject("taskAppComp", true);
 		mav.addObject("taskAppConf", t);
 		mav.setViewName("leader/taskApprovedConfirm");
+		return mav;
+	}
+
+	/**
+	 * タスク申請画面を表示
+	 * @return
+	 */
+	@LoginRequired
+	@GetMapping("taskRequest")
+	public ModelAndView taskRequest(ModelAndView mav) {
+		mav.setViewName("member/taskRequest");
+		return mav;
+	}
+
+	/**
+	 * タスク申請確認画面を表示
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("taskRequestConfirm")
+	public ModelAndView taskRequestConfirm(ModelAndView mav, TaskReqForm t) {
+		mav.addObject("taskRequest", t);
+		mav.setViewName("member/taskRequestConfirm");
+		return mav;
+	}
+
+	/**
+	 * タスク申請完了
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("taskRequestComplete")
+	public ModelAndView taskRequestComplete(ModelAndView mav, TaskReqForm t) {
+		Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(sdf.format(date));
+//		TaskService.registerTaskReq(t.getReq_category(), t.getReq_name(), t.getReq_content(), t.getReq_reason());
+		mav.addObject("taskRequestComp", true);
+		mav.addObject("taskRequest", t);
+		mav.setViewName("member/taskRequestConfirm");
 		return mav;
 	}
 

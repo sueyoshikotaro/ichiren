@@ -42,5 +42,8 @@ public interface TaskServiceInterface {
 
 	//タスク未承認フラグ更新(承認済)
 	public boolean taskReqFlg(int request_id);
+	
+	//タスク申請登録
+	public void registerTaskReq(String req_category,String req_name,String req_content,String req_reason,Date add_date,String user_name,int group_id);
 
 }

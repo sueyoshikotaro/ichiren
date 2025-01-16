@@ -135,4 +135,14 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	public boolean taskReqFlg(int request_id) {
 		return repo_req.updateFlg(request_id);
 	}
+	
+	/**
+	 * 申請登録
+	 * 湊原
+	 * registerTaskReq
+	 */
+	@Override
+	public void registerTaskReq(String req_category,String req_name,String req_content,String req_reason,Date add_date,String user_name,int group_id) {
+		repo_req.registerTaskReq(req_category,req_name,req_content,req_reason,add_date,user_name,group_id);
+	}
 }

@@ -68,7 +68,7 @@
 		<h2 class="no-wrap">【タスク承認確認】</h2> <!--画面タイトル-->
 		<form th:action="@{taskAppComplete}" method="post">
 			<div>
-				<label>メンバ</label>
+				<label>担当者</label>
 				<div type="text" th:text="${taskAppConf.user_name}" th:value="${taskAppConf.user_name}"></div>
 			</div>
 			<div>

@@ -1,3 +1,4 @@
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
@@ -6,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|タスク未承認一覧</title>
+	<title>タスクどん|タスク一覧</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,31 +69,95 @@
 </head>
 
 <body>
-	<!--各画面ごとのメイン内容-->
-	<div class="container" id="container"> <!--コンテナ共通-->
-		<h2 class="no-wrap">【タスク未承認一覧】</h2><br> <!--画面タイトル-->
-		<div class="content">
-			<div th:each="task : ${taskNonapp}" class="content_child" id="data">
-				<div class="text_child" th:text="${task.user_name}"></div>
-				<div class="text_child" th:text="${task.req_name}"></div>
-				<div class="text_child" th:text="${task.add_date}"></div>
-				<div>
-					<form th:action="@{taskAppConfirm}" method="post">
-						<input type="hidden" name="request_id" th:value="${task.request_id}">
-						<input type="hidden" name="req_category" th:value="${task.req_category}">
-						<input type="hidden" name="user_name" th:value="${task.user_name}">
-						<input type="hidden" name="add_date" th:value="${task.add_date}">
-						<input type="hidden" name="req_name" th:value="${task.req_name}">
-						<input type="hidden" name="req_content" th:value="${task.req_content}">
-						<input type="hidden" name="req_reason" th:value="${task.req_reason}">
-						<input type="hidden" name="request_flg" th:value="${task.request_flg}">
-						<input type="submit" value="確認">
-					</form>
+	<!--コンテナ-->
+	<div class="container">
+
+		<h2>タスク登録</h2>
+		<h3>[登録内容確認]</h3> <!--確認画面用の説明用テキスト-->
+		<div>
+			<label>申請者</label>
+			<div th:text="${taskRequest.user_name}" readonly></div>
+		</div>
+
+		<div>
+			<label>タスク名</label>
+			<div th:text="${taskRequest.req_name}" readonly></div>
+		</div>
+
+		<div>
+			<label>タスクカテゴリ</label>
+			<div th:text="${taskRequest.req_category}" readonly></div>
+		</div>
+		<div>
+			<label>タスク内容</label>
+			<div th:text="${taskRequest.req_content}" readonly></div>
+		</div>
+		<div>
+			<label>申請理由</label>
+			<div th:text="${taskRequest.req_reason}" readonly></div>
+		</div>
+
+		<form th:action="taskRegistComplete" method="post">
+			<input type="hidden" name="req_name" th:value="${taskRequest.req_name}">
+			<input type="hidden" name="req_category" th:value="${taskRequest.req_category}">
+			<input type="hidden" name="req_content" th:value="${taskRequest.req_content}">
+			<input type="hidden" name="user_name" th:value="${taskRequest.user_name}">
+			<button type="submit" name="button" value="request" class="btn btn-danger"
+				onclick="taskRequestAndShowPopup()">申請</button>
+		</form>
+		<!-- ポップアップ -->
+		<div class="modal fade" id="taskRequestModal" tabindex="-1" role="dialog" aria-labelledby="taskRequestModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="taskRequestModalLabel">登録完了</h5>
+					</div>
+					<div class="modal-body">
+						<p>登録が完了しました</p>
+					</div>
+					<div class="modal-footer">
+						<button th:onclick="|location.href='@{/taskdon/user/taskList}'|"
+							class="btn btn-danger">タスク一覧へ</button>
+					</div>
 				</div>
 			</div>
-			<button th:onclick="|location.href='@{/taskdon/user/taskList}'|">戻る</button>
 		</div>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+	<script>
+		function taskRequestAndShowPopup() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'taskRequestComplete'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			// buttonパラメータを追加
+			var buttonInput = document.createElement('input');
+			buttonInput.type = 'hidden';
+			buttonInput.name = 'button';
+			buttonInput.value = 'request'; // または '戻る' など必要な値を設定
+			form.appendChild(buttonInput);
+
+			form.submit();
+		}
+	</script>
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var taskRequestComp = /*[[${taskRequestComp}]]*/ true;
+		$(document).ready(function () {
+			if (taskRequestComp == true) {
+				$('#taskRequestModal').modal('show');
+			}
+		});
+		/*]]>*/
+	</script>
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
