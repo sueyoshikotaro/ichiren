@@ -13,7 +13,10 @@ public class GroupMenberDetailView {
 	private int score;
 	private int user_progress;
 	
+	
 	private String task_name;
 	private int task_priority;
 	private int progress;
+	
+	//private int task_id;
 }

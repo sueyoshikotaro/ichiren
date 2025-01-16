@@ -29,8 +29,9 @@
 			<p th:text="${groupDetails.user_name}"></p>
 			<p th:text="'スコア：' + ${groupDetails.score}"></p>
 
-			<!-- グループ全体の進捗率(バー&パーセント)を表示する -->
+			<!-- ユーザの進捗率(バー&パーセント)を表示する -->
 			<div class="overview">
+				<div th:text="'進捗率：' + ${groupDetails.user_progress} + '％'"></div>
 				<div class="w-auto p-3">
 					<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
 						aria-valuemin="0" aria-valuemax="100">
@@ -53,9 +54,9 @@
 			<!--				<td th:text="${group.app_date}"></td> 更新日 後回しのやつ -->
 			<div>
 				<!--タスク詳細 -->
-				<form th:action="@{groupMenberDetails}" method="get">
+				<form th:action="@{taskDeails}" method="get">
 					<input type="hidden" name="task_name" th:value="${group.task_name}">
-					<input type="submit" value="詳細">
+					<button type="submit" name="button" class="btn btn-detail" value="詳細">
 				</form>
 			</div>
 		</div>
