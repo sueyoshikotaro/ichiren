@@ -439,13 +439,12 @@ public class UserCtrl {
 
 	/**
 	 * タスク未承認一覧画面を表示する
-	 * 現状況の場合、全ての未承認タスクが表示される(引数としてuser_idとgroup_idを渡す)
 	 * 湊原
 	 */
 	@LoginRequired
 	@GetMapping("taskUnapproved")
 	public ModelAndView taskUnapproved(ModelAndView mav) {
-		mav.addObject("taskNonapp", TaskService.selectTaskUnapproved());
+		mav.addObject("taskNonapp", TaskService.selectTaskUnapproved((int)session.getAttribute("groupId")));
 		mav.setViewName("leader/taskUnapproved");
 		return mav;
 	}
@@ -538,7 +537,7 @@ public class UserCtrl {
 		Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         System.out.println(sdf.format(date));
-//		TaskService.registerTaskReq(t.getReq_category(), t.getReq_name(), t.getReq_content(), t.getReq_reason());
+		TaskService.registerTaskReq(t.getReq_category(), t.getReq_name(), t.getReq_content(), t.getReq_reason(),date,t.getUser_name(),(int) session.getAttribute("groupId"));
 		mav.addObject("taskRequestComp", true);
 		mav.addObject("taskRequest", t);
 		mav.setViewName("member/taskRequestConfirm");

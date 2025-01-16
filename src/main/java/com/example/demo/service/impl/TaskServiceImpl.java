@@ -121,9 +121,9 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * 未承認タスク一覧
 	 */
 	@Override
-	public List<TaskReqView> selectTaskUnapproved() {
+	public List<TaskReqView> selectTaskUnapproved(int group_id) {
 
-		return repo_req.selectTaskUnapproved();
+		return repo_req.selectTaskUnapproved(group_id);
 	}
 
 	/*

@@ -20,8 +20,8 @@ public interface TaskReqCrudRepository extends CrudRepository<TaskReqView, Integ
 	 * 向江
 	 * タスク未承認一覧
 	 */
-	@Query("select *,u.user_name as user_name from task_req r inner join user u on r.user_id = u.user_id where request_flg = 0 order by request_id;")
-	public List<TaskReqView> selectTaskUnapproved();
+	@Query("select *,u.user_name as user_name from task_req r inner join user u on r.user_id = u.user_id where request_flg = 0 and group_id = :group_id order by request_id;")
+	public List<TaskReqView> selectTaskUnapproved(int group_id);
 	
 	/**
 	 * 湊原
@@ -35,6 +35,7 @@ public interface TaskReqCrudRepository extends CrudRepository<TaskReqView, Integ
 	 * 湊原
 	 * タスク申請登録
 	 */
-	@Query("insert into task_req (req_category,req_name,req_content,req_reason,add_date, request_flg,user_id,group_id) values (:req_category,:req_name,:req_content,:req_reason,:add_date, 0,(SELECT user_id FROM user WHERE user_name=:user_name),:group_id);")
+	@Modifying
+	@Query("insert into task_req (req_category,req_name,req_content,req_reason,add_date, request_flg,user_id,group_id) values(:req_category,:req_name,:req_content,:req_reason,:add_date, 0,(SELECT user_id FROM user WHERE user_name=:user_name),:group_id);")
 	public void registerTaskReq(String req_category,String req_name,String req_content,String req_reason,Date add_date,String user_name,int group_id);
 }
