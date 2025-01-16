@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+/*選択ボタン(デザイン)*/
+.choice-btn {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	width: 80px;
+	margin: auto;
+	margin-top: 12px;
+	margin-bottom: 13px;
+	font-size: 20px;
+	font-weight: bold;
+	border: 2px solid black;
+	color: black;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.choice-btn::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	transform: translateX(-100%);
+	transition: all .3s;
+	z-index: -1;
+}
+
+.choice-btn:hover::before {
+	transform: translateX(0);
+}
+
+.choice-btn:hover {
+	color: #fff;
+}
+
+.lines {
+	margin-top: -10px;
+	margin-bottom: 0;
+}
+
+.hstack.gap-3 {
+	border-bottom: 1px solid #ccc;
+}

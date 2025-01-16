@@ -10,6 +10,7 @@ import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMenberDetailView;
 import com.example.demo.form.TaskForm;
+import com.example.demo.form.TeamsDisplay;
 
 public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Integer> {
 
@@ -74,5 +75,12 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update user_detail set user_roll = 'リーダ'")
 	public void groupEdit(String user_roll);
+  
+	/**
+	 * 末吉
+	 * グループ作成
+	 */
+	@Query("select * from teams where group_name = :group_name")
+	public TeamsDisplay groupCreate(String group_name, int school_id, String genre, String user_id, String user_roll);
 }
 	
