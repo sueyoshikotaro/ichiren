@@ -931,12 +931,18 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("groupCreateConfirm")
-	public ModelAndView groupCreateConfirm(ModelAndView mav, TeamsDisplay t,
+	public ModelAndView groupCreateConfirm(ModelAndView mav,
 			@RequestParam(name = "check", required = false) String[] check,
-			@RequestParam(name = "userId", required = false) String[] userId,
+			@RequestParam(name = "selectedUserId", required = false) String[] userId,
+			@RequestParam(name = "userName", required = false) String[] userName,
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre) {
 
+		
+		TeamsDisplay teamsDisplay = new TeamsDisplay();
+	    teamsDisplay.setGroup_name(group_name);
+	    teamsDisplay.setGenre(genre);		
+		
 		//リーダに任命するメンバ
 		List<String> checkedUserId = new ArrayList<>();
 
@@ -949,7 +955,7 @@ public class AdminCtrl {
 
 		System.out.println("グループ名: " + group_name);
 		
-		System.out.println("ジャンル名" + genre);
+		System.out.println("ジャンル名:" + genre);
 		
 		if (group_name == null || group_name.isEmpty()) {
 
