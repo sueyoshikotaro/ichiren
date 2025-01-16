@@ -299,11 +299,11 @@ public class UserCtrl {
 			TaskService.taskRegister(t.getTask_category(), t.getTask_name(), t.getTask_content(), "未着手",
 					st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
 					group_id);
-			System.out.println(t);
 			//スコアの足しこみ
 			score = score + Integer.valueOf(t.getTask_weight());
 			TaskService.userUpScore(score, t.getUser_name(), group_id);
 
+			mav.addObject("taskRegistComp", true);
 			mav.addObject("tasks", t);
 			mav.setViewName("leader/taskRegistConfirm");
 		} catch (Exception e) {
@@ -411,14 +411,13 @@ public class UserCtrl {
 	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
 		//セッション情報の取得
 		int groupId = (int) session.getAttribute("groupId");
-		System.out.println(t.getTask_weight());
-		//スコアの足しこみ
+		//スコアの減算
 		int score = TaskService.userScore(t.getUser_name(), groupId);
-		System.out.println(score);
 		score = score - Integer.valueOf(t.getTask_weight());
 		TaskService.userUpScore(score, t.getUser_name(), groupId);
 
 		TaskService.taskUpFlg(t.getTask_id());
+		mav.addObject("taskDeleteComp", true);
 		mav.addObject("task", t);
 		mav.setViewName("leader/taskDeleteConfirm");
 
@@ -426,7 +425,8 @@ public class UserCtrl {
 	}
 
 	/**
-	 * タスク未承認画面を表示する
+	 * タスク未承認一覧画面を表示する
+	 * 現状況の場合、全ての未承認タスクが表示される(引数としてuser_idとgroup_idを渡す)
 	 * 湊原
 	 */
 	@LoginRequired
@@ -444,7 +444,6 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskAppConfirm")
 	public ModelAndView taskAppConfirm(ModelAndView mav, TaskReqForm t) {
-		System.out.println(t);
 		mav.addObject("taskAppConf", t);
 		mav.setViewName("leader/taskApprovedConfirm");
 		return mav;
@@ -461,8 +460,35 @@ public class UserCtrl {
 	@PostMapping("taskAppComplete")
 	public ModelAndView taskAppComplete(ModelAndView mav, TaskView t) {
 		System.out.println(t);
+		//日付型定義
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		//変数定義
+		Date st_date = null;
+		Date end_date = null;
+		int group_id = (int) session.getAttribute("groupId");
+		int score = TaskService.userScore(t.getUser_name(), group_id);
+		try {
+			//開始予定日と終了予定日の型変換
+			st_date = sdf.parse(t.getStart_date());
+			end_date = sdf.parse(t.getEnd_date());
+			//登録が出来た場合
+			if (TaskService.taskRegister(t.getReq_category(), t.getReq_name(), t.getReq_content(), "未着手",
+					st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
+					group_id)) {
+				
+				//タスク承認(フラグ更新)
+				TaskService.taskReqFlg(t.getRequest_id());
+				
+				//スコアの足しこみ
+				score = score + Integer.valueOf(t.getTask_weight());
+				TaskService.userUpScore(score, t.getUser_name(), group_id);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		mav.addObject("taskAppComp", true);
 		mav.addObject("taskAppConf", t);
-		mav.setViewName("leader/taskUnapprovedConfirm");
+		mav.setViewName("leader/taskApprovedConfirm");
 		return mav;
 	}
 

@@ -75,29 +75,27 @@
 
 		<h2>タスク編集</h2>
 		<h3>[編集内容確認]</h3> <!--確認画面用の説明用テキスト-->
-
+		<div>
+			<label>タスク名：</label>
+			<div th:text="${task.task_name}"></div>
+		</div>
+		<div>
+			<label>タスクカテゴリ：</label>
+			<div th:text="${task.task_category}"></div>
+		</div>
+		<div>
+			<label>タスク概要：</label>
+			<div th:text="${task.task_content}"></div>
+		</div>
+		<div>
+			<label>担当者：</label>
+			<div th:text="${task.user_name}"></div>
+		</div>
+		<div>
+			<label>優先度：</label>
+			<div th:text="${task.task_priority}"></div>
+		</div>
 		<form th:action="@{taskEditComplete}" method="post">
-			<div>
-				<label>タスク名：</label>
-				<div th:text="${task.task_name}"></div>
-			</div>
-			<div>
-				<label>タスクカテゴリ：</label>
-				<div th:text="${task.task_category}"></div>
-			</div>
-			<div>
-				<label>タスク概要：</label>
-				<div th:text="${task.task_content}"></div>
-			</div>
-			<div>
-				<label>担当者：</label>
-				<div th:text="${task.user_name}"></div>
-			</div>
-			<div>
-				<label>優先度：</label>
-				<div th:text="${task.task_priority}"></div>
-			</div>
-
 			<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
 			<input type="hidden" name="task_name" th:value="${task.task_name}"></input>
 			<input type="hidden" name="task_category" th:value="${task.task_category}"></input>
@@ -110,7 +108,7 @@
 			<input type="hidden" name="end_date" th:value="${task.end_date}"></input>
 			<input type="hidden" name="progress" th:value="${task.progress}"></input>
 			<button type="button" name="button" value="edit" class="btn btn-danger"
-				onclick="schoolEditAndShowPopup()">編集</button>
+				onclick="taskEditAndShowPopup()">編集</button>
 		</form>
 		<!-- ポップアップ -->
 		<div class="modal fade" id="taskEditModal" tabindex="-1" role="dialog" aria-labelledby="taskEditModalLabel"
@@ -135,10 +133,9 @@
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 	<script>
-		function schoolEditAndShowPopup() {
+		function taskEditAndShowPopup() {
 			// フォーム要素を取得
 			var form = document.querySelector('form');
 
