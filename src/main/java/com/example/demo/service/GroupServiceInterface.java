@@ -12,12 +12,4 @@ public interface GroupServiceInterface {
 	 * 所属グループ一覧,メニュー
 	 */
 	public List<GroupDisplay> deptGroupList(String user_id);
-
-	/**
-	 * 坂本
-	 * リーダ・メンバ
-	 * メニュー
-	 */
-	//	public List<GroupDisplay> selectRoll();
-
 }

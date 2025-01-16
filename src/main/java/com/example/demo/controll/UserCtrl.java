@@ -180,16 +180,17 @@ public class UserCtrl {
 
 			if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
 
+				System.out.println(user);
+				System.out.println(user_id);
+
 				mav.setViewName("common/deptGroupList");
 				mav.addObject("groupS", deptGroupList);
 				session.setAttribute("user", user.get());
 			} else {
-
 				mav.setViewName("common/login");
 				mav.addObject("errMsg", "ログインできませんでした");
 			}
 		} else {
-
 			mav.setViewName("common/login");
 			mav.addObject("errMsg", "ログインできませんでした");
 		}
@@ -201,15 +202,20 @@ public class UserCtrl {
 	 * @return
 	 */
 	@GetMapping("deptGroupList")
-	public ModelAndView viewDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
+	public ModelAndView viewDeptGroupList(ModelAndView mav, String user_id) {
 
-		session.removeAttribute("groupId"); //グループIDのセッション破棄
+		Optional<User> user = userCrudRepo.findById(user_id);
 
-		//グループ情報の取得
 		List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
-		mav.setViewName("common/deptGroupList");
-		mav.addObject("groupS", deptGroupList);
+		if (user.isPresent()) {
+			mav.setViewName("common/deptGroupList");
+			mav.addObject("groupS", deptGroupList);
+			session.setAttribute("user", user.get());
+		} else {
+			mav.setViewName("common/menuUser");
+			mav.addObject("errMsg", "失敗しました");
+		}
 
 		return mav;
 	}
@@ -218,28 +224,6 @@ public class UserCtrl {
 	 * メニュー(ユーザ)
 	 * @return
 	 */
-	//	@LoginRequired
-	//	@GetMapping("menu")
-	//	public String menu(@RequestParam(name = "group_id", required = false) Integer group_id,
-	//			@RequestParam(name = "user_roll", required = false) String user_roll) {
-	//
-	//		if (group_id != null && user_roll != null) {
-	//			//セッションに値を設定
-	//			session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ名,担当者検索用
-	//			session.setAttribute("groupId", group_id); //グループID,
-	//			session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
-	//		}
-	//		
-	//		if() {
-	//			session.removeAttribute("groupUser");
-	//			session.removeAttribute("groupId");
-	//			session.removeAttribute("user_roll");
-	//			return "redirect:/taskdon/user/deptGroupList";
-	//		}
-	//
-	//		return "common/menuUser";
-	//	}
-
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu(@RequestParam(name = "group_id", required = false) Integer group_id,
@@ -251,7 +235,6 @@ public class UserCtrl {
 			session.setAttribute("groupId", group_id); //グループID,
 			session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
 		}
-
 		return "common/menuUser";
 	}
 
@@ -350,12 +333,12 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(@RequestParam(name = "taskProgress", required = false) String progress,
-			@RequestParam(name="task_id") Integer task_id, ModelAndView mav) {
+			@RequestParam(name = "task_id") Integer task_id, ModelAndView mav) {
 		mav.getModel().clear();
 		if (progress != null) {
 			TaskService.taskUpProgress(task_id, Integer.valueOf(progress));
 		}
-		mav.addObject("task", TaskService.taskDetails(task_id,(int) session.getAttribute("groupId")));
+		mav.addObject("task", TaskService.taskDetails(task_id, (int) session.getAttribute("groupId")));
 		mav.setViewName("common/taskDetails");
 		return mav;
 	}
