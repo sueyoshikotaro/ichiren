@@ -38,7 +38,7 @@ public interface TaskServiceInterface {
 	public void taskUpProgress(int task_id, int progress);
 
 	//タスク未承認一覧表示
-	public List<TaskReqView> selectTaskUnapproved();
+	public List<TaskReqView> selectTaskUnapproved(int group_id);
 
 	//タスク未承認フラグ更新(承認済)
 	public boolean taskReqFlg(int request_id);
