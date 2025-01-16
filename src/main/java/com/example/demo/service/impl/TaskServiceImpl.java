@@ -49,11 +49,11 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * タスク登録
 	 */
 	@Override
-	public void taskRegister(String task_category, String task_name, String task_content, String str,
+	public boolean taskRegister(String task_category, String task_name, String task_content, String str,
 			Date start_date, Date end_date, String task_priority, String task_level, String task_weight,
 			String user_name, int group_id) {
 
-		repo.registerTask(task_category, task_name, task_content, str,
+		return repo.registerTask(task_category, task_name, task_content, str,
 				start_date, end_date, task_priority, task_level, task_weight, user_name, group_id);
 
 	}
@@ -129,10 +129,10 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	/*
 	 * 未承認確認表示
 	 * 湊原
-	 * 未承認テーブルフラグ更新
+	 * 未承認テーブルフラグ更新(承認済)
 	 */
 	@Override
-	public void taskReqFlg() {
-
+	public boolean taskReqFlg(int request_id) {
+		return repo_req.updateFlg(request_id);
 	}
 }

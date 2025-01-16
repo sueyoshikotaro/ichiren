@@ -14,7 +14,7 @@ public interface TaskServiceInterface {
 	public List<Task> taskDetails(int task_id, int group_id);
 
 	//タスク登録
-	public void taskRegister(String task_category, String task_name, String task_content, String string,
+	public boolean taskRegister(String task_category, String task_name, String task_content, String string,
 			Date start_date, Date end_date, String task_priority, String task_level, String task_weight,
 			String user_name, int group_id);
 
@@ -40,7 +40,7 @@ public interface TaskServiceInterface {
 	//タスク未承認一覧表示
 	public List<TaskReqView> selectTaskUnapproved();
 
-	//タスク未承認確認表示
-	public void taskReqFlg();
+	//タスク未承認フラグ更新(承認済)
+	public boolean taskReqFlg(int request_id);
 
 }

@@ -75,13 +75,34 @@
 
 		<h2>タスク詳細</h2>
 		<div th:each="task : ${task}">
-			<div th:text="${task.task_name}"></div>
-			<div th:text="${task.task_category}"></div>
-			<div th:text="${task.task_content}"></div>
-			<div th:text="'担当者：'+${task.user_name}"></div>
-			<div th:text="'優先度：'+${task.task_priority}"></div>
-			<div th:text="'開始日：'+${task.start_date}"></div>
-			<div th:text="'終了日：'+${task.end_date}"></div>
+			<div>
+				<label>タスク名：</label>
+				<div th:text="${task.task_name}"></div>
+			</div>
+			<div>
+				<label>タスクカテゴリ：</label>
+				<div th:text="${task.task_category}"></div>
+			</div>
+			<div>
+				<label>タスク概要：</label>
+				<div th:text="${task.task_content}"></div>
+			</div>
+			<div>
+				<label>担当者：</label>
+				<div th:text="${task.user_name}"></div>
+			</div>
+			<div>
+				<label>優先度：</label>
+				<div th:text="${task.task_priority}"></div>
+			</div>
+			<div>
+				<label>開始日：</label>
+				<div th:text="${task.start_date}" readonly></div>
+			</div>
+			<div>
+				<label>終了日：</label>
+				<div th:text="${task.end_date}" readonly></div>
+			</div>
 			<!--進捗編集可能か否かの判定-->
 			<div th:if="${session.user.getUser_name()==task.user_name}">
 				<label>進捗<input type="text" th:value="${task.progress}"

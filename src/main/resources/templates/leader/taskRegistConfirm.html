@@ -76,46 +76,46 @@
 		<h2>タスク登録</h2>
 		<h3>[登録内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
+
+		<div>
+			<label>タスク名</label>
+			<div th:text="${tasks.task_name}" readonly></div>
+		</div>
+
+		<div>
+			<label>タスクカテゴリ</label>
+			<div th:text="${tasks.task_category}" readonly></div>
+		</div>
+		<div>
+			<label>タスク概要</label>
+			<div th:text="${tasks.task_content}" readonly></div>
+		</div>
+		<div>
+			<label>担当者</label>
+			<div th:text="${tasks.user_name}" readonly></div>
+		</div>
+
+		<div>
+			<label>優先度</label>
+			<div th:text="${tasks.task_priority}" readonly></div>
+		</div>
+		<div>
+			<label>難易度</label>
+			<div th:text="${tasks.task_level}" readonly></div>
+		</div>
+		<div>
+			<label>重み</label>
+			<div th:text="${tasks.task_weight}" readonly></div>
+		</div>
+		<div>
+			<label>開始予定日</label>
+			<div th:text="${tasks.start_date}" readonly></div>
+		</div>
+		<div>
+			<label>終了予定日</label>
+			<div th:text="${tasks.end_date}" readonly></div>
+		</div>
 		<form th:action="taskRegistComplete" method="post">
-			<div>
-				<label>タスク名</label>
-				<div th:text="${tasks.task_name}" readonly></div>
-			</div>
-
-			<div>
-				<label>タスクカテゴリ</label>
-				<div th:text="${tasks.task_category}" readonly></div>
-			</div>
-			<div>
-				<label>タスク概要</label>
-				<div th:text="${tasks.task_content}" readonly></div>
-			</div>
-			<div>
-				<label>担当者</label>
-				<div th:text="${tasks.user_name}" readonly></div>
-			</div>
-
-			<div>
-				<label>優先度</label>
-				<div th:text="${tasks.task_priority}" readonly></div>
-			</div>
-			<div>
-				<label>難易度</label>
-				<div th:text="${tasks.task_level}" readonly></div>
-			</div>
-			<div>
-				<label>重み</label>
-				<div th:text="${tasks.task_weight}" readonly></div>
-			</div>
-			<div>
-				<label>開始予定日</label>
-				<div th:text="${tasks.start_date}" readonly></div>
-			</div>
-			<div>
-				<label>終了予定日</label>
-				<div th:text="${tasks.end_date}" readonly></div>
-			</div>
-
 			<input type="hidden" name="task_name" th:value="${tasks.task_name}">
 			<input type="hidden" name="task_category" th:value="${tasks.task_category}">
 			<input type="hidden" name="task_content" th:value="${tasks.task_content}">
@@ -125,27 +125,63 @@
 			<input type="hidden" name="start_date" th:value="${tasks.start_date}">
 			<input type="hidden" name="end_date" th:value="${tasks.end_date}">
 			<input type="hidden" name="user_name" th:value="${tasks.user_name}">
-
-			<input type="submit" value="登録">
+			<button type="submit" name="button" value="regist" class="btn btn-danger"
+				onclick="taskRegistAndShowPopup()">登録</button>
 		</form>
 
-		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+		<!-- ポップアップ -->
+		<div class="modal fade" id="taskRegistModal" tabindex="-1" role="dialog" aria-labelledby="taskRegistModalLabel"
 			aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="deleteModalLabel">登録完了</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
+						<h5 class="modal-title" id="taskRegistModalLabel">登録完了</h5>
 					</div>
 					<div class="modal-body">
 						<p>登録が完了しました</p>
+					</div>
+					<div class="modal-footer">
+						<button th:onclick="|location.href='@{/taskdon/user/taskList}'|"
+							class="btn btn-danger">タスク一覧へ</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+	<script>
+		function taskRegistAndShowPopup() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'taskRegistComplete'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			// buttonパラメータを追加
+			var buttonInput = document.createElement('input');
+			buttonInput.type = 'hidden';
+			buttonInput.name = 'button';
+			buttonInput.value = 'regist'; // または '戻る' など必要な値を設定
+			form.appendChild(buttonInput);
+
+			form.submit();
+		}
+	</script>
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var taskRegistComp = /*[[${taskRegistComp}]]*/ true;
+		$(document).ready(function () {
+			if (taskRegistComp == true) {
+				$('#taskRegistModal').modal('show');
+			}
+		});
+		/*]]>*/
+	</script>
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
