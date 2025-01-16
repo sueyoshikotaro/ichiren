@@ -9,6 +9,7 @@ import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMenberDetailView;
 import com.example.demo.form.TaskForm;
+import com.example.demo.form.TeamsDisplay;
 
 public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Integer> {
 
@@ -65,5 +66,12 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Query("select t.task_name, t.task_priority, t.task_category, t.progress, t.start_date, t.end_date, t.task_content from task t where t.task_name = :task_name")
 	public List<TaskForm> taskDetail(String task_name);
+	
+	/**
+	 * 末吉
+	 * グループ作成
+	 */
+	@Query("select * from teams where group_name = :group_name")
+	public TeamsDisplay groupCreate(String group_name, int school_id, String genre, String user_id, String user_roll);
 }
 	

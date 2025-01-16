@@ -933,8 +933,8 @@ public class AdminCtrl {
 	@PostMapping("groupCreateConfirm")
 	public ModelAndView groupCreateConfirm(ModelAndView mav,
 			@RequestParam(name = "check", required = false) String[] check,
-			@RequestParam(name = "selectedUserId", required = false) String[] userId,
-			@RequestParam(name = "userName", required = false) String[] userName,
+			@RequestParam(name = "selectedUserId", required = false) String[] user_id,
+			@RequestParam(name = "selectUserName", required = false) String[] user_name,
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre) {
 
@@ -944,18 +944,10 @@ public class AdminCtrl {
 	    teamsDisplay.setGenre(genre);		
 		
 		//リーダに任命するメンバ
-		List<String> checkedUserId = new ArrayList<>();
+		List<UserDisplay> leaderUser = new ArrayList<>();
 
 		//リーダ以外のメンバ
-		List<String> uncheckedUserId = new ArrayList<>();
-
-		System.out.println(Arrays.toString(userId));
-
-		System.out.println(Arrays.toString(check));
-
-		System.out.println("グループ名: " + group_name);
-		
-		System.out.println("ジャンル名:" + genre);
+		List<UserDisplay> memberUser = new ArrayList<>();
 		
 		if (group_name == null || group_name.isEmpty()) {
 
@@ -963,20 +955,33 @@ public class AdminCtrl {
 			mav.setViewName("admin/groupCreate");
 
 		} else {
-			if (userId != null && check != null) {
-				for (int i = 0; i < userId.length; i++) {
-					if (check != null && Arrays.asList(check).contains(userId[i])) {
-						checkedUserId.add(userId[i]);
+			if (user_id != null && check != null) {
+				for (int i = 0; i < user_id.length; i++) {
+					
+					//チェックボックスで選択したユーザIDとユーザ名を格納
+					if (check != null && Arrays.asList(check).contains(user_id[i])) {
+						
+						UserDisplay leader = new UserDisplay();
+						leader.setUser_id(user_id[i]);
+					    leader.setUser_name(user_name[i]);
+					    leaderUser.add(leader);
+						
+						//チェックボックスで選択しなかったユーザIDとユーザ名を格納
 					} else {
-						uncheckedUserId.add(userId[i]);
+						UserDisplay member = new UserDisplay();
+					    member.setUser_id(user_id[i]);
+					    member.setUser_name(user_name[i]);
+					    memberUser.add(member);
 					}
 				}
-				mav.addObject("checkedUserId", checkedUserId);
-				mav.addObject("uncheckedUserId", uncheckedUserId);
+				
+				mav.addObject("groupDetail", teamsDisplay);
+				mav.addObject("leaderUser", leaderUser);
+				mav.addObject("memberUser", memberUser);
 				mav.setViewName("admin/groupCreateConfirm");
 
 				//ユーザが選択されていない場合
-			} else if (userId == null) {
+			} else if (user_id == null) {
 
 				mav.addObject("errMsg", "ユーザを選択してください");
 				mav.setViewName("admin/groupCreate");
@@ -987,6 +992,34 @@ public class AdminCtrl {
 			}
 		}
 
+		return mav;
+	}
+	
+	/**
+	 * 末吉
+	 * グループ作成完了
+	 * @return
+	 */
+	@PostMapping("groupCreateComp")
+	public ModelAndView groupCreateComplete(ModelAndView mav, TeamsDisplay teamsDisplay,
+			@RequestParam(name = "group_name", required = false) String group_name) {
+		
+		System.out.println(teamsDisplay);
+		
+		// teamsDisplayの中身を一件ずつ取り出す
+	    List<TeamsDisplay> teamsDisplays = new ArrayList<>();
+	    teamsDisplays.add(teamsDisplay);
+	    
+	    for (TeamsDisplay team : teamsDisplays) {
+	        // Queryを呼び出す
+	    	groupDispService.groupCreate(team.getGroup_name(), team.getSchool_id(), team.getGenre(), team.getUser_id(), team.getUser_roll());
+	    }
+		
+		
+		
+		mav.addObject("group_name", group_name);
+		mav.setViewName("admin/groupCreateComp");
+		
 		return mav;
 	}
 
