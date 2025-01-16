@@ -51,7 +51,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * グループ詳細表示
 	 */
-	@Query("select t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.group_id = :group_id")
+	@Query("select t.group_id, t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.group_id = :group_id")
 	public List<GroupDetailView> groupDetail(String group_id);
 	
 	/*

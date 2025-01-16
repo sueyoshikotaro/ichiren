@@ -730,6 +730,10 @@ public class AdminCtrl {
 
 		System.out.println(group);
 		mav.addObject("groups", group);
+		for(Teams t : group) {
+			System.out.println(t);
+		}
+		
 		mav.setViewName("admin/groupList");
 
 		return mav;
@@ -741,13 +745,22 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("groupDetail")
-	public ModelAndView groupDetail(ModelAndView mav, GroupDetailView g) {
+	public ModelAndView groupDetail(ModelAndView mav, 
+			@RequestParam(name = "group_id", required = false) String group_id,
+			GroupDetailView g) {
 
 		System.out.println(g.getGroup_id());
 		
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
 
-		mav.addObject("group", group);
+		for(GroupDetailView i : group) {
+			
+			System.out.println(i);
+			
+		}
+		
+		
+		mav.addObject("groups", group);
 		mav.setViewName("admin/groupDetails");
 
 		return mav;
@@ -758,7 +771,7 @@ public class AdminCtrl {
 	 * グループメンバ詳細画面を表示する
 	 * @return
 	 */
-	@GetMapping("groupMenberDetails")
+	@PostMapping("groupMenberDetails")
 	public ModelAndView memberDetails(ModelAndView mav,
 			@RequestParam(name="user_name") String user_name) {
 

@@ -42,12 +42,10 @@
 					</div>
 				</div>
 			</div>
-			<!--			<form th:action="@{groupMenberDetails}" method="get">-->
-			<!--				<input type="hidden" name="group_name" th:value="${groupDetails.group_name}">-->
-			<!--			</form>-->
+
 		</tr>
 
-		<div th:each="group : ${group}">
+		<div th:each="group : ${groups}">
 			<div th:text="'メンバ：' + ${group.user_name}"></div>
 			<div th:text="'進捗：' + ${group.user_progress} + '％'"></div>
 			<div class="w-25 p-3">
@@ -59,25 +57,30 @@
 			<!--				<td th:text="${group.app_date}"></td> 更新日 後回しのやつ -->
 			<div th:text="'スコア：' + ${group.score}"></div>
 
+			<!-- グループメンバ詳細 -->
 			<div>
-				<!-- グループメンバ詳細 -->
-				<form th:action="@{groupMenberDetails}" method="get">
+				<form th:action="@{groupMenberDetails}" method="post">
 					<input type="hidden" name="user_name" th:value="${group.user_name}">
 					<input type="hidden" name="group_name" th:value="${group.group_name}">
 					<button type="submit" name="button" class="btn btn-detail" value="詳細">詳細</button>
 				</form>
 			</div>
+			<!--グループ編集 -->
+			<div>
+				<form th:action="@{groupEdit}" method="post">
+					<input type="hidden" name="group_id" th:value="${group.group_id}">
+					<input type="hidden" name="group_name" th:value="${group.group_name}">
+					<button type="submit" name="button" class="btn btn-update" value="編集">編集</button>
+				</form>
+			</div>
+
+
 		</div>
+		<!--			<input type="hidden" name="group_id" th:value="${group.group_id}">-->
+
 
 		<!-- コンテナ最下のボタン -->
-		<div>
-			<form th:acthion="@{gorupUpdate}" method="post">
-				<input type="hidden" name="group_id" th:value="${group.group_id}">
-				<!--				<input type="hidden" name="group_name" th:value="${group.group_name}">-->
-				<button type="submit" name="button" class="btn btn-update" value="編集">編集</button>
-			</form>
-		</div>
-
+<!--		<button th:onclick="|location.href='@{groupEdit}'|">編集</button>-->
 		<button th:onclick="|location.href='@{groupAdd}'|">追加</button>
 		<button th:onclick="|location.href='@{groupDiss}'|">解散</button>
 
