@@ -794,8 +794,26 @@ public class AdminCtrl {
 	 * グループ編集画面を表示する
 	 * @return
 	 */
-	public String groupUpdate() {
-		return "groupUpdate";
+	@PostMapping("groupEdit")
+	public ModelAndView groupEdit(ModelAndView mav, TeamsDisplay td) {
+
+		groupDispService.groupEdit(td.getUser_roll());
+		
+		mav.addObject("group", td);
+		mav.setViewName("admin/groupEdit");
+		
+		return null;
+	}
+	
+	/*
+	 * 向江
+	 * グループ編集確認画面を表示する
+	 * @return
+	 */
+	public ModelAndView groupEditConfirm(ModelAndView mav) {
+		
+		
+		return null;
 	}
 
 	/**

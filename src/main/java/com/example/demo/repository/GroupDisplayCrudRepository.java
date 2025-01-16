@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import java.util.List;
 
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -65,5 +66,13 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Query("select t.task_name, t.task_priority, t.task_category, t.progress, t.start_date, t.end_date, t.task_content from task t where t.task_name = :task_name")
 	public List<TaskForm> taskDetail(String task_name);
+	
+	/*
+	 * 向江
+	 * グループ編集
+	 */
+	@Modifying
+	@Query("update user_detail set user_roll = 'リーダ'")
+	public void groupEdit(String user_roll);
 }
 	

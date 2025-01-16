@@ -26,6 +26,9 @@ public interface GroupDisplayServiceInterface {
 	//グループメンバ詳細表示
 	public List<GroupMenberDetailView> groupMemberDetail(String user_name);
 	
-	//タスク詳細表示
+	//グループメンバタスク詳細表示
 	public List<TaskForm> taskDetail(String task_name);
+	
+	//グループ編集
+	public void groupEdit(String user_roll);
 }
