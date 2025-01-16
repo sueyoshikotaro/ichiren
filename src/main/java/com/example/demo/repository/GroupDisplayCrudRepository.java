@@ -10,7 +10,6 @@ import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMenberDetailView;
 import com.example.demo.form.TaskForm;
-import com.example.demo.form.TeamsDisplay;
 
 public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Integer> {
 
@@ -80,7 +79,23 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 末吉
 	 * グループ作成
 	 */
-	@Query("select * from teams where group_name = :group_name")
-	public TeamsDisplay groupCreate(String group_name, int school_id, String genre, String user_id, String user_roll);
+	@Modifying
+	@Query("insert into teams (group_name, school_id, group_flg, genre, work_status) values (:group_name, :school_id, 1, :genre, '休憩中')")
+	public void groupCreate(String group_name, int school_id, String genre);
+	
+	/**
+	 * 末吉
+	 * 登録したグループIDを取得
+	 */
+	@Query("select max(group_id) from teams where school_id = :school_id")
+	public int MaxGroupId(int school_id);
+	
+	/**
+	 * 末吉
+	 * グループ詳細
+	 */
+	@Modifying
+	@Query("insert into user_detail (user_id, group_id, user_roll, score) values (:user_id, :group_id, :user_roll, :score)")
+	public void groupDetailCreate(String user_id, int group_id, String user_roll, int score);
 }
 	

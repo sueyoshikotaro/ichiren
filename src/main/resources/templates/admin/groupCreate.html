@@ -75,7 +75,7 @@
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
-		<form th:action="@{groupCreateConfirm}" method="post">
+		<form th:action="@{groupCreateConfirm}" method="post" id="form">
 			<table border="1">
 				<tr>
 					<th>グループ名</th>

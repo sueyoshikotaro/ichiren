@@ -110,7 +110,7 @@
 						<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
 						<input type="hidden" name="room_name" th:value="${schoolDetails.room_name}">
 						<input type="hidden" name="before_room_name" th:value="${schoolDetails.before_room_name}">
-            <input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
+						<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
 						<input type="hidden" name="hall" th:value="${schoolDetails.hall}">
 						<input type="hidden" name="floor" th:value="${schoolDetails.floor}">
 						<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
@@ -144,13 +144,10 @@
 				</div>
 			</div>
 		</div>
-
+	</div>
+	
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-	<!--bootstrapのjsリンク接続-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-		crossorigin="anonymous"></script>
-		
+
 	<script>
 		function schoolEditAndShowPopup() {
 			// フォーム要素を取得
@@ -168,22 +165,20 @@
 			form.appendChild(buttonInput);
 
 			form.submit();
+		}
+	</script>
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var schoolEditComp = /*[[${schoolEditComp}]]*/ true;
+		$(document).ready(function () {
+			if (schoolEditComp == true) {
+				$('#schoolEditModal').modal('show');
 			}
-		</script>
-
-		<!--ポップアップを表示するためのコード-->
-		<script th:inline="javascript">
-			/*<![CDATA[*/
-			var schoolEditComp = /*[[${schoolEditComp}]]*/ true;
-			$(document).ready(function () {
-				if (schoolEditComp == true) {
-					$('#schoolEditModal').modal('show');
-				}
-			});
-			/*]]>*/
-		</script>
-
-	</div>
+		});
+		/*]]>*/
+	</script>
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
