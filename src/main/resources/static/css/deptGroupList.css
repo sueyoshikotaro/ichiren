@@ -48,3 +48,14 @@
 .hstack.gap-3 {
 	border-bottom: 1px solid #ccc;
 }
+
+.dropdown-item.disabled {
+	color: #333;
+	/* 文字色を強調 */
+	opacity: 1;
+	/* 透明度を1に設定 */
+}
+
+.dropdown-item.disabled.po1 {
+	border-bottom: 1px solid #ccc;
+}

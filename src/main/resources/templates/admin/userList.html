@@ -40,26 +40,23 @@
 						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							メニュー
 						</button>
+						<!--各画面遷移-->
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<ul class="dropdown-menu dropdown-menu-dark">
-								<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
-								<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
-								<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
-
-								<!--ログインしているユーザが大ボスの場合-->
-								<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
-									<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
-									</li>
-								</div>
-
-								<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
+							<!--メニュー画面遷移-->
+							<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
+							<!--役職判断処理(管理者のBOSS)-->
+							<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
+								<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
 								</li>
-								<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
-								<li>
-									<hr class="dropdown-divider"> <!--線-->
-								</li>
-								<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
-							</ul>
+							</div>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
+							<li>
+								<hr class="dropdown-divider"> <!--線-->
+							</li>
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
 				</ul>
 				</li>
