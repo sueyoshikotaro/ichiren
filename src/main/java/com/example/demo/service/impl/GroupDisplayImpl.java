@@ -102,7 +102,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * タスク詳細
 	 */
 	@Override
-	public List<TaskForm> taskDetail(String user_id, int task_id) {
+	public List<TaskForm> taskDetail(int task_id) {
 
 		return groupDispCrudRepo.taskDetail(task_id);
 	}
