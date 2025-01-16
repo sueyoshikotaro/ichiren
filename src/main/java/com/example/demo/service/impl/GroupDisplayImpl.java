@@ -123,10 +123,29 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ作成
 	 */
 	@Override
-	public void groupCreate(String group_name, int school_id, String genre, String user_id, String user_roll) {
+	public void groupCreate(String group_name, int school_id, String genre) {
 		
-		groupDispCrudRepo.groupCreate(group_name, school_id, genre, user_id, user_roll);
+		groupDispCrudRepo.groupCreate(group_name, school_id, genre);
 		
 	}
+	
+	/**
+	 * 末吉
+	 * 登録したグループID取得
+	 */
+	@Override
+	public int MaxGroupId(int school_id) {
+		
+		return groupDispCrudRepo.MaxGroupId(school_id);
+	}
+
+	@Override
+	public void groupDetailCreate(String user_id, int group_id, String user_roll, int score) {
+		
+		groupDispCrudRepo.groupDetailCreate(user_id, group_id, user_roll, score);
+	}
+	
+	
+	
 
 }

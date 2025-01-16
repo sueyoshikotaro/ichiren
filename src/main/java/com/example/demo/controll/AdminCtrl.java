@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Teams;
+import com.example.demo.entity.User;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMenberDetailView;
@@ -744,7 +745,7 @@ public class AdminCtrl {
 	public ModelAndView groupDetail(ModelAndView mav, GroupDetailView g) {
 
 		System.out.println(g.getGroup_id());
-		
+
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
 
 		mav.addObject("group", group);
@@ -760,12 +761,12 @@ public class AdminCtrl {
 	 */
 	@GetMapping("groupMenberDetails")
 	public ModelAndView memberDetails(ModelAndView mav,
-			@RequestParam(name="user_name") String user_name) {
+			@RequestParam(name = "user_name") String user_name) {
 
 		System.out.println(user_name);
-		
+
 		List<GroupMenberDetailView> group = groupDispService.groupMemberDetail(user_name);
-		
+
 		mav.addObject("group", group);
 		mav.setViewName("admin/groupMenberDetails");
 
@@ -779,16 +780,16 @@ public class AdminCtrl {
 	 */
 	@GetMapping("taskDeails")
 	public ModelAndView taskDeails(ModelAndView mav, TaskForm t) {
-		
+
 		List<TaskForm> task = groupDispService.taskDetail(t.getTask_name());
-		
+
 		mav.addObject("task", task);
 		mav.setViewName("admin/groupMenberTaskDetails");
-		
+
 		return mav;
-		
+
 	}
-	
+
 	/**
 	 * 向江
 	 * グループ編集画面を表示する
@@ -798,21 +799,20 @@ public class AdminCtrl {
 	public ModelAndView groupEdit(ModelAndView mav, TeamsDisplay td) {
 
 		groupDispService.groupEdit(td.getUser_roll());
-		
+
 		mav.addObject("group", td);
 		mav.setViewName("admin/groupEdit");
-		
+
 		return null;
 	}
-	
+
 	/*
 	 * 向江
 	 * グループ編集確認画面を表示する
 	 * @return
 	 */
 	public ModelAndView groupEditConfirm(ModelAndView mav) {
-		
-		
+
 		return null;
 	}
 
@@ -878,20 +878,20 @@ public class AdminCtrl {
 				return mav;
 
 			} else {
-				
+
 				//チェックボックスで選択したユーザIDとユーザ名を格納
 				List<UserDisplay> userList = new ArrayList<>();
 				for (int i = 0; i < userId.length; i++) {
-				    for (int j = 0; j < check.length; j++) {
-				        if (check[j].equals(userId[i])) {
-				            UserDisplay user = new UserDisplay();
-				            user.setUser_id(userId[i]);
-				            user.setUser_name(userName[i]);
-				            userList.add(user);
-				        }
-				    }
+					for (int j = 0; j < check.length; j++) {
+						if (check[j].equals(userId[i])) {
+							UserDisplay user = new UserDisplay();
+							user.setUser_id(userId[i]);
+							user.setUser_name(userName[i]);
+							userList.add(user);
+						}
+					}
 				}
-				
+
 				mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
 				mav.addObject("group_name", group_name);
 				mav.addObject("genre", genre);
@@ -922,10 +922,9 @@ public class AdminCtrl {
 		List<String> selectedUserIds = new ArrayList<>();
 		if (selectedUserId != null) {
 			String[] ids = selectedUserId.split(",");
-		    selectedUserIds = Arrays.asList(ids);
+			selectedUserIds = Arrays.asList(ids);
 		}
 
-		
 		//選択されているユーザのチェックボックスをチェックする
 		for (UserDisplay user : userList) {
 			if (selectedUserIds.contains(user.getUser_id())) {
@@ -934,7 +933,7 @@ public class AdminCtrl {
 				user.setChecked(false);
 			}
 		}
-		
+
 		mav.addObject("group_name", group_name);
 		mav.addObject("genre", genre);
 		mav.addObject("users", userList);
@@ -956,17 +955,16 @@ public class AdminCtrl {
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre) {
 
-		
 		TeamsDisplay teamsDisplay = new TeamsDisplay();
-	    teamsDisplay.setGroup_name(group_name);
-	    teamsDisplay.setGenre(genre);		
-		
+		teamsDisplay.setGroup_name(group_name);
+		teamsDisplay.setGenre(genre);
+
 		//リーダに任命するメンバ
 		List<UserDisplay> leaderUser = new ArrayList<>();
 
 		//リーダ以外のメンバ
 		List<UserDisplay> memberUser = new ArrayList<>();
-		
+
 		if (group_name == null || group_name.isEmpty()) {
 
 			mav.addObject("errMsg", "グループ名を入力してください");
@@ -975,24 +973,24 @@ public class AdminCtrl {
 		} else {
 			if (user_id != null && check != null) {
 				for (int i = 0; i < user_id.length; i++) {
-					
+
 					//チェックボックスで選択したユーザIDとユーザ名を格納
 					if (check != null && Arrays.asList(check).contains(user_id[i])) {
-						
+
 						UserDisplay leader = new UserDisplay();
 						leader.setUser_id(user_id[i]);
-					    leader.setUser_name(user_name[i]);
-					    leaderUser.add(leader);
-						
+						leader.setUser_name(user_name[i]);
+						leaderUser.add(leader);
+
 						//チェックボックスで選択しなかったユーザIDとユーザ名を格納
 					} else {
 						UserDisplay member = new UserDisplay();
-					    member.setUser_id(user_id[i]);
-					    member.setUser_name(user_name[i]);
-					    memberUser.add(member);
+						member.setUser_id(user_id[i]);
+						member.setUser_name(user_name[i]);
+						memberUser.add(member);
 					}
 				}
-				
+
 				mav.addObject("groupDetail", teamsDisplay);
 				mav.addObject("leaderUser", leaderUser);
 				mav.addObject("memberUser", memberUser);
@@ -1012,7 +1010,7 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * グループ作成完了
@@ -1020,24 +1018,45 @@ public class AdminCtrl {
 	 */
 	@PostMapping("groupCreateComp")
 	public ModelAndView groupCreateComplete(ModelAndView mav, TeamsDisplay teamsDisplay,
-			@RequestParam(name = "group_name", required = false) String group_name) {
+			@RequestParam(name = "group_name", required = false) String group_name,
+			@RequestParam(name = "genre", required = false) String genre,
+			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
+			@RequestParam(name = "leaderUser_name", required = false) List<String> leaderUser_name,
+			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id,
+			@RequestParam(name = "memberUser_name", required = false) List<String> memberUser_name) {
+
+		if(memberUser_id != null) {
+			// セッション情報のUserFormを取得
+			User userForm = (User) session.getAttribute("user");
+
+			
+			
+			groupDispService.groupCreate(group_name, userForm.getSchool_id(), genre);
+			
+			
+			//登録したグループIDを取得する
+			int groop_id = groupDispService.MaxGroupId(userForm.getSchool_id());
+			
+			// ここで、受け取ったデータを処理する
+			for (int i = 0; i < leaderUser_id.size(); i++) {
+				String leaderUserId = leaderUser_id.get(i);
+				String leaderUserName = leaderUser_name.get(i);
+				// ここで、リーダーのデータを処理する
+				
+				groupDispService.groupDetailCreate(leaderUserId, groop_id, "リーダ", 0);
+			}
+
+			for (int i = 0; i < memberUser_id.size(); i++) {
+				String memberUserId = memberUser_id.get(i);
+				String memberUserName = memberUser_name.get(i);
+				// ここで、メンバーのデータを処理する
+				groupDispService.groupDetailCreate(memberUserId, groop_id, "メンバ", 0);
+			}
+		}
 		
-		System.out.println(teamsDisplay);
-		
-		// teamsDisplayの中身を一件ずつ取り出す
-	    List<TeamsDisplay> teamsDisplays = new ArrayList<>();
-	    teamsDisplays.add(teamsDisplay);
-	    
-	    for (TeamsDisplay team : teamsDisplays) {
-	        // Queryを呼び出す
-	    	groupDispService.groupCreate(team.getGroup_name(), team.getSchool_id(), team.getGenre(), team.getUser_id(), team.getUser_roll());
-	    }
-		
-		
-		
-		mav.addObject("group_name", group_name);
-		mav.setViewName("admin/groupCreateComp");
-		
+		mav.addObject("groupCreateComp", true);
+		mav.setViewName("admin/groupCreateConfirm");
+
 		return mav;
 	}
 

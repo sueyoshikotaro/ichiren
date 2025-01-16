@@ -33,5 +33,11 @@ public interface GroupDisplayServiceInterface {
 	public void groupEdit(String user_roll);
 
 	//グループ作成
-	public void groupCreate(String group_name, int school_id, String genre, String user_id, String user_roll);
+	public void groupCreate(String group_name, int school_id, String genre);
+	
+	//登録したグループID取得
+	public int MaxGroupId(int school_id);
+	
+	//グループ詳細登録
+	public void groupDetailCreate(String user_id, int group_id, String user_roll, int score);
 }
