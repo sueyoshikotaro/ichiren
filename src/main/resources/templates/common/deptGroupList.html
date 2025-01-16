@@ -60,7 +60,7 @@
 		<h2>所属グループ一覧</h2>
 
 		<!--所属グループを表示(下記)-->
-		<label for="inputPassword5" class="form-label">グループ</label>
+		<label for="inputPassword5" class="form-label">　　 グループ</label>
 		<hr class="lines">
 
 		<!--所属グループ分だけ繰り返し-->
@@ -83,9 +83,9 @@
 					<!--詳細項目の中身-->
 					<!--現在の項目(ジャンル,ロール)-->
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#"><label th:text="'ジャンル：'+${deptGroup.genre}"></label></a>
+						<li><a class="dropdown-item disabled po1" href="#"><label th:text="'ジャンル：'+${deptGroup.genre}"></label></a>
 						</li>
-						<li><a class="dropdown-item" href="#"><label
+						<li><a class="dropdown-item disabled" href="#"><label
 									th:text="'ロール　：'+${deptGroup.user_roll}"></label></a></li>
 					</ul>
 				</div>

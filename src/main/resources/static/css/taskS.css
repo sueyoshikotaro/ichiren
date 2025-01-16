@@ -40,12 +40,39 @@
 }
 
 .box1 {
-	margin-top: 12px;
-	border-bottom: 2px solid black;
+	margin-top: -16px;
+	border-top: 2px solid black;
 }
 
+/*コンテンツ内のスクロールバー*/
 .content {
-	border-top: 2px solid black;
+	overflow-y: auto;
+	/* 縦にスクロールバーを追加 */
+	height: 600px;
+	/* スクロールバーの高さを指定 */
+	padding: 20px;
+	/* 内側の余白を追加 */
+}
+
+.content::-webkit-scrollbar {
+	width: 12px;
+	/* スクロールバーの幅 */
+	height: 12px;
+	/* スクロールバーの高さ */
+}
+
+.content::-webkit-scrollbar-thumb {
+	background-color: #ccc;
+	/* スクロールバーの色 */
+	border-radius: 10px;
+	/* スクロールバーの角を丸くする */
+}
+
+.content::-webkit-scrollbar-track {
+	background-color: #fff;
+	/* スクロールバーの背景色 */
+	border-radius: 10px;
+	/* スクロールバーの角を丸くする */
 }
 
 .progress {
