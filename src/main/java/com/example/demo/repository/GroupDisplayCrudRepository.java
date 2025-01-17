@@ -6,7 +6,6 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.example.demo.entity.GroupMenberDetailView;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMemberDetailView;
@@ -81,7 +80,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループメンバ削除画面を表示するためだけのsql
 	 */
 	@Query("slect u.user_name, t.task_id, t.task_name,t.task_content where user_name = :user_name")
-	public List<GroupMenberDetailView> grMemDelDisp(String user_name);
+	public List<GroupMemberDetailView> grMemDelDisp(String user_name);
 	
 	/*
 	 * 向江

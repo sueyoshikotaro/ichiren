@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.entity.GroupMenberDetailView;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMemberDetailView;
@@ -34,7 +33,7 @@ public interface GroupDisplayServiceInterface {
 	public void groupEdit(String group_id);
 
 	//グループメンバ削除画面を表示するためだけのメソッド
-	public List<GroupMenberDetailView> grMemDelDisp(String user_name);
+	public List<GroupMemberDetailView> grMemDelDisp(String user_name);
 	
 	//グループメンバ削除
 	public void groupMemberDelete(String group_id, String user_id);
