@@ -73,17 +73,27 @@
 					<button type="submit" name="button" class="btn btn-update" value="編集">編集</button>
 				</form>
 			</div>
-
+			<!--グループメンバ追加 -->
+			<div>
+				<form th:action="@{groupMenberAdd}" method="post">
+					<input type="hidden" name="group_id" th:value="${group.group_id}">
+					<input type="hidden" name="group_name" th:value="${group.group_name}">
+					<button type="submit" name="button" class="btn btn-update" value="追加">追加</button>
+				</form>
+			</div>
+			<!--グループ解散 -->
+			<div>
+				<form th:action="@{groupDiss}" method="post">
+					<input type="hidden" name="group_id" th:value="${group.group_id}">
+					<input type="hidden" name="group_name" th:value="${group.group_name}">
+					<button type="submit" name="button" class="btn btn-update" value="解散">解散</button>
+				</form>
+			</div>
 
 		</div>
 		<!--			<input type="hidden" name="group_id" th:value="${group.group_id}">-->
 
-
-		<!-- コンテナ最下のボタン -->
-<!--		<button th:onclick="|location.href='@{groupEdit}'|">編集</button>-->
-		<button th:onclick="|location.href='@{groupAdd}'|">追加</button>
-		<button th:onclick="|location.href='@{groupDiss}'|">解散</button>
-
+		<!--コンテナ最下のボタン-->
 		<button th:onclick="|location.href='@{/taskdon/user/taskList}'|">戻る</button>
 	</div>
 	<!--bootstrapのjsリンク接続-->
