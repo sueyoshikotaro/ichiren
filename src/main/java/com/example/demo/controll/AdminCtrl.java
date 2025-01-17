@@ -25,7 +25,7 @@ import com.example.demo.entity.Teams;
 import com.example.demo.entity.User;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
-import com.example.demo.form.GroupMenberDetailView;
+import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsDisplay;
@@ -729,12 +729,7 @@ public class AdminCtrl {
 			group = groupDispService.groupList(dropdown, dropid);
 		}
 
-		System.out.println(group);
 		mav.addObject("groups", group);
-		for (Teams t : group) {
-			System.out.println(t);
-		}
-
 		mav.setViewName("admin/groupList");
 
 		return mav;
@@ -750,15 +745,7 @@ public class AdminCtrl {
 			@RequestParam(name = "group_id", required = false) String group_id,
 			GroupDetailView g) {
 
-		System.out.println(g.getGroup_id());
-
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
-
-		for (GroupDetailView i : group) {
-
-			System.out.println(i);
-
-		}
 
 		mav.addObject("groups", group);
 		mav.setViewName("admin/groupDetails");
@@ -771,16 +758,14 @@ public class AdminCtrl {
 	 * グループメンバ詳細画面を表示する
 	 * @return
 	 */
-	@PostMapping("groupMenberDetails")
+	@GetMapping("groupMemberDetails")
 	public ModelAndView memberDetails(ModelAndView mav,
 			@RequestParam(name = "user_name") String user_name) {
 
-		System.out.println(user_name);
-
-		List<GroupMenberDetailView> group = groupDispService.groupMemberDetail(user_name);
+		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(user_name);
 
 		mav.addObject("group", group);
-		mav.setViewName("admin/groupMenberDetails");
+		mav.setViewName("admin/groupMemberDetails");
 
 		return mav;
 	}
@@ -796,27 +781,38 @@ public class AdminCtrl {
 		List<TaskForm> task = groupDispService.taskDetail(t.getTask_name());
 
 		mav.addObject("task", task);
-		mav.setViewName("admin/groupMenberTaskDetails");
+		mav.setViewName("admin/groupMemberTaskDetails");
 
 		return mav;
 
 	}
 
-	/**
-	 * 向江
-	 * グループ編集画面を表示する
-	 * @return
-	 */
-	@PostMapping("groupEdit")
-	public ModelAndView groupEdit(ModelAndView mav, TeamsDisplay td) {
-
-		groupDispService.groupEdit(td.getUser_roll());
-
-		mav.addObject("group", td);
-		mav.setViewName("admin/groupEdit");
-
-		return null;
-	}
+//	/**
+//	 * 向江
+//	 * グループ編集画面を表示する
+//	 * @return
+//	 */
+//	@PostMapping("groupEdit")
+//	public ModelAndView groupEdit(ModelAndView mav,
+//			@RequestParam(name = "check", required = false) String[] check,
+//			@RequestParam(name = "group_id", required = false) String[] group_id,
+//			@RequestParam(name = "user_id", required = false) String[] user_id,
+//			@RequestParam(name = "user_name", required = false) String[] user_name,
+//			@RequestParam(name = "user_roll", required = false) String[] user_roll,
+//			TeamsDisplay td) {
+//
+//		// グループ詳細の編集ボタンから遷移してきた場合
+//		if (user_roll == "メンバ") {
+//
+//		}
+//
+//		groupDispService.groupEdit(group_id);
+//
+//		mav.addObject("group", td);
+//		mav.setViewName("admin/groupEdit");
+//
+//		return null;
+//	}
 
 	/*
 	 * 向江
@@ -844,10 +840,29 @@ public class AdminCtrl {
 		return "memberAddConfirm";
 	}
 
+	/*
+	 * 向江
+	 * グループメンバ削除画面を表示する
+	 * @return
+	 */
+	@PostMapping("groupMemberDelDisp")
+	public ModelAndView groupMemberDeleteDisp(ModelAndView mav,
+			@RequestParam(name = "user_name", required = false) String user_name) {
+
+		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(user_name);
+
+		mav.addObject("group", group);
+		mav.setViewName("admin/groupMemberDelete");
+
+		return mav;
+	}
+
 	/**
+	 * 向江
 	 * グループメンバ削除確認画面を表示する
 	 * @return
 	 */
+	@PostMapping("groupMemberDeleteConfirm")
 	public String memberDeleteConfirm() {
 		return "memberDeleteConfirm";
 	}

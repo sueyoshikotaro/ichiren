@@ -1,4 +1,3 @@
-<!--ユーザ用メニュー(名称:ホーム)-->
 <!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -8,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|メニュー</title>
+	<title>タスクどん|ToDoリスト一覧</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +16,6 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
-	<link rel="stylesheet" th:href="@{/css/menuS.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -59,7 +57,7 @@
 							<li>
 								<hr class="dropdown-divider"> <!--線-->
 							</li>
-							<li><a class="dropdown-item" th:href="@{/taskdon/user/reDeptGroup}">所属グループ</a></li>
+							<li><a class="dropdown-item" href="#">所属グループ</a></li>
 							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
 					</li>
@@ -70,38 +68,50 @@
 </head>
 
 <body>
-	<!--コンテナ-->
+
+	<!--ドロップダウンメニュー(開閉)-->
+	<a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExampleSide" role="button">
+		<button class="navbar-toggler" type="button" data-bs-target="#navbarNavDarkDropdown"
+			aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	</a>
+
+	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExampleSide"
+		aria-labelledby="offcanvasExampleLabel">
+		<div class="offcanvas-header">
+			<h2 class="offcanvas-title" id="offcanvasExampleLabel">ToDo一覧</h2> <button type="button" class="btn-close"
+				data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<div th:each="todo:${todoList}">
+				<div th:text="${todo.tdlist_content}"></div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+					<label class="form-check-label" for="flexCheckDefault"></label>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="container">
+		<!--			ドロップダウンリスト-->
+		<!--			<div class="dropdown mt-3">-->
+		<!--				<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">-->
+		<!--					Dropdown button-->
+		<!--				</button>-->
+		<!--				<ul class="dropdown-menu">-->
+		<!--					<li><a class="dropdown-item" href="#">Action</a></li>-->
+		<!--					<li><a class="dropdown-item" href="#">Another action</a></li>-->
+		<!--					<li><a class="dropdown-item" href="#">Something else here</a></li>-->
+		<!--				</ul>-->
+		<!--			</div>-->
 
-		<h2 class="menu-text">ホーム</h2>
-
-		<!-- 連絡事項表示領域(仮配置) -->
-		<div style="overflow-y: scroll; height: 100px;"></div>
-
-		<!-- 遷移先(ボタン) -->
-		<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
-			<a class="menu-btn" th:onclick="|location.href='@{memberList}'|">メンバ一覧</a>
-		</div>
-
-		<a class="menu-btn" th:onclick="|location.href='@{taskList}'|">タスク一覧</a>
-
-		<a class="menu-btn" th:onclick="|location.href='@{tdList}'|">ToDoリスト</a>
-
-		<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
-			<a class="menu-btn" th:onclick="|location.href='@{noticeRegist}'|">連絡事項作成</a>
-		</div>
-
-		<a class="menu-btn" th:onclick="|location.href='@{chat}'|">チャット</a>
-
-		<a class="menu-btn" th:onclick="|location.href='@{reDeptGroup}'|">所属グループ一覧</a>
 
 	</div>
-
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
-
 </body>
 
 </html>

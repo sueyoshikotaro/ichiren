@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
-import com.example.demo.form.GroupMenberDetailView;
+import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.TaskForm;
 
 public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Integer> {
@@ -58,7 +58,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループメンバ詳細表示
 	 */
 	@Query("select u.user_name, ud.score, ud.user_progress, t.task_name, t.task_priority, t.progress from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_name = :user_name")
-	public List<GroupMenberDetailView> groupMemberDetail(String user_name);
+	public List<GroupMemberDetailView> groupMemberDetail(String user_name);
 	
 	/*
 	 * 向江
@@ -72,8 +72,23 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループ編集
 	 */
 	@Modifying
-	@Query("update user_detail set user_roll = 'リーダ'")
-	public void groupEdit(String user_roll);
+	@Query("update user_detail set user_roll = 'リーダ' where group_id = :group_id")
+	public void groupEdit(String group_id);
+	
+	/*
+	 * 向江
+	 * グループメンバ削除画面を表示するためだけのsql
+	 */
+	@Query("slect u.user_name, t.task_id, t.task_name,t.task_content where user_name = :user_name")
+	public List<GroupMemberDetailView> grMemDelDisp(String user_name);
+	
+	/*
+	 * 向江
+	 * グループメンバ削除
+	 */
+	@Modifying
+	@Query("delete from user_detail where group_id = :group_id and user_id = :user_id")
+	public void groupMemberDelete(String group_id, String user_id);
   
 	/**
 	 * 末吉
