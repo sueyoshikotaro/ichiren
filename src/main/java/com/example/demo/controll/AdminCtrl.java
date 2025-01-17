@@ -731,10 +731,10 @@ public class AdminCtrl {
 
 		System.out.println(group);
 		mav.addObject("groups", group);
-		for(Teams t : group) {
+		for (Teams t : group) {
 			System.out.println(t);
 		}
-		
+
 		mav.setViewName("admin/groupList");
 
 		return mav;
@@ -746,7 +746,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("groupDetail")
-	public ModelAndView groupDetail(ModelAndView mav, 
+	public ModelAndView groupDetail(ModelAndView mav,
 			@RequestParam(name = "group_id", required = false) String group_id,
 			GroupDetailView g) {
 
@@ -754,13 +754,12 @@ public class AdminCtrl {
 
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
 
-		for(GroupDetailView i : group) {
-			
+		for (GroupDetailView i : group) {
+
 			System.out.println(i);
-			
+
 		}
-		
-		
+
 		mav.addObject("groups", group);
 		mav.setViewName("admin/groupDetails");
 
@@ -905,11 +904,20 @@ public class AdminCtrl {
 					}
 				}
 
-				mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
+				
 				mav.addObject("group_name", group_name);
 				mav.addObject("genre", genre);
 				mav.addObject("selectUser", userList);
-				mav.setViewName("admin/groupCreate");
+				
+				if(session.getAttribute("button").equals("グループ作成")) {
+					
+					mav.setViewName("admin/groupCreate");
+					mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
+					
+				} else {
+					mav.setViewName("admin/groupMemberAdd");
+				}
+				
 
 			}
 		}
@@ -926,7 +934,8 @@ public class AdminCtrl {
 	public ModelAndView groupMemberSelect(ModelAndView mav,
 			@RequestParam(name = "selectedUserId", required = false) String selectedUserId,
 			@RequestParam(name = "group_name", required = false) String group_name,
-			@RequestParam(name = "genre", required = false) String genre) {
+			@RequestParam(name = "genre", required = false) String genre,
+			@RequestParam("button") String button) {
 
 		//サービスのメソッドを呼び出す
 		Iterable<UserDisplay> userList = userDisplayService.userList();
@@ -946,6 +955,9 @@ public class AdminCtrl {
 				user.setChecked(false);
 			}
 		}
+
+		//どの画面から遷移してきたのかを格納
+		session.setAttribute("button", button);
 
 		mav.addObject("group_name", group_name);
 		mav.addObject("genre", genre);
@@ -1008,7 +1020,7 @@ public class AdminCtrl {
 				mav.addObject("leaderUser", leaderUser);
 				mav.addObject("memberUser", memberUser);
 				mav.setViewName("admin/groupCreateConfirm");
-
+				
 				//ユーザが選択されていない場合
 			} else if (user_id == null) {
 
@@ -1038,24 +1050,21 @@ public class AdminCtrl {
 			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id,
 			@RequestParam(name = "memberUser_name", required = false) List<String> memberUser_name) {
 
-		if(memberUser_id != null) {
+		if (memberUser_id != null) {
 			// セッション情報のUserFormを取得
 			User userForm = (User) session.getAttribute("user");
 
-			
-			
 			groupDispService.groupCreate(group_name, userForm.getSchool_id(), genre);
-			
-			
+
 			//登録したグループIDを取得する
 			int groop_id = groupDispService.MaxGroupId(userForm.getSchool_id());
-			
+
 			// ここで、受け取ったデータを処理する
 			for (int i = 0; i < leaderUser_id.size(); i++) {
 				String leaderUserId = leaderUser_id.get(i);
 				String leaderUserName = leaderUser_name.get(i);
 				// ここで、リーダーのデータを処理する
-				
+
 				groupDispService.groupDetailCreate(leaderUserId, groop_id, "リーダ", 0);
 			}
 
@@ -1066,9 +1075,30 @@ public class AdminCtrl {
 				groupDispService.groupDetailCreate(memberUserId, groop_id, "メンバ", 0);
 			}
 		}
-		
+
 		mav.addObject("groupCreateComp", true);
 		mav.setViewName("admin/groupCreateConfirm");
+
+		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * グループメンバ追加画面
+	 * @return
+	 */
+	@PostMapping("groupMemberAdd")
+	public ModelAndView groupMemberAdd(ModelAndView mav,
+			@RequestParam(name = "group_id", required = false) int group_id,
+			@RequestParam(name = "group_name", required = false) String group_name) {
+
+		TeamsDisplay teamsDisplay = new TeamsDisplay();
+		teamsDisplay.setGroup_id(group_id);
+		teamsDisplay.setGroup_name(group_name);
+		//		teamsDisplay.setGenre(genre);
+
+		mav.addObject("groupDetail", teamsDisplay);
+		mav.setViewName("admin/groupMemberAdd");
 
 		return mav;
 	}
