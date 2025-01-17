@@ -63,7 +63,7 @@
 		<hr class="lines">
 
 		<!--所属グループ分だけ繰り返し-->
-		<div class="input-group" th:each="deptGroup : ${groupS}">
+		<div class="input-group" th:each="deptGroup : ${session.deptGroupList}">
 			<div class="hstack gap-3">
 				<svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="currentColor"
 					class="bi bi-people-fill group-icon" viewBox="0 0 16 16">
@@ -94,7 +94,7 @@
 				<div class="vr"></div>
 
 				<!--選択後に選択グループの対応メニューへ遷移-->
-				<form th:action="@{menu}" method="get">
+				<form th:action="@{menu}" method="post">
 					<input type="hidden" id="group_id" name="group_id" th:value="${deptGroup.group_id}" />
 					<input type="hidden" id="user_roll" name="user_roll" th:value="${deptGroup.user_roll}" />
 
