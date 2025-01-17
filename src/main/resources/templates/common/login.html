@@ -31,7 +31,6 @@
 
 		<!--入力情報(必須)-->
 		<form th:action="@{/taskdon/user/deptGroupList}" method="post">
-
 			<!--ID入力欄-->
 			<div class="form-group">
 				<!--アイコン画像(bootstrap引用)-->
@@ -42,7 +41,7 @@
 				</svg>
 				<label for="inputPassword5" class="form-label">User-ID</label>
 				<input type="text" id="user_id" name="user_id" class="form-control" aria-labelledby="passwordHelpBlock"
-					placeholder="例:st○○○○○○○○" th:value="${user_id}" required>
+					placeholder="例:st○○○○○○○○" th:value="${user_pass}" required>
 			</div>
 			<div id="passwordHelpBlock" class="form-text"> <!--入力欄下の注釈-->
 				学生(st+学籍番号),管理者(te+8桁の英数字).
@@ -60,7 +59,7 @@
 				<label for="inputPassword5" class="form-label">PASS</label>
 				<div class="input-group">
 					<input type="password" id="user_pass" name="user_pass" class="form-control"
-						aria-labelledby="passwordHelpBlock" th:value="${user_pass}" required>
+						aria-labelledby="passwordHelpBlock" th:value="${user_pass}" required></input>
 					<span class="input-group-text">
 
 						<!--入力内容の目マーク機能-->
