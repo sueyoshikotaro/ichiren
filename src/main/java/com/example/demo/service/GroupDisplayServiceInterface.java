@@ -2,9 +2,10 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import com.example.demo.entity.GroupMenberDetailView;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
-import com.example.demo.form.GroupMenberDetailView;
+import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.TaskForm;
 
 public interface GroupDisplayServiceInterface {
@@ -24,14 +25,20 @@ public interface GroupDisplayServiceInterface {
 	public List<GroupDetailView> groupDetail(String group_id);
 	
 	//グループメンバ詳細表示
-	public List<GroupMenberDetailView> groupMemberDetail(String user_name);
+	public List<GroupMemberDetailView> groupMemberDetail(String user_name);
 	
 	//グループメンバタスク詳細表示
 	public List<TaskForm> taskDetail(String task_name);
 	
 	//グループ編集
-	public void groupEdit(String user_roll);
+	public void groupEdit(String group_id);
 
+	//グループメンバ削除画面を表示するためだけのメソッド
+	public List<GroupMenberDetailView> grMemDelDisp(String user_name);
+	
+	//グループメンバ削除
+	public void groupMemberDelete(String group_id, String user_id);
+	
 	//グループ作成
 	public void groupCreate(String group_name, int school_id, String genre);
 	
