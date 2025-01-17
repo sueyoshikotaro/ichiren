@@ -919,11 +919,20 @@ public class AdminCtrl {
 					}
 				}
 
-				mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
+				
 				mav.addObject("group_name", group_name);
 				mav.addObject("genre", genre);
 				mav.addObject("selectUser", userList);
-				mav.setViewName("admin/groupCreate");
+				
+				if(session.getAttribute("button").equals("グループ作成")) {
+					
+					mav.setViewName("admin/groupCreate");
+					mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
+					
+				} else {
+					mav.setViewName("admin/groupMemberAdd");
+				}
+				
 
 			}
 		}
@@ -940,7 +949,8 @@ public class AdminCtrl {
 	public ModelAndView groupMemberSelect(ModelAndView mav,
 			@RequestParam(name = "selectedUserId", required = false) String selectedUserId,
 			@RequestParam(name = "group_name", required = false) String group_name,
-			@RequestParam(name = "genre", required = false) String genre) {
+			@RequestParam(name = "genre", required = false) String genre,
+			@RequestParam("button") String button) {
 
 		//サービスのメソッドを呼び出す
 		Iterable<UserDisplay> userList = userDisplayService.userList();
@@ -960,6 +970,9 @@ public class AdminCtrl {
 				user.setChecked(false);
 			}
 		}
+
+		//どの画面から遷移してきたのかを格納
+		session.setAttribute("button", button);
 
 		mav.addObject("group_name", group_name);
 		mav.addObject("genre", genre);
@@ -1022,7 +1035,7 @@ public class AdminCtrl {
 				mav.addObject("leaderUser", leaderUser);
 				mav.addObject("memberUser", memberUser);
 				mav.setViewName("admin/groupCreateConfirm");
-
+				
 				//ユーザが選択されていない場合
 			} else if (user_id == null) {
 
@@ -1080,6 +1093,27 @@ public class AdminCtrl {
 
 		mav.addObject("groupCreateComp", true);
 		mav.setViewName("admin/groupCreateConfirm");
+
+		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * グループメンバ追加画面
+	 * @return
+	 */
+	@PostMapping("groupMemberAdd")
+	public ModelAndView groupMemberAdd(ModelAndView mav,
+			@RequestParam(name = "group_id", required = false) int group_id,
+			@RequestParam(name = "group_name", required = false) String group_name) {
+
+		TeamsDisplay teamsDisplay = new TeamsDisplay();
+		teamsDisplay.setGroup_id(group_id);
+		teamsDisplay.setGroup_name(group_name);
+		//		teamsDisplay.setGenre(genre);
+
+		mav.addObject("groupDetail", teamsDisplay);
+		mav.setViewName("admin/groupMemberAdd");
 
 		return mav;
 	}
