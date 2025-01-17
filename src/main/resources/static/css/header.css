@@ -20,6 +20,24 @@ body {
 	font-size: 28px;
 }
 
+.navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+}
+
+.main-content {
+	padding-top: 60px;
+	/* ナビゲーションバーの高さ */
+}
+
+body {
+	padding-top: 80px;
+	/* ナビゲーションバーの高さ */
+}
+
 /*アイコン(メニューへ遷移する)*/
 .iconLink {
 	-webkit-transition: all .3s;
