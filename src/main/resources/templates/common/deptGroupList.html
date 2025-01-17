@@ -45,8 +45,7 @@
 							</li>
 							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
-				</ul>
-				</li>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -83,7 +82,8 @@
 					<!--詳細項目の中身-->
 					<!--現在の項目(ジャンル,ロール)-->
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item disabled po1" href="#"><label th:text="'ジャンル：'+${deptGroup.genre}"></label></a>
+						<li><a class="dropdown-item disabled po1" href="#"><label
+									th:text="'ジャンル：'+${deptGroup.genre}"></label></a>
 						</li>
 						<li><a class="dropdown-item disabled" href="#"><label
 									th:text="'ロール　：'+${deptGroup.user_roll}"></label></a></li>
