@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupMenberDetailView {
+public class GroupMemberDetailView {
 
 	@Id
 	private String user_id;

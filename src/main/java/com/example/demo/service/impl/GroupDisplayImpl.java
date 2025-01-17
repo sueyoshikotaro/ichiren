@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.entity.GroupMenberDetailView;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMemberDetailView;
@@ -124,7 +123,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ削除画面を表示するためだけのメソッド
 	 */
 	@Override
-	public List<GroupMenberDetailView> grMemDelDisp(String user_name) {
+	public List<GroupMemberDetailView> grMemDelDisp(String user_name) {
 		
 		return groupDispCrudRepo.grMemDelDisp(user_name);
 	}
