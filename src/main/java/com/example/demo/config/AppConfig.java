@@ -8,14 +8,15 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
+import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
 import com.example.demo.service.impl.GroupDisplayImpl;
 import com.example.demo.service.impl.GroupServiceImpl;
 import com.example.demo.service.impl.SchoolDisplayImpl;
 import com.example.demo.service.impl.SchoolServiceImpl;
 import com.example.demo.service.impl.TaskServiceImpl;
+import com.example.demo.service.impl.TodoServiceImpl;
 import com.example.demo.service.impl.UserDisplayImpl;
 import com.example.demo.service.impl.UserServiceImpl;
 
@@ -61,6 +62,11 @@ public class AppConfig {
 	@Bean(name = "GroupDisplayImpl")
 	GroupDisplayServiceInterface groupDispService() {
 		return new GroupDisplayImpl();
+	}
+	
+	@Bean(name = "todoService")
+	TodoServiceInterface todoService() {
+		return new TodoServiceImpl();
 	}
 	
 }

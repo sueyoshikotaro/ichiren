@@ -27,6 +27,7 @@ import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
+import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
 
 @Controller
@@ -52,6 +53,11 @@ public class UserCtrl {
 	@Autowired
 	@Qualifier("taskService")
 	TaskServiceInterface TaskService;
+	
+	//湊原追加
+	@Autowired
+	@Qualifier("todoService")
+	TodoServiceInterface TodoService;
 
 	//セッション
 	@Autowired
@@ -548,6 +554,16 @@ public class UserCtrl {
 	 * ToDoリスト画面を表示
 	 * @return
 	 */
+//	@LoginRequired
+	@GetMapping("todoList")
+	public ModelAndView todoList(ModelAndView mav) {
+		System.out.println(TodoService.selectTodoList(session.getId()));
+		User user = (User) session.getAttribute("user");
+		String user_id = user.getUser_id();
+		mav.addObject("todoList", TodoService.selectTodoList(user_id));
+		mav.setViewName("common/todoList");
+		return mav;
+	}
 
 	/**
 	 * 連絡事項作成画面を表示
