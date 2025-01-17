@@ -172,51 +172,34 @@ public class UserCtrl {
 
 		Optional<User> user;
 
-		List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+		if (user_id == null) {
 
-		user = userCrudRepo.findById(user_id);
+			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
-		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+			user = userCrudRepo.findById(user_id);
 
-			if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
+			if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
-				System.out.println(user);
-				System.out.println(user_id);
+				if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
 
-				mav.setViewName("common/deptGroupList");
-				mav.addObject("groupS", deptGroupList);
-				session.setAttribute("user", user.get());
+					System.out.println(user);
+					System.out.println(user_id);
+					for (GroupDisplay group : deptGroupList) {
+						System.out.println(group);
+					}
+
+					mav.setViewName("common/deptGroupList");
+					mav.addObject("groupS", deptGroupList);
+					session.setAttribute("user", user.get());
+				} else {
+					mav.setViewName("common/login");
+					mav.addObject("errMsg", "ログインできませんでした");
+				}
 			} else {
 				mav.setViewName("common/login");
 				mav.addObject("errMsg", "ログインできませんでした");
 			}
-		} else {
-			mav.setViewName("common/login");
-			mav.addObject("errMsg", "ログインできませんでした");
 		}
-		return mav;
-	}
-
-	/**
-	 * 所属グループ一覧
-	 * @return
-	 */
-	@GetMapping("deptGroupList")
-	public ModelAndView viewDeptGroupList(ModelAndView mav, String user_id) {
-
-		Optional<User> user = userCrudRepo.findById(user_id);
-
-		List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
-
-		if (user.isPresent()) {
-			mav.setViewName("common/deptGroupList");
-			mav.addObject("groupS", deptGroupList);
-			session.setAttribute("user", user.get());
-		} else {
-			mav.setViewName("common/menuUser");
-			mav.addObject("errMsg", "失敗しました");
-		}
-
 		return mav;
 	}
 
