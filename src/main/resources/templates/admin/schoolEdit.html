@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|学校情報編集</title>
+	<title>タスクどん|メニュー</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +16,7 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/menuS.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -39,29 +40,25 @@
 						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							メニュー
 						</button>
+						<!--各画面遷移-->
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<ul class="dropdown-menu dropdown-menu-dark">
-								<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
-								<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
-								<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
-
-								<!--ログインしているユーザが大ボスの場合-->
-								<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
-									<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
-									</li>
-								</div>
-
-								<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
+							<!--メニュー画面遷移-->
+							<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
+							<!--役職判断処理(管理者のBOSS)-->
+							<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
+								<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
 								</li>
-								<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
-								<li>
-									<hr class="dropdown-divider"> <!--線-->
-								</li>
-								<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
-							</ul>
+							</div>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
+							<li>
+								<hr class="dropdown-divider"> <!--線-->
+							</li>
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
-				</ul>
-				</li>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -74,9 +71,9 @@
 
 		<h2>学校情報編集</h2>
 
-    <!-- エラー文を表示する -->
-	  <p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
-    
+		<!-- エラー文を表示する -->
+		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
+
 		<tr th:each="schoolDetails : ${schoolEdit}" th:if="${schoolDetailsStat.index == 0}">
 			<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
 			<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
@@ -116,8 +113,8 @@
 						<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
 						<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
 						<input type="hidden" name="before_room_name" th:value="${schoolDetails.before_room_name}">
-					
-					  <input type="submit" name="button" value="確認">
+
+						<input type="submit" name="button" value="確認">
 					</td>
 
 					<td><input type="submit" name="button" value="戻る"></td>

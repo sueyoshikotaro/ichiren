@@ -92,46 +92,41 @@
 
 			<!--教室情報一覧表示-->
 			<div class="content">
+				<!--繰り返し処理-->
 				<div th:each="schoolDetails : ${schoolS}">
 					<div class="content-box">
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="flexRadioDefault"
-								th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
-								th:checked="${schoolDetailsStat.index == 0}">
-							<label class="form-check-label" th:for="${schoolDetails.room_id}"></label>
-						</div>
+						<label for="inputPassword5" class="form-label"
+							th:text="'教室名：'+${schoolDetails.room_name}"></label>
 						<div class="input-group mb-3">
-							<span class="input-group-text" id="basic-addon1">教室名</span>
-							<input type="text" class="form-control" th:value="${schoolDetails.room_name}"
-								aria-label="Username" aria-describedby="basic-addon1" readonly>
-						</div>
-						<div class="input-group mb-3">
-							<span class="input-group-text" id="basic-addon1" style="margin-top: -9px;">建物　</span>
+							<span class="input-group-text" id="basic-addon1">建物</span>
 							<input type="text" class="form-control" th:value="${schoolDetails.hall}"
-								aria-label="Username" aria-describedby="basic-addon1" style="margin-top: -9px;"
-								readonly>
-						</div>
-						<div class="input-group mb-3">
-							<span class="input-group-text" id="basic-addon1" style="margin-top: -9px;">階層　</span>
+								aria-label="Username" aria-describedby="basic-addon1" readonly>
+							<span class="input-group-text" id="basic-addon1">階層</span>
 							<input type="text" class="form-control" th:value="${schoolDetails.floor}"
-								aria-label="Username" aria-describedby="basic-addon1" style="margin-top: -9px;"
-								readonly>
-						</div>
-						<div class="input-group mb-3">
-							<span class="input-group-text" id="basic-addon1" style="margin-top: -9px;">PC　　</span>
+								aria-label="Username" aria-describedby="basic-addon1" readonly>
+							<span class="input-group-text" id="basic-addon1">PC</span>
 							<div th:if="${schoolDetails.pc_flg == 1}">
 								<input type="text" class="form-control" th:value="'有'" aria-label="Username"
-									aria-describedby="basic-addon1" style="margin-top: -9px;" readonly>
+									aria-describedby="basic-addon1" readonly>
 							</div>
 							<div th:unless="${schoolDetails.pc_flg == 1}">
 								<input type="text" class="form-control" th:value="'無'" aria-label="Username"
-									aria-describedby="basic-addon1" style="margin-top: -9px;" readonly>
+									aria-describedby="basic-addon1" readonly>
+							</div>
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text" id="basic-addon1">選択</span>
+							<!--ラジオボタン-->
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="flexRadioDefault"
+									th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
+									th:checked="${schoolDetailsStat.index == 0}">
+								<label class="form-check-label" th:for="${schoolDetails.room_id}"></label>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
 
 			<table border="1">
 				<tr>
@@ -196,4 +191,4 @@
 
 </body>
 
-</html>
+</html>>
