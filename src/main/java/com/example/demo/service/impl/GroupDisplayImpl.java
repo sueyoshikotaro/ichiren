@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.entity.GroupMenberDetailView;
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
-import com.example.demo.form.GroupMenberDetailView;
+import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.TaskForm;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.service.GroupDisplayServiceInterface;
@@ -86,7 +87,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ詳細
 	 */
 	@Override
-	public List<GroupMenberDetailView> groupMemberDetail(String user_name) {
+	public List<GroupMemberDetailView> groupMemberDetail(String user_name) {
 
 		return groupDispCrudRepo.groupMemberDetail(user_name);
 	}
@@ -112,40 +113,58 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ編集
 	 */
 	@Override
-	public void groupEdit(String user_roll) {
+	public void groupEdit(String group_id) {
 
-		groupDispCrudRepo.groupEdit(user_roll);
+		groupDispCrudRepo.groupEdit(group_id);
 
 	}
-	
+
+	/*
+	 * 向江
+	 * グループメンバ削除画面を表示するためだけのメソッド
+	 */
+	@Override
+	public List<GroupMenberDetailView> grMemDelDisp(String user_name) {
+		
+		return groupDispCrudRepo.grMemDelDisp(user_name);
+	}
+
+	/*
+	 * 向江
+	 * グループメンバ削除
+	 */
+	@Override
+	public void groupMemberDelete(String group_id, String user_id) {
+
+		groupDispCrudRepo.groupMemberDelete(group_id, user_id);
+
+	}
+
 	/**
 	 * 末吉
 	 * グループ作成
 	 */
 	@Override
 	public void groupCreate(String group_name, int school_id, String genre) {
-		
+
 		groupDispCrudRepo.groupCreate(group_name, school_id, genre);
-		
+
 	}
-	
+
 	/**
 	 * 末吉
 	 * 登録したグループID取得
 	 */
 	@Override
 	public int MaxGroupId(int school_id) {
-		
+
 		return groupDispCrudRepo.MaxGroupId(school_id);
 	}
 
 	@Override
 	public void groupDetailCreate(String user_id, int group_id, String user_roll, int score) {
-		
+
 		groupDispCrudRepo.groupDetailCreate(user_id, group_id, user_roll, score);
 	}
-	
-	
-	
 
 }

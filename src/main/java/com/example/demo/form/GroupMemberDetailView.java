@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import lombok.Data;
 
 @Data
-public class GroupMenberDetailView {
+public class GroupMemberDetailView {
 
 	@Id
 	private String user_name;
@@ -17,6 +17,7 @@ public class GroupMenberDetailView {
 	private String task_name;
 	private int task_priority;
 	private int progress;
+	private String task_content;
 	
 	//private int task_id;
 }

@@ -59,23 +59,33 @@
 
 			<!-- グループメンバ詳細 -->
 			<div>
-				<form th:action="@{groupMenberDetails}" method="post">
+				<form th:action="@{groupMemberDetails}" method="get">
 					<input type="hidden" name="user_name" th:value="${group.user_name}">
 					<input type="hidden" name="group_name" th:value="${group.group_name}">
 					<button type="submit" name="button" class="btn btn-detail" value="詳細">詳細</button>
 				</form>
+
+				<!--グループメンバ削除-->
+				<form th:action="@{groupMemberDelDisp}" method="post">
+					<input type="hidden" name="user_name" th:value="${group.user_name}">
+					<input type="hidden" name="group_name" th:value="${group.group_name}">
+					<button type="submit" name="button" class="btn btn-detail" value="削除">削除</button>
+				</form>
 			</div>
+			
 			<!--グループ編集 -->
 			<div>
 				<form th:action="@{groupEdit}" method="post">
 					<input type="hidden" name="group_id" th:value="${group.group_id}">
-					<input type="hidden" name="group_name" th:value="${group.group_name}">
-					<button type="submit" name="button" class="btn btn-update" value="編集">編集</button>
+					<input type="hidden" name="user_roll" th:value="${user_roll}">
+					<input type="hidden" name="user_roll" th:value="${user_roll}">
+					<!--					<input type="hidden" name="group_name" th:value="${group.group_name}">-->
+					<button type="submit" name="button" class="btn btn-edit" value="編集">編集</button>
 				</form>
 			</div>
 			<!--グループメンバ追加 -->
 			<div>
-				<form th:action="@{groupMenberAdd}" method="post">
+				<form th:action="@{groupMemberAdd}" method="post">
 					<input type="hidden" name="group_id" th:value="${group.group_id}">
 					<input type="hidden" name="group_name" th:value="${group.group_name}">
 					<button type="submit" name="button" class="btn btn-update" value="追加">追加</button>
@@ -86,12 +96,11 @@
 				<form th:action="@{groupDiss}" method="post">
 					<input type="hidden" name="group_id" th:value="${group.group_id}">
 					<input type="hidden" name="group_name" th:value="${group.group_name}">
-					<button type="submit" name="button" class="btn btn-update" value="解散">解散</button>
+					<button type="submit" name="button" class="btn btn-diss" value="解散">解散</button>
 				</form>
 			</div>
 
 		</div>
-		<!--			<input type="hidden" name="group_id" th:value="${group.group_id}">-->
 
 		<!--コンテナ最下のボタン-->
 		<button th:onclick="|location.href='@{/taskdon/user/taskList}'|">戻る</button>
