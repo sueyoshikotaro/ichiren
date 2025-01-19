@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Todo {
+public class Tdlist {
 	@Id
 	private int tdlist_id;
 	private String user_id;
