@@ -70,42 +70,71 @@
 <body>
 
 	<!--ドロップダウンメニュー(開閉)-->
-	<a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExampleSide" role="button">
-		<button class="navbar-toggler" type="button" data-bs-target="#navbarNavDarkDropdown"
-			aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-	</a>
-
-	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExampleSide"
-		aria-labelledby="offcanvasExampleLabel">
-		<div class="offcanvas-header">
-			<h2 class="offcanvas-title" id="offcanvasExampleLabel">ToDo一覧</h2> <button type="button" class="btn-close"
-				data-bs-dismiss="offcanvas" aria-label="Close"></button>
-		</div>
-		<div class="offcanvas-body">
-			<div th:each="todo:${todoList}">
-				<div th:text="${todo.tdlist_content}"></div>
-				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-					<label class="form-check-label" for="flexCheckDefault"></label>
-				</div>
+	<button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExampleSide"
+		aria-controls="offcanvasExample">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div>
+		<th:block th:insert="common/TodoFragment :: toggle">
+	</div>
+<!--	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExampleSide"-->
+<!--		aria-labelledby="offcanvasExampleLabel">-->
+<!--		<div class="offcanvas-header">-->
+<!--			<h2 class="offcanvas-title" id="offcanvasExampleLabel">ToDo一覧</h2> <button type="button" class="btn-close"-->
+<!--				data-bs-dismiss="offcanvas" aria-label="Close"></button>-->
+<!--		</div>-->
+<!--		<div class="offcanvas-body">-->
+<!--			<form th:action="@{todoListChange}" method="post">-->
+<!--				<div th:each="todo:${todoList}">-->
+<!--					<div th:text="${todo.tdlist_content}"></div>-->
+<!--					<div class="form-check">-->
+<!--						<input class="form-check-input" type="checkbox" id="flexCheckDefault">-->
+<!--						<label class="form-check-label"></label>-->
+<!--					</div>-->
+<!--					ラジオボタン-->
+<!--					<div class="form-check">-->
+<!--						<input class="form-check-input" type="radio" name="flexRadioDefault"-->
+<!--							th:value="${todo.tdlist_id}" id="flexRadioDefault1" th:checked="${todo.tdlist_id} == ${id}">-->
+<!--						<label class="form-check-label"></label>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--				<button type="submit" name="button" value="edit">編集</button>-->
+<!--				<button type="submit" name="button" value="regist">登録</button>-->
+<!--				<button type="submit" name="button" value="delete">削除</button>-->
+<!--			</form>-->
+<!--		</div>-->
+<!--	</div>-->
+	<div class="container">
+		<div th:if="${button==null} or ${button=='regist'}">
+			<div>
+				<label>タスク内容</label>
+				<input type="text" required>
+			</div>
+			<div class="dropdown mt-3">
+				<label>重要度</label>
+				<select class="form-select">
+					<option class="dropdown-item" value="高">高</option>
+					<option class="dropdown-item" value="中">中</option>
+					<option class="dropdown-item" value="低">低</option>
+				</select>
 			</div>
 		</div>
-	</div>
-	<div class="container">
-		<!--			ドロップダウンリスト-->
-		<!--			<div class="dropdown mt-3">-->
-		<!--				<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">-->
-		<!--					Dropdown button-->
-		<!--				</button>-->
-		<!--				<ul class="dropdown-menu">-->
-		<!--					<li><a class="dropdown-item" href="#">Action</a></li>-->
-		<!--					<li><a class="dropdown-item" href="#">Another action</a></li>-->
-		<!--					<li><a class="dropdown-item" href="#">Something else here</a></li>-->
-		<!--				</ul>-->
-		<!--			</div>-->
-
+		<form th:if="${todo!=null} and ${button != 'regist'}" th:action="@{#}" method="post">
+			<div th:each="todo:${todo}">
+				<div>
+					<label>タスク内容</label>
+					<input type="text" th:value="${todo.tdlist_content}" required></input>
+				</div>
+				<div class="dropdown mt-3">
+					<label>重要度</label>
+					<select class="form-select">
+						<option class="dropdown-item" value="高" th:selected="${todo.importance} == '高'">高</option>
+						<option class="dropdown-item" value="中" th:selected="${todo.importance} == '中'">中</option>
+						<option class="dropdown-item" value="低" th:selected="${todo.importance} == '低'">低</option>
+					</select>
+				</div>
+			</div>
+		</form>
 
 	</div>
 	<!--bootstrapのjsリンク接続-->
