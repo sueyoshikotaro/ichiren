@@ -11,6 +11,8 @@ public class TeamsForm {
 	private String group_id;
 	private String group_name;
 	private String school_name;
+	private String school_id;
+	
 	private int group_flg;
 	private String genre;
 	private String work_status;

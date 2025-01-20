@@ -13,6 +13,8 @@ public class GroupDetailView {
 	private String genre;
 	private String all_progress;
 	
+	private int school_id;
+	private String user_id;
 	private String user_name;
 	private int user_progress;
 	private int score;

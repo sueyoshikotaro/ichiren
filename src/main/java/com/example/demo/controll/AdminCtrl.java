@@ -22,14 +22,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
-import com.example.demo.entity.Teams;
 import com.example.demo.entity.User;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsDisplay;
+import com.example.demo.form.TeamsForm;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
 import com.example.demo.service.GroupDisplayServiceInterface;
@@ -772,7 +773,8 @@ public class AdminCtrl {
 			@RequestParam(required = false) String selectedValue,
 			@RequestParam(name = "dropdown", required = false) String drop) {
 
-		List<Teams> group = null;
+		List<TeamsForm> group = null;
+
 		String dropid = null;
 		String dropdown = "--";
 		mav.getModel().clear();
@@ -784,6 +786,10 @@ public class AdminCtrl {
 		}
 
 		mav.addObject("groups", group);
+
+		for (TeamsForm t : group) {
+			System.out.println(t);
+		}
 		mav.setViewName("admin/groupList");
 
 		return mav;
@@ -801,6 +807,10 @@ public class AdminCtrl {
 
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
 
+		for (GroupDetailView gdv : group) {
+			System.out.println(gdv);
+		}
+
 		mav.addObject("groups", group);
 		mav.setViewName("admin/groupDetails");
 
@@ -817,6 +827,10 @@ public class AdminCtrl {
 			@RequestParam(name = "user_name") String user_name) {
 
 		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(user_name);
+
+		for (GroupMemberDetailView g : group) {
+			System.out.println(g);
+		}
 
 		mav.addObject("group", group);
 		mav.setViewName("admin/groupMemberDetails");
@@ -901,24 +915,68 @@ public class AdminCtrl {
 	 */
 	@PostMapping("groupMemberDelDisp")
 	public ModelAndView groupMemberDeleteDisp(ModelAndView mav,
-			@RequestParam(name = "user_name", required = false) String user_name) {
+			@RequestParam(name = "user_id", required = false) String user_id,
+			GroupMemberDeleteView g) {
 
-		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(user_name);
+		System.out.println(user_id);
 
-		mav.addObject("group", group);
+		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
+
+		for (GroupMemberDeleteView test : group) {
+			System.out.println(test);
+		}
+
+		System.out.println(g.getUser_id());
+
+		mav.addObject("user", group);
+
+		for (GroupMemberDeleteView gmdv : group) {
+			System.out.println(gmdv);
+		}
 		mav.setViewName("admin/groupMemberDelete");
 
 		return mav;
 	}
 
-	/**
+//	/**
+//	 * 向江
+//	 * グループメンバ削除確認画面の戻るを押下した場合
+//	 * @return
+//	 */
+//	@PostMapping("groupMemberDeleteConfirm")
+//	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
+//			GroupDetailView g, ModelAndView mav, Model model) {
+//
+//		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
+//
+//		mav.addObject("user", group);
+//		mav.setViewName("admin/groupDetails");
+//
+//		return mav;
+//	}
+
+	/*
 	 * 向江
-	 * グループメンバ削除確認画面を表示する
+	 * グループメンバ削除完了
 	 * @return
 	 */
-	@PostMapping("groupMemberDeleteConfirm")
-	public String memberDeleteConfirm() {
-		return "memberDeleteConfirm";
+	@PostMapping("groupMemberDeleteComp")
+	public ModelAndView memberDeleteComp(@RequestParam("button") String button,
+			@RequestParam(name = "user_id", required = false) String user_id,
+			@RequestParam(name = "group_id", required = false) String group_id,
+			@RequestParam(name = "user_name", required = false) String user_name,
+			ModelAndView mav,
+			GroupDetailView g) {
+
+		groupDispService.groupMemberDelete(user_id, group_id, user_name);
+		List<GroupDetailView> groupDetails = groupDispService.groupDetail(g.getGroup_id());
+
+		// ポップアップを表示するために、画面遷移しないようにする
+		mav.addObject("groupMemberDeleteComp", true);
+		mav.addObject("group", groupDetails);
+		mav.setViewName("admin/groupMemberDeleteConfirm");
+
+		return mav;
 	}
 
 	/**
