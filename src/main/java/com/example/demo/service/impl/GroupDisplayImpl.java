@@ -22,26 +22,29 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ一覧
 	 */
 	@Override
-	public List<TeamsForm> groupList(String dropdown, String dropid) {
+	public List<TeamsForm> groupList(String dropdown, String dropid, int school_id) {
+		
+		
+		
 		List<TeamsForm> result = null;
 		if (dropdown.equals("--")) {
-			result = groupDispCrudRepo.groupList();
+			result = groupDispCrudRepo.groupList(school_id);
 		} else {
 			if (dropid.equals("year")) {
 				if (dropdown.equals("グループ結成年度")) {
-					result = groupDispCrudRepo.groupList();
+					result = groupDispCrudRepo.groupList(school_id);
 				} else {
 					result = groupDispCrudRepo.groupListYear(dropdown);
 				}
 			} else if (dropid.equals("school")) {
 				if (dropdown.equals("学校名")) {
-					result = groupDispCrudRepo.groupList();
+					result = groupDispCrudRepo.groupList(school_id);
 				} else {
 					result = groupDispCrudRepo.groupListSchool(dropdown);
 				}
 			} else if (dropid.equals("genre")) {
 				if (dropdown.equals("ジャンル")) {
-					result = groupDispCrudRepo.groupList();
+					result = groupDispCrudRepo.groupList(school_id);
 				} else {
 					result = groupDispCrudRepo.groupListGenre(dropdown);
 				}

@@ -11,7 +11,7 @@ import com.example.demo.form.TeamsForm;
 public interface GroupDisplayServiceInterface {
 
 	// グループ一覧表示
-	public List<TeamsForm> groupList(String dropdown, String dropid);
+	public List<TeamsForm> groupList(String dropdown, String dropid, int school_id);
 
 	// 発足年度で絞り込みする
 	public List<TeamsForm> findDistinctEstYear(String estYear);

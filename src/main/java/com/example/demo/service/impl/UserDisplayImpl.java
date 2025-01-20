@@ -25,9 +25,9 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 * ユーザ一覧
 	 */
 	@Override
-	public Iterable<UserDisplay> userList() {
+	public Iterable<UserDisplay> userList(int school_id) {
 
-		return userCrudRepo.userList();
+		return userCrudRepo.userList(school_id);
 	}
 
 	/*
@@ -125,9 +125,9 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 * 講師一覧表示
 	 */
 	@Override
-	public Iterable<UserDisplay> teList() {
+	public Iterable<UserDisplay> teList(int school_id) {
 
-		return userCrudRepo.teList();
+		return userCrudRepo.teList(school_id);
 	}
 
 	/*

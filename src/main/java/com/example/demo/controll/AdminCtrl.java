@@ -431,11 +431,18 @@ public class AdminCtrl {
 
 	@GetMapping("userList")
 	public ModelAndView userList() {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
+
 		//ModelAndViewのインスタンス生成
 		ModelAndView mav = new ModelAndView();
 
 		//サービスのメソッドを呼び出す
-		Iterable<UserDisplay> userList = userDisplayService.userList();
+		Iterable<UserDisplay> userList = userDisplayService.userList(school_id);
 
 		mav.addObject("users", userList);
 		mav.setViewName("admin/userList");
@@ -666,9 +673,15 @@ public class AdminCtrl {
 	@GetMapping("teList")
 	public ModelAndView dispTeList() {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
+
 		ModelAndView mav = new ModelAndView();
 
-		Iterable<UserDisplay> teList = userDisplayService.teList();
+		Iterable<UserDisplay> teList = userDisplayService.teList(school_id);
 
 		mav.addObject("tes", teList);
 		mav.setViewName("admin/teList");
@@ -773,6 +786,12 @@ public class AdminCtrl {
 			@RequestParam(required = false) String selectedValue,
 			@RequestParam(name = "dropdown", required = false) String drop) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
+
 		List<TeamsForm> group = null;
 
 		String dropid = null;
@@ -780,9 +799,9 @@ public class AdminCtrl {
 		mav.getModel().clear();
 		if (drop != null) {
 			dropdown = selectedValue;
-			group = groupDispService.groupList(dropdown, drop);
+			group = groupDispService.groupList(dropdown, drop, school_id);
 		} else {
-			group = groupDispService.groupList(dropdown, dropid);
+			group = groupDispService.groupList(dropdown, dropid, school_id);
 		}
 
 		mav.addObject("groups", group);
@@ -938,22 +957,22 @@ public class AdminCtrl {
 		return mav;
 	}
 
-//	/**
-//	 * 向江
-//	 * グループメンバ削除確認画面の戻るを押下した場合
-//	 * @return
-//	 */
-//	@PostMapping("groupMemberDeleteConfirm")
-//	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
-//			GroupDetailView g, ModelAndView mav, Model model) {
-//
-//		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
-//
-//		mav.addObject("user", group);
-//		mav.setViewName("admin/groupDetails");
-//
-//		return mav;
-//	}
+	//	/**
+	//	 * 向江
+	//	 * グループメンバ削除確認画面の戻るを押下した場合
+	//	 * @return
+	//	 */
+	//	@PostMapping("groupMemberDeleteConfirm")
+	//	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
+	//			GroupDetailView g, ModelAndView mav, Model model) {
+	//
+	//		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
+	//
+	//		mav.addObject("user", group);
+	//		mav.setViewName("admin/groupDetails");
+	//
+	//		return mav;
+	//	}
 
 	/*
 	 * 向江
@@ -1001,7 +1020,11 @@ public class AdminCtrl {
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre) {
 
-		System.out.println(check);
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
 
 		//グループ一覧の作成ボタンから遷移してきた場合
 		if (userId == null) {
@@ -1012,13 +1035,13 @@ public class AdminCtrl {
 		} else {
 
 			if (check == null || check.length == 0) {
-				
+
 				TeamsDisplay teamsDisplay = new TeamsDisplay();
 				teamsDisplay.setGroup_id(group_id);
 				teamsDisplay.setGroup_name(group_name);
-				
+
 				//ユーザ一覧表示のメソッドを呼び出す
-				Iterable<UserDisplay> userList = userDisplayService.userList();
+				Iterable<UserDisplay> userList = userDisplayService.userList(school_id);
 
 				//グループメンバ追加の場合
 				if (group_id != null) {
@@ -1029,7 +1052,7 @@ public class AdminCtrl {
 					// ユーザリストからすでにグループに登録されているユーザを除外
 					((Collection<UserDisplay>) userList).removeIf(user -> existUserIds.contains(user.getUser_id()));
 				}
-				
+
 				mav.addObject("groupDetail", teamsDisplay);
 				mav.addObject("users", userList);
 				mav.addObject("errMsg", "メンバを選択してください");
@@ -1053,8 +1076,6 @@ public class AdminCtrl {
 				TeamsDisplay teamsDisplay = new TeamsDisplay();
 				teamsDisplay.setGroup_id(group_id);
 				teamsDisplay.setGroup_name(group_name);
-				
-				
 
 				mav.addObject("groupDetail", teamsDisplay);
 				mav.addObject("selectUser", userList);
@@ -1086,10 +1107,16 @@ public class AdminCtrl {
 			@RequestParam(name = "genre", required = false) String genre,
 			@RequestParam(name = "button", required = false) String button) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
+
 		TeamsDisplay teamsDisplay = new TeamsDisplay();
 
 		//ユーザ一覧表示のメソッドを呼び出す
-		Iterable<UserDisplay> userList = userDisplayService.userList();
+		Iterable<UserDisplay> userList = userDisplayService.userList(school_id);
 
 		//グループメンバ追加の場合
 		if (group_id != null) {
