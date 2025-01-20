@@ -16,6 +16,7 @@ public class GroupDetailView {
 	private int school_id;
 	private String user_id;
 	private String user_name;
+	private String user_roll;
 	private int user_progress;
 	private int score;
 	

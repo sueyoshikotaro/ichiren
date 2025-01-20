@@ -51,4 +51,7 @@ public interface GroupDisplayServiceInterface {
 	//既に登録されているユーザIDを取得
 	public List<String> getExistUserIds(Integer group_id);
 	
+	//グループ解散
+	public void groupDiss(int group_id);
+	
 }

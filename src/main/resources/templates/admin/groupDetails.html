@@ -95,9 +95,12 @@
 			</div>
 			<!--グループ解散 -->
 			<div>
-				<form th:action="@{groupDiss}" method="post">
+				<form th:action="@{groupDissConfirm}" method="post">
 					<input type="hidden" name="group_id" th:value="${group.group_id}">
 					<input type="hidden" name="group_name" th:value="${group.group_name}">
+					<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
+					<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
+					<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
 					<button type="submit" name="button" class="btn btn-diss" value="解散">解散</button>
 				</form>
 			</div>
