@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Task;
+import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
@@ -27,8 +30,6 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -624,9 +625,33 @@ public class UserCtrl {
 	//	@LoginRequired
 	@GetMapping("todoList")
 	public ModelAndView todoList(ModelAndView mav) {
-		System.out.println(TodoService.selectTodoList(session.getId()));
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
+		mav.addObject("todoList", TodoService.selectTodoList(user_id));
+		mav.setViewName("common/todoList");
+		return mav;
+	}
+
+	/**
+	 * 選択されたToDoリスト画面を表示
+	 * @return
+	 */
+	//	@LoginRequired
+	@PostMapping("todoListChange")
+	public ModelAndView todoList(ModelAndView mav,
+			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
+			@RequestParam("button") String button) {
+		List<Tdlist> todo = null;
+		User user = (User) session.getAttribute("user");
+		String user_id = user.getUser_id();
+		if (tdlist_id != null) {
+			todo = TodoService.selectTodo(tdlist_id);
+		}
+
+		mav.addObject("button", button);
+		mav.addObject("id", tdlist_id);
+		mav.addObject("todo", todo);
+		System.out.println("aaaaaaaaaaaaaaaa"+todo);
 		mav.addObject("todoList", TodoService.selectTodoList(user_id));
 		mav.setViewName("common/todoList");
 		return mav;

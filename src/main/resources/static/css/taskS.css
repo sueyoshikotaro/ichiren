@@ -120,6 +120,45 @@
 	color: #fff;
 }
 
+/*確認ボタン*/
+.Confirm-btn {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	width: 80px;
+	margin: auto;
+	margin-top: 16px;
+	font-size: 18px;
+	font-weight: bold;
+	border: 2px solid black;
+	color: black;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.Confirm-btn::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	transform: translateX(-100%);
+	transition: all .3s;
+	z-index: -1;
+}
+
+.Confirm-btn:hover::before {
+	transform: translateX(0);
+}
+
+.Confirm-btn:hover {
+	color: #fff;
+}
+
 /*遷移ボタン(登録や未承認等)*/
 a.move-btn {
 	display: block;
