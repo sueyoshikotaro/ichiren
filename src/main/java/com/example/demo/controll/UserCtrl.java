@@ -90,42 +90,30 @@ public class UserCtrl {
 	 * ログイン処理
 	 * @return
 	 */
-//	@PostMapping("login")
-//	public String loginCheck(String user_id, String user_pass) {
-//
-//		Optional<User> user = userCrudRepo.findById(user_id);
-//
-//		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
-//
-//			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
-//
-//				System.out.println(user_id);
-//				System.out.println(user_pass);
-//
-//				return "redirect:/menuAdmin";
-//			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
-//
-//				System.out.println(user_id);
-//				System.out.println(user_pass);
-//
-//				return "redirect:/menuAdmin";
-//			} else if (user.get().getUser_pass().equals("taskdon1")) {
-//
-//				System.out.println(user_id);
-//				System.out.println(user_pass);
-//
-//				return "redirect:/passReset";
-//			} else if (user.get().getUser_id().contains("st")) {
-//
-//				//				System.out.println(user_id);
-//				//				System.out.println(user_pass);
-//
-//				return "redirect:/deptGroupList";
-//			}
-//		}
-//
-//		return "common/login";
-//	}
+	@PostMapping("login")
+	public String loginCheck(String user_id, String user_pass) {
+
+		Optional<User> user = userCrudRepo.findById(user_id);
+
+		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+
+			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
+
+				return "redirect:/menuAdmin";
+			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+
+				return "redirect:/menuAdmin";
+			} else if (user.get().getUser_pass().equals("taskdon1")) {
+
+				return "redirect:/passReset";
+			} else if (user.get().getUser_id().contains("st")) {
+
+				return "redirect:/deptGroupList";
+			}
+		}
+
+		return "common/login";
+	}
 
 	/**
 	 * 在籍チェック
@@ -136,6 +124,9 @@ public class UserCtrl {
 	 */
 	@PostMapping("passReset")
 	public ModelAndView userIdCheckForResetPass(ModelAndView mav, String user_id, String user_pass) {
+
+		System.out.println("出力" + user_id);
+		System.out.println(user_pass);
 
 		Optional<User> user = userCrudRepo.findById(user_id);
 
@@ -180,7 +171,7 @@ public class UserCtrl {
 	@PostMapping("/taskdon/admin/menu")
 	public ModelAndView userIdCheckForAdmin(ModelAndView mav, String user_id, String user_pass) {
 
-		System.out.println("出力" + user_id);
+		System.out.println("出力は" + user_id);
 		System.out.println(user_pass);
 
 		Optional<User> user = userCrudRepo.findById(user_id);
