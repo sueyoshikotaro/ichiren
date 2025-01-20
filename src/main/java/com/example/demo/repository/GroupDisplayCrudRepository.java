@@ -112,5 +112,12 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("insert into user_detail (user_id, group_id, user_roll, score) values (:user_id, :group_id, :user_roll, :score)")
 	public void groupDetailCreate(String user_id, int group_id, String user_roll, int score);
+	
+	/**
+	 * 末吉
+	 * 既に登録されているユーザIDを取得
+	 */
+	@Query("select user_id from user_detail where group_id = :group_id")
+	public List<String> getExistUserIds(int group_id);
 }
 	

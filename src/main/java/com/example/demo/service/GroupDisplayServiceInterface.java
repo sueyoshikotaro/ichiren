@@ -46,4 +46,8 @@ public interface GroupDisplayServiceInterface {
 	
 	//グループ詳細登録
 	public void groupDetailCreate(String user_id, int group_id, String user_roll, int score);
+
+	//既に登録されているユーザIDを取得
+	public List<String> getExistUserIds(Integer group_id);
+	
 }
