@@ -937,42 +937,46 @@ public class AdminCtrl {
 			@RequestParam(name = "user_id", required = false) String user_id,
 			GroupMemberDeleteView g) {
 
-		System.out.println(user_id);
-
 		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
 
-		for (GroupMemberDeleteView test : group) {
-			System.out.println(test);
-		}
-
-		System.out.println(g.getUser_id());
-
 		mav.addObject("user", group);
-
-		for (GroupMemberDeleteView gmdv : group) {
-			System.out.println(gmdv);
-		}
 		mav.setViewName("admin/groupMemberDelete");
 
 		return mav;
 	}
 
-	//	/**
-	//	 * 向江
-	//	 * グループメンバ削除確認画面の戻るを押下した場合
-	//	 * @return
-	//	 */
-	//	@PostMapping("groupMemberDeleteConfirm")
-	//	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
-	//			GroupDetailView g, ModelAndView mav, Model model) {
-	//
-	//		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
-	//
-	//		mav.addObject("user", group);
-	//		mav.setViewName("admin/groupDetails");
-	//
-	//		return mav;
-	//	}
+	/**
+	 * 向江
+	 * グループメンバ削除確認画面を表示する
+	 * @return
+	 */
+	@PostMapping("groupMemberDeleteConfirm")
+	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
+			@RequestParam(name = "user_id") String user_id,
+			@RequestParam(name = "user_name") String user_name,
+			@RequestParam(name = "group_id") String group_id,
+			GroupDetailView g, ModelAndView mav) {
+
+		// 削除ボタンを押下
+		if (button.equals("削除")) {
+
+			groupDispService.groupMemberDelete(user_id, group_id, user_name);
+
+			// ポップアップを表示するために、画面遷移しないようにする
+			mav.addObject("groupMemberDeleteComp", true);
+			//mav.addObject("group", groupDetails);
+			mav.setViewName("admin/groupMemberDelete");
+			
+			return mav;
+		}
+
+		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
+
+		mav.addObject("user", group);
+		mav.setViewName("admin/groupDetails");
+
+		return mav;
+	}
 
 	/*
 	 * 向江
@@ -987,12 +991,12 @@ public class AdminCtrl {
 			ModelAndView mav,
 			GroupDetailView g) {
 
-		groupDispService.groupMemberDelete(user_id, group_id, user_name);
-		
-		System.out.println(user_id);
-		System.out.println(group_id);
-		System.out.println(user_name);
-		
+		//		groupDispService.groupMemberDelete(user_id, group_id, user_name);
+		//
+		//		System.out.println(user_id);
+		//		System.out.println(group_id);
+		//		System.out.println(user_name);
+
 		List<GroupDetailView> groupDetails = groupDispService.groupDetail(g.getGroup_id());
 
 		// ポップアップを表示するために、画面遷移しないようにする
