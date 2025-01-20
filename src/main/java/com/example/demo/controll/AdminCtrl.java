@@ -819,7 +819,7 @@ public class AdminCtrl {
 	 * グループ詳細画面を表示する
 	 * @return
 	 */
-	@GetMapping("groupDetail")
+	@PostMapping("groupDetail")
 	public ModelAndView groupDetail(ModelAndView mav,
 			@RequestParam(name = "group_id", required = false) String group_id,
 			GroupDetailView g) {
@@ -988,12 +988,17 @@ public class AdminCtrl {
 			GroupDetailView g) {
 
 		groupDispService.groupMemberDelete(user_id, group_id, user_name);
+		
+		System.out.println(user_id);
+		System.out.println(group_id);
+		System.out.println(user_name);
+		
 		List<GroupDetailView> groupDetails = groupDispService.groupDetail(g.getGroup_id());
 
 		// ポップアップを表示するために、画面遷移しないようにする
 		mav.addObject("groupMemberDeleteComp", true);
 		mav.addObject("group", groupDetails);
-		mav.setViewName("admin/groupMemberDeleteConfirm");
+		mav.setViewName("admin/groupMemberDelete");
 
 		return mav;
 	}

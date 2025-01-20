@@ -92,7 +92,7 @@
 					</div>
 					<div th:text="'居場所：' + ${group.work_status}"></div>
 					<div>
-						<form th:action="@{groupDetail}" method="get">
+						<form th:action="@{groupDetail}" method="post">
 							<input type="hidden" name="group_id" th:value="${group.group_id}">
 							<input type="hidden" name="group_name" th:value="${group.group_name}">
 							<input type="hidden" name="school_id" th:value="${group.school_id}">

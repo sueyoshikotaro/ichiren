@@ -69,14 +69,11 @@
 						<p>削除が完了しました</p>
 					</div>
 					<div class="modal-footer">
-						<table th:each="groupDetails : ${groupMemberDelete}">
-							<form th:action="@{groupMemberDeleteComp}" method="post">
-								<input type="hidden" name="user_id" th:value="${groupDetails.user_id}">
-								<input type="hidden" name="group_id" th:value="${groupDetails.group_id}">
-								<button type="submit" name="button" value="グループ詳細へ"
-									class="btn btn-danger">グループ詳細へ</button>
-							</form>
-						</table>
+
+						<form th:action="@{groupDetail}" method="get">
+							<button type="submit" name="button" value="グループ詳細へ" class="btn btn-danger">グループ詳細へ</button>
+						</form>
+
 					</div>
 				</div>
 			</div>
