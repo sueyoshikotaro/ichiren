@@ -113,7 +113,7 @@ public class AdminCtrl {
 	@PostMapping("menu")
 	public String menuLogin() {
 		
-		return "admin/menu";
+		return "admin/menuAdmin";
 	}
 
 	/**
