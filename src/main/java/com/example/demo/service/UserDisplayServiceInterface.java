@@ -5,7 +5,7 @@ import com.example.demo.form.UserDisplay;
 public interface UserDisplayServiceInterface {
 
 	// ユーザ一覧表示
-	public Iterable<UserDisplay> userList();
+	public Iterable<UserDisplay> userList(int school_id);
 
 	// ユーザ削除
 	public void DeleteUser(String user_id);
@@ -32,7 +32,7 @@ public interface UserDisplayServiceInterface {
 			int i);
 
 	// 講師一覧表示
-	public Iterable<UserDisplay> teList();
+	public Iterable<UserDisplay> teList(int school_id);
 	
 	// 講師編集
 	public void teInfoUpdate(String user_id, String user_name, String school_name, String enr_year, int user_flg);

@@ -19,8 +19,8 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * 管理者_グループ一覧表示用のSQL
 	 */
-	@Query("select t.*, s.school_name from teams t inner join school s on t.school_id = s.school_id where group_flg = 1")
-	public List<TeamsForm> groupList();
+	@Query("select t.*, s.school_name from teams t inner join school s on t.school_id = s.school_id where group_flg = 1 and t.school_id = :school_id")
+	public List<TeamsForm> groupList(int school_id);
 
 	/*
 	 * 管理者_グループ一覧

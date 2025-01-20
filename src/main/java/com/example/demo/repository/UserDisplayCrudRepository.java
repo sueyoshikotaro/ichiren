@@ -17,8 +17,8 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	 * 向江
 	 * ユーザ一覧表示用のSQL
 	 */
-	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id where user_flg = 1 and user_id like '%st%'")
-	public List<UserDisplay> userList();
+	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id where user_flg = 1 and user_id like '%st%' and u.school_id = :school_id")
+	public List<UserDisplay> userList(int school_id);
 
 	/*
 	 * 向江
@@ -66,8 +66,8 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	 * 向江
 	 * 講師一覧表示用のSQL
 	 */
-	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id where user_flg = 1 and user_id like '%te%'")
-	public List<UserDisplay> teList();
+	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id where user_flg = 1 and user_id like '%te%' and u.school_id = :school_id")
+	public List<UserDisplay> teList(int school_id);
 
 	/*
 	 * 向江
