@@ -67,12 +67,14 @@
 
 				<!--グループメンバ削除-->
 				<form th:action="@{groupMemberDelDisp}" method="post">
-					<input type="hidden" name="user_name" th:value="${group.user_name}">
-					<input type="hidden" name="group_name" th:value="${group.group_name}">
+					<input type="hidden" name="user_id" th:value="${group.user_id}">
+					<input type="hidden" name="task_id" th:value="${group_task_id}">
+					<!--					<input type="hidden" name="user_name" th:value="${group.user_name}">-->
+					<!--					<input type="hidden" name="group_name" th:value="${group.group_name}">-->
 					<button type="submit" name="button" class="btn btn-detail" value="削除">削除</button>
 				</form>
 			</div>
-			
+
 			<!--グループ編集 -->
 			<div>
 				<form th:action="@{groupEdit}" method="post">
