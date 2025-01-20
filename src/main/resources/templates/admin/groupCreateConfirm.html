@@ -66,7 +66,7 @@
 
 <body>
 	<!--コンテナ-->
-	<div class="container">
+	<div class="container" th:if="${groupDetail != null}">
 		<h2 class="menu-text">グループ作成確認</h2>
 
 		<!-- エラー文を表示する -->
@@ -74,7 +74,7 @@
 
 		<form th:action="@{groupCreateComp}" method="post">
 			<table border="1">
-				<div th:if="${groupDetail != null}">
+				<div>
 					<tr>
 						<th>グループ名</th>
 						<td th:text="${groupDetail.group_name}"></td>
@@ -163,7 +163,6 @@
 		var groupCreateComp = /*[[${groupCreateComp}]]*/ true;
 		$(document).ready(function () {
 			if (groupCreateComp == true) {
-				console.log('ポップアップを表示する条件がtrueです');
 				$('#groupCreateModal').modal('show');
 			}
 		});

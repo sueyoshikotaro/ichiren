@@ -966,7 +966,7 @@ public class AdminCtrl {
 			mav.addObject("groupMemberDeleteComp", true);
 			//mav.addObject("group", groupDetails);
 			mav.setViewName("admin/groupMemberDelete");
-			
+
 			return mav;
 		}
 
@@ -1354,17 +1354,65 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * グループ解散
 	 * @return
 	 */
-	@PostMapping("groupDiss")
-	public ModelAndView groupDelete(ModelAndView mav) {
+	@PostMapping("groupDissConfirm")
+	public ModelAndView groupDelete(ModelAndView mav, TeamsDisplay teamsDisplay,
+			@RequestParam("user_id") String[] user_id,
+			@RequestParam("user_name") String[] user_name,
+			@RequestParam("user_roll") String[] user_roll) {
+
+		System.out.println("kaisann");
+		System.out.println(teamsDisplay.getGroup_id());
+		System.out.println(teamsDisplay.getGroup_name());
+		for (String id : user_id) {
+			System.out.println(id);
+
+		}
+		for (String name : user_name) {
+			System.out.println(name);
+		}
+
+		List<TeamsDisplay> leaderList = new ArrayList<>();
+		List<TeamsDisplay> memberList = new ArrayList<>();
+
+		for (int i = 0; i < user_id.length; i++) {
+			TeamsDisplay userInfo = new TeamsDisplay();
+			userInfo.setUser_id(user_id[i]);
+			userInfo.setUser_name(user_name[i]);
+			userInfo.setUser_roll(user_roll[i]);
+
+			if (user_roll[i].equals("リーダ")) {
+				leaderList.add(userInfo);
+			} else {
+				memberList.add(userInfo);
+			}
+		}
+
+		mav.addObject("leaderUser", leaderList);
+		mav.addObject("memberUser", memberList);
+		mav.addObject("teamsDisplay", teamsDisplay);
+		mav.setViewName("admin/groupDissConfirm");
+
+		return mav;
+	}
+	
+	/**
+	 * 末吉
+	 * グループ解散完了
+	 */
+	@PostMapping("groupDissComp")
+	public ModelAndView groupDissComp(ModelAndView mav,
+			@RequestParam(name = "group_id", required = false) int group_id) {
 		
-		mav.addObject("groupDelete", true);
-		mav.setViewName("admin/groupDelete");
+		groupDispService.groupDiss(group_id);
+		
+		mav.addObject("groupDissComp", true);
+		mav.setViewName("admin/groupDissConfirm");
 		
 		return mav;
 	}

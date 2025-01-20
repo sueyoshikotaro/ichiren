@@ -184,4 +184,15 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		
 		return groupDispCrudRepo.getExistUserIds(group_id);
 	}
+
+	/**
+	 * 末吉
+	 * グループ解散完了
+	 */
+	@Override
+	public void groupDiss(int group_id) {
+		
+		groupDispCrudRepo.groupDiss(group_id);
+		
+	}
 }

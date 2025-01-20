@@ -1,4 +1,3 @@
-<!-- 向江 -->
 <!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -8,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|ユーザ削除確認</title>
+	<title>タスクどん|グループ解散</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,47 +65,41 @@
 </head>
 
 <body>
-	<!--コンテナ-->
-	<div class="container" th:if="${user != null}">
-		<h2 class="menu-text">グループ作成確認</h2>
+	<div class="container" id="container" th:if="${teamsDisplay != null}"> <!-- コンテナ共通 -->
+		<h2 class="menu-text">グループ解散</h2>
 
 		<p>本当にこのユーザを削除しますか？</p>
 
-		<form th:action="@{userDeleteConfirm}" method="post">
+		<form th:action="@{groupDissComp}" method="post">
 			<table border="1">
+				<div>
+					<tr>
+						<th>グループ名</th>
+						<td th:text="${teamsDisplay.group_name}"></td>
+						<input type="hidden" name="group_id" th:value="${teamsDisplay.group_id}">
+					</tr>
 
-				<tr>
-					<th>項目</th>
-					<th>内容</th>
-				</tr>
-				<tr>
-					<th>ユーザID</th>
-					<td th:text="${user.user_id}"></td>
-				</tr>
-				<tr>
-					<th>ユーザ名</th>
-					<td th:text="${user.user_name}"></td>
-				</tr>
-				<tr>
-					<th>パスワード</th>
-					<td th:text="${user.user_pass}"></td>
-				</tr>
-				<tr>
-					<th>所属学校</th>
-					<td th:text="${user.school_name}"></td>
-				</tr>
-				<tr>
-					<th>入学年度</th>
-					<td th:text="${user.enr_year}"></td>
-				</tr>
+					<tr>
+						<th>リーダ</th>
+					</tr>
+					<tr th:each="leader : ${leaderUser}">
+						<td th:text="${leader.user_name}"></td>
+					</tr>
 
+					<tr>
+						<th>メンバ</th>
+					</tr>
+					<tr th:each="member : ${memberUser}">
+						<td th:text="${member.user_name}"></td>
+					</tr>
+				</div>
 			</table>
 
 			<tr>
 				<th>
 					<div class="form-check">
 						<label class="form-check-label" for="flexCheckDefault">
-							一度ユーザを削除すると元には戻せません
+							一度グループ情報を削除すると元には戻せません
 						</label>
 						<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
 					</div>
@@ -115,71 +108,66 @@
 
 			<tr>
 				<td colspan="2" align="center">
-					<button type="button" name="button" value="削除" class="btn btn-danger"
-						onclick="userDereteAndShowPopup()">削除</button>
+					<button type="button" name="button" value="解散" class="btn btn-danger"
+						onclick="groupDissAndShowPopup()">解散</button>
 				</td>
 			</tr>
-
-			<input type="hidden" name="user_id" th:value="${user.user_id}">
-			<input type="hidden" name="user_name" th:value="${user.user_name}">
-			<input type="hidden" name="user_pass" th:value="${user.user_pass}">
-			<input type="hidden" name="school_name" th:value="${user.school_name}">
-			<input type="hidden" name="enr_year" th:value="${user.enr_year}">
-			<input type="hidden" name="user_flg" th:value="${user.user_flg}">
-
 		</form>
-	</div>
 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-
-	<!-- ポップアップ -->
-	<div class="modal fade" id="userDeleteModal" tabindex="-1" role="dialog" aria-labelledby="userDeleteModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="userDeleteModalLabel">削除完了</h5>
-				</div>
-				<div class="modal-body">
-					<p>削除が完了しました</p>
-				</div>
-				<div class="modal-footer">
-					<form th:action="@{userList}" method="get">
-						<button type="submit" class="btn btn-danger">ユーザ一覧へ</button>
-					</form>
+		<!-- ポップアップ -->
+		<div class="modal fade" id="groupDissModal" tabindex="-1" role="dialog" aria-labelledby="groupDissModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="groupDissModalLabel">解散完了</h5>
+					</div>
+					<div class="modal-body">
+						<p>解散が完了しました</p>
+					</div>
+					<div class="modal-footer">
+						<form th:action="@{groupList}" method="get">
+							<button type="submit" class="btn btn-danger">グループ一覧へ</button>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 
-	<!--コントロールを呼び出す-->
 	<script>
-		function userDereteAndShowPopup() {
+		function groupDissAndShowPopup() {
 			// フォーム要素を取得
 			var form = document.querySelector('form');
 
 			// コントローラメソッドを呼び出すためにフォームを送信
-			form.action = 'userDeleteConfirm'; // コントローラメソッドの実際のURLに置き換えてください
+			form.action = 'groupDissComp'; // コントローラメソッドの実際のURLに置き換えてください
 			form.method = 'post';
+
+			// buttonパラメータを追加
+			//var buttonInput = document.createElement('input');
+			//buttonInput.type = 'hidden';
+			//buttonInput.name = 'button';
+			//buttonInput.value = '編集'; // または '戻る' など必要な値を設定
+			//form.appendChild(buttonInput);
 
 			form.submit();
 		}
 	</script>
 
-
 	<!--ポップアップを表示するためのコード-->
 	<script th:inline="javascript">
 		/*<![CDATA[*/
-		var userDeleteConfirm = /*[[${userDeleteConfirm}]]*/ true;
+		var groupDissComp = /*[[${groupDissComp}]]*/ true;
 		$(document).ready(function () {
-			if (userDeleteConfirm == true) {
-				$('#userDeleteModal').modal('show');
+			if (groupDissComp == true) {
+				$('#groupDissModal').modal('show');
 			}
 		});
 		/*]]>*/
 	</script>
-
 
 	<!--チェックボックスが押されていない間ボタンを無効化-->
 	<script>
