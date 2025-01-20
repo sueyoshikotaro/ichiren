@@ -1350,5 +1350,19 @@ public class AdminCtrl {
 
 		return mav;
 	}
+	
+	/**
+	 * 末吉
+	 * グループ解散
+	 * @return
+	 */
+	@PostMapping("groupDiss")
+	public ModelAndView groupDelete(ModelAndView mav) {
+		
+		mav.addObject("groupDelete", true);
+		mav.setViewName("admin/groupDelete");
+		
+		return mav;
+	}
 
 }
