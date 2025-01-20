@@ -103,6 +103,18 @@ public class AdminCtrl {
 
 		return "admin/menuAdmin";
 	}
+	
+	/**
+	 * 末吉
+	 * メニュー画面を表示する(ログイン画面から)
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("menu")
+	public String menuLogin() {
+		
+		return "admin/menu";
+	}
 
 	/**
 	 * 末吉
@@ -1061,9 +1073,7 @@ public class AdminCtrl {
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre,
 			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
-			@RequestParam(name = "leaderUser_name", required = false) List<String> leaderUser_name,
-			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id,
-			@RequestParam(name = "memberUser_name", required = false) List<String> memberUser_name) {
+			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id) {
 
 		if (memberUser_id != null) {
 			// セッション情報のUserFormを取得
@@ -1077,7 +1087,6 @@ public class AdminCtrl {
 			// ここで、受け取ったデータを処理する
 			for (int i = 0; i < leaderUser_id.size(); i++) {
 				String leaderUserId = leaderUser_id.get(i);
-				String leaderUserName = leaderUser_name.get(i);
 				// ここで、リーダーのデータを処理する
 
 				groupDispService.groupDetailCreate(leaderUserId, groop_id, "リーダ", 0);
@@ -1085,7 +1094,6 @@ public class AdminCtrl {
 
 			for (int i = 0; i < memberUser_id.size(); i++) {
 				String memberUserId = memberUser_id.get(i);
-				String memberUserName = memberUser_name.get(i);
 				// ここで、メンバーのデータを処理する
 				groupDispService.groupDetailCreate(memberUserId, groop_id, "メンバ", 0);
 			}
@@ -1115,6 +1123,23 @@ public class AdminCtrl {
 		mav.addObject("groupDetail", teamsDisplay);
 		mav.setViewName("admin/groupMemberAdd");
 
+		return mav;
+	}
+	
+	/**
+	 * 末吉
+	 * グループメンバ追加確認
+	 * @return
+	 */
+	@PostMapping("groupMemberAddConfirm")
+	public ModelAndView groupMemberAddConfirm(ModelAndView mav,
+			@RequestParam(name = "group_id", required = false) int group_id,
+			@RequestParam(name = "user_id", required = false) String user_id) {
+		
+		mav.addObject("group_id", group_id);
+		mav.addObject("user_id", user_id);
+		mav.setViewName("admin/groupMemberAddConfirm");
+		
 		return mav;
 	}
 
