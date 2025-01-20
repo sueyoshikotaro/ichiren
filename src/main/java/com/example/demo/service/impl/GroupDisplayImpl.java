@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.TaskForm;
+import com.example.demo.form.TeamsForm;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.service.GroupDisplayServiceInterface;
 
@@ -21,26 +22,29 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ一覧
 	 */
 	@Override
-	public List<Teams> groupList(String dropdown, String dropid) {
-		List<Teams> result = null;
+	public List<TeamsForm> groupList(String dropdown, String dropid, int school_id) {
+		
+		
+		
+		List<TeamsForm> result = null;
 		if (dropdown.equals("--")) {
-			result = groupDispCrudRepo.groupList();
+			result = groupDispCrudRepo.groupList(school_id);
 		} else {
 			if (dropid.equals("year")) {
 				if (dropdown.equals("グループ結成年度")) {
-					result = groupDispCrudRepo.groupList();
+					result = groupDispCrudRepo.groupList(school_id);
 				} else {
 					result = groupDispCrudRepo.groupListYear(dropdown);
 				}
 			} else if (dropid.equals("school")) {
 				if (dropdown.equals("学校名")) {
-					result = groupDispCrudRepo.groupList();
+					result = groupDispCrudRepo.groupList(school_id);
 				} else {
 					result = groupDispCrudRepo.groupListSchool(dropdown);
 				}
 			} else if (dropid.equals("genre")) {
 				if (dropdown.equals("ジャンル")) {
-					result = groupDispCrudRepo.groupList();
+					result = groupDispCrudRepo.groupList(school_id);
 				} else {
 					result = groupDispCrudRepo.groupListGenre(dropdown);
 				}
@@ -55,7 +59,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * 年だけ抽出
 	 */
 	@Override
-	public List<Teams> findAll() {
+	public List<TeamsForm> findAll() {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
@@ -66,7 +70,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ一覧
 	 */
 	@Override
-	public List<Teams> getTeamsByCriteria(String schoolName) {
+	public List<TeamsForm> getTeamsByCriteria(String schoolName) {
 
 		return groupDispCrudRepo.findByCriteria(schoolName);
 	}
@@ -77,7 +81,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 */
 	@Override
 	public List<GroupDetailView> groupDetail(String group_id) {
-
+		
 		return groupDispCrudRepo.groupDetail(group_id);
 	}
 
@@ -92,7 +96,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	}
 
 	@Override
-	public List<Teams> findDistinctEstYear(String estYear) {
+	public List<TeamsForm> findDistinctEstYear(String estYear) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
@@ -106,6 +110,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 		return groupDispCrudRepo.taskDetail(task_name);
 	}
+	
 
 	/*
 	 * 向江
@@ -123,9 +128,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ削除画面を表示するためだけのメソッド
 	 */
 	@Override
-	public List<GroupMemberDetailView> grMemDelDisp(String user_name) {
-		
-		return groupDispCrudRepo.grMemDelDisp(user_name);
+	public List<GroupMemberDeleteView> grMemDelDisp(String user_id) {
+
+		return groupDispCrudRepo.grMemDelDisp(user_id);
 	}
 
 	/*
@@ -133,9 +138,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ削除
 	 */
 	@Override
-	public void groupMemberDelete(String group_id, String user_id) {
+	public void groupMemberDelete(String group_id, String user_id, String user_name) {
 
-		groupDispCrudRepo.groupMemberDelete(group_id, user_id);
+		groupDispCrudRepo.groupMemberDelete(group_id, user_id, user_name);
 
 	}
 
@@ -160,10 +165,23 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		return groupDispCrudRepo.MaxGroupId(school_id);
 	}
 
+	/**
+	 * 末吉
+	 * グループ作成
+	 */
 	@Override
 	public void groupDetailCreate(String user_id, int group_id, String user_roll, int score) {
 
 		groupDispCrudRepo.groupDetailCreate(user_id, group_id, user_roll, score);
 	}
-
+  
+	/**
+	 * 末吉
+	 * 既に登録されているユーザIDを取得
+	 */
+	@Override
+	public List<String> getExistUserIds(Integer group_id) {
+		
+		return groupDispCrudRepo.getExistUserIds(group_id);
+	}
 }

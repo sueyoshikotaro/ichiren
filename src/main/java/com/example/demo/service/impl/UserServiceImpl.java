@@ -22,14 +22,16 @@ public class UserServiceImpl implements UserServiceInterface {
 	/*
 	 * 坂本
 	 * ユーザ
-	 * 入力したIDの重複をチェック
+	 * ID・パスワードをチェック
 	 */
 	@Override
-	public boolean userIdCheck(String user_id) {
+	public boolean userIdCheck(String user_id, String user_pass) {
 
 		boolean id_flg = userCrudRepo.existsById(user_id);
 
-		if (id_flg) {
+		boolean pass_flg = userCrudRepo.existsById(user_pass);
+
+		if (id_flg && pass_flg) {
 
 			return true;
 		} else {
@@ -40,11 +42,32 @@ public class UserServiceImpl implements UserServiceInterface {
 
 	/**
 	 * 坂本
-	 * ユーザ
-	 * 入力したパスワードのチェック
+	 * 管理者
+	 * ID・パスワードのチェック
 	 */
 	@Override
-	public boolean userPassCheck(String user_pass) {
+	public boolean adminIdCheck(String user_id, String user_pass) {
+
+		boolean id_flg = userCrudRepo.existsById(user_id);
+
+		boolean pass_flg = userCrudRepo.existsById(user_pass);
+
+		if (id_flg && pass_flg) {
+
+			return true;
+		} else {
+
+			return false;
+		}
+	}
+
+	/*
+	 * 坂本
+	 * ユーザ
+	 * デフォルトパスワードチェック
+	 */
+	@Override
+	public boolean defaultPassCheck(String user_pass) {
 
 		boolean pass_flg = userCrudRepo.existsById(user_pass);
 
@@ -55,6 +78,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
 			return false;
 		}
+
 	}
 
 	/*
@@ -67,4 +91,5 @@ public class UserServiceImpl implements UserServiceInterface {
 
 		userCrudRepo.userPassReset(user_pass);
 	}
+
 }

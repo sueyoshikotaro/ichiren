@@ -94,7 +94,11 @@
 
 			</table>
 
-			<input type="hidden" name="group_name" th:value="${group_name}">
+			<!--グループメンバ追加から遷移してきた場合-->
+			<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
+			
+			<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+						
 			<input type="hidden" name="genre" th:value="${genre}">
 			
 			<button type="submit">選択</button>

@@ -49,7 +49,7 @@
 								<li><a class="dropdown-item" href="#">メンバ一覧</a></li>
 							</div>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
-							<li><a class="dropdown-item" href="#">ToDoリスト</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{todoList}'|">ToDoリスト</a></li>
 							<!--役職判断処理-->
 							<div th:if="${session.user_roll} == 'リーダ'">
 								<li><a class="dropdown-item" href="#">連絡事項作成</a></li>
@@ -58,11 +58,10 @@
 							<li>
 								<hr class="dropdown-divider"> <!--線-->
 							</li>
-							<li><a class="dropdown-item" href="#">所属グループ</a></li>
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/deptGroupList}">所属グループ</a></li>
 							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
-				</ul>
-				</li>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -86,7 +85,7 @@
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlTextarea1" class="form-label">タスク概要</label>
-				<textarea class="form-control" name="task_content" rows="3"></textarea>
+				<textarea class="form-control" name="task_content" rows="2"></textarea>
 			</div>
 			<div class="form-group">
 				<label>担当者</label>
@@ -121,33 +120,33 @@
 							<option value="5">5</option>
 						</select>
 					</div>
+				</div>
 
-					<!--参照のみ-->
-					<div class="col">
-						<label class="form-label">重み</label>
-						<input class="form-control" type="text" id="result" name="task_weight"
-							aria-label="readonly input example" readonly>
+				<!--参照のみ-->
+				<div class="col">
+					<label class="form-label">重み</label>
+					<input class="form-control" type="text" id="result" name="task_weight"
+						aria-label="readonly input example" readonly>
 
-						<!--JavaScript挿入欄(重み計算)-->
-						<script th:inline="javascript">
-							const priority = document.getElementById("priority").nextElementSibling;
-							const level = document.getElementById("level").nextElementSibling;
+					<!--JavaScript挿入欄(重み計算)-->
+					<script th:inline="javascript">
+						const priority = document.getElementById("priority").nextElementSibling;
+						const level = document.getElementById("level").nextElementSibling;
 
-							priority.addEventListener('change', calculate);
-							level.addEventListener('change', calculate);
-							calculate();
+						priority.addEventListener('change', calculate);
+						level.addEventListener('change', calculate);
+						calculate();
 
-							function calculate() {
-								const value1 = priority.value;
-								const value2 = level.value;
-								console.log(value1);
-								console.log(value2);
-								const resultValue = parseInt(value1) * parseInt(value2);
-								document.getElementById("result").value = resultValue;
-							}
-						</script>
-						</input>
-					</div>
+						function calculate() {
+							const value1 = priority.value;
+							const value2 = level.value;
+							console.log(value1);
+							console.log(value2);
+							const resultValue = parseInt(value1) * parseInt(value2);
+							document.getElementById("result").value = resultValue;
+						}
+					</script>
+					</input>
 				</div>
 			</div>
 
@@ -163,7 +162,7 @@
 				</div>
 			</div>
 
-			<button type="submit" class="Confirm-btn">詳細</button>
+			<button type="submit" class="Confirm-btn">確認</button>
 			<!--			<input type="submit" class="Under-button" value="確認">-->
 
 		</form>

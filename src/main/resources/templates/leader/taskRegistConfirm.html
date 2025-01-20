@@ -49,7 +49,7 @@
 								<li><a class="dropdown-item" href="#">メンバ一覧</a></li>
 							</div>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
-							<li><a class="dropdown-item" href="#">ToDoリスト</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{todoList}'|">ToDoリスト</a></li>
 							<!--役職判断処理-->
 							<div th:if="${session.user_roll} == 'リーダ'">
 								<li><a class="dropdown-item" href="#">連絡事項作成</a></li>
@@ -58,7 +58,7 @@
 							<li>
 								<hr class="dropdown-divider"> <!--線-->
 							</li>
-							<li><a class="dropdown-item" href="#">所属グループ</a></li>
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/deptGroupList}">所属グループ</a></li>
 							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
 					</li>
@@ -75,44 +75,51 @@
 		<h2>タスク登録</h2>
 		<h3>[登録内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
-
-		<div>
-			<label>タスク名</label>
-			<div th:text="${tasks.task_name}" readonly></div>
+		<div class="form-group">
+			<label for="exampleFormControlInput1" class="form-label">タスク名</label>
+			<div th:text="${tasks.task_name}" class="form-control" name="task_name" readonly></div>
+		</div>
+		<div class="form-group">
+			<label for="exampleFormControlInput1" class="form-label">タスクカテゴリ</label>
+			<div th:text="${tasks.task_category}" class="form-control" name="task_category" readonly></div>
+		</div>
+		<div class="form-group">
+			<label for="exampleFormControlTextarea1" class="form-label">タスク概要</label>
+			<textarea th:text="${tasks.task_content}" class="form-control" name="task_content" readonly
+				rows="2"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="exampleFormControlInput1" class="form-label">担当者</label>
+			<div th:text="${tasks.user_name}" class="form-control" name="user_name" readonly></div>
+		</div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col">
+					<label id="priority" class="form-label">優先度</label>
+					<div th:text="${tasks.task_priority}" class="form-control" name="task_priority"
+						aria-label="Default select example" style="margin-top: 0px;" readonly></div>
+				</div>
+				<div class="col">
+					<label id="level" class="form-label">難易度</label>
+					<div th:text="${tasks.task_level}" class="form-control" name="task_priority"
+						aria-label="Default select example" style="margin-top: 0px;" readonly></div>
+				</div>
+				<div class="col">
+					<label class="form-label">重み</label>
+					<div th:text="${tasks.task_weight}" class="form-control" readonly></div>
+				</div>
+			</div>
 		</div>
 
-		<div>
-			<label>タスクカテゴリ</label>
-			<div th:text="${tasks.task_category}" readonly></div>
-		</div>
-		<div>
-			<label>タスク概要</label>
-			<div th:text="${tasks.task_content}" readonly></div>
-		</div>
-		<div>
-			<label>担当者</label>
-			<div th:text="${tasks.user_name}" readonly></div>
-		</div>
-
-		<div>
-			<label>優先度</label>
-			<div th:text="${tasks.task_priority}" readonly></div>
-		</div>
-		<div>
-			<label>難易度</label>
-			<div th:text="${tasks.task_level}" readonly></div>
-		</div>
-		<div>
-			<label>重み</label>
-			<div th:text="${tasks.task_weight}" readonly></div>
-		</div>
-		<div>
-			<label>開始予定日</label>
-			<div th:text="${tasks.start_date}" readonly></div>
-		</div>
-		<div>
-			<label>終了予定日</label>
-			<div th:text="${tasks.end_date}" readonly></div>
+		<div class="row" style="margin-top: 14px;">
+			<div class="col">
+				<label class="form-label">開始予定日</label>
+				<div th:text="${tasks.start_date}" class="form-control" readonly></div>
+			</div>
+			<div class="col">
+				<label class="form-label">終了予定日</label>
+				<div th:text="${tasks.end_date}" class="form-control" readonly></div>
+			</div>
 		</div>
 		<form th:action="taskRegistComplete" method="post">
 			<input type="hidden" name="task_name" th:value="${tasks.task_name}">
@@ -124,25 +131,20 @@
 			<input type="hidden" name="start_date" th:value="${tasks.start_date}">
 			<input type="hidden" name="end_date" th:value="${tasks.end_date}">
 			<input type="hidden" name="user_name" th:value="${tasks.user_name}">
-			<button type="submit" name="button" value="regist" class="btn btn-danger"
+
+			<button type="submit" name="button" value="regist" class="Confirm-btn"
 				onclick="taskRegistAndShowPopup()">登録</button>
+
 		</form>
 
 		<!-- ポップアップ -->
 		<div class="modal fade" id="taskRegistModal" tabindex="-1" role="dialog" aria-labelledby="taskRegistModalLabel"
-			aria-hidden="true">
+			aria-hidden="true" style="margin-top: 180px;">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="taskRegistModalLabel">登録完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>登録が完了しました</p>
-					</div>
-					<div class="modal-footer">
-						<button th:onclick="|location.href='@{/taskdon/user/taskList}'|"
-							class="btn btn-danger">タスク一覧へ</button>
-					</div>
+					<p class="modal-text">登録が完了しました</p>
+					<button th:onclick="|location.href='@{/taskdon/user/taskList}'|" class="Back-btn"
+						style="margin-bottom: 18px;">タスク一覧へ</button>
 				</div>
 			</div>
 		</div>

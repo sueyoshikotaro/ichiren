@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -31,6 +29,8 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -66,6 +66,18 @@ public class UserCtrl {
 	HttpSession session;
 
 	/**
+	 * ログアウト画面を表示
+	 * @return
+	 */
+	@GetMapping("logout")
+	public String logout() {
+
+		session.invalidate();
+
+		return "common/login";
+	}
+
+	/**
 	 * ログイン画面を表示 
 	 * @return
 	 */
@@ -76,13 +88,30 @@ public class UserCtrl {
 	}
 
 	/**
-	 * ログアウト画面を表示
+	 * ログイン処理
 	 * @return
 	 */
-	@GetMapping("logout")
-	public String logout() {
+	@PostMapping("login")
+	public String loginCheck(String user_id, String user_pass) {
 
-		session.invalidate();
+		Optional<User> user = userCrudRepo.findById(user_id);
+
+		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+
+			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
+
+				return "redirect:/menuAdmin";
+			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+
+				return "redirect:/menuAdmin";
+			} else if (user.get().getUser_pass().equals("taskdon1")) {
+
+				return "redirect:/passReset";
+			} else if (user.get().getUser_id().contains("st")) {
+
+				return "redirect:/deptGroupList";
+			}
+		}
 
 		return "common/login";
 	}
@@ -97,9 +126,10 @@ public class UserCtrl {
 	@PostMapping("passReset")
 	public ModelAndView userIdCheckForResetPass(ModelAndView mav, String user_id, String user_pass) {
 
-		Optional<User> user;
+		System.out.println("出力" + user_id);
+		System.out.println(user_pass);
 
-		user = userCrudRepo.findById(user_id);
+		Optional<User> user = userCrudRepo.findById(user_id);
 
 		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
@@ -117,7 +147,7 @@ public class UserCtrl {
 	}
 
 	/**
-	 * パスワード再設定
+	 * パスワード再設定画面
 	 * @return
 	 */
 	@GetMapping("passReset")
@@ -136,19 +166,20 @@ public class UserCtrl {
 	 * 在籍チェック
 	 * ID重複チェック
 	 * パスワードチェック
-	 * ログイン後、メニュー(管理者)画面に遷移
+	 * ログイン後、メニュー(管理者)画面
 	 * @return
 	 */
 	@PostMapping("/taskdon/admin/menu")
 	public ModelAndView userIdCheckForAdmin(ModelAndView mav, String user_id, String user_pass) {
 
-		Optional<User> user;
+		System.out.println("出力は" + user_id);
+		System.out.println(user_pass);
 
-		user = userCrudRepo.findById(user_id);
+		Optional<User> user = userCrudRepo.findById(user_id);
 
 		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
-			if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
+			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
 				//admin無効化のSQL
 				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
 				session.setAttribute("user", user.get());
@@ -173,6 +204,9 @@ public class UserCtrl {
 	@PostMapping("deptGroupList")
 	public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
 
+		System.out.println("出力" + user_id);
+		System.out.println(user_pass);
+
 		Optional<User> user;
 
 		if (user_id != null) {
@@ -184,12 +218,6 @@ public class UserCtrl {
 			if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
 				if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
-
-					System.out.println(user);
-					System.out.println(user_id);
-					for (GroupDisplay group : deptGroupList) {
-						System.out.println(group);
-					}
 
 					mav.setViewName("common/deptGroupList");
 					mav.addObject("groupS", deptGroupList);
@@ -213,7 +241,7 @@ public class UserCtrl {
 	 * 所属グループ一覧の表示
 	 * @return
 	 */
-	@GetMapping("reDeptGroup")
+	@GetMapping("deptGroupList")
 	public ModelAndView reDeptGroup(ModelAndView mav, String user_id) {
 
 		Optional<User> user;

@@ -7,10 +7,10 @@ import com.example.demo.form.SchoolDisplay;
 public interface SchoolDisplayServiceInterface {
 	
 	//学校情報詳細一覧
-	public List<SchoolDisplay> SchoolDetails();
+	public List<SchoolDisplay> SchoolDetails(int school_id);
 
 	//編集する学校情報詳細
-	public List<SchoolDisplay> EditSchoolDetails(int room_id);
+	public List<SchoolDisplay> EditSchoolDetails(int room_id, int school_id);
 	
 	//学校情報詳細編集
 	public void EditSchoolDetailsComp(String room_name, int pc_flg,String hall, String floor, int school_id, int room_id);

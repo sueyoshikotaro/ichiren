@@ -14,16 +14,16 @@ public class SchoolDisplayImpl implements SchoolDisplayServiceInterface {
 	SchoolDisplayCrudRepository repo;
 	
 	@Override
-	public List<SchoolDisplay> SchoolDetails() {
+	public List<SchoolDisplay> SchoolDetails(int school_id) {
 		
 		
-		return repo.selectSchoolDetails();
+		return repo.selectSchoolDetails(school_id);
 	}
 
 	@Override
-	public List<SchoolDisplay> EditSchoolDetails(int room_id) {
+	public List<SchoolDisplay> EditSchoolDetails(int room_id, int school_id) {
 		
-		return repo.schoolDetailsChange(room_id);
+		return repo.schoolDetailsChange(room_id, school_id);
 	}
 
 	@Override

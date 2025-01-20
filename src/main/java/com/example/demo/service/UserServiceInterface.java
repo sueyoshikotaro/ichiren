@@ -15,16 +15,23 @@ public interface UserServiceInterface {
 	/**
 	 * 坂本
 	 * ユーザ
-	 * ID重複をチェック
+	 * ID・パスワードをチェック
 	 */
-	public boolean userIdCheck(String user_id);
+	public boolean userIdCheck(String user_id, String user_pass);
 
 	/**
 	 * 坂本
-	 * ユーザ
-	 * passをチェック
+	 * 管理者
+	 * ID・パスワードをチェック
 	 */
-	public boolean userPassCheck(String user_pass);
+	public boolean adminIdCheck(String user_id, String user_pass);
+
+	/**
+	 * 坂本
+	 * 管理者
+	 * デフォルトパスワードをチェック
+	 */
+	public boolean defaultPassCheck(String user_pass);
 
 	/**
 	 * 坂本

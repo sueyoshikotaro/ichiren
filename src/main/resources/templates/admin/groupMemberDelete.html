@@ -20,35 +20,103 @@
 <body>
 
 	<div class="container" id="container"> <!-- コンテナ共通 -->
-		<h1>グループメンバ削除画面</h1><br>
+		<h1>グループメンバ削除確認画面</h1><br>
 
 		<!--指示文を表示-->
-		<p th:if="${Msg}" th:text="${Msg}"></p>
+		<!--		<p th:if="${Msg}" th:text="${Msg}"></p>-->
 
-		<tr th:each="groupMenberDelete : ${user}" th:if="${groupMenberDelete.index == 0}">
-			<p th:text="${groupMenberDelete.user_name}"></p>
+		<tr th:each="groupMemberDelete : ${user}" th:if="${groupMemberDeleteStat.index == 0}">
+			<p th:text="${groupMemberDelete.user_name}"></p>
 		</tr>
-		
-		<form th:action="@{groupMenberDeleteConfirm}" method="post" id="form">
-			<table border="1">
+
+		<form th:action="@{groupMemberDeleteConfirm}" method="post">
+			<table>
 				<tr>
 					<th>タスク名</th>
 					<th>タスク内容</th>
 				</tr>
-				
-				<tr th:each="user : ${tasks}">
+
+				<tr th:each="user : ${user}">
 					<td th:text="${user.task_name}"></td>
 					<td th:text="${user.task_content}"></td>
 				</tr>
+
+				<tr>
+					<td colspan="2" align="right">
+
+						<input type="hidden" name="user_id" th:value="user.user_id">
+						<input type="hidden" name="group_id" th:value="user.group_id">
+						<input type="hidden" name="task_id" th:value="user.task_id">
+
+						<button type="button" name="button" value="削除" class="btn btn-danger"
+							onclick="groupMemberDeleteAndShowPopup()">削除</button>
+						<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
+					</td>
+				</tr>
 			</table>
-
-
-			<button type="button" name="button" value="確認" onclick="formSubmit('確認')">確認</button>
-			<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>
-
 		</form>
 
+
+		<!-- ポップアップ -->
+		<div class="modal fade" id="groupMemberDeleteModal" tabindex="-1" role="dialog"
+			aria-labelledby="groupMemberDeleteModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="groupMemberDeleteModalLabel">削除完了</h5>
+					</div>
+					<div class="modal-body">
+						<p>削除が完了しました</p>
+					</div>
+					<div class="modal-footer">
+
+						<form th:action="@{groupDetail}" method="post">
+							<button type="submit" name="button" value="グループ詳細へ" class="btn btn-danger">グループ詳細へ</button>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<script>
+		function groupMemberDeleteAndShowPopup() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'groupMemberDeleteComp'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			// buttonパラメータを追加
+			var buttonInput = document.createElement('input');
+			buttonInput.type = 'hidden';
+			buttonInput.name = 'button';
+			buttonInput.value = '削除'; // または '戻る' など必要な値を設定
+			form.appendChild(buttonInput);
+
+			form.submit();
+		}
+	</script>
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var groupMemberDeleteComp = /*[[${groupMemberDeleteComp}]]*/ true;
+		$(document).ready(function () {
+			if (groupMemberDeleteComp == true) {
+				$('#groupMemberDeleteModal').modal('show');
+			}
+		});
+		/*]]>*/
+	</script>
+
+
+
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

@@ -49,7 +49,7 @@
 								<li><a class="dropdown-item" href="#">メンバ一覧</a></li>
 							</div>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
-							<li><a class="dropdown-item" href="#">ToDoリスト</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{todoList}'|">ToDoリスト</a></li>
 							<!--役職判断処理-->
 							<div th:if="${session.user_roll} == 'リーダ'">
 								<li><a class="dropdown-item" href="#">連絡事項作成</a></li>
@@ -58,11 +58,10 @@
 							<li>
 								<hr class="dropdown-divider"> <!--線-->
 							</li>
-							<li><a class="dropdown-item" href="#">所属グループ</a></li>
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/deptGroupList}">所属グループ</a></li>
 							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
-				</ul>
-				</li>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -77,35 +76,40 @@
 
 		<form th:action="@{taskEditConfirm}" method="post">
 			<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
-			<div>
-				<label>タスク名：</label>
-				<input type="text" name="task_name" th:value="${task.task_name}"></input>
+			<div class="form-group">
+				<label class="form-label">タスク名</label>
+				<input type="text" th:value="${task.task_name}" class="form-control" name="task_name">
 			</div>
-			<div>
-				<label>タスクカテゴリ：</label>
-				<input type="text" name="task_category" th:value="${task.task_category}"></input>
+			<div class="form-group">
+				<label class="form-label">タスクカテゴリ</label>
+				<input type="text" th:value="${task.task_category}" class="form-control" name="task_category">
 			</div>
-			<div>
-				<label>タスク概要：</label>
-				<input type="textarea" name="task_content" th:value="${task.task_content}"></input>
+			<div class="form-group">
+				<label class="form-label">タスク概要</label>
+				<textarea type="text" th:text="${task.task_content}" class="form-control"
+					name="task_content"></textarea>
 			</div>
-			<div>
-				<label>担当者：</label>
-				<select name="user_name">
-					<option th:each="user : ${session.groupUser}" name="user_name" th:value="${user}" th:text="${user}"
-						th:selected="${task.user_name == user}">
-					</option>
-				</select>
-			</div>
-			<div>
-				<label>優先度：</label>
-				<select name="task_priority" required>
-					<option value="1" th:selected="${task.task_priority == '1'}">1</option>
-					<option value="2" th:selected="${task.task_priority == '2'}">2</option>
-					<option value="3" th:selected="${task.task_priority == '3'}">3</option>
-					<option value="4" th:selected="${task.task_priority == '4'}">4</option>
-					<option value="5" th:selected="${task.task_priority == '5'}">5</option>
-				</select>
+			<div class="form-group">
+				<div class="row">
+					<div class="col">
+						<label class="form-label">担当者</label>
+						<select name="user_name" class="form-select" style="margin-top: 0px;">
+							<option th:each="user : ${session.groupUser}" th:value="${user}" th:text="${user}"
+								name="user_name" th:selected="${task.user_name == user}">
+							</option>
+						</select>
+					</div>
+					<div class="col">
+						<label class="form-label">優先度</label>
+						<select class="form-select" name="task_priority" style="margin-top: 0px;">
+							<option value="1" th:selected="${task.task_priority == '1'}">1</option>
+							<option value="2" th:selected="${task.task_priority == '2'}">2</option>
+							<option value="3" th:selected="${task.task_priority == '3'}">3</option>
+							<option value="4" th:selected="${task.task_priority == '4'}">4</option>
+							<option value="5" th:selected="${task.task_priority == '5'}">5</option>
+						</select>
+					</div>
+				</div>
 			</div>
 			<input type="hidden" name="task_id" th:value="${task.task_id}">
 			<input type="hidden" name="task_level" th:value="${task.task_level}">
@@ -113,7 +117,8 @@
 			<input type="hidden" name="progress" th:value="${task.progress}">
 			<input type="hidden" name="start_date" th:value="${task.start_date}">
 			<input type="hidden" name="end_date" th:value="${task.end_date}">
-			<button type="submit">確認</button>
+
+			<button type="submit" class="Confirm-btn">確認</button>
 		</form>
 	</div>
 
@@ -123,5 +128,7 @@
 		crossorigin="anonymous"></script>
 
 </body>
+
+</html>
 
 </html>
