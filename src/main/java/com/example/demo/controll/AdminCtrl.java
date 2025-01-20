@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
@@ -103,7 +104,7 @@ public class AdminCtrl {
 
 		return "admin/menuAdmin";
 	}
-	
+
 	/**
 	 * 末吉
 	 * メニュー画面を表示する(ログイン画面から)
@@ -112,7 +113,7 @@ public class AdminCtrl {
 	@LoginRequired
 	@PostMapping("menu")
 	public String menuLogin() {
-		
+
 		return "admin/menuAdmin";
 	}
 
@@ -124,7 +125,13 @@ public class AdminCtrl {
 	@GetMapping("schoolDetails")
 	public ModelAndView schoolDetails(ModelAndView mav, Model model) {
 
-		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
+
+		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 
 		//ラジオボタンの情報を取得
 		model.addAttribute("FormContent", new FormContents());
@@ -145,8 +152,20 @@ public class AdminCtrl {
 			@RequestParam("flexRadioDefault") int room_id, @RequestParam("before_room_name") String room_name,
 			ModelAndView mav) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
+
 		//ラジオボタンで選択したデータを取得
-		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(room_id);
+		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(room_id, school_id);
+
+		for (SchoolDisplay sd : EditSchoolDetails) {
+
+			System.out.println("データ" + sd);
+
+		}
 
 		//選択したデータの教室名を編集前の教室名として保持
 		EditSchoolDetails.get(0).setBefore_room_name(EditSchoolDetails.get(0).getRoom_name());
@@ -190,8 +209,6 @@ public class AdminCtrl {
 	public ModelAndView schoolEditConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
 
-		System.out.println(s.getBefore_room_name());
-
 		//確認ボタンを押下
 		if (button.equals("確認")) {
 
@@ -203,7 +220,13 @@ public class AdminCtrl {
 			//戻るボタンを押下し学校情報詳細画面を表示
 		} else {
 
-			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+			// ログインユーザのエンティティを取得
+			User userEntity = (User) session.getAttribute("user");
+
+			// エンティティの中のschool_idを取得
+			int school_id = userEntity.getSchool_id();
+
+			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 
 			//ラジオボタンの情報を取得
 			model.addAttribute("FormContent", new FormContents());
@@ -288,7 +311,13 @@ public class AdminCtrl {
 			//戻るボタンを押下し学校情報詳細画面を表示
 		} else {
 
-			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+			// ログインユーザのエンティティを取得
+			User userEntity = (User) session.getAttribute("user");
+
+			// エンティティの中のschool_idを取得
+			int school_id = userEntity.getSchool_id();
+
+			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 
 			mav.addObject("schoolS", SchoolDetails);
 			mav.setViewName("admin/schoolDetails");
@@ -347,7 +376,13 @@ public class AdminCtrl {
 	public ModelAndView schoolDeleteConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
 
-		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
+
+		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 
 		//ラジオボタンの情報を取得
 		model.addAttribute("FormContent", new FormContents());
@@ -368,8 +403,15 @@ public class AdminCtrl {
 	public ModelAndView schoolDeleteComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
+
 		schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
-		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails();
+
+		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 
 		//ラジオボタンの情報を取得
 		model.addAttribute("FormContent", new FormContents());
@@ -799,32 +841,32 @@ public class AdminCtrl {
 
 	}
 
-//	/**
-//	 * 向江
-//	 * グループ編集画面を表示する
-//	 * @return
-//	 */
-//	@PostMapping("groupEdit")
-//	public ModelAndView groupEdit(ModelAndView mav,
-//			@RequestParam(name = "check", required = false) String[] check,
-//			@RequestParam(name = "group_id", required = false) String[] group_id,
-//			@RequestParam(name = "user_id", required = false) String[] user_id,
-//			@RequestParam(name = "user_name", required = false) String[] user_name,
-//			@RequestParam(name = "user_roll", required = false) String[] user_roll,
-//			TeamsDisplay td) {
-//
-//		// グループ詳細の編集ボタンから遷移してきた場合
-//		if (user_roll == "メンバ") {
-//
-//		}
-//
-//		groupDispService.groupEdit(group_id);
-//
-//		mav.addObject("group", td);
-//		mav.setViewName("admin/groupEdit");
-//
-//		return null;
-//	}
+	//	/**
+	//	 * 向江
+	//	 * グループ編集画面を表示する
+	//	 * @return
+	//	 */
+	//	@PostMapping("groupEdit")
+	//	public ModelAndView groupEdit(ModelAndView mav,
+	//			@RequestParam(name = "check", required = false) String[] check,
+	//			@RequestParam(name = "group_id", required = false) String[] group_id,
+	//			@RequestParam(name = "user_id", required = false) String[] user_id,
+	//			@RequestParam(name = "user_name", required = false) String[] user_name,
+	//			@RequestParam(name = "user_roll", required = false) String[] user_roll,
+	//			TeamsDisplay td) {
+	//
+	//		// グループ詳細の編集ボタンから遷移してきた場合
+	//		if (user_roll == "メンバ") {
+	//
+	//		}
+	//
+	//		groupDispService.groupEdit(group_id);
+	//
+	//		mav.addObject("group", td);
+	//		mav.setViewName("admin/groupEdit");
+	//
+	//		return null;
+	//	}
 
 	/*
 	 * 向江
@@ -897,8 +939,11 @@ public class AdminCtrl {
 			@RequestParam(name = "check", required = false) String[] check,
 			@RequestParam(name = "userId", required = false) String[] userId,
 			@RequestParam(name = "userName", required = false) String[] userName,
+			@RequestParam(name = "group_id", required = false) Integer group_id,
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre) {
+
+		System.out.println(check);
 
 		//グループ一覧の作成ボタンから遷移してきた場合
 		if (userId == null) {
@@ -909,12 +954,28 @@ public class AdminCtrl {
 		} else {
 
 			if (check == null || check.length == 0) {
+				
+				TeamsDisplay teamsDisplay = new TeamsDisplay();
+				teamsDisplay.setGroup_id(group_id);
+				teamsDisplay.setGroup_name(group_name);
+				
+				//ユーザ一覧表示のメソッドを呼び出す
 				Iterable<UserDisplay> userList = userDisplayService.userList();
 
+				//グループメンバ追加の場合
+				if (group_id != null) {
+
+					//既に登録されているユーザIDを取得
+					List<String> existUserIds = groupDispService.getExistUserIds(group_id);
+
+					// ユーザリストからすでにグループに登録されているユーザを除外
+					((Collection<UserDisplay>) userList).removeIf(user -> existUserIds.contains(user.getUser_id()));
+				}
+				
+				mav.addObject("groupDetail", teamsDisplay);
 				mav.addObject("users", userList);
 				mav.addObject("errMsg", "メンバを選択してください");
 				mav.setViewName("admin/userSelectList");
-				return mav;
 
 			} else {
 
@@ -931,21 +992,23 @@ public class AdminCtrl {
 					}
 				}
 
+				TeamsDisplay teamsDisplay = new TeamsDisplay();
+				teamsDisplay.setGroup_id(group_id);
+				teamsDisplay.setGroup_name(group_name);
 				
-				mav.addObject("group_name", group_name);
-				mav.addObject("genre", genre);
+				
+
+				mav.addObject("groupDetail", teamsDisplay);
 				mav.addObject("selectUser", userList);
-				
-				if(session.getAttribute("button").equals("グループ作成")) {
-					
+
+				if (session.getAttribute("button").equals("グループ作成")) {
+
 					mav.setViewName("admin/groupCreate");
 					mav.addObject("Msg", "リーダにするメンバにチェックを入れてください");
-					
+
 				} else {
 					mav.setViewName("admin/groupMemberAdd");
 				}
-				
-
 			}
 		}
 
@@ -960,12 +1023,28 @@ public class AdminCtrl {
 	@PostMapping("groupMemberSelect")
 	public ModelAndView groupMemberSelect(ModelAndView mav,
 			@RequestParam(name = "selectedUserId", required = false) String selectedUserId,
+			@RequestParam(name = "group_id", required = false) Integer group_id,
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre,
-			@RequestParam("button") String button) {
+			@RequestParam(name = "button", required = false) String button) {
 
-		//サービスのメソッドを呼び出す
+		TeamsDisplay teamsDisplay = new TeamsDisplay();
+
+		//ユーザ一覧表示のメソッドを呼び出す
 		Iterable<UserDisplay> userList = userDisplayService.userList();
+
+		//グループメンバ追加の場合
+		if (group_id != null) {
+			teamsDisplay.setGroup_id(group_id);
+
+			//既に登録されているユーザIDを取得
+			List<String> existUserIds = groupDispService.getExistUserIds(group_id);
+
+			// ユーザリストからすでにグループに登録されているユーザを除外
+			((Collection<UserDisplay>) userList).removeIf(user -> existUserIds.contains(user.getUser_id()));
+		}
+
+		teamsDisplay.setGroup_name(group_name);
 
 		//選択しているユーザのIDを元に、チェックボックスをチェックする
 		List<String> selectedUserIds = new ArrayList<>();
@@ -986,7 +1065,7 @@ public class AdminCtrl {
 		//どの画面から遷移してきたのかを格納
 		session.setAttribute("button", button);
 
-		mav.addObject("group_name", group_name);
+		mav.addObject("groupDetail", teamsDisplay);
 		mav.addObject("genre", genre);
 		mav.addObject("users", userList);
 		mav.setViewName("admin/userSelectList");
@@ -1047,7 +1126,7 @@ public class AdminCtrl {
 				mav.addObject("leaderUser", leaderUser);
 				mav.addObject("memberUser", memberUser);
 				mav.setViewName("admin/groupCreateConfirm");
-				
+
 				//ユーザが選択されていない場合
 			} else if (user_id == null) {
 
@@ -1082,22 +1161,24 @@ public class AdminCtrl {
 			groupDispService.groupCreate(group_name, userForm.getSchool_id(), genre);
 
 			//登録したグループIDを取得する
-			int groop_id = groupDispService.MaxGroupId(userForm.getSchool_id());
+			int group_id = groupDispService.MaxGroupId(userForm.getSchool_id());
 
 			// ここで、受け取ったデータを処理する
 			for (int i = 0; i < leaderUser_id.size(); i++) {
 				String leaderUserId = leaderUser_id.get(i);
 				// ここで、リーダーのデータを処理する
 
-				groupDispService.groupDetailCreate(leaderUserId, groop_id, "リーダ", 0);
+				groupDispService.groupDetailCreate(leaderUserId, group_id, "リーダ", 0);
 			}
 
 			for (int i = 0; i < memberUser_id.size(); i++) {
 				String memberUserId = memberUser_id.get(i);
 				// ここで、メンバーのデータを処理する
-				groupDispService.groupDetailCreate(memberUserId, groop_id, "メンバ", 0);
+				groupDispService.groupDetailCreate(memberUserId, group_id, "メンバ", 0);
 			}
 		}
+
+		session.removeAttribute("button");
 
 		mav.addObject("groupCreateComp", true);
 		mav.setViewName("admin/groupCreateConfirm");
@@ -1125,7 +1206,7 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * グループメンバ追加確認
@@ -1134,12 +1215,49 @@ public class AdminCtrl {
 	@PostMapping("groupMemberAddConfirm")
 	public ModelAndView groupMemberAddConfirm(ModelAndView mav,
 			@RequestParam(name = "group_id", required = false) int group_id,
-			@RequestParam(name = "user_id", required = false) String user_id) {
-		
-		mav.addObject("group_id", group_id);
-		mav.addObject("user_id", user_id);
+			@RequestParam(name = "group_name", required = false) String group_name,
+			@RequestParam(name = "selectedUserId", required = false) String[] user_id,
+			@RequestParam(name = "selectUserName", required = false) String[] user_name) {
+
+		//リーダ以外のメンバ
+		List<UserDisplay> addMember = new ArrayList<>();
+
+		//グループIDとグループ名を格納
+		TeamsDisplay teamsDisplay = new TeamsDisplay();
+		teamsDisplay.setGroup_name(group_name);
+		teamsDisplay.setGroup_id(group_id);
+
+		//追加するメンバをListに格納
+		for (int i = 0; i < user_id.length; i++) {
+			UserDisplay member = new UserDisplay();
+			member.setUser_id(user_id[i]);
+			member.setUser_name(user_name[i]);
+			addMember.add(member);
+		}
+
+		mav.addObject("groupDetail", teamsDisplay);
+		mav.addObject("addMember", addMember);
 		mav.setViewName("admin/groupMemberAddConfirm");
-		
+
+		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * グループメンバ追加完了
+	 */
+	@PostMapping("groupMemberAddComp")
+	public ModelAndView groupMemberAddComp(ModelAndView mav,
+			@RequestParam(name = "memberUser_id", required = false) String user_id,
+			@RequestParam(name = "group_id", required = false) int group_id) {
+
+		groupDispService.groupDetailCreate(user_id, group_id, "メンバ", 0);
+
+		session.removeAttribute("button");
+
+		mav.addObject("groupMemberAddComp", true);
+		mav.setViewName("admin/groupMemberAddConfirm");
+
 		return mav;
 	}
 
