@@ -1,3 +1,4 @@
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
@@ -48,7 +49,7 @@
 								<li><a class="dropdown-item" href="#">メンバ一覧</a></li>
 							</div>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
-							<li><a class="dropdown-item" href="#">ToDoリスト</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{todoList}'|">ToDoリスト</a></li>
 							<!--役職判断処理-->
 							<div th:if="${session.user_roll} == 'リーダ'">
 								<li><a class="dropdown-item" href="#">連絡事項作成</a></li>
@@ -57,7 +58,7 @@
 							<li>
 								<hr class="dropdown-divider"> <!--線-->
 							</li>
-							<li><a class="dropdown-item" href="#">所属グループ</a></li>
+							<li><a class="dropdown-item" th:href="@{/taskdon/user/deptGroupList}">所属グループ</a></li>
 							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
 					</li>
@@ -68,26 +69,31 @@
 </head>
 
 <body>
-	<!--各画面ごとのメイン内容-->
-	<div class="container" id="container"> <!--コンテナ共通-->
-		<h2 class="no-wrap">【タスク未承認一覧】</h2><br> <!--画面タイトル-->
+	<!--コンテナ-->
+	<div class="container">
+
+		<h2>タスク未承認一覧</h2>
+
+		<!--タスク未承認一覧(繰返し)-->
 		<div class="content">
 			<div th:each="task : ${taskNonapp}" class="content_child" id="data">
-				<div class="text_child" th:text="${task.user_name}"></div>
-				<div class="text_child" th:text="${task.req_name}"></div>
-				<div class="text_child" th:text="${task.add_date}"></div>
-				<div>
-					<form th:action="@{taskAppConfirm}" method="post">
-						<input type="hidden" name="request_id" th:value="${task.request_id}">
-						<input type="hidden" name="req_category" th:value="${task.req_category}">
-						<input type="hidden" name="user_name" th:value="${task.user_name}">
-						<input type="hidden" name="add_date" th:value="${task.add_date}">
-						<input type="hidden" name="req_name" th:value="${task.req_name}">
-						<input type="hidden" name="req_content" th:value="${task.req_content}">
-						<input type="hidden" name="req_reason" th:value="${task.req_reason}">
-						<input type="hidden" name="request_flg" th:value="${task.request_flg}">
-						<input type="submit" value="確認">
-					</form>
+				<div class="content-box">
+					<div class="text_child" th:text="${task.user_name}"></div>
+					<div class="text_child" th:text="${task.req_name}"></div>
+					<div class="text_child" th:text="${task.add_date}"></div>
+					<div>
+						<form th:action="@{taskAppConfirm}" method="post">
+							<input type="hidden" name="request_id" th:value="${task.request_id}">
+							<input type="hidden" name="req_category" th:value="${task.req_category}">
+							<input type="hidden" name="user_name" th:value="${task.user_name}">
+							<input type="hidden" name="add_date" th:value="${task.add_date}">
+							<input type="hidden" name="req_name" th:value="${task.req_name}">
+							<input type="hidden" name="req_content" th:value="${task.req_content}">
+							<input type="hidden" name="req_reason" th:value="${task.req_reason}">
+							<input type="hidden" name="request_flg" th:value="${task.request_flg}">
+							<button type="submit" class="Confirm-btn" value="確認">
+						</form>
+					</div>
 				</div>
 			</div>
 			<button th:onclick="|location.href='@{/taskdon/user/taskList}'|">戻る</button>

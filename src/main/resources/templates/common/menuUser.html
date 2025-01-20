@@ -50,7 +50,7 @@
 								<li><a class="dropdown-item" href="#">メンバ一覧</a></li>
 							</div>
 							<li><a class="dropdown-item" th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
-							<li><a class="dropdown-item" href="#">ToDoリスト</a></li>
+							<li><a class="dropdown-item" th:onclick="|location.href='@{todoList}'|">ToDoリスト</a></li>
 							<!--役職判断処理-->
 							<div th:if="${session.user_roll} == 'リーダ'">
 								<li><a class="dropdown-item" href="#">連絡事項作成</a></li>
@@ -85,7 +85,7 @@
 
 		<a class="menu-btn" th:onclick="|location.href='@{taskList}'|">タスク一覧</a>
 
-		<a class="menu-btn" th:onclick="|location.href='@{tdList}'|">ToDoリスト</a>
+		<a class="menu-btn" th:onclick="|location.href='@{todoList}'|">ToDoリスト</a>
 
 		<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
 			<a class="menu-btn" th:onclick="|location.href='@{noticeRegist}'|">連絡事項作成</a>
