@@ -53,7 +53,7 @@ public class UserCtrl {
 	@Autowired
 	@Qualifier("taskService")
 	TaskServiceInterface TaskService;
-	
+
 	//湊原追加
 	@Autowired
 	@Qualifier("todoService")
@@ -62,6 +62,18 @@ public class UserCtrl {
 	//セッション
 	@Autowired
 	HttpSession session;
+
+	/**
+	 * ログアウト画面を表示
+	 * @return
+	 */
+	@GetMapping("logout")
+	public String logout() {
+
+		session.invalidate();
+
+		return "common/login";
+	}
 
 	/**
 	 * ログイン画面を表示 
@@ -74,15 +86,51 @@ public class UserCtrl {
 	}
 
 	/**
-	 * ログアウト画面を表示
+	 * ログイン処理
 	 * @return
 	 */
-	@GetMapping("logout")
-	public String logout() {
+	@PostMapping("login")
+	public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
 
-		session.invalidate();
+		Optional<User> user;
 
-		return "common/login";
+		if (user_id != null) {
+			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+
+			user = userCrudRepo.findById(user_id);
+
+			if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+
+				if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
+
+					//admin無効化のSQL
+					mav.setViewName("redirect:/admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
+					session.setAttribute("user", user.get());
+				} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+
+					mav.setViewName("redirect:/admin/menuAdmin"); //管理者ログイン(通常)
+					session.setAttribute("user", user.get());
+				} else if (user.get().getUser_pass().equals("taskdon1")) {
+
+					mav.setViewName("redirect:/common/passReset"); //パスワード再設定
+				} else {
+
+					mav.setViewName("redirect:/common/deptGroupList");
+					mav.addObject("groupS", deptGroupList);
+					session.setAttribute("deptGroupList", deptGroupList);
+					session.setAttribute("user", user.get());
+				}
+			} else {
+
+				mav.setViewName("common/login");
+				mav.addObject("errMsg", "ログインできませんでした");
+			}
+		} else {
+
+			mav.setViewName("common/deptGroupList");
+		}
+
+		return mav;
 	}
 
 	/**
@@ -115,7 +163,7 @@ public class UserCtrl {
 	}
 
 	/**
-	 * パスワード再設定
+	 * パスワード再設定画面
 	 * @return
 	 */
 	@GetMapping("passReset")
@@ -134,7 +182,7 @@ public class UserCtrl {
 	 * 在籍チェック
 	 * ID重複チェック
 	 * パスワードチェック
-	 * ログイン後、メニュー(管理者)画面に遷移
+	 * ログイン後、メニュー(管理者)画面
 	 * @return
 	 */
 	@PostMapping("/taskdon/admin/menu")
@@ -168,44 +216,44 @@ public class UserCtrl {
 	 * ログイン後、所属グループ一覧画面に遷移
 	 * @return
 	 */
-	@PostMapping("deptGroupList")
-	public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
-
-		Optional<User> user;
-
-		if (user_id != null) {
-
-			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
-
-			user = userCrudRepo.findById(user_id);
-
-			if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
-
-				if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
-
-					System.out.println(user);
-					System.out.println(user_id);
-					for (GroupDisplay group : deptGroupList) {
-						System.out.println(group);
-					}
-
-					mav.setViewName("common/deptGroupList");
-					mav.addObject("groupS", deptGroupList);
-					session.setAttribute("deptGroupList", deptGroupList);
-					session.setAttribute("user", user.get());
-				} else {
-					mav.setViewName("common/login");
-					mav.addObject("errMsg", "ログインできませんでした");
-				}
-			} else {
-				mav.setViewName("common/login");
-				mav.addObject("errMsg", "ログインできませんでした");
-			}
-		} else {
-			mav.setViewName("common/deptGroupList");
-		}
-		return mav;
-	}
+	//	@PostMapping("login")
+	//	public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
+	//
+	//		Optional<User> user;
+	//
+	//		if (user_id != null) {
+	//
+	//			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+	//
+	//			user = userCrudRepo.findById(user_id);
+	//
+	//			if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+	//
+	//				if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
+	//
+	//					System.out.println(user);
+	//					System.out.println(user_id);
+	//					for (GroupDisplay group : deptGroupList) {
+	//						System.out.println(group);
+	//					}
+	//
+	//					mav.setViewName("common/deptGroupList");
+	//					mav.addObject("groupS", deptGroupList);
+	//					session.setAttribute("deptGroupList", deptGroupList);
+	//					session.setAttribute("user", user.get());
+	//				} else {
+	//					mav.setViewName("common/login");
+	//					mav.addObject("errMsg", "ログインできませんでした");
+	//				}
+	//			} else {
+	//				mav.setViewName("common/login");
+	//				mav.addObject("errMsg", "ログインできませんでした");
+	//			}
+	//		} else {
+	//			mav.setViewName("common/deptGroupList");
+	//		}
+	//		return mav;
+	//	}
 
 	/**
 	 * 所属グループ一覧の表示
@@ -573,7 +621,7 @@ public class UserCtrl {
 	 * ToDoリスト画面を表示
 	 * @return
 	 */
-//	@LoginRequired
+	//	@LoginRequired
 	@GetMapping("todoList")
 	public ModelAndView todoList(ModelAndView mav) {
 		System.out.println(TodoService.selectTodoList(session.getId()));
