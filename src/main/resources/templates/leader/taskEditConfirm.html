@@ -61,8 +61,7 @@
 							<li><a class="dropdown-item" href="#">所属グループ</a></li>
 							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 						</ul>
-				</ul>
-				</li>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -75,26 +74,33 @@
 
 		<h2>タスク編集</h2>
 		<h3>[編集内容確認]</h3> <!--確認画面用の説明用テキスト-->
-		<div>
-			<label>タスク名：</label>
-			<div th:text="${task.task_name}"></div>
+
+		<div class="form-group">
+			<label class="form-label">タスク名</label>
+			<div th:text="${task.task_name}" class="form-control"></div>
 		</div>
-		<div>
-			<label>タスクカテゴリ：</label>
-			<div th:text="${task.task_category}"></div>
+		<div class="form-group">
+			<label class="form-label">タスクカテゴリ</label>
+			<div th:text="${task.task_category}" class="form-control"></div>
 		</div>
-		<div>
-			<label>タスク概要：</label>
-			<div th:text="${task.task_content}"></div>
+		<div class="form-group">
+			<label class="form-label">タスク概要</label>
+			<textarea type="text" th:text="${task.task_content}" class="form-control" name="task_content"
+				readonly></textarea>
 		</div>
-		<div>
-			<label>担当者：</label>
-			<div th:text="${task.user_name}"></div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col">
+					<label class="form-label">担当者</label>
+					<div th:text="${task.user_name}" class="form-control" style="margin-top: 0px;"></div>
+				</div>
+				<div class="col">
+					<label class="form-label">優先度</label>
+					<div th:text="${task.task_priority}" class="form-control" style="margin-top: 0px;"></div>
+				</div>
+			</div>
 		</div>
-		<div>
-			<label>優先度：</label>
-			<div th:text="${task.task_priority}"></div>
-		</div>
+
 		<form th:action="@{taskEditComplete}" method="post">
 			<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
 			<input type="hidden" name="task_name" th:value="${task.task_name}"></input>
@@ -107,26 +113,22 @@
 			<input type="hidden" name="start_date" th:value="${task.start_date}"></input>
 			<input type="hidden" name="end_date" th:value="${task.end_date}"></input>
 			<input type="hidden" name="progress" th:value="${task.progress}"></input>
-			<button type="button" name="button" value="edit" class="btn btn-danger"
-				onclick="taskEditAndShowPopup()">編集</button>
+
+			<button type="button" name="button" value="edit" class="Confirm-btn"
+				onclick="taskEditAndShowPopup()">更新</button>
+
 		</form>
+
 		<!-- ポップアップ -->
 		<div class="modal fade" id="taskEditModal" tabindex="-1" role="dialog" aria-labelledby="taskEditModalLabel"
-			aria-hidden="true">
+			aria-hidden="true" style="margin-top: 180px;">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="taskEditModalLabel">編集完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>編集が完了しました</p>
-					</div>
-					<div class="modal-footer">
-						<form th:action="@{taskDetails}" method="post">
-							<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
-							<button type="submit" class="btn btn-danger">タスク詳細へ</button>
-						</form>
-					</div>
+					<p class="modal-text">編集が完了しました</p>
+					<form th:action="@{taskDetails}" method="post">
+						<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
+						<button type="submit" class="Back-btn" style="margin-bottom: 18px;">タスク詳細へ</button>
+					</form>
 				</div>
 			</div>
 		</div>

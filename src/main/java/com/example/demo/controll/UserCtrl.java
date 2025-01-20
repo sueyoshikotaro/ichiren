@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -18,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Task;
+import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
@@ -27,7 +26,10 @@ import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
+import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -53,19 +55,14 @@ public class UserCtrl {
 	@Qualifier("taskService")
 	TaskServiceInterface TaskService;
 
+	//湊原追加
+	@Autowired
+	@Qualifier("todoService")
+	TodoServiceInterface TodoService;
+
 	//セッション
 	@Autowired
 	HttpSession session;
-
-	/**
-	 * ログイン画面を表示 
-	 * @return
-	 */
-	@GetMapping("login")
-	public String login() {
-
-		return "common/login";
-	}
 
 	/**
 	 * ログアウト画面を表示
@@ -80,13 +77,71 @@ public class UserCtrl {
 	}
 
 	/**
+	 * ログイン画面を表示 
+	 * @return
+	 */
+	@GetMapping("login")
+	public String login() {
+
+		return "common/login";
+	}
+
+	/**
+	 * ログイン処理
+	 * @return
+	 */
+	//	@PostMapping("login")
+	//	public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
+	//
+	//		Optional<User> user;
+	//
+	//		if (user_id != null) {
+	//			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+	//
+	//			user = userCrudRepo.findById(user_id);
+	//
+	//			if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+	//
+	//				if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
+	//
+	//					//admin無効化のSQL
+	//					mav.setViewName("redirect:/admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
+	//					session.setAttribute("user", user.get());
+	//				} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+	//
+	//					mav.setViewName("redirect:/admin/menuAdmin"); //管理者ログイン(通常)
+	//					session.setAttribute("user", user.get());
+	//				} else if (user.get().getUser_pass().equals("taskdon1")) {
+	//
+	//					mav.setViewName("redirect:/common/passReset"); //パスワード再設定
+	//				} else {
+	//
+	//					mav.setViewName("redirect:/common/deptGroupList");
+	//					mav.addObject("groupS", deptGroupList);
+	//					session.setAttribute("deptGroupList", deptGroupList);
+	//					session.setAttribute("user", user.get());
+	//				}
+	//			} else {
+	//
+	//				mav.setViewName("common/login");
+	//				mav.addObject("errMsg", "ログインできませんでした");
+	//			}
+	//		} else {
+	//
+	//			mav.setViewName("common/deptGroupList");
+	//		}
+	//
+	//		return mav;
+	//	}
+
+	/**
 	 * 在籍チェック
 	 * ID重複チェック
 	 * パスワードチェック
 	 * パスワード再設定画面に遷移
 	 * @return
 	 */
-	@PostMapping("resetPass")
+	@PostMapping("passReset")
 	public ModelAndView userIdCheckForResetPass(ModelAndView mav, String user_id, String user_pass) {
 
 		Optional<User> user;
@@ -98,7 +153,6 @@ public class UserCtrl {
 			if (user.get().getUser_pass().equals("taskdon1")) {
 
 				mav.setViewName("common/passReset"); //パスワード再設定
-				mav.addObject("");
 			}
 		} else {
 
@@ -110,29 +164,29 @@ public class UserCtrl {
 	}
 
 	/**
-	 * パスワード再設定
+	 * パスワード再設定画面
 	 * @return
 	 */
-	@GetMapping("resetPass")
-	public ModelAndView resetPass(String user_pass, String button, ModelAndView mav) {
+	@GetMapping("passReset")
+	public String resetPass() {
 
 		//確認ボタンを押下
-		if (button.equals("reset")) {
-			mav.addObject("user_pass", user_pass);
-			mav.setViewName("common/resetPass");
-		}
+		//if (button.equals("reset")) {
+		//	mav.addObject("user_pass", user_pass);
+		//	mav.setViewName("common/passReset");
+		//}
 
-		return mav;
+		return "common/passReset";
 	}
 
 	/**
 	 * 在籍チェック
 	 * ID重複チェック
 	 * パスワードチェック
-	 * ログイン後、メニュー(管理者)画面に遷移
+	 * ログイン後、メニュー(管理者)画面
 	 * @return
 	 */
-	@PostMapping("menu")
+	@PostMapping("/taskdon/admin/menu")
 	public ModelAndView userIdCheckForAdmin(ModelAndView mav, String user_id, String user_pass) {
 
 		Optional<User> user;
@@ -142,18 +196,14 @@ public class UserCtrl {
 		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
 
 			if (user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin")) {
-
 				//admin無効化のSQL
-
 				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
 				session.setAttribute("user", user.get());
 			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
-
 				mav.setViewName("admin/menuAdmin"); //管理者ログイン(通常)
 				session.setAttribute("user", user.get());
 			}
 		} else {
-
 			mav.setViewName("common/login");
 			mav.addObject("errMsg", "ログインできませんでした");
 		}
@@ -167,54 +217,66 @@ public class UserCtrl {
 	 * ログイン後、所属グループ一覧画面に遷移
 	 * @return
 	 */
-	@PostMapping("deptGroupList")
-	public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
+		@PostMapping("deptGroupList")
+		public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
+	
+			Optional<User> user;
+	
+			if (user_id != null) {
+	
+				List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+	
+				user = userCrudRepo.findById(user_id);
+	
+				if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+	
+					if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
+	
+						System.out.println(user);
+						System.out.println(user_id);
+						for (GroupDisplay group : deptGroupList) {
+							System.out.println(group);
+						}
+	
+						mav.setViewName("common/deptGroupList");
+						mav.addObject("groupS", deptGroupList);
+						session.setAttribute("deptGroupList", deptGroupList);
+						session.setAttribute("user", user.get());
+					} else {
+						mav.setViewName("common/login");
+						mav.addObject("errMsg", "ログインできませんでした");
+					}
+				} else {
+					mav.setViewName("common/login");
+					mav.addObject("errMsg", "ログインできませんでした");
+				}
+			} else {
+				mav.setViewName("common/deptGroupList");
+			}
+			return mav;
+		}
+
+	/**
+	 * 所属グループ一覧の表示
+	 * @return
+	 */
+	@GetMapping("reDeptGroup")
+	public ModelAndView reDeptGroup(ModelAndView mav, String user_id) {
 
 		Optional<User> user;
 
-		List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+		if (user_id != null) {
 
-		user = userCrudRepo.findById(user_id);
+			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
 
-		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+			user = userCrudRepo.findById(user_id);
 
-			if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
-
-				System.out.println(user);
-				System.out.println(user_id);
-
-				mav.setViewName("common/deptGroupList");
-				mav.addObject("groupS", deptGroupList);
-				session.setAttribute("user", user.get());
-			} else {
-				mav.setViewName("common/login");
-				mav.addObject("errMsg", "ログインできませんでした");
-			}
-		} else {
-			mav.setViewName("common/login");
-			mav.addObject("errMsg", "ログインできませんでした");
-		}
-		return mav;
-	}
-
-	/**
-	 * 所属グループ一覧
-	 * @return
-	 */
-	@GetMapping("deptGroupList")
-	public ModelAndView viewDeptGroupList(ModelAndView mav, String user_id) {
-
-		Optional<User> user = userCrudRepo.findById(user_id);
-
-		List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
-
-		if (user.isPresent()) {
 			mav.setViewName("common/deptGroupList");
 			mav.addObject("groupS", deptGroupList);
+			session.setAttribute("deptGroupList", deptGroupList);
 			session.setAttribute("user", user.get());
 		} else {
-			mav.setViewName("common/menuUser");
-			mav.addObject("errMsg", "失敗しました");
+			mav.setViewName("common/deptGroupList");
 		}
 
 		return mav;
@@ -225,7 +287,7 @@ public class UserCtrl {
 	 * @return
 	 */
 	@LoginRequired
-	@GetMapping("menu")
+	@PostMapping("menu")
 	public String menu(@RequestParam(name = "group_id", required = false) Integer group_id,
 			@RequestParam(name = "user_roll", required = false) String user_roll) {
 
@@ -235,6 +297,17 @@ public class UserCtrl {
 			session.setAttribute("groupId", group_id); //グループID,
 			session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
 		}
+		return "common/menuUser";
+	}
+
+	/**
+	 * メニュー(ユーザ)の表示
+	 * @return
+	 */
+	@LoginRequired
+	@GetMapping("menu")
+	public String reMenu() {
+
 		return "common/menuUser";
 	}
 
@@ -444,7 +517,7 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("taskUnapproved")
 	public ModelAndView taskUnapproved(ModelAndView mav) {
-		mav.addObject("taskNonapp", TaskService.selectTaskUnapproved((int)session.getAttribute("groupId")));
+		mav.addObject("taskNonapp", TaskService.selectTaskUnapproved((int) session.getAttribute("groupId")));
 		mav.setViewName("leader/taskUnapproved");
 		return mav;
 	}
@@ -535,9 +608,10 @@ public class UserCtrl {
 	@PostMapping("taskRequestComplete")
 	public ModelAndView taskRequestComplete(ModelAndView mav, TaskReqForm t) {
 		Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        System.out.println(sdf.format(date));
-		TaskService.registerTaskReq(t.getReq_category(), t.getReq_name(), t.getReq_content(), t.getReq_reason(),date,t.getUser_name(),(int) session.getAttribute("groupId"));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		System.out.println(sdf.format(date));
+		TaskService.registerTaskReq(t.getReq_category(), t.getReq_name(), t.getReq_content(), t.getReq_reason(), date,
+				t.getUser_name(), (int) session.getAttribute("groupId"));
 		mav.addObject("taskRequestComp", true);
 		mav.addObject("taskRequest", t);
 		mav.setViewName("member/taskRequestConfirm");
@@ -548,6 +622,40 @@ public class UserCtrl {
 	 * ToDoリスト画面を表示
 	 * @return
 	 */
+	//	@LoginRequired
+	@GetMapping("todoList")
+	public ModelAndView todoList(ModelAndView mav) {
+		User user = (User) session.getAttribute("user");
+		String user_id = user.getUser_id();
+		mav.addObject("todoList", TodoService.selectTodoList(user_id));
+		mav.setViewName("common/todoList");
+		return mav;
+	}
+
+	/**
+	 * 選択されたToDoリスト画面を表示
+	 * @return
+	 */
+	//	@LoginRequired
+	@PostMapping("todoListChange")
+	public ModelAndView todoList(ModelAndView mav,
+			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
+			@RequestParam("button") String button) {
+		List<Tdlist> todo = null;
+		User user = (User) session.getAttribute("user");
+		String user_id = user.getUser_id();
+		if (tdlist_id != null) {
+			todo = TodoService.selectTodo(tdlist_id);
+		}
+
+		mav.addObject("button", button);
+		mav.addObject("id", tdlist_id);
+		mav.addObject("todo", todo);
+		System.out.println("aaaaaaaaaaaaaaaa"+todo);
+		mav.addObject("todoList", TodoService.selectTodoList(user_id));
+		mav.setViewName("common/todoList");
+		return mav;
+	}
 
 	/**
 	 * 連絡事項作成画面を表示

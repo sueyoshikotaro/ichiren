@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|タスク編集</title>
+	<title>タスクどん|ToDoリスト一覧</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,6 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
-	<link rel="stylesheet" th:href="@{/css/taskS.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -69,66 +68,79 @@
 </head>
 
 <body>
-	<!--コンテナ-->
+
+	<!--ドロップダウンメニュー(開閉)-->
+	<button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExampleSide"
+		aria-controls="offcanvasExample">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div>
+		<th:block th:insert="common/TodoFragment :: toggle">
+	</div>
+<!--	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExampleSide"-->
+<!--		aria-labelledby="offcanvasExampleLabel">-->
+<!--		<div class="offcanvas-header">-->
+<!--			<h2 class="offcanvas-title" id="offcanvasExampleLabel">ToDo一覧</h2> <button type="button" class="btn-close"-->
+<!--				data-bs-dismiss="offcanvas" aria-label="Close"></button>-->
+<!--		</div>-->
+<!--		<div class="offcanvas-body">-->
+<!--			<form th:action="@{todoListChange}" method="post">-->
+<!--				<div th:each="todo:${todoList}">-->
+<!--					<div th:text="${todo.tdlist_content}"></div>-->
+<!--					<div class="form-check">-->
+<!--						<input class="form-check-input" type="checkbox" id="flexCheckDefault">-->
+<!--						<label class="form-check-label"></label>-->
+<!--					</div>-->
+<!--					ラジオボタン-->
+<!--					<div class="form-check">-->
+<!--						<input class="form-check-input" type="radio" name="flexRadioDefault"-->
+<!--							th:value="${todo.tdlist_id}" id="flexRadioDefault1" th:checked="${todo.tdlist_id} == ${id}">-->
+<!--						<label class="form-check-label"></label>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--				<button type="submit" name="button" value="edit">編集</button>-->
+<!--				<button type="submit" name="button" value="regist">登録</button>-->
+<!--				<button type="submit" name="button" value="delete">削除</button>-->
+<!--			</form>-->
+<!--		</div>-->
+<!--	</div>-->
 	<div class="container">
-
-		<h2>タスク編集</h2>
-
-		<form th:action="@{taskEditConfirm}" method="post">
-			<input type="hidden" name="task_id" th:value="${task.task_id}"></input>
-			<div class="form-group">
-				<label class="form-label">タスク名</label>
-				<input type="text" th:value="${task.task_name}" class="form-control" name="task_name">
+		<div th:if="${button==null} or ${button=='regist'}">
+			<div>
+				<label>タスク内容</label>
+				<input type="text" required>
 			</div>
-			<div class="form-group">
-				<label class="form-label">タスクカテゴリ</label>
-				<input type="text" th:value="${task.task_category}" class="form-control" name="task_category">
+			<div class="dropdown mt-3">
+				<label>重要度</label>
+				<select class="form-select">
+					<option class="dropdown-item" value="高">高</option>
+					<option class="dropdown-item" value="中">中</option>
+					<option class="dropdown-item" value="低">低</option>
+				</select>
 			</div>
-			<div class="form-group">
-				<label class="form-label">タスク概要</label>
-				<textarea type="text" th:text="${task.task_content}" class="form-control"
-					name="task_content"></textarea>
-			</div>
-			<div class="form-group">
-				<div class="row">
-					<div class="col">
-						<label class="form-label">担当者</label>
-						<select name="user_name" class="form-select" style="margin-top: 0px;">
-							<option th:each="user : ${session.groupUser}" th:value="${user}" th:text="${user}"
-								name="user_name" th:selected="${task.user_name == user}">
-							</option>
-						</select>
-					</div>
-					<div class="col">
-						<label class="form-label">優先度</label>
-						<select class="form-select" name="task_priority" style="margin-top: 0px;">
-							<option value="1" th:selected="${task.task_priority == '1'}">1</option>
-							<option value="2" th:selected="${task.task_priority == '2'}">2</option>
-							<option value="3" th:selected="${task.task_priority == '3'}">3</option>
-							<option value="4" th:selected="${task.task_priority == '4'}">4</option>
-							<option value="5" th:selected="${task.task_priority == '5'}">5</option>
-						</select>
-					</div>
+		</div>
+		<form th:if="${todo!=null} and ${button != 'regist'}" th:action="@{#}" method="post">
+			<div th:each="todo:${todo}">
+				<div>
+					<label>タスク内容</label>
+					<input type="text" th:value="${todo.tdlist_content}" required></input>
+				</div>
+				<div class="dropdown mt-3">
+					<label>重要度</label>
+					<select class="form-select">
+						<option class="dropdown-item" value="高" th:selected="${todo.importance} == '高'">高</option>
+						<option class="dropdown-item" value="中" th:selected="${todo.importance} == '中'">中</option>
+						<option class="dropdown-item" value="低" th:selected="${todo.importance} == '低'">低</option>
+					</select>
 				</div>
 			</div>
-			<input type="hidden" name="task_id" th:value="${task.task_id}">
-			<input type="hidden" name="task_level" th:value="${task.task_level}">
-			<input type="hidden" name="task_weight" th:value="${task.task_weight}">
-			<input type="hidden" name="progress" th:value="${task.progress}">
-			<input type="hidden" name="start_date" th:value="${task.start_date}">
-			<input type="hidden" name="end_date" th:value="${task.end_date}">
-
-			<button type="submit" class="Confirm-btn">確認</button>
 		</form>
-	</div>
 
+	</div>
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
-
 </body>
-
-</html>
 
 </html>

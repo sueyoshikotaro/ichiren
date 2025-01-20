@@ -162,12 +162,23 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		return groupDispCrudRepo.MaxGroupId(school_id);
 	}
 
+	/**
+	 * 末吉
+	 * グループ作成
+	 */
 	@Override
 	public void groupDetailCreate(String user_id, int group_id, String user_roll, int score) {
 
 		groupDispCrudRepo.groupDetailCreate(user_id, group_id, user_roll, score);
 	}
-
-	
-
+  
+	/**
+	 * 末吉
+	 * 既に登録されているユーザIDを取得
+	 */
+	@Override
+	public List<String> getExistUserIds(Integer group_id) {
+		
+		return groupDispCrudRepo.getExistUserIds(group_id);
+	}
 }

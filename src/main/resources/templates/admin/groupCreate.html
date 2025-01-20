@@ -81,7 +81,7 @@
 					<th>グループ名</th>
 
 					<td th:if="${group_name != null}">
-						<input type="text" name="group_name" th:value="${group_name}">
+						<input type="text" name="group_name" th:value="${groupDetail.group_name}">
 					</td>
 
 					<td th:unless="${group_name != null}">
@@ -150,6 +150,13 @@
 			// コントローラメソッドを呼び出すためにフォームを送信
 			form.action = 'groupMemberSelect'; // コントローラメソッドの実際のURLに置き換えてください
 			form.method = 'post';
+			
+			// ボタンの値をhiddenフィールドに設定
+			var hiddenField = document.createElement('input');
+			hiddenField.type = 'hidden';
+			hiddenField.name = 'button';
+			hiddenField.value = "グループ作成";
+			form.appendChild(hiddenField);
 
 			form.submit();
 		}
@@ -166,7 +173,7 @@
 			var hiddenField = document.createElement('input');
 			hiddenField.type = 'hidden';
 			hiddenField.name = 'button';
-			hiddenField.value = buttonValue;
+			hiddenField.value = "グループ作成";
 			form.appendChild(hiddenField);
 
 			// コントローラメソッドを呼び出すためにフォームを送信

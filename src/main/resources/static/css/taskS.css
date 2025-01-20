@@ -87,7 +87,7 @@
 	text-decoration: none;
 	width: 80px;
 	margin: auto;
-	margin-top: 19px;
+	margin-top: 16px;
 	margin-bottom: 24px;
 	font-size: 18px;
 	font-weight: bold;
@@ -117,6 +117,45 @@
 }
 
 .detail-btn:hover {
+	color: #fff;
+}
+
+/*確認ボタン*/
+.Confirm-btn {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	width: 80px;
+	margin: auto;
+	margin-top: 16px;
+	font-size: 18px;
+	font-weight: bold;
+	border: 2px solid black;
+	color: black;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.Confirm-btn::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	transform: translateX(-100%);
+	transition: all .3s;
+	z-index: -1;
+}
+
+.Confirm-btn:hover::before {
+	transform: translateX(0);
+}
+
+.Confirm-btn:hover {
 	color: #fff;
 }
 
@@ -156,4 +195,54 @@ a.move-btn:hover::before {
 
 a.move-btn:hover {
 	color: #fff;
+}
+
+.modal-text{
+	margin-top: 14px;
+	font-size: 24px;
+	text-align: center;
+}
+
+/*タスク一覧へ戻るボタン*/
+.Back-btn {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	width: 140px;
+	margin: auto;
+	margin-top: 16px;
+	font-size: 18px;
+	font-weight: bold;
+	border: 2px solid black;
+	color: black;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.Back-btn::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	transform: translateX(-100%);
+	transition: all .3s;
+	z-index: -1;
+}
+
+.Back-btn:hover::before {
+	transform: translateX(0);
+}
+
+.Back-btn:hover {
+	color: #fff;
+}
+
+.per-input{
+	border-radius: 6px;
+	margin-right: 6px;
 }
