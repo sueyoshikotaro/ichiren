@@ -9,4 +9,5 @@ public class TdlistForm {
 	private String user_id;
 	private String tdlist_content;
 	private String importance;
+	private int tdlist_flg;
 }

@@ -9,15 +9,16 @@
 	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExampleSide"
 		aria-labelledby="offcanvasExampleLabel" th:fragment="toggle">
 		<div class="offcanvas-header">
-			<h2 class="offcanvas-title" id="offcanvasExampleLabel">ToDo一覧</h2> <button type="button" class="btn-close"
-				data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			<h2 class="offcanvas-title" id="offcanvasExampleLabel">ToDo一覧</h2>
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		<div class="offcanvas-body">
-			<form th:action="@{todoListChange}" method="post">
-				<div th:each="todo:${todoList}">
-					<div th:text="${todo.tdlist_content}"></div>
+			<form th:action="@{todoListChange}" method="post" id="form" th:fragment="list">
+				<div th:each="todo:${todoList}" class="data">
+					<div th:text="${todo.tdlist_content}" class="text" th:value="${todo.tdlist_id}"></div>
+					<!--チェックボックス-->
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="flexCheckDefault">
+						<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="tdlist_id">
 						<label class="form-check-label"></label>
 					</div>
 					<!--ラジオボタン-->
