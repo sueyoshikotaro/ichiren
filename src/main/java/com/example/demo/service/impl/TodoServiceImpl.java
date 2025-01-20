@@ -31,4 +31,32 @@ public class TodoServiceImpl implements TodoServiceInterface {
 		return repo.selectTodo(tdlist_id);
 	}
 
+	/**
+	 * 湊原
+	 * ToDoを追加する
+	 */
+	@Override
+	public void todoRegister(String user_id, String tdlist_content, String importance) {
+		repo.registerTodo(user_id, tdlist_content, importance);		
+	}
+
+	/**
+	 * 湊原
+	 * TodDoを更新する
+	 */
+	@Override
+	public void todoUpdate(int tdlist_id, String tdlist_content, String importance) {
+		repo.updateTodo(tdlist_id, tdlist_content, importance);
+		
+	}
+
+	/**
+	 * 湊原
+	 * TodDoを削除する
+	 */
+	@Override
+	public void todoDelete(int tdlist_id) {
+		repo.deleteTodo(tdlist_id);
+	}
+
 }

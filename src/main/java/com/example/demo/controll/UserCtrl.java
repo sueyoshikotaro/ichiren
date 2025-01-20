@@ -22,6 +22,7 @@ import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TaskReqForm;
 import com.example.demo.form.TaskView;
+import com.example.demo.form.TdlistForm;
 import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
@@ -620,18 +621,79 @@ public class UserCtrl {
 	@PostMapping("todoListChange")
 	public ModelAndView todoList(ModelAndView mav,
 			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
-			@RequestParam("button") String button) {
+			@RequestParam(name = "button") String button) {
 		List<Tdlist> todo = null;
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
 		if (tdlist_id != null) {
 			todo = TodoService.selectTodo(tdlist_id);
 		}
-
+		if (button.equals("regist")) {
+			mav.setViewName("common/todoListRegist");
+		} else if (button.equals("edit")) {
+			mav.setViewName("common/todoListEdit");
+		} else if (button.equals("delete")) {
+			mav.setViewName("common/todoListDelete");
+		}
 		mav.addObject("button", button);
 		mav.addObject("id", tdlist_id);
 		mav.addObject("todo", todo);
-		System.out.println("aaaaaaaaaaaaaaaa" + todo);
+		mav.addObject("todoList", TodoService.selectTodoList(user_id));
+		return mav;
+	}
+
+	/**
+	 * ToDoリスト登録を行う
+	 * 湊原
+	 * @return
+	 */
+	//	@LoginRequired
+	@PostMapping("registConfirm")
+	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t,
+			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
+			@RequestParam(name = "button", required = false) String button,
+			@RequestParam(name = "check", required = false) String check) {
+		User user = (User) session.getAttribute("user");
+		String user_id = user.getUser_id();
+		TodoService.todoRegister(user_id, t.getTdlist_content(), t.getImportance());
+		mav.addObject("check", check);
+		mav.addObject("todoList", TodoService.selectTodoList(user_id));
+		mav.setViewName("common/todoList");
+		return mav;
+	}
+
+	/**
+	 * ToDoリスト編集を行う
+	 * 湊原
+	 * @return
+	 */
+	//	@LoginRequired
+	@PostMapping("editConfirm")
+	public ModelAndView editConfirm(ModelAndView mav, TdlistForm t,
+			@RequestParam(name = "check", required = false) String check) {
+		User user = (User) session.getAttribute("user");
+		String user_id = user.getUser_id();
+		System.out.println(t.getTdlist_id());
+		TodoService.todoUpdate(t.getTdlist_id(), t.getTdlist_content(), t.getImportance());
+		mav.addObject("check", check);
+		mav.addObject("todoList", TodoService.selectTodoList(user_id));
+		mav.setViewName("common/todoList");
+		return mav;
+	}
+
+	/**
+	 * ToDoリスト削除を行う
+	 * 湊原
+	 * @return
+	 */
+	//	@LoginRequired
+	@PostMapping("deleteConfirm")
+	public ModelAndView deleteConfirm(ModelAndView mav, TdlistForm t,
+			@RequestParam(name = "check", required = false) String check) {
+		User user = (User) session.getAttribute("user");
+		String user_id = user.getUser_id();
+		TodoService.todoDelete(t.getTdlist_id());
+		mav.addObject("check", check);
 		mav.addObject("todoList", TodoService.selectTodoList(user_id));
 		mav.setViewName("common/todoList");
 		return mav;

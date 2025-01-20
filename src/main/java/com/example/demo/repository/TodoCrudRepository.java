@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import java.util.List;
 
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -26,5 +27,33 @@ public interface TodoCrudRepository extends CrudRepository<Tdlist, Integer> {
 	 */
 	@Query("select * from tdlist where tdlist_id=:tdlist_id;")
 	List<Tdlist> selectTodo(int tdlist_id);
+
+	
+	/**
+	 * ToDoを追加する
+	 * 湊原
+	 * @param user_id
+	 * @param tdlist_content
+	 * @param importance
+	 */
+	@Modifying
+	@Query("insert into tdlist(user_id, tdlist_content, importance) values(:user_id, :tdlist_content, :importance)")
+	public void registerTodo(String user_id, String tdlist_content, String importance);
+	
+	/**
+	 * TodDoを更新する
+	 * 湊原
+	 */
+	@Modifying
+	@Query("update tdlist set tdlist_content=:tdlist_content, importance=:importance where tdlist_id=:tdlist_id")
+	public void updateTodo(int tdlist_id, String tdlist_content, String importance);
+	
+	/**
+	 * TodDoを削除する
+	 * 湊原
+	 */
+	@Modifying
+	@Query("delete from tdlist where tdlist_id=:tdlist_id")
+	public void deleteTodo(int tdlist_id);
 
 }
