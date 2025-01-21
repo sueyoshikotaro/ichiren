@@ -1,0 +1,67 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Sawarabi+Mincho');
+
+/*全体*/
+body {
+	background-image: url(../img/backImage.png);
+	background-size: 100% auto;
+	background-position: center top;
+	background-repeat: no-repeat;
+	min-height: 100vh;
+	background-size: cover;
+	font-family: 'Sawarabi Mincho', sans-serif;
+}
+
+/*コンテナ(共通)*/
+.container {
+	background-image: url(../img/containerImage.png);
+	background-size: cover;
+	max-width: 480px;
+	padding: 20px;
+	margin-top: 8px;
+	border: 2px solid black;
+	border-radius: 10px;
+	font-weight: bold;
+}
+
+/*メニューデザイン*/
+/*メニューテキスト*/
+.menu-text {
+	text-align: center;
+}
+
+/*メニューボタン(以下:4項目)*/
+a.menu-btn {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	position: relative;
+	width: 192px;
+	margin: auto;
+	font-size: 21px;
+	color: black;
+	background: #EEEEEE;
+	transition: 0.3s ease-in-out;
+	margin-top: 19px;
+}
+
+a.menu-btn::before {
+	content: '';
+	position: absolute;
+	top: -5px;
+	left: -5px;
+	width: calc(100% - 2px);
+	height: calc(100% - 2px);
+	border: 2px solid black;
+	transition: 0.2s;
+}
+
+a.menu-btn:hover {
+	background: black;
+	color: white;
+}
+
+a.menu-btn:hover::before {
+	top: 0;
+	left: 0;
+}

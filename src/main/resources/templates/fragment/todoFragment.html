@@ -1,11 +1,15 @@
+<!--todo用の共通HTML-->
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<!--必須項目-->
 	<meta charset="UTF-8">
 </head>
 
 <body>
+	<!--左開閉部分-->
 	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExampleSide"
 		aria-labelledby="offcanvasExampleLabel" th:fragment="toggle">
 		<div class="offcanvas-header">
@@ -13,7 +17,7 @@
 			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		<div class="offcanvas-body">
-			<form th:action="@{todoListChange}" method="post" id="form" th:fragment="list">
+			<form th:action="@{todoListChange}" method="post" id="form" th:fragment="list"> <!--リスト-->
 				<div th:each="todo:${todoList}" class="data">
 					<div th:text="${todo.tdlist_content}" class="text" th:value="${todo.tdlist_id}"></div>
 					<!--チェックボックス-->
@@ -21,16 +25,21 @@
 						<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="tdlist_id">
 						<label class="form-check-label"></label>
 					</div>
+					
 					<!--ラジオボタン-->
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="flexRadioDefault"
 							th:value="${todo.tdlist_id}" id="flexRadioDefault1" th:checked="${todo.tdlist_id} == ${id}">
 						<label class="form-check-label"></label>
 					</div>
+					
 				</div>
+				
+				<!--機能ボタン-->
 				<button type="submit" name="button" value="edit">編集</button>
 				<button type="submit" name="button" value="regist">登録</button>
 				<button type="submit" name="button" value="delete">削除</button>
+				
 			</form>
 		</div>
 	</div>
