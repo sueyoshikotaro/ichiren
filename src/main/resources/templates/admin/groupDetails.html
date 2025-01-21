@@ -67,7 +67,7 @@
 
 			<!-- グループメンバ詳細 -->
 			<div>
-				<form th:action="@{groupMemberDetails}" method="post">
+				<form th:action="@{groupMemberDetails}" method="get">
 					<input type="hidden" name="user_name" th:value="${group.user_name}">
 					<input type="hidden" name="group_name" th:value="${group.group_name}">
 					<button type="submit" name="button" class="btn btn-detail" value="詳細">詳細</button>
@@ -83,17 +83,7 @@
 				</form>
 			</div>
 
-			<!--グループ編集 -->
-			<div>
-				<form th:action="@{groupEdit}" method="post">
-					<input type="hidden" name="group_id" th:value="${group.group_id}">
-					<input type="hidden" name="group_name" th:value="${group.group_name}">
-					<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
-					<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
-					<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
-					<button type="submit" name="button" class="btn btn-edit" value="編集">編集</button>
-				</form>
-			</div>
+
 			<!--グループメンバ追加 -->
 			<div>
 				<form th:action="@{groupMemberAdd}" method="post">
@@ -104,6 +94,20 @@
 			</div>
 		</div>
 
+
+		<!--グループ編集 -->
+		<div>
+			<form th:action="@{groupEdit}" method="post">
+				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
+				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
+				<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
+				<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
+				<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
+				<button type="submit" name="button" class="btn btn-edit" value="編集">編集</button>
+			</form>
+		</div>
+
+
 		<!--グループ解散 -->
 		<form th:action="@{groupDissConfirm}" method="post">
 			<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
@@ -111,12 +115,8 @@
 			<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
 			<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
 			<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
-			<button type="submit" name="button" class="btn btn-diss" value="解散">解散</button>
+			<button type="submit" name="button" class="btn btn-edit" value="解散">解散</button>
 		</form>
-
-		<!--コンテナ最下のボタン-->
-		<button th:onclick="|location.href='@{/taskdon/user/taskList}'|">戻る</button>
-
 	</div>
 
 	<!--bootstrapのjsリンク接続-->
