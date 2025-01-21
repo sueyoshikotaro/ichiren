@@ -59,4 +59,13 @@ public class TodoServiceImpl implements TodoServiceInterface {
 		repo.deleteTodo(tdlist_id);
 	}
 
+	/**
+	 * 湊原
+	 * 選択されたToDoリストを完了にする
+	 */
+	@Override
+	public void todoUpFlg(int tdlist_id,int tdlist_flg) {
+		repo.updateTodoFlg(tdlist_id,tdlist_flg);
+	}
+
 }

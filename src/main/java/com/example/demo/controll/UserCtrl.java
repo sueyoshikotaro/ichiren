@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -29,8 +31,6 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -605,7 +605,14 @@ public class UserCtrl {
 	 */
 	//	@LoginRequired
 	@GetMapping("todoList")
-	public ModelAndView todoList(ModelAndView mav) {
+	public ModelAndView todoList(ModelAndView mav,
+			@RequestParam(name = "tdlist_id", required = false) Integer tdlist_id,
+			@RequestParam(name = "checked", required = false) Boolean checked) {
+		
+		if (tdlist_id != null) {
+			System.out.println(checked);
+			TodoService.todoUpFlg((int)tdlist_id, (int) session.getAttribute("groupId"));
+		}
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
 		mav.addObject("todoList", TodoService.selectTodoList(user_id));
@@ -619,7 +626,7 @@ public class UserCtrl {
 	 */
 	//	@LoginRequired
 	@PostMapping("todoListChange")
-	public ModelAndView todoList(ModelAndView mav,
+	public ModelAndView todoListChange(ModelAndView mav,
 			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
 			@RequestParam(name = "button") String button) {
 		List<Tdlist> todo = null;
