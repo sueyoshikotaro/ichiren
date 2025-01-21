@@ -71,6 +71,7 @@ public class UserCtrl {
 	 * ログアウト画面を表示
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("logout")
 	public String logout() {
 
@@ -83,6 +84,7 @@ public class UserCtrl {
 	 * ログイン画面を表示 
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("login")
 	public String login() {
 
@@ -96,13 +98,11 @@ public class UserCtrl {
 	 * パスワードチェック
 	 * @return
 	 */
-	@PostMapping("/login")
+	@LoginRequired
+	@PostMapping("login")
 	public ModelAndView loginCheck(ModelAndView mav, String user_id, String user_pass, RedirectAttributes ra) {
 
 		Optional<User> user = userCrudRepo.findById(user_id);
-
-		System.out.println(user_id);
-		System.out.println(user_pass);
 
 		if (user.isPresent() && user.get().getUser_flg() == 1 && user.get().getUser_pass().equals(user_pass)) {
 
@@ -111,8 +111,12 @@ public class UserCtrl {
 
 			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
 
+				session.setAttribute("user", user.get());
+
 				return new ModelAndView("redirect:/taskdon/admin/menu");
 			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+
+				session.setAttribute("user", user.get());
 
 				return new ModelAndView("redirect:/taskdon/admin/menu");
 			} else if (user.get().getUser_pass().equals("taskdon1")) {
@@ -121,9 +125,11 @@ public class UserCtrl {
 			} else if (user.get().getUser_id().contains("st")) {
 
 				return new ModelAndView("redirect:/taskdon/user/deptGroupList");
+			} else {
+
+				mav.setViewName("common/login");
 			}
 		}
-		mav.setViewName("common/login");
 
 		return mav;
 	}
@@ -132,7 +138,7 @@ public class UserCtrl {
 	 * パスワード再設定画面
 	 * @return
 	 */
-	@GetMapping("/passReset")
+	@GetMapping("passReset")
 	public ModelAndView passReset(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
 		mav.setViewName("common/passReset"); //パスワード再設定
@@ -160,21 +166,13 @@ public class UserCtrl {
 	 * メニュー(管理者)画面
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("/taskdon/admin/menu")
 	public ModelAndView adminMenu(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
-		System.out.println("adminMenu called"); //追記
-		System.out.println("user_id: " + user_id); //追記
-
 		Optional<User> user = userCrudRepo.findById(user_id);
 
-		if (user.isPresent()) { //userが存在するか確認
-			mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
-			session.setAttribute("user", user.get());
-		} else {
-			mav.setViewName("common/login"); //userが存在しない場合はログイン画面に戻す
-			System.out.println("user not found"); //追記
-		}
+		mav.setViewName("admin/menuAdmin");
 
 		return mav;
 	}
@@ -183,7 +181,7 @@ public class UserCtrl {
 	 * 所属グループ一覧画面に遷移
 	 * @return
 	 */
-	@GetMapping("/deptGroupList")
+	@GetMapping("deptGroupList")
 	public ModelAndView deptGroupList(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
 		Optional<User> user;
@@ -209,7 +207,8 @@ public class UserCtrl {
 	 * 所属グループ一覧
 	 * @return
 	 */
-	@GetMapping("/deptGroupList")
+	@LoginRequired
+	@PostMapping("deptGroupList")
 	public ModelAndView reDeptGroupList(ModelAndView mav, String user_id) {
 
 		Optional<User> user;
