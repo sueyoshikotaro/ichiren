@@ -158,28 +158,24 @@
 				<input type="hidden" name="req_category" th:value="${taskAppConf.req_category}">
 				<input type="hidden" name="req_content" th:value="${taskAppConf.req_content}">
 				<input type="hidden" name="req_reason" th:value="${taskAppConf.req_reason}">
+
 				<button type="submit" name="button" value="app" class="Confirm-btn"
 					onclick="taskAppAndShowPopup()">承認</button>
+
 		</form>
 
 		<!-- ポップアップ -->
 		<div class="modal fade" id="taskAppModal" tabindex="-1" role="dialog" aria-labelledby="taskAppModalLabel"
-			aria-hidden="true">
+			aria-hidden="true" style="margin-top: 180px;">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="taskAppModalLabel">承認完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>承認しました</p>
-					</div>
-					<div class="modal-footer">
-						<button th:onclick="|location.href='@{/taskdon/user/taskUnapproved}'|"
-							class="btn btn-danger">未承認一覧へ</button>
-					</div>
+					<p class="modal-text">申請を承認しました</p>
+					<button th:onclick="|location.href='@{/taskdon/user/taskUnapproved}'|" class="Back-btn"
+						style="margin-bottom: 18px;">未承認一覧へ</button>
 				</div>
 			</div>
 		</div>
+		
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
