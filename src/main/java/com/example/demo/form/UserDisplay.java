@@ -19,5 +19,7 @@ public class UserDisplay {
 	private String school_name;
 	private String enr_year;
 	private int user_flg;
+	
+	//リーダ選択のチェックボックス用
 	private boolean checked;
 }
