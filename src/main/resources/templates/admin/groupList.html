@@ -1,116 +1,132 @@
-<!-- 向江 -->
-<!-- グループ一覧機能 -->
-
+<!-- グループ一覧機能(向江) -->
+<!-- 必須情報(下記2項目) -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<!-- 必須項目 -->
 	<meta charset="UTF-8">
-	<title>タスクどん</title>
 
+	<!-- サイトタイトル -->
+	<title>タスクどん|グループ一覧</title>
+
+	<!-- デザイン等 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-		crossorigin="anonymous"></script>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<!-- CSS接続 -->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 
-	<a th:href="@{/taskdon/admin/logout}">ログアウト</a><!-- 右寄せにする -->
+	<!-- 共通header呼出し(管理者用) -->
+	<div>
+		<th:block th:insert="fragment/header :: headerAdmin">
+	</div>
+
 </head>
 
 <body>
-	<div>
+	<!--コンテナ-->
+	<div class="container">
+		
 		<h2>グループ一覧画面</h2><br>
-		<div class="container" id="container">
-			<select id="year" name="selectedValue" th:onchange="groupList(this.value)">
-				<option>グループ結成年度</option>
-				<option name="est_year" th:each="group : ${groups}" th:value="${group.est_year}"
-					th:text="${group.est_year}">
-				</option>
-			</select>
 
-			<select id="school" name="selectedValue" th:onchange="groupList(this.value)">
-				<option>学校名</option>
-				<option name="school_name">北海道情報専門学校</option>
-				<option name="school_name">JOHO 新潟情報専門学校</option>
-				<option name="school_name">JOHO 大阪情報専門学校</option>
-				<option name="school_name">名古屋医療情報専門学校</option>
-				<option name="school_name">名古屋情報メディア専門学校</option>
-				<option name="school_name">JOHO 広島情報専門学校</option>
-				<option name="school_name">KCS福岡情報専門学校</option>
-				<option name="school_name">KCS北九州情報専門学校</option>
-				<option name="school_name">KCS大分情報専門学校</option>
-				<option name="school_name">KCS鹿児島情報専門学校</option>
-			</select>
+		<select id="year" name="selectedValue" th:onchange="groupList(this.value)">
+			<option>グループ結成年度</option>
+			<option name="est_year" th:each="group : ${groups}" th:value="${group.est_year}"
+				th:text="${group.est_year}">
+			</option>
+		</select>
 
-			<select id="genre" name="selectValue" th:onchange="groupList(this.value)">
-				<option>ジャンル</option>
-				<option name="genre" th:each="group : ${groups}" th:value="${group.genre}" th:text="${group.genre}">
-				</option>
-			</select>
+		<select id="school" name="selectedValue" th:onchange="groupList(this.value)">
+			<option>学校名</option>
+			<option name="school_name">北海道情報専門学校</option>
+			<option name="school_name">JOHO 新潟情報専門学校</option>
+			<option name="school_name">JOHO 大阪情報専門学校</option>
+			<option name="school_name">名古屋医療情報専門学校</option>
+			<option name="school_name">名古屋情報メディア専門学校</option>
+			<option name="school_name">JOHO 広島情報専門学校</option>
+			<option name="school_name">KCS福岡情報専門学校</option>
+			<option name="school_name">KCS北九州情報専門学校</option>
+			<option name="school_name">KCS大分情報専門学校</option>
+			<option name="school_name">KCS鹿児島情報専門学校</option>
+		</select>
 
-			<script th:inline="javascript">
-				/* グループ結成年度 */
-				function groupList(selectedValue) {
-					/*URL指定＆ドロップダウンリストの値引き渡し*/
-					var url = "groupList";
-					var dropdown = event.target.id;
-					var params = {
-						"selectedValue": selectedValue,
-						"dropdown": dropdown
-					};
+		<select id="genre" name="selectValue" th:onchange="groupList(this.value)">
+			<option>ジャンル</option>
+			<option name="genre" th:each="group : ${groups}" th:value="${group.genre}" th:text="${group.genre}">
+			</option>
+		</select>
+
+		<script th:inline="javascript">
+			/* グループ結成年度 */
+			function groupList(selectedValue) {
+				/*URL指定＆ドロップダウンリストの値引き渡し*/
+				var url = "groupList";
+				var dropdown = event.target.id;
+				var params = {
+					"selectedValue": selectedValue,
+					"dropdown": dropdown
+				};
 
 
-					/*HTML内容のクリア*/
-					var elements = document.getElementsByClassName("content_child");
-					for (var i = 0; i < elements.length; i++) {
-						elements[i].innerHTML = "";
-					}
-					/*グループ一覧表示メソッドの呼び出し*/
-					$.ajax({
-						type: "GET",
-						url: url,
-						data: params,
-						success: function (data) {
-							var html = $(data).find(".content").html();
-							document.getElementById("data").innerHTML = html;
-						}
-					});
+				/*HTML内容のクリア*/
+				var elements = document.getElementsByClassName("content_child");
+				for (var i = 0; i < elements.length; i++) {
+					elements[i].innerHTML = "";
 				}
-			</script>
+				/*グループ一覧表示メソッドの呼び出し*/
+				$.ajax({
+					type: "GET",
+					url: url,
+					data: params,
+					success: function (data) {
+						var html = $(data).find(".content").html();
+						document.getElementById("data").innerHTML = html;
+					}
+				});
+			}
+		</script>
 
-			<div class="content">
-				<div th:each="group : ${groups}" class="content_child" id="data">
-					<div th:text="'グループ：' + ${group.group_name}"></div>
-					<div class="w-50 p-3">
-						<div th:text="'進捗：' + ${group.all_progress} + '％'"></div>
-						<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
-							aria-valuemin="0" aria-valuemax="100">
-							<div class="progress-bar" th:style="'width:'+ ${group.all_progress}+'%'"></div>
-						</div>
-					</div>
-					<div th:text="'居場所：' + ${group.work_status}"></div>
-					<div>
-						<form th:action="@{groupDetail}" method="post">
-							<input type="hidden" name="group_id" th:value="${group.group_id}">
-							<input type="hidden" name="group_name" th:value="${group.group_name}">
-							<input type="hidden" name="school_id" th:value="${group.school_id}">
-							<input type="hidden" name="group_flg" th:value="${group.group_flg}">
-							<input type="hidden" name="genre" th:value="${group.genre}">
-							<input type="hidden" name="work_status" th:value="${group.work_status}">
-							<input type="hidden" name="all_progress" th:value="${group.all_progress}">
-							<input type="hidden" name="est_year" th:value="${group.est_year}">
-							<button type="submit" name="button" class="btn btn-detail" value="詳細">詳細</button>
-						</form>
+		<div class="content">
+			<div th:each="group : ${groups}" class="content_child" id="data">
+				<div th:text="'グループ：' + ${group.group_name}"></div>
+				<div class="w-50 p-3">
+					<div th:text="'進捗：' + ${group.all_progress} + '％'"></div>
+					<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
+						aria-valuemin="0" aria-valuemax="100">
+						<div class="progress-bar" th:style="'width:'+ ${group.all_progress}+'%'"></div>
 					</div>
 				</div>
+				<div th:text="'居場所：' + ${group.work_status}"></div>
+				<div>
+					<form th:action="@{groupDetail}" method="post">
+						<input type="hidden" name="group_id" th:value="${group.group_id}">
+						<input type="hidden" name="group_name" th:value="${group.group_name}">
+						<input type="hidden" name="school_id" th:value="${group.school_id}">
+						<input type="hidden" name="group_flg" th:value="${group.group_flg}">
+						<input type="hidden" name="genre" th:value="${group.genre}">
+						<input type="hidden" name="work_status" th:value="${group.work_status}">
+						<input type="hidden" name="all_progress" th:value="${group.all_progress}">
+						<input type="hidden" name="est_year" th:value="${group.est_year}">
+
+						<button type="submit" name="button" class="Confirm-btn" value="詳細">詳細</button>
+
+					</form>
+				</div>
 			</div>
-
-			<button th:onclick="|location.href='@{groupCreate}'|">作成</button>
-			<button th:onclick="|location.href='@{menu}'|">メニュー</button>
-
 		</div>
+
+		<button th:onclick="|location.href='@{groupCreate}'|">作成</button>
+		<button th:onclick="|location.href='@{menu}'|">メニュー</button>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </body>
 
 </html>
