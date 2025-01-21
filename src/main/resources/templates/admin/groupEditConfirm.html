@@ -34,12 +34,13 @@
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
-		<form th:action="@{groupCreateComp}" method="post" th:if="${groupDetail != null}">
+		<form th:action="@{groupEditComp}" method="post" th:if="${groupDetail != null}">
 			<table border="1">
 				<div>
 					<tr>
 						<th>グループ名</th>
 						<td th:text="${groupDetail.group_name}"></td>
+						<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
 						<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
 					</tr>
 

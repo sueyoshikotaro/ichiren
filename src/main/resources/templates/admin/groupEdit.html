@@ -40,9 +40,16 @@
 			<table border="1">
 				<tr>
 					<th>グループ名</th>
+					<td th:text="${groupDetail.group_name}"></td>
 					<input type="hidden" name="group_id" th:if="${groupDetail != null}"
 						th:value="${groupDetail.group_id}">
-					<td th:text="${groupDetail.group_name}"></td>
+					<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+				</tr>
+				
+				<tr>
+					<th>ジャンル名</th>
+					<td th:text="${groupDetail.genre}"></td>
+					<input type="hidden" name="genre" th:value="${groupDetail.genre}">
 				</tr>
 
 				

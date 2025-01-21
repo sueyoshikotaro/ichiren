@@ -931,23 +931,39 @@ public class AdminCtrl {
 		//リーダ以外のメンバ
 		List<UserDisplay> leaderUser = new ArrayList<>();
 		List<UserDisplay> memberUser = new ArrayList<>();
+		
+		//リーダが選択されていない場合
+		if (check == null) {
+			for (int i = 0; i < user_id.length; i++) {
+				UserDisplay user = new UserDisplay();
+				user.setUser_id(user_id[i]);
+				user.setUser_name(user_name[i]);
+				memberUser.add(user);
 
-		for (int i = 0; i < user_id.length; i++) {
-			UserDisplay user = new UserDisplay();
-			user.setUser_id(user_id[i]);
-			user.setUser_name(user_name[i]);
+				mav.addObject("errMsg", "リーダを選択してください");
+				mav.addObject("groupDetail", t);
+				mav.addObject("leaderUser", leaderUser);
+				mav.addObject("memberUser", memberUser);
+				mav.setViewName("admin/groupEdit");
+			}
+		} else {
+			for (int i = 0; i < user_id.length; i++) {
+				UserDisplay user = new UserDisplay();
+				user.setUser_id(user_id[i]);
+				user.setUser_name(user_name[i]);
 
-			if (Arrays.asList(check).contains(user_id[i])) {
-	            leaderUser.add(user);
-	        } else {
-	            memberUser.add(user);
-	        }
+				if (Arrays.asList(check).contains(user_id[i])) {
+					leaderUser.add(user);
+				} else {
+					memberUser.add(user);
+				}
+			}
+
+			mav.addObject("groupDetail", t);
+			mav.addObject("leaderUser", leaderUser);
+			mav.addObject("memberUser", memberUser);
+			mav.setViewName("admin/groupEditConfirm");
 		}
-
-		mav.addObject("groupDetail", t);
-		mav.addObject("leaderUser", leaderUser);
-		mav.addObject("memberUser", memberUser);
-		mav.setViewName("admin/groupEditConfirm");
 
 		return mav;
 	}
@@ -962,22 +978,26 @@ public class AdminCtrl {
 			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
 			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id) {
 
-		// ログインユーザのエンティティを取得
-		User userEntity = (User) session.getAttribute("user");
-
-		// エンティティの中のschool_idを取得
-		int school_id = userEntity.getSchool_id();
-
 		if (memberUser_id != null) {
 
 			// ここで、リーダーのデータを処理する
 			for (String i : leaderUser_id) {
-				groupDispService.groupEdit(i, t.getGroup_id(), "リーダ", school_id);
+
+				System.out.println("リーダ");
+				System.out.println(i);
+				System.out.println(t.getGroup_id());
+
+				groupDispService.groupEdit(i, t.getGroup_id(), "リーダ");
+
 			}
 
+			//ここで、メンバーのデータを処理する
 			for (String i : memberUser_id) {
-				// ここで、メンバーのデータを処理する
-				groupDispService.groupEdit(i, t.getGroup_id(), "メンバ", school_id);
+				System.out.println("メンバ");
+				System.out.println(i);
+				System.out.println(t.getGroup_id());
+
+				groupDispService.groupEdit(i, t.getGroup_id(), "メンバ");
 			}
 
 		}
@@ -986,22 +1006,6 @@ public class AdminCtrl {
 		mav.setViewName("admin/groupEditConfirm");
 
 		return mav;
-	}
-
-	/**
-	 * グループメンバ追加画面を表示する
-	 * @return
-	 */
-	public String memberAdd() {
-		return "memberAdd";
-	}
-
-	/**
-	 * グループメンバ追加確認画面を表示する
-	 * @return
-	 */
-	public String memberAddConfirm() {
-		return "memberAddConfirm";
 	}
 
 	/*
@@ -1392,19 +1396,13 @@ public class AdminCtrl {
 
 	/**
 	 * 末吉
-	 * グループメンバ追加画面
+	 * グループメンバ追加
 	 * @return
 	 */
 	@PostMapping("groupMemberAdd")
-	public ModelAndView groupMemberAdd(ModelAndView mav,
-			@RequestParam(name = "group_id", required = false) int group_id,
-			@RequestParam(name = "group_name", required = false) String group_name) {
+	public ModelAndView groupMemberAdd(ModelAndView mav, TeamsDisplay teamsDisplay) {
 
-		TeamsDisplay teamsDisplay = new TeamsDisplay();
-		teamsDisplay.setGroup_id(group_id);
-		teamsDisplay.setGroup_name(group_name);
-		//		teamsDisplay.setGenre(genre);
-
+		mav.addObject("Msg", "ユーザ選択ボタンを押下し、メンバを選択してください。");
 		mav.addObject("groupDetail", teamsDisplay);
 		mav.setViewName("admin/groupMemberAdd");
 
@@ -1417,9 +1415,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@PostMapping("groupMemberAddConfirm")
-	public ModelAndView groupMemberAddConfirm(ModelAndView mav,
-			@RequestParam(name = "group_id", required = false) int group_id,
-			@RequestParam(name = "group_name", required = false) String group_name,
+	public ModelAndView groupMemberAddConfirm(ModelAndView mav, TeamsDisplay teamsDisplay,
 			@RequestParam(name = "selectedUserId", required = false) String[] user_id,
 			@RequestParam(name = "selectUserName", required = false) String[] user_name) {
 
@@ -1427,21 +1423,28 @@ public class AdminCtrl {
 		List<UserDisplay> addMember = new ArrayList<>();
 
 		//グループIDとグループ名を格納
-		TeamsDisplay teamsDisplay = new TeamsDisplay();
-		teamsDisplay.setGroup_name(group_name);
-		teamsDisplay.setGroup_id(group_id);
+//		TeamsDisplay teamsDisplay = new TeamsDisplay();
+//		teamsDisplay.setGroup_name(group_name);
+//		teamsDisplay.setGroup_id(group_id);
 
-		//追加するメンバをListに格納
-		for (int i = 0; i < user_id.length; i++) {
-			UserDisplay member = new UserDisplay();
-			member.setUser_id(user_id[i]);
-			member.setUser_name(user_name[i]);
-			addMember.add(member);
+		if(user_id != null) {
+			//追加するメンバをListに格納
+			for (int i = 0; i < user_id.length; i++) {
+				UserDisplay member = new UserDisplay();
+				member.setUser_id(user_id[i]);
+				member.setUser_name(user_name[i]);
+				addMember.add(member);
+			}
+
+			mav.addObject("groupDetail", teamsDisplay);
+			mav.addObject("addMember", addMember);
+			mav.setViewName("admin/groupMemberAddConfirm");
+		} else {
+			mav.addObject("groupDetail", teamsDisplay);
+			mav.addObject("errMsg", "追加するメンバを選択してください。");
+			mav.setViewName("admin/groupMemberAdd");
 		}
-
-		mav.addObject("groupDetail", teamsDisplay);
-		mav.addObject("addMember", addMember);
-		mav.setViewName("admin/groupMemberAddConfirm");
+		
 
 		return mav;
 	}
