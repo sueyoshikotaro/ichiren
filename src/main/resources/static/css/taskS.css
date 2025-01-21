@@ -47,32 +47,23 @@
 /*コンテンツ内のスクロールバー*/
 .content {
 	overflow-y: auto;
-	/* 縦にスクロールバーを追加 */
 	height: 600px;
-	/* スクロールバーの高さを指定 */
 	padding: 20px;
-	/* 内側の余白を追加 */
 }
 
 .content::-webkit-scrollbar {
 	width: 12px;
-	/* スクロールバーの幅 */
 	height: 12px;
-	/* スクロールバーの高さ */
 }
 
 .content::-webkit-scrollbar-thumb {
 	background-color: #ccc;
-	/* スクロールバーの色 */
 	border-radius: 10px;
-	/* スクロールバーの角を丸くする */
 }
 
 .content::-webkit-scrollbar-track {
 	background-color: #fff;
-	/* スクロールバーの背景色 */
 	border-radius: 10px;
-	/* スクロールバーの角を丸くする */
 }
 
 .progress {
@@ -197,7 +188,7 @@ a.move-btn:hover {
 	color: #fff;
 }
 
-.modal-text{
+.modal-text {
 	margin-top: 14px;
 	font-size: 24px;
 	text-align: center;
@@ -242,7 +233,7 @@ a.move-btn:hover {
 	color: #fff;
 }
 
-.per-input{
+.per-input {
 	border-radius: 6px;
 	margin-right: 6px;
 }

@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+/*未承認タスク一覧内*/
+/*コンテンツ内のスクロールバー*/
+.non-content {
+	overflow-y: auto;
+	height: 600px;
+	padding: 20px;
+}
+
+.non-content::-webkit-scrollbar {
+	width: 12px;
+	height: 12px;
+}
+
+.non-content::-webkit-scrollbar-thumb {
+	background-color: #ccc;
+	border-radius: 10px;
+}
+
+.non-content::-webkit-scrollbar-track {
+	background-color: #fff;
+	border-radius: 10px;
+}
+
+.content-box {
+	border-top: 2px solid black;
+}
+
+/*確認ボタン*/
+.Confirm-btn {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	width: 80px;
+	margin: auto;
+	margin-top: 16px;
+	font-size: 18px;
+	font-weight: bold;
+	border: 2px solid black;
+	color: black;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.Confirm-btn::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	transform: translateX(-100%);
+	transition: all .3s;
+	z-index: -1;
+}
+
+.Confirm-btn:hover::before {
+	transform: translateX(0);
+}
+
+.Confirm-btn:hover {
+	color: #fff;
+}
