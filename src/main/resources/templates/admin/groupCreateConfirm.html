@@ -66,13 +66,13 @@
 
 <body>
 	<!--コンテナ-->
-	<div class="container" th:if="${groupDetail != null}">
+	<div class="container">
 		<h2 class="menu-text">グループ作成確認</h2>
 
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
-		<form th:action="@{groupCreateComp}" method="post">
+		<form th:action="@{groupCreateComp}" method="post" th:if="${groupDetail != null}">
 			<table border="1">
 				<div>
 					<tr>

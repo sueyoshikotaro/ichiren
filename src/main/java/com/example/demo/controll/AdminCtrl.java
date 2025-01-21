@@ -874,41 +874,84 @@ public class AdminCtrl {
 
 	}
 
-	//	/**
-	//	 * 向江
-	//	 * グループ編集画面を表示する
-	//	 * @return
-	//	 */
-	//	@PostMapping("groupEdit")
-	//	public ModelAndView groupEdit(ModelAndView mav,
-	//			@RequestParam(name = "check", required = false) String[] check,
-	//			@RequestParam(name = "group_id", required = false) String[] group_id,
-	//			@RequestParam(name = "user_id", required = false) String[] user_id,
-	//			@RequestParam(name = "user_name", required = false) String[] user_name,
-	//			@RequestParam(name = "user_roll", required = false) String[] user_roll,
-	//			TeamsDisplay td) {
-	//
-	//		// グループ詳細の編集ボタンから遷移してきた場合
-	//		if (user_roll == "メンバ") {
-	//
-	//		}
-	//
-	//		groupDispService.groupEdit(group_id);
-	//
-	//		mav.addObject("group", td);
-	//		mav.setViewName("admin/groupEdit");
-	//
-	//		return null;
-	//	}
+	/**
+	 * 末吉
+	 * グループ編集画面を表示する
+	 * @return
+	 */
+	@PostMapping("groupEdit")
+	public ModelAndView groupEdit(ModelAndView mav, TeamsDisplay t,
+			@RequestParam(name = "check", required = false) String[] check,
+			@RequestParam(name = "user_id", required = false) String[] user_id,
+			@RequestParam(name = "user_name", required = false) String[] user_name,
+			@RequestParam(name = "user_roll", required = false) String[] user_roll) {
+
+		//リーダに任命するメンバ
+		List<UserDisplay> leaderUser = new ArrayList<>();
+
+		//リーダ以外のメンバ
+		List<UserDisplay> memberUser = new ArrayList<>();
+
+		for (int i = 0; i < user_id.length; i++) {
+
+			//チェックボックスで選択したユーザIDとユーザ名を格納
+			if (check != null && Arrays.asList(check).contains(user_id[i])) {
+
+				UserDisplay leader = new UserDisplay();
+				leader.setUser_id(user_id[i]);
+				leader.setUser_name(user_name[i]);
+				leaderUser.add(leader);
+
+				//チェックボックスで選択しなかったユーザIDとユーザ名を格納
+			} else {
+				UserDisplay member = new UserDisplay();
+				member.setUser_id(user_id[i]);
+				member.setUser_name(user_name[i]);
+				memberUser.add(member);
+			}
+		}
+
+		System.out.println(t.getGroup_id());
+		System.out.println(t.getGroup_name());
+
+		mav.addObject("groupDetail", t);
+		mav.addObject("leaderUser", leaderUser);
+		mav.addObject("memberUser", memberUser);
+		mav.setViewName("admin/groupEditConfirm");
+
+		return mav;
+	}
 
 	/*
 	 * 向江
 	 * グループ編集確認画面を表示する
 	 * @return
 	 */
-	public ModelAndView groupEditConfirm(ModelAndView mav) {
+	public ModelAndView groupEditConfirm(ModelAndView mav, TeamsDisplay t,
+			@RequestParam(name = "selectedUserId", required = false) String[] user_id,
+			@RequestParam(name = "selectUserName", required = false) String[] user_name) {
 
-		return null;
+		//リーダ以外のメンバ
+		List<UserDisplay> addMember = new ArrayList<>();
+
+		//グループIDとグループ名を格納
+		TeamsDisplay teamsDisplay = new TeamsDisplay();
+		teamsDisplay.setGroup_id(t.getGroup_id());
+		teamsDisplay.setGroup_name(t.getGroup_name());
+
+		//追加するメンバをListに格納
+		for (int i = 0; i < user_id.length; i++) {
+			UserDisplay member = new UserDisplay();
+			member.setUser_id(user_id[i]);
+			member.setUser_name(user_name[i]);
+			addMember.add(member);
+		}
+
+		mav.addObject("groupDetail", teamsDisplay);
+		mav.addObject("addMember", addMember);
+		mav.setViewName("admin/groupMemberAddConfirm");
+
+		return mav;
 	}
 
 	/**
@@ -1093,6 +1136,7 @@ public class AdminCtrl {
 					((Collection<UserDisplay>) userList).removeIf(user -> existUserIds.contains(user.getUser_id()));
 				}
 
+				mav.addObject("genre", genre);
 				mav.addObject("groupDetail", teamsDisplay);
 				mav.addObject("users", userList);
 				mav.addObject("errMsg", "メンバを選択してください");
@@ -1117,6 +1161,7 @@ public class AdminCtrl {
 				teamsDisplay.setGroup_id(group_id);
 				teamsDisplay.setGroup_name(group_name);
 
+				mav.addObject("genre", genre);
 				mav.addObject("groupDetail", teamsDisplay);
 				mav.addObject("selectUser", userList);
 
@@ -1150,7 +1195,7 @@ public class AdminCtrl {
 		// ログインユーザのエンティティを取得
 		User userEntity = (User) session.getAttribute("user");
 
-		// エンティティの中のschool_idを取得
+		// セッションに入っているエンティティの中のschool_idを取得
 		int school_id = userEntity.getSchool_id();
 
 		TeamsDisplay teamsDisplay = new TeamsDisplay();
@@ -1388,7 +1433,7 @@ public class AdminCtrl {
 
 	/**
 	 * 末吉
-	 * グループ解散
+	 * グループ解散確認
 	 * @return
 	 */
 	@PostMapping("groupDissConfirm")

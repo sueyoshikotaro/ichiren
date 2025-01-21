@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|グループ編集</title>
+	<title>タスクどん|グループ編集確認</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,74 +65,14 @@
 </head>
 
 <body>
-
 	<div class="container" id="container"> <!-- コンテナ共通 -->
 		<h2 class="menu-text">グループ編集画面</h2>
 
-		<!--指示文を表示-->
-		<p th:if="${Msg}" th:text="${Msg}"></p>
-
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
-
-		<form th:action="@{groupEditConfirm}" method="post" id="form">
-			<table border="1">
-				<tr>
-					<th>グループ名</th>
-					<input type="hidden" name="group_id" th:if="${groupDetail != null}" th:value="${groupDetail.group_id}">
-					<td th:text="${groupDetail.group_name}"></td>
-				</tr>
-
-				<tr>
-					<td colspan="2">リーダを選択</td>
-				</tr>
-
-				<tr th:each="user : ${users}">
-					<td>
-						<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
-							id="flexCheckDefault">
-						<input type="hidden" name="selectedUserId" th:value="${user.user_id}">
-					</td>
-					<td th:text="${user.user_name}"></td>
-					<input type="hidden" name="selectUserName" th:value="${user.user_name}">
-				</tr>
-			</table>
-
-
-			<button type="button" name="button" value="確認" onclick="formSubmit('確認')">確認</button>
-			<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>
-
-		</form>
-
+		
+		
 	</div>
-
-	<!--確認と戻るボタンを押した場合-->
-	<script>
-		function formSubmit(buttonValue) {
-			// フォーム要素を取得
-			var form = document.querySelector('form');
-
-			// ボタンの値をhiddenフィールドに設定
-			var hiddenField = document.createElement('input');
-			hiddenField.type = 'hidden';
-			hiddenField.name = 'button';
-			hiddenField.value = buttonValue;
-			form.appendChild(hiddenField);
-
-			// コントローラメソッドを呼び出すためにフォームを送信
-			form.action = 'groupEditConfirm'; // グループ編集確認画面を表示するコントロールのURL
-			form.method = 'post';
-
-			form.submit();
-		}
-	</script>
-
-
-	<!--bootstrapのjsリンク接続-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-		crossorigin="anonymous"></script>
-
 </body>
 
 </html>
