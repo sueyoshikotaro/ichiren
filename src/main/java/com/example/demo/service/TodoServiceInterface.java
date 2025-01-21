@@ -20,4 +20,7 @@ public interface TodoServiceInterface {
 	
 	//TodDoを削除する
 	public void todoDelete(int tdlist_id);
+
+	//選択されたToDoリストを完了にする
+	public void todoUpFlg(int tdlist_id,int tdlist_flg);
 }

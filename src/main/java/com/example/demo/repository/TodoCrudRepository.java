@@ -56,4 +56,12 @@ public interface TodoCrudRepository extends CrudRepository<Tdlist, Integer> {
 	@Query("delete from tdlist where tdlist_id=:tdlist_id")
 	public void deleteTodo(int tdlist_id);
 
+	/**
+	 * 選択されたToDoリストを完了にする
+	 * 湊原
+	 */
+	@Modifying
+	@Query("update tdlist set tdlist_flg=:tdlist_flg where tdlist_id=:tdlist_id")
+	public void updateTodoFlg(int tdlist_id,int tdlist_flg);
+
 }
