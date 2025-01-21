@@ -59,7 +59,7 @@
 
 			<!-- グループメンバ詳細 -->
 			<div>
-				<form th:action="@{groupMemberDetails}" method="post">
+				<form th:action="@{groupMemberDetails}" method="get">
 					<input type="hidden" name="user_name" th:value="${group.user_name}">
 					<input type="hidden" name="group_name" th:value="${group.group_name}">
 					<button type="submit" name="button" class="btn btn-detail" value="詳細">詳細</button>
@@ -100,8 +100,8 @@
 
 		<!--グループ解散 -->
 		<form th:action="@{groupDissConfirm}" method="post">
-			<input type="hidden" name="group_id" th:value="${group.group_id}">
-			<input type="hidden" name="group_name" th:value="${group.group_name}">
+			<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
+			<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
 			<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
 			<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
 			<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
