@@ -13,6 +13,6 @@ public class GroupMemberDeleteView {
 	private String task_id;
 	private String task_name;
 	private String task_content;
-	private int group_id;
+	private String group_id;
 	
 }

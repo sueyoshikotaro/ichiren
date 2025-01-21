@@ -135,15 +135,39 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 	/*
 	 * 向江
-	 * グループメンバ削除
+	 * グループメンバ削除確認
 	 */
 	@Override
 	public void groupMemberDelete(String group_id, String user_id, String user_name) {
 
-		groupDispCrudRepo.groupMemberDelete(group_id, user_id, user_name);
+		groupDispCrudRepo.groupMemberDelete(group_id, user_id);
 
 	}
+	
+	/*
+	 * 向江
+	 * グループメンバ削除確認
+	 * taskテーブルのuser_idを編集する
+	 */
+	@Override
+	public void groupMemberDelete2(String user_id) {
+		
+		groupDispCrudRepo.groupMemberDelete2(user_id);
+		
+	}
 
+	/*
+	 * 向江
+	 * グループメンバ削除確認
+	 * user_detailテーブルのscoreを昇順に並び変える
+	 */
+	@Override
+	public void groupMemberDelete3(String user_id) {
+		
+		groupDispCrudRepo.groupMemberDelete3(user_id);
+		
+	}
+	
 	/**
 	 * 末吉
 	 * グループ作成
@@ -195,4 +219,8 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		groupDispCrudRepo.groupDiss(group_id);
 		
 	}
+
+	
+
+	
 }

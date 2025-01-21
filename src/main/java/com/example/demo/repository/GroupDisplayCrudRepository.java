@@ -50,7 +50,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * グループ詳細表示
 	 */
-	@Query("select t.group_id, t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score, ud.user_roll, u.user_id from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.group_id = :group_id")
+	@Query("select t.group_id, t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score, ud.user_roll, u.user_id, u.school_id from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.group_id = :group_id")
 	public List<GroupDetailView> groupDetail(String group_id);
 
 	/*
@@ -79,7 +79,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * グループメンバ削除画面を表示するためだけのsql
 	 */
-	@Query("select u.user_name, t.task_id, t.task_name,t.task_content, u.user_id, t.task_id from user u join task t on u.user_id = t.user_id where u.user_id = :user_id")
+	@Query("select u.user_name, t.task_id, t.task_name,t.task_content, u.user_id, t.task_id, t.group_id, t.task_weight from user u join task t on u.user_id = t.user_id where u.user_id = :user_id")
 	public List<GroupMemberDeleteView> grMemDelDisp(String user_id);
 
 	/*
@@ -88,7 +88,25 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Modifying
 	@Query("delete from user_detail where group_id = :group_id and user_id = :user_id")
-	public void groupMemberDelete(String group_id, String user_id, String user_name);
+	public void groupMemberDelete(String group_id, String user_id);
+	
+	/*
+	 * 向江
+	 * グループメンバ削除
+	 * taskてーぶるのuser_idをnullに
+	 */
+	@Modifying
+	@Query("update task set user_id = null where user_id = :user_id")
+	public void groupMemberDelete2(String user_id);
+	
+	/*
+	 * 向江
+	 * グループメンバ削除
+	 * user_detailのscoreを持ってくる
+	 */
+	@Query("select * from user_detail where user_id = :user_id order by score asc")
+	public void groupMemberDelete3(String user_id);
+	
 	
 	/**
 	 * 末吉

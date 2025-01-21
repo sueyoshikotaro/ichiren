@@ -39,14 +39,15 @@
 				<tr th:each="user : ${user}">
 					<td th:text="${user.task_name}"></td>
 					<td th:text="${user.task_content}"></td>
+					<input type="hidden" name="task_id" th:value="${user.task_id}">
 				</tr>
 
 				<tr>
 					<td colspan="2" align="right">
 
-						<input type="hidden" name="user_id" th:value="user.user_id">
-						<input type="hidden" name="group_id" th:value="user.group_id">
-						<input type="hidden" name="task_id" th:value="user.task_id">
+							<input type="hidden" name="user_id" th:value="${user[0].user_id}">
+							<input type="hidden" name="group_id" th:value="${user[0].group_id}">
+						
 
 						<button type="button" name="button" value="削除" class="btn btn-danger"
 							onclick="groupMemberDeleteAndShowPopup()">削除</button>
@@ -89,7 +90,7 @@
 			var form = document.querySelector('form');
 
 			// コントローラメソッドを呼び出すためにフォームを送信
-			form.action = 'groupMemberDeleteComp'; // コントローラメソッドの実際のURLに置き換えてください
+			form.action = 'groupMemberDeleteConfirm'; // コントローラメソッドの実際のURLに置き換えてください
 			form.method = 'post';
 
 			// buttonパラメータを追加
