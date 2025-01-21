@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Task;
@@ -88,60 +90,40 @@ public class UserCtrl {
 	}
 
 	/**
-	 * ログイン処理
-	 * @return
-	 */
-	@PostMapping("login")
-	public String loginCheck(String user_id, String user_pass) {
-
-		Optional<User> user = userCrudRepo.findById(user_id);
-
-		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
-
-			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
-
-				return "redirect:/menuAdmin";
-			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
-
-				return "redirect:/menuAdmin";
-			} else if (user.get().getUser_pass().equals("taskdon1")) {
-
-				return "redirect:/passReset";
-			} else if (user.get().getUser_id().contains("st")) {
-
-				return "redirect:/deptGroupList";
-			}
-		}
-
-		return "common/login";
-	}
-
-	/**
+	 * ログイン処理・遷移分岐
 	 * 在籍チェック
 	 * ID重複チェック
 	 * パスワードチェック
-	 * パスワード再設定画面に遷移
 	 * @return
 	 */
-	@PostMapping("passReset")
-	public ModelAndView userIdCheckForResetPass(ModelAndView mav, String user_id, String user_pass) {
-
-		System.out.println("出力" + user_id);
-		System.out.println(user_pass);
+	@PostMapping("/login")
+	public ModelAndView loginCheck(ModelAndView mav, String user_id, String user_pass, RedirectAttributes ra) {
 
 		Optional<User> user = userCrudRepo.findById(user_id);
 
-		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
+		System.out.println(user_id);
+		System.out.println(user_pass);
 
-			if (user.get().getUser_pass().equals("taskdon1")) {
+		if (user.isPresent() && user.get().getUser_flg() == 1 && user.get().getUser_pass().equals(user_pass)) {
 
-				mav.setViewName("common/passReset"); //パスワード再設定
+			ra.addFlashAttribute("user_id", user_id);
+			ra.addFlashAttribute("user_pass", user_pass);
+
+			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
+
+				return new ModelAndView("redirect:/taskdon/admin/menu");
+			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+
+				return new ModelAndView("redirect:/taskdon/admin/menu");
+			} else if (user.get().getUser_pass().equals("taskdon1")) {
+
+				return new ModelAndView("redirect:/taskdon/user/passReset");
+			} else if (user.get().getUser_id().contains("st")) {
+
+				return new ModelAndView("redirect:/taskdon/user/deptGroupList");
 			}
-		} else {
-
-			mav.setViewName("common/login");
-			mav.addObject("errMsg", "ログインできませんでした");
 		}
+		mav.setViewName("common/login");
 
 		return mav;
 	}
@@ -150,99 +132,59 @@ public class UserCtrl {
 	 * パスワード再設定画面
 	 * @return
 	 */
-	@GetMapping("passReset")
-	public String resetPass() {
+	@GetMapping("/passReset")
+	public ModelAndView passReset(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
-		//確認ボタンを押下
-		//if (button.equals("reset")) {
-		//	mav.addObject("user_pass", user_pass);
-		//	mav.setViewName("common/passReset");
-		//}
+		mav.setViewName("common/passReset"); //パスワード再設定
 
-		return "common/passReset";
+		return mav;
 	}
 
 	/**
-	 * 在籍チェック
-	 * ID重複チェック
-	 * パスワードチェック
-	 * ログイン後、メニュー(管理者)画面
+	 * パスワード再設定画面を表示
 	 * @return
 	 */
-	@PostMapping("/taskdon/admin/menu")
-	public ModelAndView userIdCheckForAdmin(ModelAndView mav, String user_id, String user_pass) {
+	//	@GetMapping("passReset")
+	//	public String passReset() {
+	//
+	//		//確認ボタンを押下
+	//		//if (button.equals("reset")) {
+	//		//	mav.addObject("user_pass", user_pass);
+	//		//	mav.setViewName("common/passReset");
+	//		//}
+	//
+	//		return "common/passReset";
+	//	}
 
-		System.out.println("出力は" + user_id);
-		System.out.println(user_pass);
+	/**
+	 * メニュー(管理者)画面
+	 * @return
+	 */
+	@GetMapping("/taskdon/admin/menu")
+	public ModelAndView adminMenu(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
+
+		System.out.println("adminMenu called"); //追記
+		System.out.println("user_id: " + user_id); //追記
 
 		Optional<User> user = userCrudRepo.findById(user_id);
 
-		if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
-
-			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
-				//admin無効化のSQL
-				mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
-				session.setAttribute("user", user.get());
-			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
-				mav.setViewName("admin/menuAdmin"); //管理者ログイン(通常)
-				session.setAttribute("user", user.get());
-			}
+		if (user.isPresent()) { //userが存在するか確認
+			mav.setViewName("admin/menuAdmin"); //管理者ログイン(上位管理者,初回のみ)
+			session.setAttribute("user", user.get());
 		} else {
-			mav.setViewName("common/login");
-			mav.addObject("errMsg", "ログインできませんでした");
+			mav.setViewName("common/login"); //userが存在しない場合はログイン画面に戻す
+			System.out.println("user not found"); //追記
 		}
+
 		return mav;
 	}
 
 	/**
-	 * 在籍チェック
-	 * ID重複チェック
-	 * パスワードチェック
-	 * ログイン後、所属グループ一覧画面に遷移
+	 * 所属グループ一覧画面に遷移
 	 * @return
 	 */
-	@PostMapping("deptGroupList")
-	public ModelAndView userIdCheckForDeptGroupList(ModelAndView mav, String user_id, String user_pass) {
-
-		System.out.println("出力" + user_id);
-		System.out.println(user_pass);
-
-		Optional<User> user;
-
-		if (user_id != null) {
-
-			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
-
-			user = userCrudRepo.findById(user_id);
-
-			if (user.get().getUser_flg() == 1 && user.isPresent() && user.get().getUser_pass().equals(user_pass)) {
-
-				if (!(user.get().getUser_id().equals("admin") && user.get().getUser_pass().equals("admin"))) {
-
-					mav.setViewName("common/deptGroupList");
-					mav.addObject("groupS", deptGroupList);
-					session.setAttribute("deptGroupList", deptGroupList);
-					session.setAttribute("user", user.get());
-				} else {
-					mav.setViewName("common/login");
-					mav.addObject("errMsg", "ログインできませんでした");
-				}
-			} else {
-				mav.setViewName("common/login");
-				mav.addObject("errMsg", "ログインできませんでした");
-			}
-		} else {
-			mav.setViewName("common/deptGroupList");
-		}
-		return mav;
-	}
-
-	/**
-	 * 所属グループ一覧の表示
-	 * @return
-	 */
-	@GetMapping("deptGroupList")
-	public ModelAndView reDeptGroup(ModelAndView mav, String user_id) {
+	@GetMapping("/deptGroupList")
+	public ModelAndView deptGroupList(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
 		Optional<User> user;
 
@@ -256,6 +198,33 @@ public class UserCtrl {
 			mav.addObject("groupS", deptGroupList);
 			session.setAttribute("deptGroupList", deptGroupList);
 			session.setAttribute("user", user.get());
+
+		} else {
+			mav.setViewName("common/deptGroupList");
+		}
+		return mav;
+	}
+
+	/**
+	 * 所属グループ一覧
+	 * @return
+	 */
+	@GetMapping("/deptGroupList")
+	public ModelAndView reDeptGroupList(ModelAndView mav, String user_id) {
+
+		Optional<User> user;
+
+		if (user_id != null) {
+
+			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+
+			user = userCrudRepo.findById(user_id);
+
+			mav.setViewName("common/deptGroupList");
+			mav.addObject("groupS", deptGroupList);
+			session.setAttribute("deptGroupList", deptGroupList);
+			session.setAttribute("user", user.get());
+
 		} else {
 			mav.setViewName("common/deptGroupList");
 		}
@@ -287,7 +256,7 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@GetMapping("menu")
-	public String reMenu() {
+	public String menu() {
 
 		return "common/menuUser";
 	}
