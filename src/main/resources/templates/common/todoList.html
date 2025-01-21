@@ -34,7 +34,7 @@
 	<div>
 		<th:block th:insert="fragment/todoFragment :: toggle">
 	</div>
-	
+
 	<!--コンテナ-->
 	<div class="container">
 		<div>
@@ -44,34 +44,40 @@
 
 	<!--JavaScript-->
 	<script th:inline="javascript">
-		const rows = document.querySelectorAll('.data');
 
-		const form = document.getElementById("form");
-		const value = form.querySelector("input[name='tdlist_id']").value;
+		const rows = document.querySelectorAll('.data');
+		var checkbox = null;
+		var url = "todoList";
+		var form = document.getElementById("form");
+		var value = null;
+
+		console.log(rows)
 
 		rows.forEach((row) => {
-			const checkbox = row.querySelector('.form-check-input');
-			const text = row.querySelector('.text');
-			var url = "todoList";
+			checkbox = row.querySelector('.form-check-input');
+
+			console.log(checkbox);
+		});
+
+		checkbox.addEventListener('change', () => {
+			console.log(value);
+			value = form.querySelector("input[name='tdlist_id']").value;
 			var params = {
 				"tdlist_id": value,
 				"checked": checkbox.checked
 			};
-			checkbox.addEventListener('change', () => {
-				if (checkbox.checked) {
-					text.style.textDecoration = 'line-through';
-				} else {
-					text.style.textDecoration = 'none';
+			console.log(checkbox.checked);
+
+			/*ToDo一覧表示メソッドの呼び出し*/
+			$.ajax({
+				type: "GET",
+				url: url,
+				data: params,
+				success: function (data) {
+					console.log('aaaaaaaaa')
 				}
-				/*ToDo一覧表示メソッドの呼び出し*/
-				$.ajax({
-					type: "GET",
-					url: url,
-					data: params,
-				});
 			});
 		});
-
 	</script>
 
 	<!--bootstrapのjsリンク接続-->
@@ -80,7 +86,7 @@
 		crossorigin="anonymous"></script>
 	<!--JavaScript-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	
+
 </body>
 
 </html>

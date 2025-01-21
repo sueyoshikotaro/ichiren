@@ -19,27 +19,29 @@
 		<div class="offcanvas-body">
 			<form th:action="@{todoListChange}" method="post" id="form" th:fragment="list"> <!--リスト-->
 				<div th:each="todo:${todoList}" class="data">
-					<div th:text="${todo.tdlist_content}" class="text" th:value="${todo.tdlist_id}"></div>
+					<div th:text="${todo.tdlist_content}" class="text" th:if="${todo.tdlist_flg} == 1" style="text-decoration: line-through;"></div>
+					<div th:text="${todo.tdlist_content}" class="text" th:if="${todo.tdlist_flg} == 0" style="text-decoration: none;"></div>
 					<!--チェックボックス-->
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="tdlist_id">
+					<div class=" form-check" id="check">
+						<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="tdlist_id"
+							th:value="${todo.tdlist_id}">
 						<label class="form-check-label"></label>
 					</div>
-					
+
 					<!--ラジオボタン-->
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="flexRadioDefault"
 							th:value="${todo.tdlist_id}" id="flexRadioDefault1" th:checked="${todo.tdlist_id} == ${id}">
 						<label class="form-check-label"></label>
 					</div>
-					
+
 				</div>
-				
+
 				<!--機能ボタン-->
 				<button type="submit" name="button" value="edit">編集</button>
 				<button type="submit" name="button" value="regist">登録</button>
 				<button type="submit" name="button" value="delete">削除</button>
-				
+
 			</form>
 		</div>
 	</div>

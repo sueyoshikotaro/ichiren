@@ -576,10 +576,10 @@ public class UserCtrl {
 	public ModelAndView todoList(ModelAndView mav,
 			@RequestParam(name = "tdlist_id", required = false) Integer tdlist_id,
 			@RequestParam(name = "checked", required = false) Boolean checked) {
-		
+		System.out.println(tdlist_id);
 		if (tdlist_id != null) {
 			System.out.println(checked);
-			TodoService.todoUpFlg((int)tdlist_id, (int) session.getAttribute("groupId"));
+			TodoService.todoUpFlg(tdlist_id, (int) session.getAttribute("groupId"));
 		}
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
