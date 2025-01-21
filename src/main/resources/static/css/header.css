@@ -12,7 +12,8 @@ body {
 	font-family: 'Sawarabi Mincho', sans-serif;
 }
 
-/*ナビゲーションバー*/
+/*ヘッダー*/
+/*ナビゲーション*/
 .nav-title {
 	display: inline;
 	padding-left: 10px;
@@ -30,12 +31,10 @@ body {
 
 .main-content {
 	padding-top: 60px;
-	/* ナビゲーションバーの高さ */
 }
 
 body {
 	padding-top: 80px;
-	/* ナビゲーションバーの高さ */
 }
 
 /*アイコン(メニューへ遷移する)*/

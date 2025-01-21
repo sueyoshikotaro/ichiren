@@ -16,7 +16,7 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
-	<link rel="stylesheet" th:href="@{/css/taskS.css}">
+	<link rel="stylesheet" th:href="@{/css/taskS2.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -75,12 +75,21 @@
 		<h2>タスク未承認一覧</h2>
 
 		<!--タスク未承認一覧(繰返し)-->
-		<div class="content">
-			<div th:each="task : ${taskNonapp}" class="content_child" id="data">
+		<div class="non-content">
+			<div th:each="task : ${taskNonapp}" id="data">
 				<div class="content-box">
-					<div class="text_child" th:text="${task.user_name}"></div>
-					<div class="text_child" th:text="${task.req_name}"></div>
-					<div class="text_child" th:text="${task.add_date}"></div>
+					<div class="input-group mb-3" style="margin-top: 14px;">
+						<span class="input-group-text">申請者　　</span>
+						<div class="form-control" th:text="${task.user_name}"></div>
+					</div>
+					<div class="input-group mb-3" style="margin-top: -8px;">
+						<span class="input-group-text">申請タスク</span>
+						<div class="form-control" th:text="${task.req_name}"></div>
+					</div>
+					<div class="input-group mb-3" style="margin-top: -8px;">
+						<span class="input-group-text">申請日　　</span>
+						<div class="form-control" th:text="${task.add_date}"></div>
+					</div>
 					<div>
 						<form th:action="@{taskAppConfirm}" method="post">
 							<input type="hidden" name="request_id" th:value="${task.request_id}">
@@ -91,12 +100,13 @@
 							<input type="hidden" name="req_content" th:value="${task.req_content}">
 							<input type="hidden" name="req_reason" th:value="${task.req_reason}">
 							<input type="hidden" name="request_flg" th:value="${task.request_flg}">
-							<button type="submit" class="Confirm-btn" value="確認">
+							
+							<button type="submit" class="Confirm-btn" style="margin-bottom: 20px;">確認</button>
+							
 						</form>
 					</div>
 				</div>
 			</div>
-			<button th:onclick="|location.href='@{/taskdon/user/taskList}'|">戻る</button>
 		</div>
 	</div>
 
@@ -104,6 +114,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
+
 </body>
 
 </html>
