@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Sawarabi+Mincho');
 
 /*全体(body)*/
+/*移行中*/
 body {
 	background-image: url(../img/backImage.png);
 	background-size: 100% auto;
@@ -49,6 +50,7 @@ body {
 }
 
 /*コンテナ*/
+/*移行中*/
 .container {
 	background-image: url(../img/containerImage.png);
 	background-size: cover;

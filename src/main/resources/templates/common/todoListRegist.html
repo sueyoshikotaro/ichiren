@@ -17,54 +17,11 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 
-	<!--ウェブアイコン-->
-	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+	<!-- 共通header呼出し(ユーザ用) -->
+	<div>
+		<th:block th:insert="fragment/header :: headerUser">
+	</div>
 
-	<!--ナビゲーションバー-->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container-fluid">
-			<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
-				width="48" height="48">
-			<span class="nav-title">タスクどん</span>
-
-			<!--ドロップダウンメニュー(開閉)-->
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-				data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-				<ul class="navbar-nav">
-					<li class="nav-item dropdown">
-						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-							メニュー
-						</button>
-						<!--各画面遷移-->
-						<ul class="dropdown-menu dropdown-menu-dark">
-							<!--メニュー画面遷移-->
-							<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
-							<!--役職判断処理-->
-							<div th:if="${session.user_roll} == 'リーダ'">
-								<li><a class="dropdown-item" href="#">メンバ一覧</a></li>
-							</div>
-							<li><a class="dropdown-item" th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
-							<li><a class="dropdown-item" href="#">ToDoリスト</a></li>
-							<!--役職判断処理-->
-							<div th:if="${session.user_roll} == 'リーダ'">
-								<li><a class="dropdown-item" href="#">連絡事項作成</a></li>
-							</div>
-							<li><a class="dropdown-item" href="#">チャット</a></li>
-							<li>
-								<hr class="dropdown-divider"> <!--線-->
-							</li>
-							<li><a class="dropdown-item" href="#">所属グループ</a></li>
-							<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
 </head>
 
 <body>
@@ -75,18 +32,23 @@
 	</button>
 	<!--Fragment使ってコードの部品化-->
 	<div>
-		<th:block th:insert="common/TodoFragment :: toggle">
+		<th:block th:insert="fragment/todoFragment :: toggle">
 	</div>
+
+	<!--コンテナ-->
 	<div class="container">
+
 		<div>
-			<th:block th:if="${button==null}" th:insert="common/TodoFragment :: list">
+			<th:block th:if="${button==null}" th:insert="fragment/todoFragment :: list">
 		</div>
+
 		<!--登録の場合-->
 		<form th:if="${button=='regist'}" th:action="@{registConfirm}" method="post">
 			<div>
 				<label>タスク内容</label>
 				<input type="text" name="tdlist_content" required>
 			</div>
+
 			<div class="dropdown mt-3">
 				<label>重要度</label>
 				<select name="importance" class="form-select">
@@ -95,15 +57,19 @@
 					<option class="dropdown-item" value="低">低</option>
 				</select>
 			</div>
+
 			<button type="submit" value="cancel">取消</button>
 			<button type="submit" value="regist">登録</button>
+
 		</form>
+
 	</div>
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
+
 </body>
 
 </html>

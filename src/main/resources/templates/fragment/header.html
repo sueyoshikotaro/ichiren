@@ -143,6 +143,52 @@
 			</div>
 		</nav>
 	</div>
+
+	<!--共通head(所属グループ一覧用)-->
+	<div th:fragment="headerDeptGroupList">
+		<!--ウェブアイコン-->
+		<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
+		<!--ナビゲーションバー-->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container-fluid">
+				<img class="iconLink no-wrap" th:src="@{/img/icon.png}" alt="icon" width="48" height="48">
+				<span class="nav-title">タスクどん</span>
+
+				<!--ドロップダウンメニュー(開閉)-->
+				<!--開閉ボタン-->
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				
+				<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+					<ul class="navbar-nav">
+						<li class="nav-item dropdown">
+							<!--メニュー開閉ボタン-->
+							<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+								aria-expanded="false">
+								メニュー
+							</button>
+							
+							<!--各画面遷移-->
+							<!--所属グループ一覧画面専用-->
+							<ul class="dropdown-menu dropdown-menu-dark">
+								
+								<li>
+									<hr class="dropdown-divider">
+								</li>
+								
+								<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+
 </body>
 
 </html>
