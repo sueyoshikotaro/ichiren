@@ -841,7 +841,7 @@ public class AdminCtrl {
 	 * グループメンバ詳細画面を表示する
 	 * @return
 	 */
-	@GetMapping("groupMemberDetails")
+	@PostMapping("groupMemberDetails")
 	public ModelAndView memberDetails(ModelAndView mav,
 			@RequestParam(name = "user_name") String user_name) {
 
@@ -929,15 +929,19 @@ public class AdminCtrl {
 
 	/*
 	 * 向江
-	 * グループメンバ削除画面を表示する
+	 * グループメンバ削除確認画面を表示する
 	 * @return
 	 */
 	@PostMapping("groupMemberDelDisp")
 	public ModelAndView groupMemberDeleteDisp(ModelAndView mav,
-			@RequestParam(name = "user_id", required = false) String user_id,
 			GroupMemberDeleteView g) {
 
+		//グループメンバ削除確認画面のテーブルを表示する
 		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
+
+		for (GroupMemberDeleteView gmdv : group) {
+			System.out.println(gmdv);
+		}
 
 		mav.addObject("user", group);
 		mav.setViewName("admin/groupMemberDelete");
@@ -952,30 +956,57 @@ public class AdminCtrl {
 	 */
 	@PostMapping("groupMemberDeleteConfirm")
 	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
-			@RequestParam(name = "user_id") String user_id,
-			@RequestParam(name = "user_name") String user_name,
-			@RequestParam(name = "group_id") String group_id,
-			GroupDetailView g, ModelAndView mav) {
+			@RequestParam(name = "task_id", required = false) String[] task_id,
+			GroupMemberDeleteView g, ModelAndView mav) {
 
 		// 削除ボタンを押下
 		if (button.equals("削除")) {
 
-			groupDispService.groupMemberDelete(user_id, group_id, user_name);
+			for (int i = 0; i < task_id.length; i++) {
+				//user_detailのscoreを持ってくる
+				groupDispService.groupMemberDelete3(g.getUser_id());
+
+				//user_detailテーブルの一列を削除
+				groupDispService.groupMemberDelete(g.getUser_id(), g.getGroup_id(), task_id[i]);
+
+			}
+
+			//user_detailテーブルの一列を削除
+			//roupDispService.groupMemberDelete(g.getUser_id(), g.getGroup_id(), g.getTask_id());
+
+			//taskテーブルのuser_idを更新
+			//groupDispService.groupMemberDelete2(g.getUser_id());
+
+			//taskテーブルのuser_idを更新
+			//groupDispService.groupMemberDelete2(g.getUser_id());
+
+			//試運転
+			System.out.println(g.getUser_id());
+			System.out.println(g.getGroup_id());
+			System.out.println(g.getTask_id());
 
 			// ポップアップを表示するために、画面遷移しないようにする
 			mav.addObject("groupMemberDeleteComp", true);
 			//mav.addObject("group", groupDetails);
 			mav.setViewName("admin/groupMemberDelete");
 
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+			return mav;
+
+			// 戻るボタンを押下
+		} else {
+			mav.addObject("user", g);
+			mav.setViewName("admin/groupMemberDetails");
 			return mav;
 		}
 
-		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
-
-		mav.addObject("user", group);
-		mav.setViewName("admin/groupDetails");
-
-		return mav;
+		//		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
+		//
+		//		mav.addObject("user", group);
+		//		mav.setViewName("admin/groupDetails");
+		//
+		//		return mav;
 	}
 
 	/*
@@ -1400,7 +1431,7 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * グループ解散完了
@@ -1408,12 +1439,12 @@ public class AdminCtrl {
 	@PostMapping("groupDissComp")
 	public ModelAndView groupDissComp(ModelAndView mav,
 			@RequestParam(name = "group_id", required = false) int group_id) {
-		
+
 		groupDispService.groupDiss(group_id);
-		
+
 		mav.addObject("groupDissComp", true);
 		mav.setViewName("admin/groupDissConfirm");
-		
+
 		return mav;
 	}
 

@@ -20,5 +20,7 @@ public class GroupMemberDetailView {
 	private String task_name;
 	private int task_priority;
 	private int progress;
+	private int group_id;
+	
 	
 }
