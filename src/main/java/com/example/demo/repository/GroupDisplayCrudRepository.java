@@ -151,7 +151,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループ編集完了
 	 */
 	@Modifying
-	@Query("update user_detail set user_roll = :user_roll where user_id = :user_id and group_id = :group_id and school_id = :school_id")
-	public void groupEdit(String user_id, int group_id, String user_roll, int school_id);
+	@Query("update user_detail set user_roll = :user_roll where user_id = :user_id and group_id = :group_id")
+	public void groupEdit(String user_id, int group_id, String user_roll);
 	
 }

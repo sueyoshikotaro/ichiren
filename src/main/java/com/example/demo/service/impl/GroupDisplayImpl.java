@@ -225,8 +225,8 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ編集完了
 	 */
 	@Override
-	public void groupEdit(String user_id, int group_id, String user_roll, int school_id) {
-		groupDispCrudRepo.groupEdit(user_id, group_id, user_roll, school_id);
+	public void groupEdit(String user_id, int group_id, String user_roll) {
+		groupDispCrudRepo.groupEdit(user_id, group_id, user_roll);
 		
 	}
 

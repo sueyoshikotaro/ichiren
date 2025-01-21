@@ -84,45 +84,44 @@
 			</div>
 
 
-			<!--グループメンバ追加 -->
-			<div>
-				<form th:action="@{groupMemberAdd}" method="post">
-					<input type="hidden" name="group_id" th:value="${group.group_id}">
-					<input type="hidden" name="group_name" th:value="${group.group_name}">
-					<button type="submit" name="button" class="btn btn-update" value="追加">追加</button>
-				</form>
-			</div>
+
 		</div>
 
 
-		<!--グループ編集 -->
-		<div>
+		<!--グループメンバ追加 -->
+		<div class="btn-group">
+			<form th:action="@{groupMemberAdd}" method="post">
+				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
+				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
+				<button type="submit" name="button" class="btn btn-update" value="追加">追加</button>
+			</form>
+
+			<!--グループ編集 -->
 			<form th:action="@{groupEdit}" method="post">
 				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
 				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
+				<input type="hidden" name="genre" th:value="${groups[0].genre}">
 				<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
 				<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
 				<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
 				<button type="submit" name="button" class="btn btn-edit" value="編集">編集</button>
 			</form>
+
+			<!--グループ解散 -->
+			<form th:action="@{groupDissConfirm}" method="post">
+				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
+				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
+				<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
+				<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
+				<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
+				<button type="submit" name="button" class="btn btn-edit" value="解散">解散</button>
+			</form>
 		</div>
 
-
-		<!--グループ解散 -->
-		<form th:action="@{groupDissConfirm}" method="post">
-			<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
-			<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
-			<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
-			<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
-			<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
-			<button type="submit" name="button" class="btn btn-edit" value="解散">解散</button>
-		</form>
-	</div>
-
-	<!--bootstrapのjsリンク接続-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-		crossorigin="anonymous"></script>
+		<!--bootstrapのjsリンク接続-->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+			crossorigin="anonymous"></script>
 
 </body>
 
