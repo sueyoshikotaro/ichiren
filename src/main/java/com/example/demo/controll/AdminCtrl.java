@@ -821,7 +821,6 @@ public class AdminCtrl {
 	 */
 	@PostMapping("groupDetail")
 	public ModelAndView groupDetail(ModelAndView mav,
-			@RequestParam(name = "group_id", required = false) String group_id,
 			GroupDetailView g) {
 
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
@@ -881,7 +880,6 @@ public class AdminCtrl {
 	 */
 	@PostMapping("groupEdit")
 	public ModelAndView groupEdit(ModelAndView mav, TeamsDisplay t,
-			@RequestParam(name = "check", required = false) String[] check,
 			@RequestParam(name = "user_id", required = false) String[] user_id,
 			@RequestParam(name = "user_name", required = false) String[] user_name,
 			@RequestParam(name = "user_roll", required = false) String[] user_roll) {
@@ -895,7 +893,7 @@ public class AdminCtrl {
 		for (int i = 0; i < user_id.length; i++) {
 
 			//チェックボックスで選択したユーザIDとユーザ名を格納
-			if (check != null && Arrays.asList(check).contains(user_id[i])) {
+			if (user_roll[i].equals("リーダ")) {
 
 				UserDisplay leader = new UserDisplay();
 				leader.setUser_id(user_id[i]);
@@ -911,8 +909,40 @@ public class AdminCtrl {
 			}
 		}
 
-		System.out.println(t.getGroup_id());
-		System.out.println(t.getGroup_name());
+		mav.addObject("groupDetail", t);
+		mav.addObject("leaderUser", leaderUser);
+		mav.addObject("memberUser", memberUser);
+		mav.setViewName("admin/groupEdit");
+
+		return mav;
+	}
+
+	/*
+	 * 末吉
+	 * グループ編集確認画面を表示する
+	 * @return
+	 */
+	@PostMapping("groupEditConfirm")
+	public ModelAndView groupEditConfirm(ModelAndView mav, TeamsDisplay t,
+			@RequestParam(name = "check", required = false) String[] check,
+			@RequestParam(name = "selectedUserId", required = false) String[] user_id,
+			@RequestParam(name = "selectUserName", required = false) String[] user_name) {
+
+		//リーダ以外のメンバ
+		List<UserDisplay> leaderUser = new ArrayList<>();
+		List<UserDisplay> memberUser = new ArrayList<>();
+
+		for (int i = 0; i < user_id.length; i++) {
+			UserDisplay user = new UserDisplay();
+			user.setUser_id(user_id[i]);
+			user.setUser_name(user_name[i]);
+
+			if (Arrays.asList(check).contains(user_id[i])) {
+	            leaderUser.add(user);
+	        } else {
+	            memberUser.add(user);
+	        }
+		}
 
 		mav.addObject("groupDetail", t);
 		mav.addObject("leaderUser", leaderUser);
@@ -922,34 +952,38 @@ public class AdminCtrl {
 		return mav;
 	}
 
-	/*
-	 * 向江
-	 * グループ編集確認画面を表示する
+	/**
+	 * 末吉
+	 * グループ編集完了
 	 * @return
 	 */
-	public ModelAndView groupEditConfirm(ModelAndView mav, TeamsDisplay t,
-			@RequestParam(name = "selectedUserId", required = false) String[] user_id,
-			@RequestParam(name = "selectUserName", required = false) String[] user_name) {
+	@PostMapping("groupEditComp")
+	public ModelAndView groupEditComp(ModelAndView mav, TeamsDisplay t,
+			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
+			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id) {
 
-		//リーダ以外のメンバ
-		List<UserDisplay> addMember = new ArrayList<>();
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
 
-		//グループIDとグループ名を格納
-		TeamsDisplay teamsDisplay = new TeamsDisplay();
-		teamsDisplay.setGroup_id(t.getGroup_id());
-		teamsDisplay.setGroup_name(t.getGroup_name());
+		// エンティティの中のschool_idを取得
+		int school_id = userEntity.getSchool_id();
 
-		//追加するメンバをListに格納
-		for (int i = 0; i < user_id.length; i++) {
-			UserDisplay member = new UserDisplay();
-			member.setUser_id(user_id[i]);
-			member.setUser_name(user_name[i]);
-			addMember.add(member);
+		if (memberUser_id != null) {
+
+			// ここで、リーダーのデータを処理する
+			for (String i : leaderUser_id) {
+				groupDispService.groupEdit(i, t.getGroup_id(), "リーダ", school_id);
+			}
+
+			for (String i : memberUser_id) {
+				// ここで、メンバーのデータを処理する
+				groupDispService.groupEdit(i, t.getGroup_id(), "メンバ", school_id);
+			}
+
 		}
 
-		mav.addObject("groupDetail", teamsDisplay);
-		mav.addObject("addMember", addMember);
-		mav.setViewName("admin/groupMemberAddConfirm");
+		mav.addObject("groupEditComp", true);
+		mav.setViewName("admin/groupEditConfirm");
 
 		return mav;
 	}
@@ -1094,7 +1128,7 @@ public class AdminCtrl {
 	 * グループ作成画面を表示する
 	 * @return
 	 */
-	@GetMapping("groupCreate")
+	@PostMapping("groupCreate")
 	public ModelAndView groupCreate(ModelAndView mav,
 			@RequestParam(name = "check", required = false) String[] check,
 			@RequestParam(name = "userId", required = false) String[] userId,

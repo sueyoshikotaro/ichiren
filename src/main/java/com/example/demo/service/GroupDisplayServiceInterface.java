@@ -60,4 +60,7 @@ public interface GroupDisplayServiceInterface {
 	//グループ解散
 	public void groupDiss(int group_id);
 	
+	//グループ編集
+	public void groupEdit(String user_id, int group_id, String user_roll, int school_id);
+	
 }

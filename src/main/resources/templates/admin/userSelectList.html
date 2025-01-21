@@ -1,3 +1,4 @@
+<!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
@@ -6,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|ユーザー</title>
+	<title>タスクどん|ユーザ選択</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,42 +17,11 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 
-	<!--ウェブアイコン-->
-	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
-
-	<!--ナビゲーションバー-->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container-fluid">
-			<img class="iconLink no-wrap" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
-				width="48" height="48">
-			<span class="nav-title">タスクどん</span>
-
-			<!--ドロップダウンメニュー(開閉)-->
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-				data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-				<ul class="navbar-nav">
-					<li class="nav-item dropdown">
-						<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-							メニュー
-						</button>
-						<ul class="dropdown-menu dropdown-menu-dark">
-							<li>
-								<hr class="dropdown-divider"> <!--線-->
-							</li>
-							<li><a class="dropdown-item" href="#">ログアウト</a></li>
-							<!--リンク例-->
-							<!--<li><a class="dropdown-item" href="#">遷移先の画面名</a></li>-->
-						</ul>
-				</ul>
-				</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+	<!-- 共通header呼出し(管理者用) -->
+	<div>
+		<th:block th:insert="fragment/header :: headerAdmin">
+	</div>
+	
 </head>
 
 <body>
@@ -63,7 +33,7 @@
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
-		<form name="form1" th:action="@{groupCreate}" method="get">
+		<form name="form1" th:action="@{groupCreate}" method="post">
 			<!-- 一覧表示テーブル -->
 			<table border="1">
 				<tr>

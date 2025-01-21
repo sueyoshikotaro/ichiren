@@ -117,8 +117,14 @@
 			</div>
 		</div>
 
-		<button th:onclick="|location.href='@{groupCreate}'|">作成</button>
-		<button th:onclick="|location.href='@{menu}'|">メニュー</button>
+		<form th:action="@{groupCreate}" method="post">
+			<button type="submit" name="button" class="Confirm-btn" value="作成">作成</button>
+		</form>
+		
+		<form th:action="@{menu}" method="get">
+			<button type="submit" name="button" class="Confirm-btn" value="メニュー">メニュー</button>
+		</form>
+		
 
 	</div>
 

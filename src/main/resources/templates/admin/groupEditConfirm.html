@@ -21,20 +21,118 @@
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
-	
+
 </head>
 
 <body>
 	<!--コンテナ-->
 	<div class="container">
-		
+
 		<h2>グループ編集</h2>
 		<h3>[編集内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
+		<form th:action="@{groupCreateComp}" method="post" th:if="${groupDetail != null}">
+			<table border="1">
+				<div>
+					<tr>
+						<th>グループ名</th>
+						<td th:text="${groupDetail.group_name}"></td>
+						<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+					</tr>
+
+					<tr>
+						<th>ジャンル名</th>
+						<td th:text="${groupDetail.genre}"></td>
+						<input type="hidden" name="genre" th:value="${groupDetail.genre}">
+					</tr>
+				</div>
+
+				<tr>
+					<th>リーダ</th>
+				</tr>
+				<tr th:each="leader : ${leaderUser}">
+					<td th:text="${leader.user_name}"></td>
+					<input type="hidden" name="leaderUser_id" th:value="${leader.user_id}">
+					<input type="hidden" name="leaderUser_name" th:value="${leader.user_name}">
+				</tr>
+
+				<tr>
+					<th>メンバ</th>
+				</tr>
+				<tr th:each="member : ${memberUser}">
+					<td th:text="${member.user_name}"></td>
+					<input type="hidden" name="memberUser_id" th:value="${member.user_id}">
+					<input type="hidden" name="memberUser_name" th:value="${member.user_name}">
+				</tr>
+			</table>
+
+			<button type="button" name="button" value="編集" class="btn btn-danger"
+				onclick="groupEditAndShowPopup()">編集</button>
+		</form>
+		
+
+		<!-- ポップアップ -->
+		<div class="modal fade" id="groupEditModal" tabindex="-1" role="dialog"
+			aria-labelledby="groupEditModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="groupEditModalLabel">編集完了</h5>
+					</div>
+					<div class="modal-body">
+						<p>編集が完了しました</p>
+					</div>
+					<div class="modal-footer">
+						<form th:action="@{groupList}" method="get">
+							<button type="submit" class="btn btn-danger">グループ一覧へ</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+	<script>
+		function groupEditAndShowPopup() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'groupEditComp'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			// buttonパラメータを追加
+			//var buttonInput = document.createElement('input');
+			//buttonInput.type = 'hidden';
+			//buttonInput.name = 'button';
+			//buttonInput.value = '編集'; // または '戻る' など必要な値を設定
+			//form.appendChild(buttonInput);
+
+			form.submit();
+		}
+	</script>
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var groupEditComp = /*[[${groupEditComp}]]*/ true;
+		$(document).ready(function () {
+			if (groupEditComp == true) {
+				$('#groupEditModal').modal('show');
+			}
+		});
+		/*]]>*/
+	</script>
+
+	<!--bootstrapのjsリンク接続-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
 </body>
 
 </html>
