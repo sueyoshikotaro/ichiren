@@ -821,14 +821,10 @@ public class AdminCtrl {
 	 */
 	@PostMapping("groupDetail")
 	public ModelAndView groupDetail(ModelAndView mav,
-			GroupDetailView g) {
+			GroupMemberDeleteView g) {
 
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
-
-		for (GroupDetailView gdv : group) {
-			System.out.println(gdv);
-		}
-
+		
 		mav.addObject("groups", group);
 		mav.setViewName("admin/groupDetails");
 
@@ -1029,71 +1025,36 @@ public class AdminCtrl {
 	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
 			GroupMemberDeleteView g, ModelAndView mav) {
 		
-		//メンバごとの進捗度の合計を格納
-		int progressSum = 0;
-
-		int taskSum = 0;
-
-		//割り振るタスクのtask_weightを取得
-		int task_weight = 0;
-
-		//割り振ったメンバのscoreを再計算
-		int scoreResult = 0;
-
-		//メンバの変更後の進捗度の計算結果を格納
-		int userProgressResult = 0;
-
 		//グループメンバ削除確認画面のテーブルを表示する
 		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
 
+		System.out.println(group);
+
 		for (int i = 0; i < group.size(); i++) {
-			//user_detailの情報をscoreの昇順に格納
-			List<GroupMemberDeleteView> membersDetail = groupDispService.membersScore(g.getGroup_id());
 
-			//タスクを割り振るメンバのscoreを取得
-			int score = membersDetail.get(0).getScore();
-
-			//割り振るユーザのタスク情報を取得
-			List<TaskForm> task = groupDispService.taskList(g.getUser_id(), g.getGroup_id());
-
-			//割り振られるユーザのタスク情報を取得
-			List<TaskForm> task2 = groupDispService.taskList(membersDetail.get(0).getUser_id(), g.getGroup_id());
-
-			System.out.println(task2);
-
-			//user_progressの合計と割り振られているタスクの数を計算
-			for (TaskForm progress : task2) {
-				progressSum += progress.getUser_progress();
-				taskSum++;
-			}
-
-			//変更後の進捗度を計算
-			userProgressResult = progressSum / taskSum;
-
-			//割り振るタスクのtask_weightを取得
-			task_weight = task.get(0).getTask_weight();
-
-			//割り振ったメンバのscoreを再計算
-			scoreResult = score + task_weight;
-
-			//user_detailのuser_idを更新
-			groupDispService.updateUserId(task.get(0).getTask_id(), membersDetail.get(0).getUser_id());
+			//更新後のスコアと進捗度を計算するサービスを呼び出す
+			Object[] updateData = groupDispService.scoreCalc(g.getGroup_id(), g.getUser_id());
 			
+			//user_detailのtask_idを更新(タスクの自動振り分け)
+			groupDispService.updateUserId(group.get(0).getTask_id(), (String) updateData[2]);
+
 			//user_detailのscoreとuser_progressを更新
-			groupDispService.updateScore(membersDetail.get(0).getUser_id(), g.getGroup_id(), scoreResult,
-					userProgressResult);
+			groupDispService.updateScore((String) updateData[2], g.getGroup_id(), (int)updateData[0], (int)updateData[1]);
 		}
 
 		//user_detailテーブルの一列を削除
 		groupDispService.groupMemberDelete(g.getGroup_id(), g.getUser_id());
 
+		//グループの全体進捗を更新するサービスを呼び出す
+		groupDispService.allProgress(g.getGroup_id());
+		
 		//グループ詳細画面を表示するためにグループ情報を格納
 		List<GroupDetailView> groupDetails = groupDispService.groupDetail(g.getGroup_id());
-		
+
 		mav.addObject("group", groupDetails);
 		mav.addObject("groupMemberDeleteComp", true);
 		mav.setViewName("admin/groupMemberDelete");
-		
+
 		return mav;
 	}
 

@@ -8,7 +8,7 @@ import lombok.Data;
 public class GroupDetailView {
 
 	@Id
-	private String group_id;
+	private int group_id;
 	private String group_name;
 	private String genre;
 	private String all_progress;

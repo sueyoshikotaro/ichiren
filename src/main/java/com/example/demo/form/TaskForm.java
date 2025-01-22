@@ -16,7 +16,7 @@ public class TaskForm {
 	private int task_priority;
 	private int task_level;
 	private int task_weight;
-	private String progress;
+	private int progress;
 	private String task_flg;
 	private String group_id;
 	private String user_id;
