@@ -12,12 +12,12 @@ public class GroupMemberDetailView {
 	private String user_id;
 	private int score;
 	private int user_progress;
-	
+	private String group_id;
 	
 	private String task_name;
 	private int task_priority;
 	private int progress;
-	private String task_content;
+	//private String task_content;
 	
 	//private int task_id;
 }
