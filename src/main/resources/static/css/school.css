@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+/*学校情報詳細画面,学校IDの表示テキスト*/
+.mb-3.school-info-text.second-text {
+	margin-top: -12px;
+}
+
+/*学校情報詳細限定の3ボタン均等処理*/
+.btn-group {
+	display: flex;
+	justify-content: space-between;
+}
+
+/*遷移系ボタン*/
+.move-btn {
+	display: inline-block;
+	flex: 1;
+	margin: 0 30px;
+}
