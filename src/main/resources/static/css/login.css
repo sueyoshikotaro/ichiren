@@ -1,6 +1,7 @@
 @charset "UTF-8";
+/*ログイン専用*/
 
-/*コンテナ(ログイン画面のみ別種コンテナ)*/
+/*コンテナ(ログイン専用)*/
 .login-container {
 	background-image: url(../img/containerImage.png);
 	background-size: cover;
@@ -11,19 +12,15 @@
 	border-radius: 25px;
 }
 
-/*アプリ名*/
-.app-name {
+/*アプリ名(ログインコンテナ内)*/
+.app-title {
 	text-align: center;
 	font-weight: bold;
 	color: #454545;
 	text-shadow: 3px 3px #AAAAAA;
 }
 
-/*画面タイトル*/
-.login-title {
-	margin-top: 20px;
-}
-
+/*非表示目アイコン*/
 .input-group-text {
 	cursor: pointer;
 }
@@ -44,13 +41,12 @@
 	transition: all .3s;
 }
 
-/*アニメーション*/
 .login-button:hover {
 	transform: scale(0.9, 0.9);
 	background-color: #FF8C00;
 }
 
-/* パスワード再設定説明のポップアップ (下記全て)*/
+/* パスワード再設定説明のポップアップ*/
 .popup-link {
 	text-decoration: none;
 	color: black;
