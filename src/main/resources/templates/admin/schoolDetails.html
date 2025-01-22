@@ -17,7 +17,9 @@
 
 	<!-- CSS接続 -->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
-	<link rel="stylesheet" th:href="@{/css/schoolS.css}">
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/list.css}"> <!-- リスト用CSS -->
+	<link rel="stylesheet" th:href="@{/css/school.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -33,101 +35,82 @@
 		<h2>学校情報詳細</h2>
 
 		<!--学校IDと学校名(表示)-->
-		<tr th:each="schoolDetails : ${schoolS}" th:if="${schoolDetailsStat.index == 0}">
-			<div class="input-group mb-3">
-				<span class="input-group-text" id="basic-addon1">学校名</span>
-				<input type="text" class="form-control info-text" th:value="${schoolDetails.school_name}"
-					aria-label="Username" aria-describedby="basic-addon1" readonly>
+		<div th:each="schoolDetails : ${schoolS}" th:if="${schoolDetailsStat.index == 0}">
+
+			<div class="mb-3 school-info-text">
+				<span class="form-label" id="basic-addon1">学校名</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_name}" readonly>
 			</div>
-			<div class="input-group mb-3">
-				<span class="input-group-text" id="basic-addon1" style="margin-top: -10px;">学校ID</span>
-				<input type="text" class="form-control info-text" th:value="${schoolDetails.school_id}"
-					aria-label="Username" aria-describedby="basic-addon1" style="margin-top: -10px;" readonly>
+
+			<div class="mb-3 school-info-text second-text">
+				<span class="form-label" id="basic-addon1">学校ID</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_id}" readonly>
 			</div>
-			<!-- [旧] -->
-			<!--<p class="info-text" th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>-->
-			<!--<p class="info-text" th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>-->
-		</tr>
+
+		</div>
 
 		<form th:action="@{schoolDetailsChange}" th:object="${FormContent}" method="post">
 
 			<!--教室情報一覧表示-->
-			<div class="content">
+			<div class="main-content">
+
 				<!--繰り返し処理-->
 				<div th:each="schoolDetails : ${schoolS}">
-					<div class="content-box">
-						<label for="inputPassword5" class="form-label"
-							th:text="'教室名：'+${schoolDetails.room_name}"></label>
-						<div class="input-group mb-3">
-							<span class="input-group-text" id="basic-addon1">建物</span>
-							<input type="text" class="form-control" th:value="${schoolDetails.hall}"
-								aria-label="Username" aria-describedby="basic-addon1" readonly>
-							<span class="input-group-text" id="basic-addon1">階層</span>
-							<input type="text" class="form-control" th:value="${schoolDetails.floor}"
-								aria-label="Username" aria-describedby="basic-addon1" readonly>
-							<span class="input-group-text" id="basic-addon1">PC</span>
-							<div th:if="${schoolDetails.pc_flg == 1}">
-								<input type="text" class="form-control" th:value="'有'" aria-label="Username"
-									aria-describedby="basic-addon1" readonly>
+
+					<div class="content-child">
+
+						<div class="row">
+							<div class="col">
+								<label for="inputPassword5" class="form-label"
+									th:text="'教室名：'+${schoolDetails.room_name}"></label>
 							</div>
-							<div th:unless="${schoolDetails.pc_flg == 1}">
-								<input type="text" class="form-control" th:value="'無'" aria-label="Username"
-									aria-describedby="basic-addon1" readonly>
+							<div class="col">
+								<div class="form-check form-switch form-check-reverse">
+									<input class="form-check-input" type="radio" name="flexRadioDefault"
+										th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
+										th:checked="${schoolDetailsStat.index == 0}">
+									<label class="form-check-label" th:for="${schoolDetails.room_id}">選択</label>
+								</div>
 							</div>
 						</div>
-						<div class="input-group mb-3">
-							<span class="input-group-text" id="basic-addon1">選択</span>
-							<!--ラジオボタン-->
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="flexRadioDefault"
-									th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
-									th:checked="${schoolDetailsStat.index == 0}">
-								<label class="form-check-label" th:for="${schoolDetails.room_id}"></label>
+
+						<div class="row">
+							<div class="col">
+								<div class="mb-3">
+									<span class="form-label">建物</span>
+									<input type="text" class="form-control" th:value="${schoolDetails.hall}" readonly>
+								</div>
+							</div>
+							<div class="col">
+								<div class="mb-3">
+									<span class="form-label">階層</span>
+									<input type="text" class="form-control" th:value="${schoolDetails.floor}" readonly>
+								</div>
+							</div>
+							<div class="col">
+								<div class="mb-3">
+									<span class="form-label">PC</span>
+									<div th:if="${schoolDetails.pc_flg == 1}">
+										<input type="text" class="form-control" th:value="有" readonly>
+									</div>
+									<div th:unless="${schoolDetails.pc_flg == 1}">
+										<input type="text" class="form-control" th:value="無" readonly>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<table border="1">
-				<tr>
-					<th></th>
-					<th>教室名</th>
-					<th>建物</th>
-					<th>階層</th>
-					<th>PC</th>
-				</tr>
-
-				<tr th:each="schoolDetails : ${schoolS}">
-					<td>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="flexRadioDefault"
-								th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
-								th:checked="${schoolDetailsStat.index == 0}">
-							<label class="form-check-label" th:for="${schoolDetails.room_id}"></label>
-						</div>
-					</td>
-
-					<td th:text="${schoolDetails.room_name}"></td>
-					<td th:text="${schoolDetails.hall}"></td>
-					<td th:text="${schoolDetails.floor}"></td>
-					<td th:if="${schoolDetails.pc_flg == 1}">有</td>
-					<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
-				</tr>
-			</table>
-
 			<input type="hidden" id="before_room_name" name="before_room_name">
 
-			<div>
-				<button type="submit" name="button" class="move-btn" value="add">追加</button>
-				<button type="submit" name="button" class="move-btn" value="edit">編集</button>
-				<button type="submit" name="button" class="move-btn" value="delete">削除</button>
+			<div class="btn-group">
+				<button type="submit" name="button" class="move-btn mini-btn" value="add">追加</button>
+				<button type="submit" name="button" class="move-btn mini-btn" value="edit">編集</button>
+				<button type="submit" name="button" class="move-btn mini-btn" value="delete">削除</button>
 			</div>
 
-			<!-- [旧] -->
-			<!--<button type="submit" name="button" value="add">追加</button>-->
-			<!--<button type="submit" name="button" value="edit">編集</button>-->
-			<!--<button type="submit" name="button" value="delete">削除</button>-->
 		</form>
 	</div>
 
