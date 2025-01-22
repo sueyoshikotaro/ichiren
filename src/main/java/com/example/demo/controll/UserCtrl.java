@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -33,6 +31,8 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -106,17 +106,16 @@ public class UserCtrl {
 
 		if (user.isPresent() && user.get().getUser_flg() == 1 && user.get().getUser_pass().equals(user_pass)) {
 
+			session.setAttribute("user_id", user_id);
+			session.setAttribute("user", user.get());
+
 			ra.addFlashAttribute("user_id", user_id);
 			ra.addFlashAttribute("user_pass", user_pass);
 
 			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
 
-				session.setAttribute("user", user.get());
-
 				return new ModelAndView("redirect:/taskdon/admin/menu");
 			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
-
-				session.setAttribute("user", user.get());
 
 				return new ModelAndView("redirect:/taskdon/admin/menu");
 			} else if (user.get().getUser_pass().equals("taskdon1")) {
@@ -184,48 +183,27 @@ public class UserCtrl {
 	@GetMapping("deptGroupList")
 	public ModelAndView deptGroupList(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
-		Optional<User> user;
+		if (user_id == null || user_id.isEmpty()) {
 
-		if (user_id != null) {
-
-			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
-
-			user = userCrudRepo.findById(user_id);
-
-			mav.setViewName("common/deptGroupList");
-			mav.addObject("groupS", deptGroupList);
-			session.setAttribute("deptGroupList", deptGroupList);
-			session.setAttribute("user", user.get());
-
-		} else {
-			mav.setViewName("common/deptGroupList");
+			// セッションからも取得を試みる
+			user_id = (String) session.getAttribute("user_id");
 		}
-		return mav;
-	}
 
-	/**
-	 * 所属グループ一覧
-	 * @return
-	 */
-	@LoginRequired
-	@PostMapping("deptGroupList")
-	public ModelAndView reDeptGroupList(ModelAndView mav, String user_id) {
+		Optional<User> user = userCrudRepo.findById(user_id);
 
-		Optional<User> user;
-
-		if (user_id != null) {
+		if (user.isPresent()) {
 
 			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
-
-			user = userCrudRepo.findById(user_id);
 
 			mav.setViewName("common/deptGroupList");
 			mav.addObject("groupS", deptGroupList);
 			session.setAttribute("deptGroupList", deptGroupList);
 			session.setAttribute("user", user.get());
-
 		} else {
-			mav.setViewName("common/deptGroupList");
+
+			// ユーザーが存在しない場合のエラー処理
+			mav.setViewName("error");
+			mav.addObject("errorMessage", "ユーザーが見つかりません。");
 		}
 
 		return mav;
@@ -516,11 +494,15 @@ public class UserCtrl {
 				//スコアの足しこみ
 				score = score + Integer.valueOf(t.getTask_weight());
 				TaskService.userUpScore(score, t.getUser_name(), group_id);
+
+				mav.addObject("taskAppComp", true);
+			} else {
+				mav.addObject("taskAppComp", false);
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		mav.addObject("taskAppComp", true);
+
 		mav.addObject("taskAppConf", t);
 		mav.setViewName("leader/taskApprovedConfirm");
 		return mav;
@@ -571,15 +553,21 @@ public class UserCtrl {
 	 * ToDoリスト画面を表示
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@GetMapping("todoList")
 	public ModelAndView todoList(ModelAndView mav,
 			@RequestParam(name = "tdlist_id", required = false) Integer tdlist_id,
 			@RequestParam(name = "checked", required = false) Boolean checked) {
 		System.out.println(tdlist_id);
 		if (tdlist_id != null) {
-			System.out.println(checked);
-			TodoService.todoUpFlg(tdlist_id, (int) session.getAttribute("groupId"));
+			if (checked != null) {
+				if (checked) {
+					System.out.println(checked);
+					TodoService.todoUpFlg(tdlist_id, 1);
+				} else {
+					TodoService.todoUpFlg(tdlist_id, 0);
+				}
+			}
 		}
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
@@ -592,7 +580,7 @@ public class UserCtrl {
 	 * 選択されたToDoリスト画面を表示
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("todoListChange")
 	public ModelAndView todoListChange(ModelAndView mav,
 			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
@@ -622,19 +610,13 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("registConfirm")
-	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t,
-			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
-			@RequestParam(name = "button", required = false) String button,
-			@RequestParam(name = "check", required = false) String check) {
+	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t) {
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
 		TodoService.todoRegister(user_id, t.getTdlist_content(), t.getImportance());
-		mav.addObject("check", check);
-		mav.addObject("todoList", TodoService.selectTodoList(user_id));
-		mav.setViewName("common/todoList");
-		return mav;
+		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
 
 	/**
@@ -642,18 +624,11 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("editConfirm")
-	public ModelAndView editConfirm(ModelAndView mav, TdlistForm t,
-			@RequestParam(name = "check", required = false) String check) {
-		User user = (User) session.getAttribute("user");
-		String user_id = user.getUser_id();
-		System.out.println(t.getTdlist_id());
+	public ModelAndView editConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoUpdate(t.getTdlist_id(), t.getTdlist_content(), t.getImportance());
-		mav.addObject("check", check);
-		mav.addObject("todoList", TodoService.selectTodoList(user_id));
-		mav.setViewName("common/todoList");
-		return mav;
+		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
 
 	/**
@@ -661,17 +636,11 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("deleteConfirm")
-	public ModelAndView deleteConfirm(ModelAndView mav, TdlistForm t,
-			@RequestParam(name = "check", required = false) String check) {
-		User user = (User) session.getAttribute("user");
-		String user_id = user.getUser_id();
+	public ModelAndView deleteConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoDelete(t.getTdlist_id());
-		mav.addObject("check", check);
-		mav.addObject("todoList", TodoService.selectTodoList(user_id));
-		mav.setViewName("common/todoList");
-		return mav;
+		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
 
 	/**

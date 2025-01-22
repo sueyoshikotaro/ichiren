@@ -37,9 +37,8 @@
 	
 	<!--コンテナ-->
 	<div class="container">
-		
 		<!--編集の場合-->
-		<form th:if="${button == 'edit'}" th:action="@{editConfirm}" method="post">
+		<form th:action="@{editConfirm}" method="post">
 			<div th:each="todo:${todo}">
 				<input type="hidden" name="tdlist_id" th:value="${todo.tdlist_id}">
 				<div>
@@ -57,7 +56,7 @@
 				</div>
 			</div>
 			
-			<button type="submit" value="cancel">取消</button>
+			<button th:onclick="|location.href='@{/taskdon/user/todoList}'|">取消</button>
 			<button type="submit" value="edit">編集</button>
 			
 		</form>

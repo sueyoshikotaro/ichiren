@@ -842,9 +842,13 @@ public class AdminCtrl {
 	 */
 	@PostMapping("groupMemberDetails")
 	public ModelAndView memberDetails(ModelAndView mav,
-			@RequestParam(name = "user_name") String user_name) {
+			GroupMemberDetailView gmdv) {
 
-		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(user_name);
+		System.out.println(gmdv);
+		
+		System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
+		
+		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(gmdv.getUser_id(), gmdv.getGroup_id());
 
 		for (GroupMemberDetailView g : group) {
 			System.out.println(g);
@@ -1040,6 +1044,8 @@ public class AdminCtrl {
 			@RequestParam(name = "task_id", required = false) String[] task_id,
 			GroupMemberDeleteView g, ModelAndView mav) {
 
+		System.out.println(g);
+		
 		// 削除ボタンを押下
 		if (button.equals("削除")) {
 

@@ -37,45 +37,35 @@
 
 	<!--コンテナ-->
 	<div class="container">
-		<div>
-			<th:block th:if="${button==null}" th:insert="fragment/todoFragment :: list">
-		</div>
+		<th:block th:insert="fragment/todoFragment :: list">
 	</div>
 
 	<!--JavaScript-->
 	<script th:inline="javascript">
-
-		const rows = document.querySelectorAll('.data');
-		var checkbox = null;
+		var rows = document.querySelectorAll('.data');
 		var url = "todoList";
 		var form = document.getElementById("form");
-		var value = null;
-
-		console.log(rows)
-
 		rows.forEach((row) => {
-			checkbox = row.querySelector('.form-check-input');
-
-			console.log(checkbox);
-		});
-
-		checkbox.addEventListener('change', () => {
-			console.log(value);
-			value = form.querySelector("input[name='tdlist_id']").value;
-			var params = {
-				"tdlist_id": value,
-				"checked": checkbox.checked
-			};
-			console.log(checkbox.checked);
-
-			/*ToDo一覧表示メソッドの呼び出し*/
-			$.ajax({
-				type: "GET",
-				url: url,
-				data: params,
-				success: function (data) {
-					console.log('aaaaaaaaa')
+			var checkbox = row.querySelector('.form-check-input');
+			var value = row.querySelector("input[name='tdlist_id']").value;
+			var text = row.querySelector('.text');
+			checkbox.addEventListener('change', () => {
+				if (checkbox.checked) {
+					text.style.textDecoration = 'line-through';
+				} else {
+					text.style.textDecoration = 'none';
 				}
+				var params = {
+					"tdlist_id": value,
+					"checked": checkbox.checked
+				};
+
+				/*ToDo一覧表示メソッドの呼び出し*/
+				$.ajax({
+					type: "GET",
+					url: url,
+					data: params,
+				});
 			});
 		});
 	</script>
