@@ -15,13 +15,16 @@
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
 	<!--CSS接続-->
-	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/school.css}">
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
-	
+
 </head>
 
 <body>
@@ -33,47 +36,54 @@
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
-		<tr th:each="schoolDetails : ${schoolAdd}" th:if="${schoolDetailsStat.index == 0}">
+		<div th:each="schoolDetails : ${schoolAdd}" th:if="${schoolDetailsStat.index == 0}">
 
-			<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
-			<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
+			<!--学校名と学校ID(表示)-->
+			<div class="mb-3 school-info-text">
+				<span class="form-label" id="basic-addon1">学校名</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_name}" readonly>
+			</div>
 
+			<div class="mb-3 school-info-text second-text">
+				<span class="form-label" id="basic-addon1">学校ID</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_id}" readonly>
+			</div>
 
 			<form th:action="@{schoolAddConfirm}" method="post">
-				<table>
-					<tr>
-						<th>教室名</th>
-						<td><input type="text" name="room_name" required></td>
-					</tr>
+				<div class="mb-3">
+					<span class="form-label">教室名</span>
+					<input type="text" class="form-control" name="room_name" required>
+				</div>
 
-					<tr>
-						<th>建物</th>
-						<td><input type="text" name="hall" required></td>
-					</tr>
+				<div class="mb-3">
+					<span class="form-label">建物名</span>
+					<input type="text" class="form-control" name="hall" required>
+				</div>
 
-					<tr>
-						<th>階数</th>
-						<td><input type="text" name="floor" required></td>
-					</tr>
-
-					<tr>
-						<th>PCの有無</th>
-						<td>
-							<select name="pc_flg">
+				<div class="row">
+					<div class="col">
+						<div class="mb-3">
+							<span class="form-label">階層</span>
+							<input type="text" class="form-control" name="floor" required>
+						</div>
+					</div>
+					<div class="col">
+						<div class="mb-3">
+							<span class="form-label">PC-有無</span>
+							<select class="form-select" name="pc_flg" required>
 								<option th:value="1" th:text="有"></option>
 								<option th:value="0" th:text="無"></option>
 							</select>
-						</td>
-					</tr>
+						</div>
+					</div>
+				</div>
 
-					<tr>
-						<td colspan="2" align="right">
-							<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
-							<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
-							<input type="submit" name="button" value="確認">
-						</td>
-					</tr>
-				</table>
+				<div colspan="2">
+					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
+					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
+					<input type="submit" name="button" class="move-btn mini-btn" value="確認">
+				</div>
+
 			</form>
 
 			<div>
@@ -82,7 +92,8 @@
 					<button type="submit">戻る</button>
 				</form>
 			</div>
-		</tr><br>
+
+		</div>
 
 	</div>
 

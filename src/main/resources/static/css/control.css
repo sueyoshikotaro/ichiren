@@ -1,4 +1,5 @@
 @charset "UTF-8";
+/*登録等の操作画面用*/
 
 /*登録項目(小項目)*/
 .regist-item {
@@ -6,12 +7,12 @@
 }
 
 /*入力欄*/
-.regist-field{
+.regist-field {
 	margin-top: -10px;
 }
 
 /*確認欄*/
-.confirmation-field{
+.confirmation-field {
 	margin-top: -10px;
 }
 
@@ -20,9 +21,14 @@
 	width: 70px;
 }
 
+/*横長ボタン(共通)*/
+.long-btn {
+	width: 140px;
+}
+
 /*登録処理系*/
-/*確認ボタン*/
-.confirmation-btn {
+/*確認&登録ボタン*/
+.control-btn {
 	display: block;
 	text-align: center;
 	text-decoration: none;
@@ -38,7 +44,7 @@
 	z-index: 1;
 }
 
-.confirmation-btn::before {
+.control-btn::before {
 	content: "";
 	position: absolute;
 	left: 0;
@@ -51,10 +57,29 @@
 	z-index: -1;
 }
 
-.confirmation-btn:hover::before {
+.control-btn:hover::before {
 	transform: translateX(0);
 }
 
-.confirmation-btn:hover {
+.control-btn:hover {
 	color: #fff;
+}
+
+/*ポップアップ用*/
+/*ポップアップ全体*/
+.popup-place {
+	margin-top: 180px;
+}
+
+/*ポップアップ内テキスト*/
+.modal-text {
+	margin-top: 14px;
+	font-size: 24px;
+	text-align: center;
+}
+
+/*ポップ終了後ボタン*/
+.return-btn {
+	width: 160px;
+	margin-bottom: 18px;
 }
