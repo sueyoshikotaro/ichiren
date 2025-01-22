@@ -37,7 +37,7 @@ public interface TodoCrudRepository extends CrudRepository<Tdlist, Integer> {
 	 * @param importance
 	 */
 	@Modifying
-	@Query("insert into tdlist(user_id, tdlist_content, importance) values(:user_id, :tdlist_content, :importance)")
+	@Query("insert into tdlist(user_id, tdlist_content, importance,tdlist_flg) values(:user_id, :tdlist_content, :importance,0)")
 	public void registerTodo(String user_id, String tdlist_content, String importance);
 	
 	/**

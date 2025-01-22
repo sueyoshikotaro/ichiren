@@ -1029,7 +1029,7 @@ public class AdminCtrl {
 	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
 			@RequestParam(name = "task_id", required = false) String[] task_id,
 			GroupMemberDeleteView g, ModelAndView mav) {
-
+    
 		//メンバごとの進捗度の合計を格納
 		int progressSum = 0;
 		

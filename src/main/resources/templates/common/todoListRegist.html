@@ -37,13 +37,8 @@
 
 	<!--コンテナ-->
 	<div class="container">
-
-		<div>
-			<th:block th:if="${button==null}" th:insert="fragment/todoFragment :: list">
-		</div>
-
 		<!--登録の場合-->
-		<form th:if="${button=='regist'}" th:action="@{registConfirm}" method="post">
+		<form th:action="@{registConfirm}" method="post">
 			<div>
 				<label>タスク内容</label>
 				<input type="text" name="tdlist_content" required>
@@ -58,7 +53,7 @@
 				</select>
 			</div>
 
-			<button type="submit" value="cancel">取消</button>
+			<button th:onclick="|location.href='@{/taskdon/user/todoList}'|">取消</button>
 			<button type="submit" value="regist">登録</button>
 
 		</form>
