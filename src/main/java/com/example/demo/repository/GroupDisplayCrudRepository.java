@@ -64,9 +64,16 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * タスク詳細表示
 	 */
-	@Query("select t.task_name, t.task_priority, t.task_category, t.progress, t.start_date, t.end_date, t.task_content from task t where t.task_name = :task_name")
+	@Query("select t.task_id, t.task_name, t.task_priority, t.task_category, t.progress, t.start_date, t.end_date, t.task_content, t.task_weight from task t where t.task_name = :task_name")
 	public List<TaskForm> taskDetail(String task_name);
 
+	/**
+	 * 末吉
+	 * メンバが受け持つ全てのタスクを取得
+	 */
+	@Query("select * from task t where t.user_id = :user_id and t.group_id = :group_id")
+	public List<TaskForm> taskList(String user_id, String group_id);
+	
 	/*
 	 * 向江
 	 * グループ編集
@@ -104,8 +111,8 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループメンバ削除
 	 * user_detailのscoreを持ってくる
 	 */
-	@Query("select * from user_detail where user_id = :user_id order by score asc")
-	public void groupMemberDelete3(String user_id);
+	@Query("select * from user_detail where group_id = :group_id order by score asc")
+	public List<GroupMemberDeleteView> membersScore(String group_id);
 	
 	
 	/**
@@ -153,5 +160,21 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update user_detail set user_roll = :user_roll where user_id = :user_id and group_id = :group_id")
 	public void groupEdit(String user_id, int group_id, String user_roll);
+	
+	/**
+	 * 末吉
+	 * タスクの再割り振り
+	 */
+	@Modifying
+	@Query("update task set user_id = :user_id where task_id = :task_id")
+	public void updateUserId(int task_id, String user_id);
+	
+	/**
+	 * 末吉
+	 * user_detailのscoreとuser_progressを更新する
+	 */
+	@Modifying
+	@Query("update user_detail set score = :scoreResult, user_progress = :userProgressResult where user_id = :user_id and group_id = :group_id")
+	public void updateScore(String user_id, String group_id, int scoreResult, int userProgressResult);
 	
 }

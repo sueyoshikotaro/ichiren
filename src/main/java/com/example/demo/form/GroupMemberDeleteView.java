@@ -15,4 +15,7 @@ public class GroupMemberDeleteView {
 	private String task_content;
 	private String group_id;
 	
+	private int score;
+	private int task_weight;
+	
 }

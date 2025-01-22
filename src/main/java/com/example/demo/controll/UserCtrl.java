@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -31,8 +33,6 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -357,9 +357,9 @@ public class UserCtrl {
 		if (button.equals("edit")) {
 			//古いスコアの減算
 			int score = TaskService.userScore(t.getUser_name(), groupId);
-			score = score - Integer.valueOf(t.getTask_weight());
+			score = score - t.getTask_weight();
 			TaskService.userUpScore(score, t.getUser_name(), groupId);
-			t.setTask_weight(String.valueOf(score));
+			t.setTask_weight(score);
 			mav.setViewName("leader/taskEdit");
 			//削除ボタンを押下
 		} else if (button.equals("delete")) {
@@ -401,7 +401,7 @@ public class UserCtrl {
 		score = score + Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level());
 		TaskService.userUpScore(score, t.getUser_name(), groupId);
 
-		String weight = String.valueOf(Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level()));
+		int weight = t.getTask_priority() * t.getTask_level();
 		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
 				t.getTask_priority(), weight, t.getUser_name());
 

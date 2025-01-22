@@ -15,7 +15,7 @@ public interface TaskServiceInterface {
 
 	//タスク登録
 	public boolean taskRegister(String task_category, String task_name, String task_content, String string,
-			Date start_date, Date end_date, String task_priority, String task_level, String task_weight,
+			Date start_date, Date end_date, int task_priority, int task_level, int task_weight,
 			String user_name, int group_id);
 
 	//タスク担当者検索
@@ -23,7 +23,7 @@ public interface TaskServiceInterface {
 
 	//タスク編集
 	public void taskUpdate(int task_id, String task_category, String task_name, String task_content,
-			String task_priority, String task_weight, String user_name);
+			int task_priority, int task_weight, String user_name);
 
 	//タスクフラグ更新(削除)
 	public void taskUpFlg(int task_id);
@@ -42,8 +42,9 @@ public interface TaskServiceInterface {
 
 	//タスク未承認フラグ更新(承認済)
 	public boolean taskReqFlg(int request_id);
-	
+
 	//タスク申請登録
-	public void registerTaskReq(String req_category,String req_name,String req_content,String req_reason,Date add_date,String user_name,int group_id);
+	public void registerTaskReq(String req_category, String req_name, String req_content, String req_reason,
+			Date add_date, String user_name, int group_id);
 
 }

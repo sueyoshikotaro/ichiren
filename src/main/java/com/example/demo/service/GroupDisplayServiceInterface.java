@@ -29,6 +29,9 @@ public interface GroupDisplayServiceInterface {
 
 	//グループメンバタスク詳細表示
 	public List<TaskForm> taskDetail(String task_name);
+	
+	//メンバが受け持つ全てのタスクを取得
+	public List<TaskForm> taskList(String user_id, String group_id);
 
 	//グループ編集
 	public void groupEdit(String group_id);
@@ -39,11 +42,8 @@ public interface GroupDisplayServiceInterface {
 	//グループメンバ削除
 	public void groupMemberDelete(String group_id, String user_id, String user_name);
 	
-	//グループメンバ削除Taskテーブルのuser_idを編集する
-	public void groupMemberDelete2(String user_id);
-	
 	//グループメンバ削除user_detailテーブルのscoreを昇順に並び変える
-	public void groupMemberDelete3(String user_id);
+	public List<GroupMemberDeleteView> membersScore(String group_id);
 
 	//グループ作成
 	public void groupCreate(String group_name, int school_id, String genre);
@@ -62,5 +62,11 @@ public interface GroupDisplayServiceInterface {
 	
 	//グループ編集
 	public void groupEdit(String user_id, int group_id, String user_roll);
+	
+	//タスクの再割り振り
+	public void updateUserId(int task_id, String user_id);
+	
+	//user_detailのscoreとuser_progressを更新する
+	public void updateScore(String user_id, String group_id, int scoreResult, int userProgressResult);
 	
 }
