@@ -51,7 +51,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループ詳細表示
 	 */
 	@Query("select t.group_id, t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score, ud.user_roll, u.user_id, u.school_id from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.group_id = :group_id")
-	public List<GroupDetailView> groupDetail(String group_id);
+	public List<GroupDetailView> groupDetail(int group_id);
 
 	/*
 	 * 向江
@@ -71,8 +71,8 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 末吉
 	 * メンバが受け持つ全てのタスクを取得
 	 */
-	@Query("select * from task t join user_detail ud on t.group_id = ud.group_id where t.user_id = :user_id and t.group_id = :group_id")
-	public List<TaskForm> taskList(String user_id, String group_id);
+	@Query("select * from task t join user_detail ud on t.user_id = ud.user_id where t.user_id = :user_id and t.group_id = :group_id")
+	public List<TaskForm> taskList(String user_id, int group_id);
 	
 	/*
 	 * 向江
@@ -95,7 +95,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Modifying
 	@Query("delete from user_detail where group_id = :group_id and user_id = :user_id")
-	public void groupMemberDelete(String group_id, String user_id);
+	public void groupMemberDelete(int group_id, String user_id);
 	
 	/*
 	 * 向江
@@ -103,7 +103,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * user_detailのscoreを持ってくる
 	 */
 	@Query("select * from user_detail where group_id = :group_id order by score asc")
-	public List<GroupMemberDeleteView> membersScore(String group_id);
+	public List<GroupMemberDeleteView> membersScore(int group_id);
 	
 	
 	/**
@@ -166,6 +166,13 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Modifying
 	@Query("update user_detail set score = :scoreResult, user_progress = :userProgressResult where user_id = :user_id and group_id = :group_id")
-	public void updateScore(String user_id, String group_id, int scoreResult, int userProgressResult);
+	public void updateScore(String user_id, int group_id, int scoreResult, int userProgressResult);
 	
+	/**
+	 * 末吉
+	 * all_progressを更新する
+	 */
+	@Modifying
+	@Query("update teams set all_progress = :all_progressResult where group_id = :group_id")
+	public void allProgressUpdate(int group_id, int all_progressResult);
 }
