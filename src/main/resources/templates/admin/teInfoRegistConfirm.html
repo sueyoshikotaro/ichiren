@@ -17,6 +17,8 @@
 
 	<!-- CSS接続 -->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -33,33 +35,29 @@
 		<h3>[登録内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
 		<form th:action="@{teInfoRegistComp}" method="post">
+			<div class="form-group regist-item">
+				<label class="form-label">講師ID</label>
+				<input type="text" class="form-control confirmation-field" th:value="${te.user_id}" readonly>
+			</div>
+
+			<div class="form-group regist-item">
+				<label class="form-label">講師名</label>
+				<input type="text" class="form-control confirmation-field" th:value="${te.user_name}" readonly>
+			</div>
+
+			<div class="form-group regist-item">
+				<label class="form-label">所属学校</label>
+				<input type="text" class="form-control confirmation-field" th:value="${te.school_name}" readonly>
+			</div>
+
+			<div class="form-group regist-item">
+				<label class="form-label">入社年月日</label>
+				<input type="text" class="form-control confirmation-field" th:value="${te.enr_year}" readonly>
+			</div>
+
 			<table th:each="te : ${te}">
 				<tr>
-					<th>講師ID</th>
-					<td th:text="${te.user_id}"></td>
-				</tr>
-				<tr>
-					<th>講師名</th>
-					<td th:text="${te.user_name}"></td>
-				</tr>
-
-				<tr>
-					<th>所属学校</th>
-					<td th:text="${te.school_name}"></td>
-				</tr>
-				<tr>
-					<th>入社年月日</th>
-					<td th:text="${te.enr_year}"></td>
-				</tr>
-				<tr>
 					<td colspan="2" align="right">
-						<input type="submit" value="登録">
-					</td>
-				</tr>
-
-				<tr>
-					<td colspan="2" align="right">
-
 						<input type="hidden" name="user_id" th:value="${te.user_id}">
 						<input type="hidden" name="user_name" th:value="${te.user_name}">
 						<input type="hidden" name="user_pass" th:value="${te.user_pass}">
@@ -68,8 +66,6 @@
 						<input type="hidden" name="user_flg" th:value="${te.user_flg}">
 						<button type="button" name="button" value="登録" class="btn btn-danger"
 							onclick="teInfoRegistAndShowPopup()">登録</button>
-
-						<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
 					</td>
 				</tr>
 			</table>
