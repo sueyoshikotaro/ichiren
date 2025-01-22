@@ -1,7 +1,29 @@
 @charset "UTF-8";
+/*所属グループ一覧専用*/
 
-/*選択ボタン(デザイン)*/
-.choice-btn {
+/*グループテキストの下線*/
+.underline {
+	margin-top: -10px;
+	margin-bottom: 0;
+}
+
+/*繰返し内容*/
+.hstack.gap-3 {
+	border-bottom: 1px solid #ccc;
+}
+
+/*詳細のドロップダウン(下記2項目)*/
+.dropdown-item.disabled {
+	color: #333;
+	opacity: 1;
+}
+
+.dropdown-item.disabled.first-item {
+	border-bottom: 1px solid #ccc;
+}
+
+/*グループ選択ボタン(下記4項目)*/
+.group-choice-btn {
 	display: block;
 	text-align: center;
 	text-decoration: none;
@@ -19,7 +41,7 @@
 	z-index: 1;
 }
 
-.choice-btn::before {
+.group-choice-btn::before {
 	content: "";
 	position: absolute;
 	left: 0;
@@ -32,30 +54,11 @@
 	z-index: -1;
 }
 
-.choice-btn:hover::before {
+.group-choice-btn:hover::before {
 	transform: translateX(0);
 }
 
-.choice-btn:hover {
+.group-choice-btn:hover {
 	color: #fff;
 }
 
-.lines {
-	margin-top: -10px;
-	margin-bottom: 0;
-}
-
-.hstack.gap-3 {
-	border-bottom: 1px solid #ccc;
-}
-
-.dropdown-item.disabled {
-	color: #333;
-	/* 文字色を強調 */
-	opacity: 1;
-	/* 透明度を1に設定 */
-}
-
-.dropdown-item.disabled.po1 {
-	border-bottom: 1px solid #ccc;
-}

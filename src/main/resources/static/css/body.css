@@ -10,6 +10,7 @@ body {
 	min-height: 100vh;
 	background-size: cover;
 	font-family: 'Sawarabi Mincho', sans-serif;
+	padding-top: 80px;
 }
 
 /*コンテナ(共通)*/
@@ -24,13 +25,14 @@ body {
 	font-weight: bold;
 }
 
-/*メニューデザイン*/
+/*メニュー画面用(ユーザ＋管理者)*/
 /*メニューテキスト*/
 .menu-text {
 	text-align: center;
 }
 
 /*メニューボタン(以下:4項目)*/
+/*デザイン&表示&アニメーション*/
 a.menu-btn {
 	display: block;
 	text-align: center;

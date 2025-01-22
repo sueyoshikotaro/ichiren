@@ -1,0 +1,136 @@
+<!-- 必須情報(下記2項目) -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- 必須項目 -->
+	<meta charset="UTF-8">
+
+	<!-- サイトタイトル -->
+	<title>タスクどん|チャット</title>
+
+	<!-- デザイン等 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+	<!-- CSS接続 -->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+
+	<!--管理者かユーザで区分け？-->
+	<!-- 共通header呼出し(ユーザ用) -->
+	<!--<div>-->
+	<!--	<th:block th:insert="fragment/header :: headerUser">-->
+	<!--</div>-->
+	<!-- 共通header呼出し(管理者用) -->
+	<!--<div>-->
+	<!--	<th:block th:insert="fragment/header :: headerAdmin">-->
+	<!--</div>-->
+
+</head>
+
+<body>
+	<!--コンテナ-->
+	<div class="container">
+
+		<h2>チャット</h2>
+
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots"
+			viewBox="0 0 16 16">
+			<path
+				d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
+			<path
+				d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125m.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6-3.004 6-7 6a8 8 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2" />
+		</svg>
+
+		<!--bootstrap-->
+		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+			aria-controls="offcanvasExample">
+			チャット相手一覧表示ボタン
+		</button>
+
+		<!--上記ボタンで開閉可能なチャット相手一覧-->
+		<!--bootstrap-->
+		<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
+			aria-labelledby="offcanvasExampleLabel">
+			<div class="offcanvas-header">
+				<h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			</div>
+			<div class="offcanvas-body">
+
+				<!--検索フォーム(予定)-->
+				<div class="input-group mb-3">
+					<!--検索内容入力欄-->
+					<input type="text" class="form-control" placeholder="Search"
+						aria-label="Recipient's username" aria-describedby="button-addon2">
+					<!--検索ボタン-->
+					<button class="btn btn-outline-secondary" type="button" id="button-addon2">
+						<!--検索ボタンイラスト(bootstrap引用)-->
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+							class="bi bi-search" viewBox="0 0 16 16">
+							<path
+								d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+						</svg>
+					</button>
+				</div>
+
+				<!--チャット相手一覧(リスト,繰返しかな)-->
+				<ul class="list-group">
+					<li class="list-group-item list-group-item-action">Aさん
+						<span class="badge bg-primary rounded-pill">通知数</span>
+					</li>
+					<li class="list-group-item list-group-item-action">Bさん
+						<span class="badge bg-primary rounded-pill">通知数</span>
+					</li>
+					<li class="list-group-item list-group-item-action">Cさん
+						<span class="badge bg-primary rounded-pill">通知数</span>
+					</li>
+					<li class="list-group-item list-group-item-action">Dさん
+						<span class="badge bg-primary rounded-pill">通知数</span>
+					</li>
+					<li class="list-group-item list-group-item-action">Eさん
+						<span class="badge bg-primary rounded-pill">通知数</span>
+					</li>
+				</ul>
+
+			</div>
+		</div>
+
+		<!--メイン部分-->
+		<div class="chat-column">
+
+			<!--チャット欄(予定)-->
+			<!--チャット相手名表示(ヘッダー？)-->
+
+			<!--チャットテキスト-->
+
+			<!--送信欄-->
+			<div class="input-group mb-3">
+				<input type="text" class="form-control" placeholder="Recipient's username"
+					aria-label="Recipient's username" aria-describedby="button-addon2">
+
+				<!--送信ボタン-->
+				<button class="btn btn-outline-secondary" type="button" id="button-addon2">
+					<!--送信ボタンイラスト(bootstrap引用)-->
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+						class="bi bi-send" viewBox="0 0 16 16">
+						<path
+							d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+					</svg>
+				</button>
+			</div>
+
+		</div>
+
+	</div>
+
+	<!-- bootstrapのjsリンク接続 -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
+
+</body>
+
+</html>
