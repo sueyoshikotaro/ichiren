@@ -27,6 +27,6 @@ public interface UserCrudRepository extends CrudRepository<User, String> {
 	 * 再設定したパスワードを登録
 	 */
 	@Modifying
-	@Query("update user set user_pass = :user_pass where user_pass = :user_pass")
-	public void userPassReset(String user_pass);
+	@Query("update user set user.user_pass = :newPass where user.user_id = :user_id")
+	public void userPassReset(String user_id, String newPass);
 }

@@ -38,5 +38,5 @@ public interface UserServiceInterface {
 	 * ユーザ
 	 * パスワード再設定
 	 */
-	public void userPassReset(String user_pass);
+	public void userPassReset(String user_id, String newPass);
 }

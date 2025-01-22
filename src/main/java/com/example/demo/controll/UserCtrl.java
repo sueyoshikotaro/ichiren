@@ -117,7 +117,6 @@ public class UserCtrl {
 			session.setAttribute("user", user.get());
 
 			ra.addFlashAttribute("user_id", user_id);
-			ra.addFlashAttribute("user_pass", user_pass);
 
 			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
 
@@ -135,6 +134,9 @@ public class UserCtrl {
 
 				mav.setViewName("common/login");
 			}
+		} else {
+			mav.addObject("loginError", "IDまたはパスワードが違います。");
+			mav.setViewName("common/login");
 		}
 
 		return mav;
@@ -147,26 +149,66 @@ public class UserCtrl {
 	@GetMapping("passReset")
 	public ModelAndView passReset(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
-		mav.setViewName("common/passReset"); //パスワード再設定
+		System.out.println(user_id);
+
+		mav.addObject("user_id", user_id);
+		mav.addObject("newPass");
+		mav.addObject("confirmPass");
+		mav.setViewName("common/passReset");
 
 		return mav;
 	}
 
 	/**
-	 * パスワード再設定画面を表示
+	 * パスワード更新処理
 	 * @return
 	 */
-	//	@GetMapping("passReset")
-	//	public String passReset() {
-	//
-	//		//確認ボタンを押下
-	//		//if (button.equals("reset")) {
-	//		//	mav.addObject("user_pass", user_pass);
-	//		//	mav.setViewName("common/passReset");
-	//		//}
-	//
-	//		return "common/passReset";
-	//	}
+	@PostMapping("updatePass")
+	public ModelAndView updatePass(ModelAndView mav, @RequestParam("user_id") String user_id,
+			@RequestParam("newPass") String newPass, @RequestParam("confirmPass") String confirmPass) {
+
+		Optional<User> user = userCrudRepo.findById(user_id);
+
+		User u = user.get();
+
+		String passwordPattern = "^[a-zA-Z0-9]{8,15}$"; // 8-15桁の英数字
+
+		System.out.println(user_id);
+		System.out.println(newPass);
+		System.out.println(confirmPass);
+
+		if (!newPass.matches(passwordPattern)) {
+
+			mav.addObject("passwordError", "パスワードは8桁以上16桁以下の英数字でなければなりません。");
+			mav.addObject("user_id", user_id); // user_idを再度渡す
+			mav.setViewName("common/passReset");
+
+			return mav;
+		} else if (!newPass.equals(confirmPass)) {
+
+			mav.addObject("passwordError", "新パスワードと確認パスワードが一致しません。");
+			mav.addObject("user_id", user_id); // user_idを再度渡す
+			mav.setViewName("common/passReset");
+
+			return mav;
+		} else if (!(newPass.equals("taskdon1") && confirmPass.equals("taskdon1"))) {
+
+			mav.addObject("passwordError", "'taskdon1'は登録できません。");
+			mav.addObject("user_id", user_id); // user_idを再度渡す
+			mav.setViewName("common/passReset");
+
+			return mav;
+		} else {
+
+			userService.userPassReset(u.getUser_id(), newPass);
+
+			System.out.println("パスワード更新完了");
+
+			//mav.setViewName("redirect:/taskdon/user/login"); // ログイン画面へリダイレクト
+
+			return mav;
+		}
+	}
 
 	/**
 	 * メニュー(管理者)画面
@@ -252,11 +294,6 @@ public class UserCtrl {
 
 		return "common/menuUser";
 	}
-
-	/**
-	 * メンバ一覧画面を表示
-	 * @return
-	 */
 
 	/**
 	 * タスク一覧画面を表示するリクエストハンドラメソッド
@@ -659,6 +696,7 @@ public class UserCtrl {
 	}
 
 	/**
+
 	 * 向江
 	 * 連絡事項一覧画面を表示
 	 * 埋め込み前
