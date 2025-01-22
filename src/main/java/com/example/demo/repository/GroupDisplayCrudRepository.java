@@ -71,7 +71,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 末吉
 	 * メンバが受け持つ全てのタスクを取得
 	 */
-	@Query("select * from task t where t.user_id = :user_id and t.group_id = :group_id")
+	@Query("select * from task t join user_detail ud on t.group_id = ud.group_id where t.user_id = :user_id and t.group_id = :group_id")
 	public List<TaskForm> taskList(String user_id, String group_id);
 	
 	/*
@@ -96,15 +96,6 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("delete from user_detail where group_id = :group_id and user_id = :user_id")
 	public void groupMemberDelete(String group_id, String user_id);
-	
-	/*
-	 * 向江
-	 * グループメンバ削除
-	 * taskてーぶるのuser_idをnullに
-	 */
-	@Modifying
-	@Query("update task set user_id = null where user_id = :user_id")
-	public void groupMemberDelete2(String user_id);
 	
 	/*
 	 * 向江

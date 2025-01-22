@@ -40,7 +40,7 @@ public interface GroupDisplayServiceInterface {
 	public List<GroupMemberDeleteView> grMemDelDisp(String user_id);
 
 	//グループメンバ削除
-	public void groupMemberDelete(String group_id, String user_id, String user_name);
+	public void groupMemberDelete(String group_id, String user_id);
 	
 	//グループメンバ削除user_detailテーブルのscoreを昇順に並び変える
 	public List<GroupMemberDeleteView> membersScore(String group_id);

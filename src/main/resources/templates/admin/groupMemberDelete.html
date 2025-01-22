@@ -21,50 +21,52 @@
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
-	
+
 </head>
 
 <body>
 	<!--コンテナ-->
 	<div class="container">
-		
+
 		<h2>グループメンバ削除</h2>
 		<h3>[削除内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
 		<!--指示文を表示-->
 		<!--		<p th:if="${Msg}" th:text="${Msg}"></p>-->
 
-		<tr th:each="groupMemberDelete : ${user}" th:if="${groupMemberDeleteStat.index == 0}">
-			<p th:text="${groupMemberDelete.user_name}"></p>
-		</tr>
+		<div th:if="${user != null}">
+			<tr th:each="groupMemberDelete : ${user}" th:if="${groupMemberDeleteStat.index == 0}">
+				<p th:text="${groupMemberDelete.user_name}"></p>
+			</tr>
 
-		<form th:action="@{groupMemberDeleteConfirm}" method="post">
-			<table>
-				<tr>
-					<th>タスク名</th>
-					<th>タスク内容</th>
-				</tr>
+			<form th:action="@{groupMemberDeleteConfirm}" method="post">
+				<table>
+					<tr>
+						<th>タスク名</th>
+						<th>タスク内容</th>
+					</tr>
 
-				<tr th:each="user : ${user}">
-					<td th:text="${user.task_name}"></td>
-					<td th:text="${user.task_content}"></td>
-					<input type="hidden" name="task_id" th:value="${user.task_id}">
-				</tr>
+					<tr th:each="user : ${user}">
+						<td th:text="${user.task_name}"></td>
+						<td th:text="${user.task_content}"></td>
+						<input type="hidden" name="task_id" th:value="${user.task_id}">
+					</tr>
 
-				<tr>
-					<td colspan="2" align="right">
+					<tr>
+						<td colspan="2" align="right">
 
-						<input type="hidden" name="user_id" th:value="${user[0].user_id}">
-						<input type="hidden" name="group_id" th:value="${user[0].group_id}">
+							<input type="hidden" name="user_id" th:value="${user[0].user_id}">
+							<input type="hidden" name="group_id" th:value="${user[0].group_id}">
 
 
-						<button type="button" name="button" value="削除" class="btn btn-danger"
-							onclick="groupMemberDeleteAndShowPopup()">削除</button>
-						<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
-					</td>
-				</tr>
-			</table>
-		</form>
+							<button type="button" name="button" value="削除" class="btn btn-danger"
+								onclick="groupMemberDeleteAndShowPopup()">削除</button>
+							<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
 
 
 		<!-- ポップアップ -->
@@ -81,6 +83,7 @@
 					<div class="modal-footer">
 
 						<form th:action="@{groupDetail}" method="post">
+							<input type="hidden" name="group_id" th:value="${group[0].group_id}" th:if="${group != null}">
 							<button type="submit" name="button" value="グループ詳細へ" class="btn btn-danger">グループ詳細へ</button>
 						</form>
 
@@ -91,7 +94,6 @@
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 	<script>
 		function groupMemberDeleteAndShowPopup() {

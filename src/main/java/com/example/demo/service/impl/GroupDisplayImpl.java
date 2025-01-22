@@ -149,7 +149,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ削除確認
 	 */
 	@Override
-	public void groupMemberDelete(String group_id, String user_id, String user_name) {
+	public void groupMemberDelete(String group_id, String user_id) {
 
 		groupDispCrudRepo.groupMemberDelete(group_id, user_id);
 
