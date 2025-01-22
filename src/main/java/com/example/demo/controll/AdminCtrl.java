@@ -1044,6 +1044,8 @@ public class AdminCtrl {
 			@RequestParam(name = "task_id", required = false) String[] task_id,
 			GroupMemberDeleteView g, ModelAndView mav) {
 
+		System.out.println(g);
+		
 		// 削除ボタンを押下
 		if (button.equals("削除")) {
 
