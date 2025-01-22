@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +111,16 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 		return groupDispCrudRepo.taskDetail(task_name);
 	}
+
+	/**
+	 * 末吉
+	 * メンバが受け持つ全てのタスクを取得
+	 */
+	@Override
+	public List<TaskForm> taskList(String user_id, String group_id) {
+		
+		return groupDispCrudRepo.taskList(user_id, group_id);
+	}
 	
 
 	/*
@@ -143,18 +154,6 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		groupDispCrudRepo.groupMemberDelete(group_id, user_id);
 
 	}
-	
-	/*
-	 * 向江
-	 * グループメンバ削除確認
-	 * taskテーブルのuser_idを編集する
-	 */
-	@Override
-	public void groupMemberDelete2(String user_id) {
-		
-		groupDispCrudRepo.groupMemberDelete2(user_id);
-		
-	}
 
 	/*
 	 * 向江
@@ -162,9 +161,18 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * user_detailテーブルのscoreを昇順に並び変える
 	 */
 	@Override
-	public void groupMemberDelete3(String user_id) {
+	public List<GroupMemberDeleteView> membersScore(String group_id) {
 		
-		groupDispCrudRepo.groupMemberDelete3(user_id);
+		List<GroupMemberDeleteView> group = groupDispCrudRepo.membersScore(group_id);
+		
+		// membersScore の一つ目の要素を取得
+		GroupMemberDeleteView firstMember = group.get(0);
+		
+		// score と user_id を含む新しいオブジェクトを返す
+		List<GroupMemberDeleteView> result = new ArrayList<>();
+		result.add(firstMember);
+		
+		return result;
 		
 	}
 	
@@ -226,9 +234,30 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 */
 	@Override
 	public void groupEdit(String user_id, int group_id, String user_roll) {
+		
 		groupDispCrudRepo.groupEdit(user_id, group_id, user_roll);
 		
 	}
+
+	/**
+	 * 末吉
+	 * タスクの再割り振り
+	 */
+	@Override
+	public void updateUserId(int task_id, String user_id) {
+		
+		groupDispCrudRepo.updateUserId(task_id, user_id);
+		
+	}
+
+	
+	@Override
+	public void updateScore(String user_id, String group_id, int scoreResult, int userProgressResult) {
+		
+		groupDispCrudRepo.updateScore(user_id, group_id, scoreResult, userProgressResult);
+		
+	}
+
 
 	
 

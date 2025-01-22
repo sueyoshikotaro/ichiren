@@ -50,7 +50,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 */
 	@Override
 	public boolean taskRegister(String task_category, String task_name, String task_content, String str,
-			Date start_date, Date end_date, String task_priority, String task_level, String task_weight,
+			Date start_date, Date end_date, int task_priority, int task_level, int task_weight,
 			String user_name, int group_id) {
 
 		return repo.registerTask(task_category, task_name, task_content, str,
@@ -73,7 +73,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 */
 	@Override
 	public void taskUpdate(int task_id, String task_category, String task_name, String task_content,
-			String task_priority, String task_weight, String user_name) {
+			int task_priority, int task_weight, String user_name) {
 
 		repo.updateTask(task_id, task_category, task_name, task_content,
 				task_priority, task_weight, user_name);
