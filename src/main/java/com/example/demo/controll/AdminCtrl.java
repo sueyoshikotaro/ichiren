@@ -1589,7 +1589,7 @@ public class AdminCtrl {
 	 */
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
-		mav.setViewName("admin/chat");
+		mav.setViewName("common/chat");
 		return mav;
 	}
 
