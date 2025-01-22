@@ -1003,7 +1003,7 @@ public class AdminCtrl {
 	}
 
 	/*
-	 * 向江
+	 * 向江・末吉
 	 * グループメンバ削除確認画面を表示する
 	 * @return
 	 */
@@ -1021,7 +1021,7 @@ public class AdminCtrl {
 	}
 
 	/**
-	 * 向江
+	 * 向江・末吉
 	 * グループメンバ削除確認画面を表示する
 	 * @return
 	 */
