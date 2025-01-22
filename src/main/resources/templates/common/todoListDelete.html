@@ -37,9 +37,8 @@
 	
 	<!--コンテナ-->
 	<div class="container">
-		
 		<!--削除の場合-->
-		<form th:if="${button == 'delete'}" th:action="@{deleteConfirm}" method="post">
+		<form th:action="@{deleteConfirm}" method="post">
 			<div th:each="todo:${todo}">
 				<input type="hidden" name="tdlist_id" th:value="${todo.tdlist_id}">
 				<div>こちらのリストを削除しますか？</div>
@@ -58,10 +57,8 @@
 					</select>
 				</div>
 			</div>
-			
-			<button type="submit" value="cancel">取消</button>
+			<button th:onclick="|location.href='@{/taskdon/user/todoList}'|">取消</button>
 			<button type="submit" value="delete">削除</button>
-		
 		</form>
 	
 	</div>

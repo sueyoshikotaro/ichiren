@@ -14,7 +14,7 @@ public class TaskView {
 	private String user_name;
 	private String start_date;
 	private String end_date;
-	private String task_priority;
-	private String task_level;
-	private String task_weight;
+	private int task_priority;
+	private int task_level;
+	private int task_weight;
 }

@@ -1,4 +1,6 @@
 <!-- ユーザ用メニュー(名称:ホーム) -->
+<!-- 連絡事項表示のhtml -->
+<!-- あとでmenuUser.htmlに埋め込む -->
 <!-- 必須情報(下記2項目) -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -22,45 +24,41 @@
 	<!-- 共通header呼出し(ユーザ用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerUser">
-	</div>
+	</div>>
 
 </head>
 
 <body>
-	<!-- コンテナ -->
-	<div class="container">
+	<div th:fragment="notice">
 
-		<h2 class="menu-text">ホーム</h2>
+		<h2 class="menu-text">連絡事項一覧</h2>
 
-		<div>
-			<th:block th:insert="fragment/notice :: notice">
+		<div th:each="notice : ${noticeList}">
+			<div th:text="${notice.user_name}"></div>
+			<div th:text="${notice.title}"></div>
+			<div th:text="${notice.contact_msg}"></div>
+			<div th:text="${notice.send_date}"></div>
 		</div>
 
+		<!--		<div>-->
+		<!--			連絡事項削除-->
+		<!--			<form th:action="@{}" method="post">-->
+		<!--				<input type="hidden" name="title" th:value="${notice.title}">-->
+		<!--				<input type="hidden" name="contact_msg" th:value="${notice.contact_msg}">-->
+		<!--				<button type="submit" name="button" class="btn btn-delete" value="削除">削除</button>-->
+		<!--			</form>-->
+		<!--		</div>-->
 
-		<!-- 遷移先 -->
-		<div th:if="${session.user_roll} == 'リーダ'"> <!-- 役職判断処理 -->
-			<a class="menu-btn" th:onclick="|location.href='@{memberList}'|">メンバ一覧</a><!--未実装-->
-		</div>
 
-		<a class="menu-btn" th:onclick="|location.href='@{taskList}'|">タスク一覧</a>
-
-		<a class="menu-btn" th:onclick="|location.href='@{todoList}'|">ToDoリスト</a>
-
-		<div th:if="${session.user_roll} == 'リーダ'"> <!-- 役職判断処理 -->
-			<a class="menu-btn" th:onclick="|location.href='@{noticeRegist}'|">連絡事項作成</a><!--未実装-->
-		</div>
-
-		<a class="menu-btn" th:onclick="|location.href='@{chat}'|">チャット</a><!--未実装-->
-
-		<a class="menu-btn" th:onclick="|location.href='@{deptGroupList}'|">所属グループ一覧</a>
-
+		<!--コンテナ最下のボタン-->
+		<button th:onclick="|location.href='@{/taskdon/common/noticeDisp}'|">削除</button>
 	</div>
 
 	<!-- bootstrapのjsリンク接続 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
-
+		
 </body>
 
 </html>

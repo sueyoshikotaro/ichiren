@@ -17,12 +17,14 @@
 
 	<!-- CSS接続 -->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
-	
+
 </head>
 
 <body>
@@ -32,46 +34,47 @@
 		<h2>新規講師登録</h2>
 
 		<form th:action="@{teInfoRegistConfirm}" method="post">
-			<table>
-				<tr>
-					<th>講師ID</th>
-					<td><input type="text" name="user_id" required></td>
-				</tr>
-				<tr>
-					<th>講師名</th>
-					<td><input type="text" name="user_name" required></td>
-				</tr>
-				<tr>
-					<th for="school-select">所属学校名</th>
-					<td>
-						<select id="school-select" name="school_name" required>
-							<option value="">--選択してください</option>
-							<option name="school_name">北海道情報専門学校</option>
-							<option name="school_name">JOHO 新潟情報専門学校</option>
-							<option name="school_name">JOHO 大阪情報専門学校</option>
-							<option name="school_name">名古屋医療情報専門学校</option>
-							<option name="school_name">名古屋情報メディア専門学校</option>
-							<option name="school_name">JOHO 広島情報専門学校</option>
-							<option name="school_name">KCS福岡情報専門学校</option>
-							<option name="school_name">KCS北九州情報専門学校</option>
-							<option name="school_name">KCS大分情報専門学校</option>
-							<option name="school_name">KCS鹿児島情報専門学校</option>
 
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>入社年月日</th>
-					<td><input type="date" id="enr_year" name="enr_year" min="1900-01-01" max="9999-12-31"></td>
-				</tr>
-				<td colspan="2" align="center">
-					<input type="submit" value="確認">
-				</td>
-			</table>
+			<div class="form-group regist-item">
+				<label class="form-label">講師ID</label>
+				<input type="text" class="form-control regist-field" name="user_id" required>
+			</div>
+
+			<div class="form-group regist-item">
+				<label class="form-label">講師名</label>
+				<input type="text" class="form-control regist-field" name="user_name" required>
+			</div>
+
+			<div class="form-group regist-item">
+				<label class="form-label" for="school-select">所属学校名</label>
+				<select id="school-select" name="school_name" class="form-select regist-field" required>
+					<option selected disabled>選択してください</option>
+					<option name="school_name">北海道情報専門学校</option>
+					<option name="school_name">JOHO 新潟情報専門学校</option>
+					<option name="school_name">JOHO 大阪情報専門学校</option>
+					<option name="school_name">名古屋医療情報専門学校</option>
+					<option name="school_name">名古屋情報メディア専門学校</option>
+					<option name="school_name">JOHO 広島情報専門学校</option>
+					<option name="school_name">KCS福岡情報専門学校</option>
+					<option name="school_name">KCS北九州情報専門学校</option>
+					<option name="school_name">KCS大分情報専門学校</option>
+					<option name="school_name">KCS鹿児島情報専門学校</option>
+				</select>
+			</div>
+
+			<div class="form-group regist-item">
+				<label class="form-label">入社年月日</label>
+				<input type="date" class="form-control regist-field" id="enr_year" name="enr_year" min="1900-01-01" max="9999-12-31"
+					required>
+			</div>
+
+			<button type="submit" class="confirmation-btn mini-btn">確認</button>
 
 			<!--エラー置き場-->
 			<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;">エラーメッセージ</p>
+
 		</form>
+
 	</div>
 
 	<!--bootstrapのjsリンク接続-->

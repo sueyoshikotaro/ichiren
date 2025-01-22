@@ -845,9 +845,9 @@ public class AdminCtrl {
 			GroupMemberDetailView gmdv) {
 
 		System.out.println(gmdv);
-		
+
 		System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
-		
+
 		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(gmdv.getUser_id(), gmdv.getGroup_id());
 
 		for (GroupMemberDetailView g : group) {
@@ -935,7 +935,7 @@ public class AdminCtrl {
 		//リーダ以外のメンバ
 		List<UserDisplay> leaderUser = new ArrayList<>();
 		List<UserDisplay> memberUser = new ArrayList<>();
-		
+
 		//リーダが選択されていない場合
 		if (check == null) {
 			for (int i = 0; i < user_id.length; i++) {
@@ -986,21 +986,11 @@ public class AdminCtrl {
 
 			// ここで、リーダーのデータを処理する
 			for (String i : leaderUser_id) {
-
-				System.out.println("リーダ");
-				System.out.println(i);
-				System.out.println(t.getGroup_id());
-
 				groupDispService.groupEdit(i, t.getGroup_id(), "リーダ");
-
 			}
 
 			//ここで、メンバーのデータを処理する
 			for (String i : memberUser_id) {
-				System.out.println("メンバ");
-				System.out.println(i);
-				System.out.println(t.getGroup_id());
-
 				groupDispService.groupEdit(i, t.getGroup_id(), "メンバ");
 			}
 
@@ -1013,7 +1003,7 @@ public class AdminCtrl {
 	}
 
 	/*
-	 * 向江
+	 * 向江・末吉
 	 * グループメンバ削除確認画面を表示する
 	 * @return
 	 */
@@ -1024,10 +1014,6 @@ public class AdminCtrl {
 		//グループメンバ削除確認画面のテーブルを表示する
 		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
 
-		for (GroupMemberDeleteView gmdv : group) {
-			System.out.println(gmdv);
-		}
-
 		mav.addObject("user", group);
 		mav.setViewName("admin/groupMemberDelete");
 
@@ -1035,91 +1021,79 @@ public class AdminCtrl {
 	}
 
 	/**
-	 * 向江
+	 * 向江・末吉
 	 * グループメンバ削除確認画面を表示する
 	 * @return
 	 */
 	@PostMapping("groupMemberDeleteConfirm")
 	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
-			@RequestParam(name = "task_id", required = false) String[] task_id,
 			GroupMemberDeleteView g, ModelAndView mav) {
+		
+		//メンバごとの進捗度の合計を格納
+		int progressSum = 0;
 
-		// 削除ボタンを押下
-		if (button.equals("削除")) {
+		int taskSum = 0;
 
-			for (int i = 0; i < task_id.length; i++) {
-				//user_detailのscoreを持ってくる
-				groupDispService.groupMemberDelete3(g.getUser_id());
+		//割り振るタスクのtask_weightを取得
+		int task_weight = 0;
 
-				//user_detailテーブルの一列を削除
-				groupDispService.groupMemberDelete(g.getUser_id(), g.getGroup_id(), task_id[i]);
+		//割り振ったメンバのscoreを再計算
+		int scoreResult = 0;
 
+		//メンバの変更後の進捗度の計算結果を格納
+		int userProgressResult = 0;
+
+		//グループメンバ削除確認画面のテーブルを表示する
+		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
+
+		for (int i = 0; i < group.size(); i++) {
+			//user_detailの情報をscoreの昇順に格納
+			List<GroupMemberDeleteView> membersDetail = groupDispService.membersScore(g.getGroup_id());
+
+			//タスクを割り振るメンバのscoreを取得
+			int score = membersDetail.get(0).getScore();
+
+			//割り振るユーザのタスク情報を取得
+			List<TaskForm> task = groupDispService.taskList(g.getUser_id(), g.getGroup_id());
+
+			//割り振られるユーザのタスク情報を取得
+			List<TaskForm> task2 = groupDispService.taskList(membersDetail.get(0).getUser_id(), g.getGroup_id());
+
+			System.out.println(task2);
+
+			//user_progressの合計と割り振られているタスクの数を計算
+			for (TaskForm progress : task2) {
+				progressSum += progress.getUser_progress();
+				taskSum++;
 			}
 
-			//user_detailテーブルの一列を削除
-			//roupDispService.groupMemberDelete(g.getUser_id(), g.getGroup_id(), g.getTask_id());
+			//変更後の進捗度を計算
+			userProgressResult = progressSum / taskSum;
 
-			//taskテーブルのuser_idを更新
-			//groupDispService.groupMemberDelete2(g.getUser_id());
+			//割り振るタスクのtask_weightを取得
+			task_weight = task.get(0).getTask_weight();
 
-			//taskテーブルのuser_idを更新
-			//groupDispService.groupMemberDelete2(g.getUser_id());
+			//割り振ったメンバのscoreを再計算
+			scoreResult = score + task_weight;
 
-			//試運転
-			System.out.println(g.getUser_id());
-			System.out.println(g.getGroup_id());
-			System.out.println(g.getTask_id());
-
-			// ポップアップを表示するために、画面遷移しないようにする
-			mav.addObject("groupMemberDeleteComp", true);
-			//mav.addObject("group", groupDetails);
-			mav.setViewName("admin/groupMemberDelete");
-
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
-			return mav;
-
-			// 戻るボタンを押下
-		} else {
-			mav.addObject("user", g);
-			mav.setViewName("admin/groupMemberDetails");
-			return mav;
+			//user_detailのuser_idを更新
+			groupDispService.updateUserId(task.get(0).getTask_id(), membersDetail.get(0).getUser_id());
+			
+			//user_detailのscoreとuser_progressを更新
+			groupDispService.updateScore(membersDetail.get(0).getUser_id(), g.getGroup_id(), scoreResult,
+					userProgressResult);
 		}
 
-		//		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
-		//
-		//		mav.addObject("user", group);
-		//		mav.setViewName("admin/groupDetails");
-		//
-		//		return mav;
-	}
+		//user_detailテーブルの一列を削除
+		groupDispService.groupMemberDelete(g.getGroup_id(), g.getUser_id());
 
-	/*
-	 * 向江
-	 * グループメンバ削除完了
-	 * @return
-	 */
-	@PostMapping("groupMemberDeleteComp")
-	public ModelAndView memberDeleteComp(@RequestParam("button") String button,
-			@RequestParam(name = "user_id", required = false) String user_id,
-			@RequestParam(name = "group_id", required = false) String group_id,
-			@RequestParam(name = "user_name", required = false) String user_name,
-			ModelAndView mav,
-			GroupDetailView g) {
-
-		//		groupDispService.groupMemberDelete(user_id, group_id, user_name);
-		//
-		//		System.out.println(user_id);
-		//		System.out.println(group_id);
-		//		System.out.println(user_name);
-
+		//グループ詳細画面を表示するためにグループ情報を格納
 		List<GroupDetailView> groupDetails = groupDispService.groupDetail(g.getGroup_id());
-
-		// ポップアップを表示するために、画面遷移しないようにする
-		mav.addObject("groupMemberDeleteComp", true);
+		
 		mav.addObject("group", groupDetails);
+		mav.addObject("groupMemberDeleteComp", true);
 		mav.setViewName("admin/groupMemberDelete");
-
+		
 		return mav;
 	}
 
@@ -1427,11 +1401,11 @@ public class AdminCtrl {
 		List<UserDisplay> addMember = new ArrayList<>();
 
 		//グループIDとグループ名を格納
-//		TeamsDisplay teamsDisplay = new TeamsDisplay();
-//		teamsDisplay.setGroup_name(group_name);
-//		teamsDisplay.setGroup_id(group_id);
+		//		TeamsDisplay teamsDisplay = new TeamsDisplay();
+		//		teamsDisplay.setGroup_name(group_name);
+		//		teamsDisplay.setGroup_id(group_id);
 
-		if(user_id != null) {
+		if (user_id != null) {
 			//追加するメンバをListに格納
 			for (int i = 0; i < user_id.length; i++) {
 				UserDisplay member = new UserDisplay();
@@ -1448,7 +1422,6 @@ public class AdminCtrl {
 			mav.addObject("errMsg", "追加するメンバを選択してください。");
 			mav.setViewName("admin/groupMemberAdd");
 		}
-		
 
 		return mav;
 	}
@@ -1521,6 +1494,7 @@ public class AdminCtrl {
 	/**
 	 * 末吉
 	 * グループ解散完了
+	 * @return
 	 */
 	@PostMapping("groupDissComp")
 	public ModelAndView groupDissComp(ModelAndView mav,
@@ -1531,6 +1505,17 @@ public class AdminCtrl {
 		mav.addObject("groupDissComp", true);
 		mav.setViewName("admin/groupDissConfirm");
 
+		return mav;
+	}
+
+	/**
+	 * 末吉
+	 * チャット画面
+	 * @return
+	 */
+	@GetMapping("chat")
+	public ModelAndView chat(ModelAndView mav) {
+		mav.setViewName("common/chat");
 		return mav;
 	}
 

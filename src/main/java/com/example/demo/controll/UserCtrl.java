@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
+import com.example.demo.form.NoticeViewForm;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TaskReqForm;
 import com.example.demo.form.TaskView;
@@ -28,11 +31,10 @@ import com.example.demo.form.TdlistForm;
 import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
+import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -66,6 +68,11 @@ public class UserCtrl {
 	//セッション
 	@Autowired
 	HttpSession session;
+
+	//向江追加
+	@Autowired
+	@Qualifier("NoticeService")
+	NoticeServiceInterface NoticeService;
 
 	/**
 	 * ログアウト画面を表示
@@ -257,8 +264,9 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("menu")
-	public String menu(@RequestParam(name = "group_id", required = false) Integer group_id,
-			@RequestParam(name = "user_roll", required = false) String user_roll) {
+	public ModelAndView menu(@RequestParam(name = "group_id", required = false) Integer group_id,
+			@RequestParam(name = "user_roll", required = false) String user_roll,
+			ModelAndView mav) {
 
 		if (group_id != null && user_roll != null) {
 			//セッションに値を設定
@@ -266,7 +274,14 @@ public class UserCtrl {
 			session.setAttribute("groupId", group_id); //グループID,
 			session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
 		}
-		return "common/menuUser";
+		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
+
+		System.out.println(noticeList);
+
+		mav.addObject("noticeList", noticeList);
+		mav.setViewName("user/menuUser");
+		mav.setViewName("common/menuUser");
+		return mav;
 	}
 
 	/**
@@ -394,9 +409,9 @@ public class UserCtrl {
 		if (button.equals("edit")) {
 			//古いスコアの減算
 			int score = TaskService.userScore(t.getUser_name(), groupId);
-			score = score - Integer.valueOf(t.getTask_weight());
+			score = score - t.getTask_weight();
 			TaskService.userUpScore(score, t.getUser_name(), groupId);
-			t.setTask_weight(String.valueOf(score));
+			t.setTask_weight(score);
 			mav.setViewName("leader/taskEdit");
 			//削除ボタンを押下
 		} else if (button.equals("delete")) {
@@ -438,7 +453,7 @@ public class UserCtrl {
 		score = score + Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level());
 		TaskService.userUpScore(score, t.getUser_name(), groupId);
 
-		String weight = String.valueOf(Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level()));
+		int weight = t.getTask_priority() * t.getTask_level();
 		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
 				t.getTask_priority(), weight, t.getUser_name());
 
@@ -531,11 +546,15 @@ public class UserCtrl {
 				//スコアの足しこみ
 				score = score + Integer.valueOf(t.getTask_weight());
 				TaskService.userUpScore(score, t.getUser_name(), group_id);
+
+				mav.addObject("taskAppComp", true);
+			} else {
+				mav.addObject("taskAppComp", false);
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		mav.addObject("taskAppComp", true);
+
 		mav.addObject("taskAppConf", t);
 		mav.setViewName("leader/taskApprovedConfirm");
 		return mav;
@@ -586,15 +605,21 @@ public class UserCtrl {
 	 * ToDoリスト画面を表示
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@GetMapping("todoList")
 	public ModelAndView todoList(ModelAndView mav,
 			@RequestParam(name = "tdlist_id", required = false) Integer tdlist_id,
 			@RequestParam(name = "checked", required = false) Boolean checked) {
 		System.out.println(tdlist_id);
 		if (tdlist_id != null) {
-			System.out.println(checked);
-			TodoService.todoUpFlg(tdlist_id, (int) session.getAttribute("groupId"));
+			if (checked != null) {
+				if (checked) {
+					System.out.println(checked);
+					TodoService.todoUpFlg(tdlist_id, 1);
+				} else {
+					TodoService.todoUpFlg(tdlist_id, 0);
+				}
+			}
 		}
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
@@ -607,7 +632,7 @@ public class UserCtrl {
 	 * 選択されたToDoリスト画面を表示
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("todoListChange")
 	public ModelAndView todoListChange(ModelAndView mav,
 			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
@@ -637,19 +662,13 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("registConfirm")
-	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t,
-			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
-			@RequestParam(name = "button", required = false) String button,
-			@RequestParam(name = "check", required = false) String check) {
+	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t) {
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
 		TodoService.todoRegister(user_id, t.getTdlist_content(), t.getImportance());
-		mav.addObject("check", check);
-		mav.addObject("todoList", TodoService.selectTodoList(user_id));
-		mav.setViewName("common/todoList");
-		return mav;
+		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
 
 	/**
@@ -657,18 +676,11 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("editConfirm")
-	public ModelAndView editConfirm(ModelAndView mav, TdlistForm t,
-			@RequestParam(name = "check", required = false) String check) {
-		User user = (User) session.getAttribute("user");
-		String user_id = user.getUser_id();
-		System.out.println(t.getTdlist_id());
+	public ModelAndView editConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoUpdate(t.getTdlist_id(), t.getTdlist_content(), t.getImportance());
-		mav.addObject("check", check);
-		mav.addObject("todoList", TodoService.selectTodoList(user_id));
-		mav.setViewName("common/todoList");
-		return mav;
+		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
 
 	/**
@@ -676,29 +688,101 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("deleteConfirm")
-	public ModelAndView deleteConfirm(ModelAndView mav, TdlistForm t,
-			@RequestParam(name = "check", required = false) String check) {
-		User user = (User) session.getAttribute("user");
-		String user_id = user.getUser_id();
+	public ModelAndView deleteConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoDelete(t.getTdlist_id());
-		mav.addObject("check", check);
-		mav.addObject("todoList", TodoService.selectTodoList(user_id));
-		mav.setViewName("common/todoList");
-		return mav;
+		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
 
 	/**
-	 * メンバ一覧画面を表示
+
+	 * 向江
+	 * 連絡事項一覧画面を表示
+	 * 埋め込み前
 	 * @return
 	 */
+	@GetMapping("noticeDisp")
+	public ModelAndView noticeDisp(ModelAndView mav) {
 
-	/**
-	 * 連絡事項作成画面を表示
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のuser_idを取得
+		String user_id = userEntity.getUser_id();
+
+		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
+
+		System.out.println(noticeList);
+
+		mav.addObject("noticeList", noticeList);
+		mav.setViewName("user/menuUser");
+
+		return mav;
+	}
+
+	/*
+	 * 向江
+	 * 連絡事項作成画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@PostMapping("noticeRegist")
+	public ModelAndView noticeRegist(ModelAndView mav) {
 
+		mav.setViewName("leader/noticeRegist");
+
+		return mav;
+	}
+
+	/*
+	 * 向江
+	 * 連絡事項作成確認画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("noticeRegistConfirm")
+	public ModelAndView noticeregistConfirm(ModelAndView mav, NoticeViewForm n) {
+
+		mav.addObject("notice", n);
+		mav.setViewName("leader/noticeRegistConfirm");
+
+		return mav;
+	}
+
+	/*
+	 * 向江
+	 * 連絡事項作成完了画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	//	@PostMapping("noticeRegistComp")
+	//	public ModelAndView noticeRegistComp(ModelAndView mav, NoticeViewForm n) {
+	//		
+	//		
+	//		//作成ボタンを押下
+	//		if (button.equals("作成")) {
+	//			NoticeService.;
+	//
+	//			// ポップアップを表示するために、画面遷移をしないようにする
+	//			mav.addObject("teInfoRegistComp", true);
+	//			mav.setViewName("admin/teInfoRegistConfirm");
+	//
+	//			return mav;
+	//
+	//			// 戻るボタンを押下	
+	//		} else {
+	//
+	//			mav.addObject("teInfoRegist", u);
+	//			mav.setViewName("admin/teInfoRegist");
+	//			return mav;
+	//		}
+	//
+	//		
+	//		
+	//		mav.addObject("notice", n);
+	//		mav.setViewName("leader/");
+	//		
+	//		return mav;
+	//	}
+	
 	/**
 	 * チャット画面を表示
 	 * @return

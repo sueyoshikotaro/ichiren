@@ -51,7 +51,7 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	@Query("insert into task(task_category, task_name, task_content, task_status, start_date, end_date, task_priority, task_level, task_weight, progress, task_flg, user_id, group_id)"
 			+ "	VALUES(:task_category, :task_name, :task_content, :task_status, :start_date, :end_date, :task_priority,:task_level, :task_weight, 0, 1, (SELECT user_id FROM user WHERE user_name=:user_name), 1);")
 	public boolean registerTask(String task_category, String task_name, String task_content, String task_status,
-			Date start_date, Date end_date, String task_priority, String task_level, String task_weight, String user_name, int group_id);
+			Date start_date, Date end_date, int task_priority, int task_level, int task_weight, String user_name, int group_id);
 
 	/**
 	 * タスク編集
@@ -68,7 +68,7 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	@Modifying
 	@Query("update task set task_name=:task_name, task_category=:task_category, task_content=:task_content, task_priority=:task_priority,task_weight=:task_weight,user_id=(SELECT user_id FROM user WHERE user_name = :user_name) where task_id=:task_id")
 	public boolean updateTask(int task_id, String task_category, String task_name, String task_content,
-			String task_priority, String task_weight, String user_name);
+			int task_priority, int task_weight, String user_name);
 
 	/**
 	 * タスクフラグ更新(削除)
