@@ -494,11 +494,15 @@ public class UserCtrl {
 				//スコアの足しこみ
 				score = score + Integer.valueOf(t.getTask_weight());
 				TaskService.userUpScore(score, t.getUser_name(), group_id);
+
+				mav.addObject("taskAppComp", true);
+			} else {
+				mav.addObject("taskAppComp", false);
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		mav.addObject("taskAppComp", true);
+
 		mav.addObject("taskAppConf", t);
 		mav.setViewName("leader/taskApprovedConfirm");
 		return mav;
@@ -549,15 +553,21 @@ public class UserCtrl {
 	 * ToDoリスト画面を表示
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@GetMapping("todoList")
 	public ModelAndView todoList(ModelAndView mav,
 			@RequestParam(name = "tdlist_id", required = false) Integer tdlist_id,
 			@RequestParam(name = "checked", required = false) Boolean checked) {
 		System.out.println(tdlist_id);
 		if (tdlist_id != null) {
-			System.out.println(checked);
-			TodoService.todoUpFlg(tdlist_id, (int) session.getAttribute("groupId"));
+			if (checked != null) {
+				if (checked) {
+					System.out.println(checked);
+					TodoService.todoUpFlg(tdlist_id, 1);
+				} else {
+					TodoService.todoUpFlg(tdlist_id, 0);
+				}
+			}
 		}
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
@@ -570,7 +580,7 @@ public class UserCtrl {
 	 * 選択されたToDoリスト画面を表示
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("todoListChange")
 	public ModelAndView todoListChange(ModelAndView mav,
 			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
@@ -600,19 +610,13 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("registConfirm")
-	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t,
-			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
-			@RequestParam(name = "button", required = false) String button,
-			@RequestParam(name = "check", required = false) String check) {
+	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t) {
 		User user = (User) session.getAttribute("user");
 		String user_id = user.getUser_id();
 		TodoService.todoRegister(user_id, t.getTdlist_content(), t.getImportance());
-		mav.addObject("check", check);
-		mav.addObject("todoList", TodoService.selectTodoList(user_id));
-		mav.setViewName("common/todoList");
-		return mav;
+		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
 
 	/**
@@ -620,18 +624,11 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("editConfirm")
-	public ModelAndView editConfirm(ModelAndView mav, TdlistForm t,
-			@RequestParam(name = "check", required = false) String check) {
-		User user = (User) session.getAttribute("user");
-		String user_id = user.getUser_id();
-		System.out.println(t.getTdlist_id());
+	public ModelAndView editConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoUpdate(t.getTdlist_id(), t.getTdlist_content(), t.getImportance());
-		mav.addObject("check", check);
-		mav.addObject("todoList", TodoService.selectTodoList(user_id));
-		mav.setViewName("common/todoList");
-		return mav;
+		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
 
 	/**
@@ -639,17 +636,11 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	//	@LoginRequired
+	@LoginRequired
 	@PostMapping("deleteConfirm")
-	public ModelAndView deleteConfirm(ModelAndView mav, TdlistForm t,
-			@RequestParam(name = "check", required = false) String check) {
-		User user = (User) session.getAttribute("user");
-		String user_id = user.getUser_id();
+	public ModelAndView deleteConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoDelete(t.getTdlist_id());
-		mav.addObject("check", check);
-		mav.addObject("todoList", TodoService.selectTodoList(user_id));
-		mav.setViewName("common/todoList");
-		return mav;
+		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
 
 	/**

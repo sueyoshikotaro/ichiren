@@ -19,13 +19,16 @@
 		<div class="offcanvas-body">
 			<form th:action="@{todoListChange}" method="post" id="form" th:fragment="list"> <!--リスト-->
 				<div th:each="todo:${todoList}" class="data">
-					<div th:text="${todo.tdlist_content}" class="text" th:if="${todo.tdlist_flg} == 1" style="text-decoration: line-through;"></div>
-					<div th:text="${todo.tdlist_content}" class="text" th:if="${todo.tdlist_flg} == 0" style="text-decoration: none;"></div>
+					<div th:text="${todo.tdlist_content}" class="text" th:if="${todo.tdlist_flg} == 1"
+						style="text-decoration: line-through;"></div>
+					<div th:text="${todo.tdlist_content}" class="text" th:if="${todo.tdlist_flg} == 0"
+						style="text-decoration: none;"></div>
 					<!--チェックボックス-->
-					<div class=" form-check" id="check">
+					<div class="form-check" id="check">
 						<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="tdlist_id"
-							th:value="${todo.tdlist_id}">
-						<label class="form-check-label"></label>
+							th:value="${todo.tdlist_id}" th:if="${todo.tdlist_flg} == 1" checked>
+						<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="tdlist_id"
+							th:value="${todo.tdlist_id}" th:if="${todo.tdlist_flg} == 0">
 					</div>
 
 					<!--ラジオボタン-->
