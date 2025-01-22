@@ -87,9 +87,9 @@ public class UserServiceImpl implements UserServiceInterface {
 	 * パスワード再設定
 	 */
 	@Override
-	public void userPassReset(String user_pass) {
+	public void userPassReset(String user_id, String newPass) {
 
-		userCrudRepo.userPassReset(user_pass);
+		userCrudRepo.userPassReset(user_id, newPass);
 	}
 
 }
