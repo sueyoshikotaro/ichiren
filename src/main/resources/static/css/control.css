@@ -1,0 +1,60 @@
+@charset "UTF-8";
+
+/*登録項目(小項目)*/
+.regist-item {
+	margin-top: 10px;
+}
+
+/*入力欄*/
+.regist-field{
+	margin-top: -10px;
+}
+
+/*確認欄*/
+.confirmation-field{
+	margin-top: -10px;
+}
+
+/*小ボタン(共通)*/
+.mini-btn {
+	width: 70px;
+}
+
+/*登録処理系*/
+/*確認ボタン*/
+.confirmation-btn {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	margin: auto;
+	margin-top: 16px;
+	font-size: 18px;
+	font-weight: bold;
+	border: 2px solid black;
+	color: black;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.confirmation-btn::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	transform: translateX(-100%);
+	transition: all .3s;
+	z-index: -1;
+}
+
+.confirmation-btn:hover::before {
+	transform: translateX(0);
+}
+
+.confirmation-btn:hover {
+	color: #fff;
+}

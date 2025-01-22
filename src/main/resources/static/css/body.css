@@ -17,12 +17,16 @@ body {
 .container {
 	background-image: url(../img/containerImage.png);
 	background-size: cover;
-	max-width: 480px;
+	max-width: 400px;
 	padding: 20px;
 	margin-top: 8px;
 	border: 2px solid black;
 	border-radius: 10px;
 	font-weight: bold;
+}
+
+h3{
+	margin-top: -5px;
 }
 
 /*メニュー画面用(ユーザ＋管理者)*/
