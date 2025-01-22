@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -33,6 +31,8 @@ import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -106,17 +106,16 @@ public class UserCtrl {
 
 		if (user.isPresent() && user.get().getUser_flg() == 1 && user.get().getUser_pass().equals(user_pass)) {
 
+			session.setAttribute("user_id", user_id);
+			session.setAttribute("user", user.get());
+
 			ra.addFlashAttribute("user_id", user_id);
 			ra.addFlashAttribute("user_pass", user_pass);
 
 			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
 
-				session.setAttribute("user", user.get());
-
 				return new ModelAndView("redirect:/taskdon/admin/menu");
 			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
-
-				session.setAttribute("user", user.get());
 
 				return new ModelAndView("redirect:/taskdon/admin/menu");
 			} else if (user.get().getUser_pass().equals("taskdon1")) {
@@ -184,48 +183,27 @@ public class UserCtrl {
 	@GetMapping("deptGroupList")
 	public ModelAndView deptGroupList(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
-		Optional<User> user;
+		if (user_id == null || user_id.isEmpty()) {
 
-		if (user_id != null) {
-
-			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
-
-			user = userCrudRepo.findById(user_id);
-
-			mav.setViewName("common/deptGroupList");
-			mav.addObject("groupS", deptGroupList);
-			session.setAttribute("deptGroupList", deptGroupList);
-			session.setAttribute("user", user.get());
-
-		} else {
-			mav.setViewName("common/deptGroupList");
+			// セッションからも取得を試みる
+			user_id = (String) session.getAttribute("user_id");
 		}
-		return mav;
-	}
 
-	/**
-	 * 所属グループ一覧
-	 * @return
-	 */
-	@LoginRequired
-	@PostMapping("deptGroupList")
-	public ModelAndView reDeptGroupList(ModelAndView mav, String user_id) {
+		Optional<User> user = userCrudRepo.findById(user_id);
 
-		Optional<User> user;
-
-		if (user_id != null) {
+		if (user.isPresent()) {
 
 			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
-
-			user = userCrudRepo.findById(user_id);
 
 			mav.setViewName("common/deptGroupList");
 			mav.addObject("groupS", deptGroupList);
 			session.setAttribute("deptGroupList", deptGroupList);
 			session.setAttribute("user", user.get());
-
 		} else {
-			mav.setViewName("common/deptGroupList");
+
+			// ユーザーが存在しない場合のエラー処理
+			mav.setViewName("error");
+			mav.addObject("errorMessage", "ユーザーが見つかりません。");
 		}
 
 		return mav;
