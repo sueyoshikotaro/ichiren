@@ -25,6 +25,7 @@ body {
 	font-weight: bold;
 }
 
+/*確認用のタイトルテキスト(コンテナ内)*/
 h3{
 	margin-top: -5px;
 }
