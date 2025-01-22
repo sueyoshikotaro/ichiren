@@ -90,9 +90,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ詳細
 	 */
 	@Override
-	public List<GroupMemberDetailView> groupMemberDetail(String user_name) {
+	public List<GroupMemberDetailView> groupMemberDetail(String user_id, String group_id) {
 
-		return groupDispCrudRepo.groupMemberDetail(user_name);
+		return groupDispCrudRepo.groupMemberDetail(user_id, group_id);
 	}
 
 	@Override

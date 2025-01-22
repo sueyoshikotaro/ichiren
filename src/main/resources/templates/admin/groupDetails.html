@@ -67,9 +67,9 @@
 
 			<!-- グループメンバ詳細 -->
 			<div>
-				<form th:action="@{groupMemberDetails}" method="get">
-					<input type="hidden" name="user_name" th:value="${group.user_name}">
-					<input type="hidden" name="group_name" th:value="${group.group_name}">
+				<form th:action="@{groupMemberDetails}" method="post">
+					<input type="hidden" name="user_id" th:value="${group.user_id}">
+					<input type="hidden" name="group_id" th:value="${group.group_id}">
 					<button type="submit" name="button" class="btn btn-detail" value="詳細">詳細</button>
 				</form>
 
