@@ -23,6 +23,7 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
+import com.example.demo.form.NoticeViewForm;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TaskReqForm;
 import com.example.demo.form.TaskView;
@@ -30,6 +31,7 @@ import com.example.demo.form.TdlistForm;
 import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
+import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
@@ -66,6 +68,11 @@ public class UserCtrl {
 	//セッション
 	@Autowired
 	HttpSession session;
+
+	//向江追加
+	@Autowired
+	@Qualifier("NoticeService")
+	NoticeServiceInterface NoticeService;
 
 	/**
 	 * ログアウト画面を表示
@@ -215,8 +222,9 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("menu")
-	public String menu(@RequestParam(name = "group_id", required = false) Integer group_id,
-			@RequestParam(name = "user_roll", required = false) String user_roll) {
+	public ModelAndView menu(@RequestParam(name = "group_id", required = false) Integer group_id,
+			@RequestParam(name = "user_roll", required = false) String user_roll,
+			ModelAndView mav) {
 
 		if (group_id != null && user_roll != null) {
 			//セッションに値を設定
@@ -224,7 +232,14 @@ public class UserCtrl {
 			session.setAttribute("groupId", group_id); //グループID,
 			session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
 		}
-		return "common/menuUser";
+		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
+
+		System.out.println(noticeList);
+
+		mav.addObject("noticeList", noticeList);
+		mav.setViewName("user/menuUser");
+		mav.setViewName("common/menuUser");
+		return mav;
 	}
 
 	/**
@@ -644,10 +659,92 @@ public class UserCtrl {
 	}
 
 	/**
-	 * 連絡事項作成画面を表示
+	 * 向江
+	 * 連絡事項一覧画面を表示
+	 * 埋め込み前
 	 * @return
 	 */
+	@GetMapping("noticeDisp")
+	public ModelAndView noticeDisp(ModelAndView mav) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のuser_idを取得
+		String user_id = userEntity.getUser_id();
+
+		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
+
+		System.out.println(noticeList);
+
+		mav.addObject("noticeList", noticeList);
+		mav.setViewName("user/menuUser");
+
+		return mav;
+	}
+
+	/*
+	 * 向江
+	 * 連絡事項作成画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("noticeRegist")
+	public ModelAndView noticeRegist(ModelAndView mav) {
+
+		mav.setViewName("leader/noticeRegist");
+
+		return mav;
+	}
+
+	/*
+	 * 向江
+	 * 連絡事項作成確認画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("noticeRegistConfirm")
+	public ModelAndView noticeregistConfirm(ModelAndView mav, NoticeViewForm n) {
+
+		mav.addObject("notice", n);
+		mav.setViewName("leader/noticeRegistConfirm");
+
+		return mav;
+	}
+
+	/*
+	 * 向江
+	 * 連絡事項作成完了画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	//	@PostMapping("noticeRegistComp")
+	//	public ModelAndView noticeRegistComp(ModelAndView mav, NoticeViewForm n) {
+	//		
+	//		
+	//		//作成ボタンを押下
+	//		if (button.equals("作成")) {
+	//			NoticeService.;
+	//
+	//			// ポップアップを表示するために、画面遷移をしないようにする
+	//			mav.addObject("teInfoRegistComp", true);
+	//			mav.setViewName("admin/teInfoRegistConfirm");
+	//
+	//			return mav;
+	//
+	//			// 戻るボタンを押下	
+	//		} else {
+	//
+	//			mav.addObject("teInfoRegist", u);
+	//			mav.setViewName("admin/teInfoRegist");
+	//			return mav;
+	//		}
+	//
+	//		
+	//		
+	//		mav.addObject("notice", n);
+	//		mav.setViewName("leader/");
+	//		
+	//		return mav;
+	//	}
+	
 	/**
 	 * チャット画面を表示
 	 * @return
