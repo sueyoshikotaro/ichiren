@@ -29,30 +29,23 @@
 </head>
 
 <body>
-	<div th:fragment="notice">
+	<div class="container">
 
-		<h2 class="menu-text">連絡事項一覧</h2>
+		<h2 class="menu-text">連絡事項削除確認</h2>
+		<h3>[削除確認]</h3>
 
-		<!-- エラー文を表示する -->
-		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
-
-		<form th:action="@{noticeDelete}" method="post">
-			<div th:each="notice : ${noticeList}">
-				<div class="form-check">
-					<input class="form-check-input" type="checkbox" name="check" th:value="${notice.notice_id}"
-						id="flexCheckDefault" th:checked="${notice.checked}">
-					<!--					<input type="hidden" th:value="${notice.notice_id}" name="notice_id">-->
-				</div>
+		<form th:acthion="@{noticeDeleteConfirm}" method="post">
+			<p>本当に削除しますか？</p>
+			<div th:each="notice : ${notice}">
 				<div th:text="${notice.user_name}"></div>
 				<div th:text="${notice.title}"></div>
 				<div th:text="${notice.contact_msg}"></div>
 				<div th:text="${notice.send_date}"></div>
+				<input type="hidden" name="notice_id" th:text="${notice.notice_id}">
 			</div>
-
-			<!--コンテナ最下のボタン-->
-			<button type="submit" name="button" value="削除" class="btn">削除</button>
+			<button type="submit" value="削除" class="btn btn-danger">削除</button>
+<!--			<button type="submit" class="btn btn-back">いいえ</button>-->
 		</form>
-
 	</div>
 
 	<!-- bootstrapのjsリンク接続 -->

@@ -14,8 +14,11 @@ public class NoticeViewForm {
 	private String title;
 	private String contact_msg;
 	private String send_date;
-	private String view_content;
+	private int view_count;
 	private String send_by;
 	private int group_id;
-	private String user_roll;
+	
+	// 連絡事項選択のチェック欄
+	private boolean checked;
+//	private String user_roll;
 }

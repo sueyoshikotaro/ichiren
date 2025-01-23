@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jdbc.repository.query.Modifying;
@@ -24,7 +25,19 @@ public interface NoticeCrudRepository extends CrudRepository<NoticeViewForm, Str
 	 * 連絡事項作成登録
 	 */
 	@Modifying
-	@Query("insert into notice(notice_id, title, contact_msg, send_date, view_count, send_by, group_id) values(:notice_id, :title, :contact_msg, :send_date, :view_count, :send_by, :group_id)")
-	public void noticeRegist();
+	@Query("insert into notice(title, contact_msg, send_date, view_count, send_by, group_id) values (:title, :contact_msg, CURRENT_TIMESTAMP, :view_count, (select user_id from user where user_id = :send_by), :group_id)")
+	public void noticeRegist(String title, String contact_msg, Date send_date, int view_count, String send_by, int group_id);
+
 	
+	/*
+	 * 向江
+	 * 連絡事項削除
+	 */
+	@Modifying
+	@Query("delete from notice where notice_id=:notice_id")
+	public void noticeDelete(int notice_id);
+
+
+	@Query("select *,user.user_name from notice inner join user on send_by = user_id where notice_id=:notice_id")
+	public List<NoticeViewForm> selectNotice(int notice_id);
 }

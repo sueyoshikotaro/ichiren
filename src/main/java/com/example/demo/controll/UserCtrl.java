@@ -1,6 +1,8 @@
 package com.example.demo.controll;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -696,7 +698,7 @@ public class UserCtrl {
 	}
 
 	/**
-
+	
 	 * 向江
 	 * 連絡事項一覧画面を表示
 	 * 埋め込み前
@@ -726,7 +728,7 @@ public class UserCtrl {
 	 * 連絡事項作成画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
-	@PostMapping("noticeRegist")
+	@GetMapping("noticeRegist")
 	public ModelAndView noticeRegist(ModelAndView mav) {
 
 		mav.setViewName("leader/noticeRegist");
@@ -753,36 +755,117 @@ public class UserCtrl {
 	 * 連絡事項作成完了画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
-	//	@PostMapping("noticeRegistComp")
-	//	public ModelAndView noticeRegistComp(ModelAndView mav, NoticeViewForm n) {
-	//		
-	//		
-	//		//作成ボタンを押下
-	//		if (button.equals("作成")) {
-	//			NoticeService.;
-	//
-	//			// ポップアップを表示するために、画面遷移をしないようにする
-	//			mav.addObject("teInfoRegistComp", true);
-	//			mav.setViewName("admin/teInfoRegistConfirm");
-	//
-	//			return mav;
-	//
-	//			// 戻るボタンを押下	
-	//		} else {
-	//
-	//			mav.addObject("teInfoRegist", u);
-	//			mav.setViewName("admin/teInfoRegist");
-	//			return mav;
-	//		}
-	//
-	//		
-	//		
-	//		mav.addObject("notice", n);
-	//		mav.setViewName("leader/");
-	//		
-	//		return mav;
-	//	}
-	
+	@PostMapping("noticeRegistComp")
+	public ModelAndView noticeRegistComp(ModelAndView mav,
+			@RequestParam(name = "button") String button,
+			NoticeViewForm n) throws ParseException {
+
+		System.out.println(n);
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のuser_idを取得
+		String user_id = userEntity.getUser_id();
+
+		// 日付型定義
+		String sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS").format(new Date());
+		// 変数定義
+		Date send_date = null;
+
+		//登録ボタンを押下
+		if (button.equals("登録")) {
+
+			send_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(sdf);
+			NoticeService.noticeRegist(n.getTitle(), n.getContact_msg(), send_date,
+					0, user_id, (int) session.getAttribute("groupId"));
+
+			System.out.println(n.getTitle());
+			System.out.println(n.getContact_msg());
+			System.out.println(send_date);
+			System.out.println(n.getSend_by());
+			System.out.println(n.getGroup_id());
+
+			// ポップアップを表示するために、画面遷移をしないようにする
+			mav.addObject("noticeRegistComp", true);
+			mav.addObject("notice", n);
+			mav.setViewName("leader/noticeRegistConfirm");
+
+			// 戻るボタンを押下	
+		} else {
+
+			mav.addObject("noticeRegist", n);
+			mav.setViewName("leader/noticeRegist");
+
+		}
+
+		return mav;
+	}
+
+	/*
+	 * 向江
+	 * 連絡事項削除確認画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("noticeDelete")
+	public ModelAndView noticeDelete(ModelAndView mav,
+			@RequestParam(name = "check", required = false) Integer[] check) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のuser_idを取得
+		String user_id = userEntity.getUser_id();
+
+		//削除ボタンを押下
+		//チェックボックスが選択されていない場合
+		if (check == null || check.length == 0) {
+
+			mav.addObject("errMsg", "連絡事項を選択してください");
+			mav.setViewName("user/menuUser");
+
+			// チェックボックスが選択されている場合
+		} else {
+
+			//チェックボックスで選択した連絡事項IDを格納
+			List<NoticeViewForm> checkList = new ArrayList<>();
+			for (int i = 0; i < check.length; i++) {
+				NoticeViewForm notice = new NoticeViewForm();
+				List<NoticeViewForm> noticeList =new ArrayList<>(NoticeService.selectNotice(check[i]));
+				notice.setNotice_id(noticeList.get(0).getNotice_id());
+				notice.setUser_name(noticeList.get(0).getUser_name());
+				notice.setTitle(noticeList.get(0).getTitle());
+				notice.setContact_msg(noticeList.get(0).getContact_msg());
+				notice.setSend_date(noticeList.get(0).getSend_date());
+				checkList.add(notice);
+			}
+			mav.addObject("notice", checkList);
+			mav.setViewName("leader/noticeDeleteConfirm");
+		}
+		return mav;
+
+	}
+
+	/*
+	 * 向江
+	 * 連絡事項削除確認画面を表示するリクエストハンドラメソッド
+	 * @return
+	 */
+	@PostMapping("noticeDeleteConfirm")
+	public ModelAndView noticeDeleteConfirm(ModelAndView mav,
+			@RequestParam(name = "notice_id") Integer[] notice_id) {
+		System.out.println("aaaaaaaaaaaaaa");
+		for (int i = 0; i < notice_id.length; i++) {
+			// 連絡事項削除のサービス
+			System.out.println(notice_id[i]);
+			NoticeService.noticeDelete((int)notice_id[i]);
+		}
+
+		mav.setViewName("user/menuUser");
+
+		return mav;
+	}
+
 	/**
 	 * チャット画面を表示
 	 * @return
