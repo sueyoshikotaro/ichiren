@@ -1,10 +1,12 @@
 /* SQL エラー  (1054): Unknown column 'te66667777' in 'where clause' *//* SQL エラー  (1054): Unknown column 'te66667777' in 'where clause' */
 package com.example.demo.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.form.Room;
 import com.example.demo.form.UserDisplay;
-import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.repository.UserDisplayCrudRepository;
 import com.example.demo.repository.UserViewCrudRepository;
 import com.example.demo.service.UserDisplayServiceInterface;
@@ -16,9 +18,6 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 	@Autowired
 	UserViewCrudRepository userViewCrudRepo;
-
-	@Autowired
-	UserCrudRepository userRepo;
 
 	/*
 	 * 向江
@@ -90,7 +89,7 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	@Override
 	public void InsertUser(String user_id, String user_name, String user_pass, String school_id, String enr_year,
 			int user_flg) {
-		
+
 		userCrudRepo.userRegist(user_id, user_name, user_pass, school_id, enr_year, user_flg);
 
 	}
@@ -116,7 +115,7 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	public void registerUser(String user_id, String user_name, String user_pass, String school_name, String enr_year,
 			int user_flg) {
 
-		userRepo.saveAll(user_id, user_name, user_pass, school_name, enr_year, user_flg);
+		userCrudRepo.saveAll(user_id, user_name, user_pass, school_name, enr_year, user_flg);
 
 	}
 
@@ -149,6 +148,39 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	public void teInfoDelete(String user_id) {
 
 		userCrudRepo.teInfoDelete(user_id);
+
+	}
+
+	/*
+	 * 坂本
+	 * ユーザパスワード再設定
+	 */
+	@Override
+	public void userPassReset(String user_id, String newPass) {
+
+		userCrudRepo.userPassReset(user_id, newPass);
+
+	}
+
+	/*
+	 * 坂本
+	 * パスワード無効化
+	 */
+	@Override
+	public void adminDisable(String user_id, int user_flg) {
+
+		userCrudRepo.adminDisable(user_id, user_flg);
+
+	}
+
+	/*
+	 * 坂本
+	 * 居場所選択
+	 */
+	@Override
+	public List<Room> roomSelect() {
+
+		return userCrudRepo.roomSelect();
 
 	}
 

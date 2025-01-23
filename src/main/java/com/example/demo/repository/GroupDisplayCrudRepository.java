@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.TaskForm;
@@ -73,7 +74,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Query("select * from task t join user_detail ud on t.user_id = ud.user_id where t.user_id = :user_id and t.group_id = :group_id")
 	public List<TaskForm> taskList(String user_id, int group_id);
-	
+
 	/*
 	 * 向江
 	 * グループ編集
@@ -96,7 +97,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("delete from user_detail where group_id = :group_id and user_id = :user_id")
 	public void groupMemberDelete(int group_id, String user_id);
-	
+
 	/*
 	 * 向江
 	 * グループメンバ削除
@@ -104,8 +105,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Query("select * from user_detail where group_id = :group_id order by score asc")
 	public List<GroupMemberDeleteView> membersScore(int group_id);
-	
-	
+
 	/**
 	 * 末吉
 	 * グループ作成
@@ -128,14 +128,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("insert into user_detail (user_id, group_id, user_roll, score) values (:user_id, :group_id, :user_roll, :score)")
 	public void groupDetailCreate(String user_id, int group_id, String user_roll, int score);
-	
+
 	/**
 	 * 末吉
 	 * 既に登録されているユーザIDを取得
 	 */
 	@Query("select user_id from user_detail where group_id = :group_id")
 	public List<String> getExistUserIds(int group_id);
-	
+
 	/**
 	 * 末吉
 	 * グループ解散完了
@@ -143,7 +143,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update teams set group_flg = 0 where group_id = :group_id")
 	public void groupDiss(int group_id);
-	
+
 	/**
 	 * 末吉
 	 * グループ編集完了
@@ -151,7 +151,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update user_detail set user_roll = :user_roll where user_id = :user_id and group_id = :group_id")
 	public void groupEdit(String user_id, int group_id, String user_roll);
-	
+
 	/**
 	 * 末吉
 	 * タスクの再割り振り
@@ -159,7 +159,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update task set user_id = :user_id where task_id = :task_id")
 	public void updateUserId(int task_id, String user_id);
-	
+
 	/**
 	 * 末吉
 	 * user_detailのscoreとuser_progressを更新する
@@ -167,7 +167,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update user_detail set score = :scoreResult, user_progress = :userProgressResult where user_id = :user_id and group_id = :group_id")
 	public void updateScore(String user_id, int group_id, int scoreResult, int userProgressResult);
-	
+
 	/**
 	 * 末吉
 	 * all_progressを更新する
@@ -175,4 +175,25 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update teams set all_progress = :all_progressResult where group_id = :group_id")
 	public void allProgressUpdate(int group_id, int all_progressResult);
+
+	/**
+	 * 坂本
+	 * 所属グループ一覧
+	 */
+	@Query("select user_detail.group_id,group_name,genre,user_roll from teams inner join user_Detail on teams.group_id = user_Detail.group_id where user_Detail.user_id = :user_id")
+	public List<GroupDisplay> deptGroupList(String user_id);
+
+	/*
+	 * 末吉
+	 * チャット相手を格納
+	 */
+	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1")
+	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
+	
+	/**
+	 * 末吉
+	 * チャット相手を検索
+	 */
+	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1")
+	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll);
 }

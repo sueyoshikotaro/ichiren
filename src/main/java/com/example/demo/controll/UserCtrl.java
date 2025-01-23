@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -26,17 +24,20 @@ import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.NoticeViewForm;
+import com.example.demo.form.Room;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TaskReqForm;
 import com.example.demo.form.TaskView;
 import com.example.demo.form.TdlistForm;
-import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
-import com.example.demo.service.GroupServiceInterface;
+import com.example.demo.repository.UserDisplayCrudRepository;
+import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
-import com.example.demo.service.UserServiceInterface;
+import com.example.demo.service.UserDisplayServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -47,15 +48,17 @@ public class UserCtrl {
 	UserCrudRepository userCrudRepo;
 
 	@Autowired
-	GroupCrudRepository groupCrudRepo;
+	UserDisplayCrudRepository groupCrudRepo;
 
+	//坂本追加
 	@Autowired
-	@Qualifier("userService")
-	UserServiceInterface userService;
+	@Qualifier("userDisplayImpl")
+	UserDisplayServiceInterface userDisplayService;
 
+	//坂本追加
 	@Autowired
-	@Qualifier("groupService")
-	GroupServiceInterface groupService;
+	@Qualifier("GroupDisplayImpl")
+	GroupDisplayServiceInterface groupDispService;
 
 	//湊原追加
 	@Autowired
@@ -67,14 +70,14 @@ public class UserCtrl {
 	@Qualifier("todoService")
 	TodoServiceInterface TodoService;
 
-	//セッション
-	@Autowired
-	HttpSession session;
-
 	//向江追加
 	@Autowired
 	@Qualifier("NoticeService")
 	NoticeServiceInterface NoticeService;
+
+	//セッション
+	@Autowired
+	HttpSession session;
 
 	/**
 	 * ログアウト画面を表示
@@ -86,7 +89,7 @@ public class UserCtrl {
 
 		session.invalidate();
 
-		return "common/login";
+		return "redirect:/taskdon/user/login";
 	}
 
 	/**
@@ -122,23 +125,25 @@ public class UserCtrl {
 
 			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
 
-				return new ModelAndView("redirect:/taskdon/admin/menu");
+				userDisplayService.adminDisable(user_id, 0); //adminアカウント無効化
+
+				return new ModelAndView("redirect:/taskdon/admin/teList"); //管理者がログインした場合(初回のみ)
 			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
 
-				return new ModelAndView("redirect:/taskdon/admin/menu");
+				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合
 			} else if (user.get().getUser_pass().equals("taskdon1")) {
 
-				return new ModelAndView("redirect:/taskdon/user/passReset");
+				return new ModelAndView("redirect:/taskdon/user/passReset"); //パスワード再設定に遷移
 			} else if (user.get().getUser_id().contains("st")) {
 
-				return new ModelAndView("redirect:/taskdon/user/deptGroupList");
+				return new ModelAndView("redirect:/taskdon/user/deptGroupList"); //ユーザがログインした場合
 			} else {
-
-				mav.setViewName("common/login");
+				mav.addObject("errMsg", "IDまたはパスワードが違います。");
+				mav.setViewName("common/login"); //ログイン失敗
 			}
 		} else {
-			mav.addObject("loginError", "IDまたはパスワードが違います。");
-			mav.setViewName("common/login");
+			mav.addObject("errMsg", "IDまたはパスワードが違います。");
+			mav.setViewName("common/login"); //ログイン失敗
 		}
 
 		return mav;
@@ -150,8 +155,6 @@ public class UserCtrl {
 	 */
 	@GetMapping("passReset")
 	public ModelAndView passReset(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
-
-		System.out.println(user_id);
 
 		mav.addObject("user_id", user_id);
 		mav.addObject("newPass");
@@ -173,40 +176,34 @@ public class UserCtrl {
 
 		User u = user.get();
 
-		String passwordPattern = "^[a-zA-Z0-9]{8,15}$"; // 8-15桁の英数字
-
-		System.out.println(user_id);
-		System.out.println(newPass);
-		System.out.println(confirmPass);
+		String passwordPattern = "^[a-zA-Z0-9]{8,16}$"; // 8-16桁の英数字のみ設定可
 
 		if (!newPass.matches(passwordPattern)) {
 
-			mav.addObject("passwordError", "パスワードは8桁以上16桁以下の英数字でなければなりません。");
+			mav.addObject("errMsg", "パスワードは8桁以上16桁以下の英数字でなければなりません。");
 			mav.addObject("user_id", user_id); // user_idを再度渡す
 			mav.setViewName("common/passReset");
 
 			return mav;
 		} else if (!newPass.equals(confirmPass)) {
 
-			mav.addObject("passwordError", "新パスワードと確認パスワードが一致しません。");
+			mav.addObject("errMsg", "新パスワードと確認パスワードが一致しません。");
 			mav.addObject("user_id", user_id); // user_idを再度渡す
 			mav.setViewName("common/passReset");
 
 			return mav;
-		} else if (!(newPass.equals("taskdon1") && confirmPass.equals("taskdon1"))) {
+		} else if (newPass.equals("taskdon1") && confirmPass.equals("taskdon1")) {
 
-			mav.addObject("passwordError", "'taskdon1'は登録できません。");
+			mav.addObject("errMsg", "'taskdon1'は登録できません。");
 			mav.addObject("user_id", user_id); // user_idを再度渡す
 			mav.setViewName("common/passReset");
 
 			return mav;
 		} else {
 
-			userService.userPassReset(u.getUser_id(), newPass);
+			userDisplayService.userPassReset(u.getUser_id(), newPass); //新パスワードに更新
 
-			System.out.println("パスワード更新完了");
-
-			//mav.setViewName("redirect:/taskdon/user/login"); // ログイン画面へリダイレクト
+			mav.setViewName("redirect:/taskdon/user/login"); // ログイン画面へリダイレクト
 
 			return mav;
 		}
@@ -219,8 +216,6 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("/taskdon/admin/menu")
 	public ModelAndView adminMenu(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
-
-		Optional<User> user = userCrudRepo.findById(user_id);
 
 		mav.setViewName("admin/menuAdmin");
 
@@ -244,7 +239,7 @@ public class UserCtrl {
 
 		if (user.isPresent()) {
 
-			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+			List<GroupDisplay> deptGroupList = groupDispService.deptGroupList(user_id);
 
 			mav.setViewName("common/deptGroupList");
 			mav.addObject("groupS", deptGroupList);
@@ -253,7 +248,7 @@ public class UserCtrl {
 		} else {
 
 			// ユーザーが存在しない場合のエラー処理
-			mav.setViewName("error");
+			mav.setViewName("errMsg");
 			mav.addObject("errorMessage", "ユーザーが見つかりません。");
 		}
 
@@ -283,6 +278,11 @@ public class UserCtrl {
 		mav.addObject("noticeList", noticeList);
 		mav.setViewName("user/menuUser");
 		mav.setViewName("common/menuUser");
+
+		List<Room> roomList = userDisplayService.roomSelect();
+
+		mav.addObject("roomList", roomList);
+
 		return mav;
 	}
 

@@ -6,6 +6,7 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.example.demo.form.Room;
 import com.example.demo.form.UserDisplay;
 
 public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, String> {
@@ -43,7 +44,7 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	@Modifying
 	@Query("update user set user_pass = :user_pass where user_id = :user_id")
 	public void passReset(String user_id, String user_pass);
-	
+
 	/**
 	 * 末吉
 	 * 新規ユーザ登録
@@ -85,12 +86,36 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	@Query("update user set user_flg = 0 where user_id = :user_id")
 	public void teInfoDelete(String user_id);
 
-	//	/*
-	//	 * 向江
-	//	 * userテーブルにデータを登録する
-	//	 */
-	//	@Modifying
-	//	@Query("insert into user (user_id, user_name, user_pass, school_name, enr_year, user_flg) values (:user_id, :user_name, 'taskdon1', (select school_name from school where school_id = :school_id), :enr_year, 1)")
-	//	public void save(user_id, user_name, user_pass, school_name, enr_year, user_flg);
+	/*
+	 * 向江
+	 * userテーブルにデータを登録する
+	 */
+	@Modifying
+	@Query("insert into user (user_id, user_name, user_pass, school_id, enr_year, user_flg) values (:user_id, :user_name,'taskdon1', (select school_id from school where school_name = :school_name), :enr_year, 1)")
+	public void saveAll(String user_id, String user_name, String user_pass, String school_name, String enr_year,
+			int user_flg);
+
+	/**
+	 * 坂本
+	 * ユーザパスワード再設定
+	 */
+	@Modifying
+	@Query("update user set user.user_pass = :newPass where user.user_id = :user_id")
+	public void userPassReset(String user_id, String newPass);
+
+	/**
+	 * 坂本
+	 * パスワード無効化
+	 */
+	@Modifying
+	@Query("update user set user.user_flg = 0 where user.user_id = :user_id")
+	public void adminDisable(String user_id, int user_flg);
+
+	/**
+	 * 坂本
+	 * 居場所更新
+	 */
+	@Query("select room.room_id, room.room_name, room.hall, room.floor from room")
+	public List<Room> roomSelect();
 
 }
