@@ -34,17 +34,17 @@
 		<h2 class="menu-text">連絡事項削除確認</h2>
 		<h3>[削除確認]</h3>
 
-		<form th:acthion="@{noticeDeleteConfirm}" method="post">
+		<form th:action="@{noticeDeleteConfirm}" method="post">
 			<p>本当に削除しますか？</p>
 			<div th:each="notice : ${notice}">
 				<div th:text="${notice.user_name}"></div>
 				<div th:text="${notice.title}"></div>
 				<div th:text="${notice.contact_msg}"></div>
 				<div th:text="${notice.send_date}"></div>
-				<input type="hidden" name="notice_id" th:text="${notice.notice_id}">
+				<input type="hidden" name="notice_id" th:value="${notice.notice_id}">
 			</div>
-			<button type="submit" value="削除" class="btn btn-danger">削除</button>
-<!--			<button type="submit" class="btn btn-back">いいえ</button>-->
+			<button type="submit" name="button" value="削除" class="btn">削除</button>
+			<button type="submit" class="btn btn-back">いいえ</button>
 		</form>
 	</div>
 
