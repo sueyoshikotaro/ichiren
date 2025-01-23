@@ -92,4 +92,14 @@ public class UserServiceImpl implements UserServiceInterface {
 		userCrudRepo.userPassReset(user_id, newPass);
 	}
 
+	/*
+	 * 坂本
+	 * 管理者
+	 * パスワード無効化
+	 */
+	@Override
+	public void adminDisable(String user_id, int user_flg) {
+		
+		userCrudRepo.adminDisable(user_id, user_flg);
+	}
 }

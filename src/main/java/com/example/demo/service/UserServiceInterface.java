@@ -39,4 +39,11 @@ public interface UserServiceInterface {
 	 * パスワード再設定
 	 */
 	public void userPassReset(String user_id, String newPass);
+
+	/**
+	 * 坂本
+	 * 管理者
+	 * パスワード無効化
+	 */
+	public void adminDisable(String user_id, int user_flg);
 }
