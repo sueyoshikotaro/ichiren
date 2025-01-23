@@ -18,6 +18,7 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -28,18 +29,19 @@
 
 <body>
 	<!--コンテナ-->
-	<div class="container" id="container">
+	<div class="container">
 
 		<h2>新規ユーザ登録</h2>
 
 		<!--登録欄-->
 		<form th:action="@{userRegistConfirm}" method="post" enctype="multipart/form-data">
+
 			<div class="input-group mb-3">
-				<input type="file" class="form-control" id="inputGroupFile02" name="csvFile">
-				<label class="input-group-text" for="inputGroupFile02">Upload</label>
+				<input type="file" class="form-control file-select" id="inputGroupFile02" name="csvFile">
 			</div>
 
-			<button type="button" id="uploadButton" class="btn btn-primary">アップロード</button>
+			<button type="button" id="uploadButton" class="control-btn long-btn">アップロード</button>
+
 		</form>
 
 		<script>
