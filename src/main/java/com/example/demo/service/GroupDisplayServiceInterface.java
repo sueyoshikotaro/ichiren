@@ -30,7 +30,7 @@ public interface GroupDisplayServiceInterface {
 
 	//グループメンバタスク詳細表示
 	public List<TaskForm> taskDetail(String task_name);
-	
+
 	//メンバが受け持つ全てのタスクを取得
 	public List<TaskForm> taskList(String user_id, int group_id);
 
@@ -42,7 +42,7 @@ public interface GroupDisplayServiceInterface {
 
 	//グループメンバ削除
 	public void groupMemberDelete(int group_id, String user_id);
-	
+
 	//グループメンバ削除user_detailテーブルのscoreを昇順に並び変える
 	public List<GroupMemberDeleteView> membersScore(int group_id);
 
@@ -57,27 +57,31 @@ public interface GroupDisplayServiceInterface {
 
 	//既に登録されているユーザIDを取得
 	public List<String> getExistUserIds(Integer group_id);
-	
+
 	//グループ解散
 	public void groupDiss(int group_id);
-	
+
 	//グループ編集
 	public void groupEdit(String user_id, int group_id, String user_roll);
-	
+
 	//タスクの再割り振り
 	public void updateUserId(int task_id, String user_id);
-	
+
 	//user_detailのscoreとuser_progressを更新する
 	public void updateScore(String user_id, int group_id, int scoreResult, int userProgressResult);
-	
+
 	//グループメンバ削除のリファクタリング(試しに)
 	public Object[] scoreCalc(int group_id, String user_id);
-	
+
 	//グループの全体進捗更新
 	public void allProgress(int group_id);
-	
+
 	//所属グループ一覧
 	public List<GroupDisplay> deptGroupList(String user_id);
+
 	//チャット相手を設定
 	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
+
+	//チャット相手検索
+	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll);
 }
