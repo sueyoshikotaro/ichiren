@@ -50,5 +50,5 @@ public interface UserDisplayServiceInterface {
 	public void adminDisable(String user_id, int user_flg);
 
 	//居場所選択
-	public List<Room> roomSelect(String room_id, String room_name);
+	public List<Room> roomSelect();
 }

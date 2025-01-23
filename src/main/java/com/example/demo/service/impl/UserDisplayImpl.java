@@ -178,9 +178,9 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 * 居場所選択
 	 */
 	@Override
-	public List<Room> roomSelect(String room_id, String room_name) {
+	public List<Room> roomSelect() {
 
-		return userCrudRepo.roomSelect(room_id, room_name);
+		return userCrudRepo.roomSelect();
 
 	}
 

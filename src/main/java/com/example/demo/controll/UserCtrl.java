@@ -125,7 +125,7 @@ public class UserCtrl {
 
 				userDisplayService.adminDisable(user_id, 0); //adminアカウント無効化
 
-				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合(初回のみ)
+				return new ModelAndView("redirect:/taskdon/admin/teList"); //管理者がログインした場合(初回のみ)
 			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
 
 				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合
@@ -277,7 +277,7 @@ public class UserCtrl {
 		mav.setViewName("user/menuUser");
 		mav.setViewName("common/menuUser");
 
-		List<Room> roomList = userDisplayService.roomSelect("", "");
+		List<Room> roomList = userDisplayService.roomSelect();
 
 		mav.addObject("roomList", roomList);
 
