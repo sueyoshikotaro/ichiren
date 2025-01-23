@@ -17,6 +17,8 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/school.css}"> <!-- 学校情報系CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -31,73 +33,85 @@
 
 		<h2>学校情報削除</h2>
 
-		<tr th:each="schoolDetails : ${schoolDelete}" th:if="${schoolDetailsStat.index == 0}">
-			<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
-			<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
-		</tr><br>
+		<div th:each="schoolDetails : ${schoolDelete}" th:if="${schoolDetailsStat.index == 0}">
+			<div class="mb-3 school-info-text">
+				<span class="form-label" id="basic-addon1">学校名</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_name}" readonly>
+			</div>
 
+			<div class="mb-3 school-info-text second-text">
+				<span class="form-label" id="basic-addon1">学校ID</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_id}" readonly>
+			</div>
+		</div>
 
 		<form th:action="@{schoolDeleteConfirm}" method="post">
-			<table th:each="schoolDetails : ${schoolDelete}">
-				<tr>
-					<th>教室名</th>
-					<td th:text="${schoolDetails.room_name}"></td>
-				</tr>
+			<div th:each="schoolDetails : ${schoolDelete}">
+				<div class="mb-3">
+					<span class="form-label">教室名</span>
+					<div type="text" class="form-control" th:text="${schoolDetails.room_name}"></div>
+				</div>
 
-				<tr>
-					<th>建物</th>
-					<td th:text="${schoolDetails.hall}"></td>
+				<div class="mb-3">
+					<span class="form-label">建物</span>
+					<div type="text" class="form-control" th:text="${schoolDetails.hall}"></div>
+				</div>
 
-				</tr>
+				<div class="row">
+					<div class="col">
+						<div class="mb-3">
+							<span class="form-label">階層</span>
+							<div type="text" class="form-control" th:text="${schoolDetails.floor}"></div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="mb-3">
+							<span class="form-label">PC</span>
+							<div th:if="${schoolDetails.pc_flg == 1}">
+								<div type="text" class="form-control" th:text="有"></div>
+							</div>
+							<div th:unless="${schoolDetails.pc_flg == 1}">
+								<div type="text" class="form-control" th:text="無"></div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-				<tr>
-					<th>階層</th>
-					<td th:text="${schoolDetails.floor}"></td>
-				</tr>
+				<button type="button" class="control-btn mini-btn" data-toggle="modal"
+					data-target="#schoolDeleteModal">削除</button>
 
-				<tr>
-					<th>PC</th>
-					<td th:if="${schoolDetails.pc_flg == 1}">有</td>
-					<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
-				</tr>
+				<!--<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>-->
 
-				<tr>
-					<td colspan="2" align="right">
-						<button type="button" class="btn btn-danger" data-toggle="modal"
-							data-target="#schoolDeleteModal">削除</button>
-						<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
-					</td>
-				</tr>
-
-			</table>
+			</div>
 		</form>
 
-
 		<!-- ポップアップ -->
-		<div class="modal fade" id="schoolDeleteModal" tabindex="-1" role="dialog"
+		<div class="modal fade popup-place" id="schoolDeleteModal" tabindex="-1" role="dialog"
 			aria-labelledby="schoolDeleteModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="schoolDeleteModalLabel">削除確認</h5>
-					</div>
-					<div class="modal-body">
-						<p>本当に削除しますか?</p>
-					</div>
-					<div class="modal-footer">
-						<table th:each="schoolDetails : ${schoolDelete}">
-							<form th:action="@{schoolDeleteComp}" method="post">
-								<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
-								<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
-								<input type="hidden" name="room_name" th:value="${schoolDetails.room_name}">
-								<input type="hidden" name="hall" th:value="${schoolDetails.hall}">
-								<input type="hidden" name="floor" th:value="${schoolDetails.floor}">
-								<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
-								<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
-								<button type="submit" name="button" value="はい" class="btn btn-danger">はい</button>
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
-							</form>
-						</table>
+					<center>
+						<h3 class="confirm-text">削除確認</h3>
+					</center>
+
+					<p class="modal-text">本当に削除しますか?</p>
+
+					<div th:each="schoolDetails : ${schoolDelete}">
+						<form th:action="@{schoolDeleteComp}" method="post">
+							<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
+							<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
+							<input type="hidden" name="room_name" th:value="${schoolDetails.room_name}">
+							<input type="hidden" name="hall" th:value="${schoolDetails.hall}">
+							<input type="hidden" name="floor" th:value="${schoolDetails.floor}">
+							<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
+							<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
+
+							<div class="btn-group">
+								<button type="submit" name="button" value="はい" class="answer-btn yes-btn">はい</button>
+								<button type="button" class="answer-btn no-btn" data-dismiss="modal">いいえ</button>
+							</div>
+
+						</form>
 					</div>
 				</div>
 			</div>

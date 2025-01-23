@@ -17,6 +17,8 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/school.css}"> <!-- 学校情報系CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -34,52 +36,62 @@
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
-		<tr th:each="schoolDetails : ${schoolEdit}" th:if="${schoolDetailsStat.index == 0}">
-			<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
-			<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
-		</tr><br>
+		<div th:each="schoolDetails : ${schoolEdit}" th:if="${schoolDetailsStat.index == 0}">
+			<div class="mb-3 school-info-text">
+				<span class="form-label" id="basic-addon1">学校名</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_name}" readonly>
+			</div>
 
+			<div class="mb-3 school-info-text second-text">
+				<span class="form-label" id="basic-addon1">学校ID</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_id}" readonly>
+			</div>
+		</div>
 
 		<form th:action="@{schoolEditConfirm}" method="post">
-			<table th:each="schoolDetails : ${schoolEdit}">
-				<tr>
-					<th>教室名</th>
-					<td><input type="text" th:value="${schoolDetails.room_name}" name="room_name" required /></td>
-				</tr>
+			<div th:each="schoolDetails : ${schoolEdit}">
+				<div class="mb-3">
+					<span class="form-label">教室名</span>
+					<input type="text" th:value="${schoolDetails.room_name}" class="form-control" name="room_name"
+						required>
+				</div>
 
-				<tr>
-					<th>建物</th>
-					<td><input type="text" th:value="${schoolDetails.hall}" name="hall" required /></td>
-				</tr>
+				<div class="mb-3">
+					<span class="form-label">建物</span>
+					<input type="text" th:value="${schoolDetails.hall}" class="form-control" name="hall" required>
+				</div>
 
-				<tr>
-					<th>階層</th>
-					<td><input type="text" th:value="${schoolDetails.floor}" name="floor" required /></td>
-				</tr>
+				<div class="row">
+					<div class="col">
+						<div class="mb-3">
+							<span class="form-label">階層</span>
+							<input type="text" th:value="${schoolDetails.floor}" class="form-control" name="floor"
+								required>
+						</div>
+					</div>
+					<div class="col">
+						<div class="mb-3">
+							<span class="form-label">PC-有無</span>
+							<select th:value="${schoolDetails.pc_flg}" class="form-select" name="pc_flg">
+								<option th:value="1" th:text="有" th:selected="${schoolDetails.pc_flg == 1}"></option>
+								<option th:value="0" th:text="無" th:selected="${schoolDetails.pc_flg == 0}"></option>
+							</select>
+						</div>
+					</div>
+				</div>
 
-				<tr>
-					<th>PC</th>
-					<td>
-						<select name="pc_flg" th:value="${schoolDetails.pc_flg}">
-							<option th:value="1" th:text="有" th:selected="${schoolDetails.pc_flg == 1}"></option>
-							<option th:value="0" th:text="無" th:selected="${schoolDetails.pc_flg == 0}"></option>
-						</select>
-					</td>
-				</tr>
+				<div>
+					<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
+					<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
+					<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
+					<input type="hidden" name="before_room_name" th:value="${schoolDetails.before_room_name}">
 
-				<tr>
-					<td colspan="2" align="right">
-						<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
-						<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
-						<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
-						<input type="hidden" name="before_room_name" th:value="${schoolDetails.before_room_name}">
+					<button type="submit" name="button" class="control-btn mini-btn" value="確認">確認</button>
+				</div>
 
-						<input type="submit" name="button" value="確認">
-					</td>
+				<!--<input type="submit" name="button" value="戻る">-->
 
-					<td><input type="submit" name="button" value="戻る"></td>
-				</tr>
-			</table>
+			</div>
 		</form>
 	</div>
 

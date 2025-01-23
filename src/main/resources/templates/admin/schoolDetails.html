@@ -55,47 +55,44 @@
 			<div class="main-content">
 
 				<!--繰り返し処理-->
-				<div th:each="schoolDetails : ${schoolS}">
-
-					<div class="content-child">
-
-						<div class="row">
-							<div class="col">
-								<label for="inputPassword5" class="form-label"
-									th:text="'教室名：'+${schoolDetails.room_name}"></label>
-							</div>
-							<div class="col">
-								<div class="form-check form-switch form-check-reverse">
-									<input class="form-check-input" type="radio" name="flexRadioDefault"
-										th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
-										th:checked="${schoolDetailsStat.index == 0}">
-									<label class="form-check-label" th:for="${schoolDetails.room_id}">選択</label>
-								</div>
+				<div th:each="schoolDetails : ${schoolS}" class="content-child">
+					
+					<div class="row">
+						<div class="col">
+							<label for="inputPassword5" class="form-label"
+								th:text="'教室名：'+${schoolDetails.room_name}"></label>
+						</div>
+						<div class="col">
+							<div class="form-check form-switch form-check-reverse">
+								<input class="form-check-input" type="radio" name="flexRadioDefault"
+									th:id="${schoolDetails.room_id}" th:value="${schoolDetails.room_id}"
+									th:checked="${schoolDetailsStat.index == 0}">
+								<label class="form-check-label" th:for="${schoolDetails.room_id}">選択</label>
 							</div>
 						</div>
+					</div>
 
-						<div class="row">
-							<div class="col">
-								<div class="mb-3">
-									<span class="form-label">建物</span>
-									<input type="text" class="form-control" th:value="${schoolDetails.hall}" readonly>
-								</div>
+					<div class="row">
+						<div class="col">
+							<div class="mb-3">
+								<span class="form-label">建物</span>
+								<input type="text" class="form-control" th:value="${schoolDetails.hall}" readonly>
 							</div>
-							<div class="col">
-								<div class="mb-3">
-									<span class="form-label">階層</span>
-									<input type="text" class="form-control" th:value="${schoolDetails.floor}" readonly>
-								</div>
+						</div>
+						<div class="col">
+							<div class="mb-3">
+								<span class="form-label">階層</span>
+								<input type="text" class="form-control" th:value="${schoolDetails.floor}" readonly>
 							</div>
-							<div class="col">
-								<div class="mb-3">
-									<span class="form-label">PC</span>
-									<div th:if="${schoolDetails.pc_flg == 1}">
-										<input type="text" class="form-control" th:value="有" readonly>
-									</div>
-									<div th:unless="${schoolDetails.pc_flg == 1}">
-										<input type="text" class="form-control" th:value="無" readonly>
-									</div>
+						</div>
+						<div class="col">
+							<div class="mb-3">
+								<span class="form-label">PC</span>
+								<div th:if="${schoolDetails.pc_flg == 1}">
+									<input type="text" class="form-control" th:value="有" readonly>
+								</div>
+								<div th:unless="${schoolDetails.pc_flg == 1}">
+									<input type="text" class="form-control" th:value="無" readonly>
 								</div>
 							</div>
 						</div>

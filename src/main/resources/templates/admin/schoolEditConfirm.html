@@ -17,6 +17,8 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/school.css}"> <!-- 学校情報系CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -32,73 +34,74 @@
 		<h2>学校情報編集</h2>
 		<h3>[編集内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
-		<tr th:each="schoolDetails : ${SchoolDisplay}" th:if="${schoolDetailsStat.index == 0}">
-			<p th:text="'学校ID：' + ${schoolDetails.school_id}">学校ID:</p>
-			<p th:text="'学校名：' + ${schoolDetails.school_name}">学校名</p>
-		</tr><br>
+		<div th:each="schoolDetails : ${SchoolDisplay}" th:if="${schoolDetailsStat.index == 0}">
+			<div class="mb-3 school-info-text">
+				<span class="form-label" id="basic-addon1">学校名</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_name}" readonly>
+			</div>
 
-
+			<div class="mb-3 school-info-text second-text">
+				<span class="form-label" id="basic-addon1">学校ID</span>
+				<input type="text" class="form-control" th:value="${schoolDetails.school_id}" readonly>
+			</div>
+		</div>
 
 		<form th:action="@{schoolEditComp}" method="post">
-			<table th:each="schoolDetails : ${SchoolDisplay}">
-				<tr>
-					<th>教室名</th>
-					<td th:text="${schoolDetails.room_name}"></td>
-				</tr>
+			<div th:each="schoolDetails : ${SchoolDisplay}">
+				<div class="mb-3">
+					<span class="form-label">教室名</span>
+					<input type="text" th:value="${schoolDetails.room_name}" class="form-control" readonly>
+				</div>
 
-				<tr>
-					<th>建物</th>
-					<td th:text="${schoolDetails.hall}"></td>
-				</tr>
+				<div class="mb-3">
+					<span class="form-label">建物</span>
+					<input type="text" th:value="${schoolDetails.hall}" class="form-control" readonly>
+				</div>
 
-				<tr>
-					<th>階層</th>
-					<td th:text="${schoolDetails.floor}"></td>
-				</tr>
+				<div class="row">
+					<div class="col">
+						<div class="mb-3">
+							<span class="form-label">階層</span>
+							<input type="text" th:value="${schoolDetails.floor}" class="form-control" readonly>
+						</div>
+					</div>
+					<div class="col">
+						<div class="mb-3">
+							<span class="form-label">PC-有無</span>
+							<div th:if="${schoolDetails.pc_flg == 1}">
+								<input type="text" class="form-control" th:value="有" readonly>
+							</div>
+							<div th:unless="${schoolDetails.pc_flg == 1}">
+								<input type="text" class="form-control" th:value="無" readonly>
+							</div>
+						</div>
+					</div>
+				</div>
 
-				<tr>
-					<th>PC</th>
-					<td th:if="${schoolDetails.pc_flg == 1}">有</td>
-					<td th:unless="${schoolDetails.pc_flg == 1}">無</td>
-				</tr>
+				<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
+				<input type="hidden" name="room_name" th:value="${schoolDetails.room_name}">
+				<input type="hidden" name="before_room_name" th:value="${schoolDetails.before_room_name}">
+				<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
+				<input type="hidden" name="hall" th:value="${schoolDetails.hall}">
+				<input type="hidden" name="floor" th:value="${schoolDetails.floor}">
+				<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
+				<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
+				<button type="button" name="button" value="編集" class="control-btn mini-btn"
+					onclick="schoolEditAndShowPopup()">編集</button>
 
-				<tr>
-					<td colspan="2" align="right">
-
-						<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
-						<input type="hidden" name="room_name" th:value="${schoolDetails.room_name}">
-						<input type="hidden" name="before_room_name" th:value="${schoolDetails.before_room_name}">
-						<input type="hidden" name="pc_flg" th:value="${schoolDetails.pc_flg}">
-						<input type="hidden" name="hall" th:value="${schoolDetails.hall}">
-						<input type="hidden" name="floor" th:value="${schoolDetails.floor}">
-						<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
-						<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
-						<button type="button" name="button" value="編集" class="btn btn-danger"
-							onclick="schoolEditAndShowPopup()">編集</button>
-
-						<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
-					</td>
-				</tr>
-
-			</table>
+<!--				<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>-->
+			</div>
 		</form>
 
 		<!-- ポップアップ -->
-		<div class="modal fade" id="schoolEditModal" tabindex="-1" role="dialog" aria-labelledby="schoolEditModalLabel"
-			aria-hidden="true">
+		<div class="modal fade popup-place" id="schoolEditModal" tabindex="-1" role="dialog"
+			aria-labelledby="schoolEditModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="schoolEditModalLabel">編集完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>編集が完了しました</p>
-					</div>
-					<div class="modal-footer">
-						<form th:action="@{schoolDetails}" method="get">
-							<button type="submit" class="btn btn-danger">学校情報詳細へ</button>
-						</form>
-					</div>
+					<p class="modal-text">編集が完了しました</p>
+					<form th:action="@{schoolDetails}" method="get">
+						<button type="submit" class="control-btn return-btn">学校情報詳細へ</button>
+					</form>
 				</div>
 			</div>
 		</div>

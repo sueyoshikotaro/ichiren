@@ -128,3 +128,14 @@
 .teList-btn-group {
 	margin-top: 12px;
 }
+
+/*ユーザ一覧*/
+/*繰返し項目毎のボタングループ*/
+.userList-btn-group{
+	margin-top: -10px;
+	margin-bottom: -10px;
+}
+
+.user-content {
+	margin-top: -14px;
+}
