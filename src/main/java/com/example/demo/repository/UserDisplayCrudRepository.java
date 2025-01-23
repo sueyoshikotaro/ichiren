@@ -115,7 +115,7 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	 * 坂本
 	 * 居場所更新
 	 */
-	@Query("select room.room_id, room.room_name, room.pc_flg, room.hall, room.floor, room.school_id from room where room.room_id = :room_id")
-	public List<Room> roomSelect(String room_id, String room_name);
+	@Query("select room.room_id, room.room_name, room.hall, room.floor from room")
+	public List<Room> roomSelect();
 
 }
