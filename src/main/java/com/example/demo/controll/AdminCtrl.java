@@ -70,7 +70,8 @@ public class AdminCtrl {
 	GroupDisplayServiceInterface groupDispService;
 
 	private int school_id;
-
+	private String user_id;
+	
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -107,6 +108,8 @@ public class AdminCtrl {
 
 		// エンティティの中のschool_idを取得
 		school_id = userEntity.getSchool_id();
+		// エンティティの中のuser_idを取得
+		user_id = userEntity.getUser_id();
 
 		return "admin/menuAdmin";
 	}
@@ -1406,6 +1409,13 @@ public class AdminCtrl {
 	 */
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
+		
+		//チャットの通信可能相手を格納
+		List<GroupDetailView> chatPartner = groupDispService.setChatUser(school_id, "リーダ");
+		
+		System.out.println(chatPartner);
+		
+		mav.addObject("chatPartner", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
 	}
