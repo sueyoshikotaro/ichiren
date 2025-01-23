@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -37,7 +35,8 @@ import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者のコントローラ
@@ -52,10 +51,6 @@ public class AdminCtrl {
 	@Autowired
 	@Qualifier("schoolService")
 	SchoolServiceInterface schoolS;
-
-	@Autowired
-	@Qualifier("userListService")
-	UserServiceInterface userListService;
 
 	@Autowired
 	@Qualifier("schoolDisplayService")
@@ -824,7 +819,7 @@ public class AdminCtrl {
 			GroupMemberDeleteView g) {
 
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
-		
+
 		mav.addObject("groups", group);
 		mav.setViewName("admin/groupDetails");
 
@@ -1024,7 +1019,7 @@ public class AdminCtrl {
 	@PostMapping("groupMemberDeleteConfirm")
 	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
 			GroupMemberDeleteView g, ModelAndView mav) {
-		
+
 		//グループメンバ削除確認画面のテーブルを表示する
 		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
 
@@ -1034,12 +1029,13 @@ public class AdminCtrl {
 
 			//更新後のスコアと進捗度を計算するサービスを呼び出す
 			Object[] updateData = groupDispService.scoreCalc(g.getGroup_id(), g.getUser_id());
-			
+
 			//user_detailのtask_idを更新(タスクの自動振り分け)
 			groupDispService.updateUserId(group.get(0).getTask_id(), (String) updateData[2]);
 
 			//user_detailのscoreとuser_progressを更新
-			groupDispService.updateScore((String) updateData[2], g.getGroup_id(), (int)updateData[0], (int)updateData[1]);
+			groupDispService.updateScore((String) updateData[2], g.getGroup_id(), (int) updateData[0],
+					(int) updateData[1]);
 		}
 
 		//user_detailテーブルの一列を削除
@@ -1047,7 +1043,7 @@ public class AdminCtrl {
 
 		//グループの全体進捗を更新するサービスを呼び出す
 		groupDispService.allProgress(g.getGroup_id());
-		
+
 		//グループ詳細画面を表示するためにグループ情報を格納
 		List<GroupDetailView> groupDetails = groupDispService.groupDetail(g.getGroup_id());
 

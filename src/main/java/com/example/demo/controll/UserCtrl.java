@@ -22,17 +22,18 @@ import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.NoticeViewForm;
+import com.example.demo.form.Room;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TaskReqForm;
 import com.example.demo.form.TaskView;
 import com.example.demo.form.TdlistForm;
-import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
-import com.example.demo.service.GroupServiceInterface;
+import com.example.demo.repository.UserDisplayCrudRepository;
+import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
-import com.example.demo.service.UserServiceInterface;
+import com.example.demo.service.UserDisplayServiceInterface;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -45,15 +46,17 @@ public class UserCtrl {
 	UserCrudRepository userCrudRepo;
 
 	@Autowired
-	GroupCrudRepository groupCrudRepo;
+	UserDisplayCrudRepository groupCrudRepo;
 
+	//坂本追加
 	@Autowired
-	@Qualifier("userService")
-	UserServiceInterface userService;
+	@Qualifier("userDisplayImpl")
+	UserDisplayServiceInterface userDisplayService;
 
+	//坂本追加
 	@Autowired
-	@Qualifier("groupService")
-	GroupServiceInterface groupService;
+	@Qualifier("GroupDisplayImpl")
+	GroupDisplayServiceInterface groupDispService;
 
 	//湊原追加
 	@Autowired
@@ -65,14 +68,14 @@ public class UserCtrl {
 	@Qualifier("todoService")
 	TodoServiceInterface TodoService;
 
-	//セッション
-	@Autowired
-	HttpSession session;
-
 	//向江追加
 	@Autowired
 	@Qualifier("NoticeService")
 	NoticeServiceInterface NoticeService;
+
+	//セッション
+	@Autowired
+	HttpSession session;
 
 	/**
 	 * ログアウト画面を表示
@@ -85,7 +88,6 @@ public class UserCtrl {
 		session.invalidate();
 
 		return "redirect:/taskdon/user/login";
-		//return "common/login";
 	}
 
 	/**
@@ -111,7 +113,7 @@ public class UserCtrl {
 	public ModelAndView loginCheck(ModelAndView mav, String user_id, String user_pass, RedirectAttributes ra) {
 
 		Optional<User> user = userCrudRepo.findById(user_id);
-
+		
 		if (user.isPresent() && user.get().getUser_flg() == 1 && user.get().getUser_pass().equals(user_pass)) {
 
 			session.setAttribute("user_id", user_id);
@@ -121,7 +123,7 @@ public class UserCtrl {
 
 			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
 
-				userService.adminDisable(user_id, 0); //adminアカウント無効化
+				userDisplayService.adminDisable(user_id, 0); //adminアカウント無効化
 
 				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合(初回のみ)
 			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
@@ -197,7 +199,7 @@ public class UserCtrl {
 			return mav;
 		} else {
 
-			userService.userPassReset(u.getUser_id(), newPass); //新パスワードに更新
+			userDisplayService.userPassReset(u.getUser_id(), newPass); //新パスワードに更新
 
 			mav.setViewName("redirect:/taskdon/user/login"); // ログイン画面へリダイレクト
 
@@ -235,7 +237,7 @@ public class UserCtrl {
 
 		if (user.isPresent()) {
 
-			List<GroupDisplay> deptGroupList = groupService.deptGroupList(user_id);
+			List<GroupDisplay> deptGroupList = groupDispService.deptGroupList(user_id);
 
 			mav.setViewName("common/deptGroupList");
 			mav.addObject("groupS", deptGroupList);
@@ -274,6 +276,11 @@ public class UserCtrl {
 		mav.addObject("noticeList", noticeList);
 		mav.setViewName("user/menuUser");
 		mav.setViewName("common/menuUser");
+
+		List<Room> roomList = userDisplayService.roomSelect("", "");
+
+		mav.addObject("roomList", roomList);
+
 		return mav;
 	}
 

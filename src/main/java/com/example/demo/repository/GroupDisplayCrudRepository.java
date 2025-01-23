@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.entity.Teams;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.TaskForm;
@@ -175,4 +176,11 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update teams set all_progress = :all_progressResult where group_id = :group_id")
 	public void allProgressUpdate(int group_id, int all_progressResult);
+	
+	/**
+	 * 坂本
+	 * 所属グループ一覧
+	 */
+	@Query("select user_detail.group_id,group_name,genre,user_roll from teams inner join user_Detail on teams.group_id = user_Detail.group_id where user_Detail.user_id = :user_id")
+	public List<GroupDisplay> deptGroupList(String user_id);
 }
