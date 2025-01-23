@@ -175,4 +175,11 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update teams set all_progress = :all_progressResult where group_id = :group_id")
 	public void allProgressUpdate(int group_id, int all_progressResult);
+	
+	/**
+	 * 末吉
+	 * チャット相手を格納
+	 */
+	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1")
+	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
 }

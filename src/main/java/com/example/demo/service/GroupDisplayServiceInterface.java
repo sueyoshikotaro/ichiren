@@ -74,4 +74,7 @@ public interface GroupDisplayServiceInterface {
 	
 	//グループの全体進捗更新
 	public void allProgress(int group_id);
+	
+	//チャット相手を設定
+	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
 }

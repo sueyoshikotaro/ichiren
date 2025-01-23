@@ -20,13 +20,13 @@
 
 	<!--管理者かユーザで区分け？-->
 	<!-- 共通header呼出し(ユーザ用) -->
-	<!--<div>-->
-	<!--	<th:block th:insert="fragment/header :: headerUser">-->
-	<!--</div>-->
+	<div th:if="${#strings.startsWith(session.user.user_id, 'st')}">
+		<th:block th:insert="fragment/header :: headerUser">
+	</div>
 	<!-- 共通header呼出し(管理者用) -->
-	<!--<div>-->
-	<!--	<th:block th:insert="fragment/header :: headerAdmin">-->
-	<!--</div>-->
+	<div>
+		<th:block th:insert="fragment/header :: headerAdmin">
+	</div>
 
 </head>
 
@@ -63,8 +63,8 @@
 				<!--検索フォーム(予定)-->
 				<div class="input-group mb-3">
 					<!--検索内容入力欄-->
-					<input type="text" class="form-control" placeholder="Search"
-						aria-label="Recipient's username" aria-describedby="button-addon2">
+					<input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
+						aria-describedby="button-addon2">
 					<!--検索ボタン-->
 					<button class="btn btn-outline-secondary" type="button" id="button-addon2">
 						<!--検索ボタンイラスト(bootstrap引用)-->
@@ -78,21 +78,12 @@
 
 				<!--チャット相手一覧(リスト,繰返しかな)-->
 				<ul class="list-group">
-					<li class="list-group-item list-group-item-action">Aさん
-						<span class="badge bg-primary rounded-pill">通知数</span>
+					<li th:each="chat : ${chatPartner}" class="list-group-item list-group-item-action">
+						<span th:text="${chat.user_name}">○○さん</span>
+						
+						<span class="badge bg-primary rounded-pill" th:text="${notificationCount}" th:if="${notificationCount != null}">通知数</span>
 					</li>
-					<li class="list-group-item list-group-item-action">Bさん
-						<span class="badge bg-primary rounded-pill">通知数</span>
-					</li>
-					<li class="list-group-item list-group-item-action">Cさん
-						<span class="badge bg-primary rounded-pill">通知数</span>
-					</li>
-					<li class="list-group-item list-group-item-action">Dさん
-						<span class="badge bg-primary rounded-pill">通知数</span>
-					</li>
-					<li class="list-group-item list-group-item-action">Eさん
-						<span class="badge bg-primary rounded-pill">通知数</span>
-					</li>
+
 				</ul>
 
 			</div>
