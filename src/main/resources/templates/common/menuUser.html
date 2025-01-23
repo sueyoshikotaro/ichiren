@@ -32,10 +32,18 @@
 
 		<h2 class="menu-text">ホーム</h2>
 
+		<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
+			<select class="form-select place-update" aria-label="Default select example">
+				<option selected>休憩中</option>
+				<div th:each="room : ${roomList}">
+					<option th:text="room.room_name"></option>
+				</div>
+			</select>
+		</div>
+
 		<div>
 			<th:block th:insert="fragment/notice :: notice">
 		</div>
-
 
 		<!-- 遷移先 -->
 		<div th:if="${session.user_roll} == 'リーダ'"> <!-- 役職判断処理 -->

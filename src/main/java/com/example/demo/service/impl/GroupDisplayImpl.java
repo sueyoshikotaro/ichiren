@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.TaskForm;
@@ -281,48 +282,58 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 		//割り振られるユーザのタスク情報を取得
 		List<TaskForm> updateUserTask = groupDispCrudRepo.taskList(group.get(0).getUser_id(), group_id);
-		
+
 		//割り振るタスクのtask_weightを取得
 		task_weight = delteUserTask.get(0).getTask_weight();
 
 		//割り振ったメンバのscoreを再計算(戻り値)
 		scoreResult = score + task_weight;
-		
+
 		progressSum = updateUserTask.get(0).getUser_progress() + delteUserTask.get(0).getProgress();
-		
+
 		//変更後の進捗度を計算(戻り値)
 		userProgressResult = progressSum / 2;
-		
+
 		//戻り値をresult配列に格納
 		Object[] result = { scoreResult, userProgressResult, group.get(0).getUser_id() };
-		
+
 		return result;
 	}
 
 	//グループの全体進捗更新
 	@Override
 	public void allProgress(int group_id) {
-		
+
 		//メンバごとの進捗度の合計を格納
 		int all_progress = 0;
-		
+
 		//更新後のグループ全体の進捗度を格納
 		int all_progress_result = 0;
-		
+
 		List<GroupDetailView> taskList = groupDispCrudRepo.groupDetail(group_id);
-		
+
 		System.out.println(taskList.size());
-		
-		for(GroupDetailView progressSum : taskList) {
+
+		for (GroupDetailView progressSum : taskList) {
 			all_progress += progressSum.getUser_progress();
 		}
-		
+
 		//更新後の全体進捗の計算
 		all_progress_result = all_progress / taskList.size();
-		
+
 		//全体進捗の更新
 		groupDispCrudRepo.allProgressUpdate(taskList.get(0).getGroup_id(), all_progress_result);
-		
+
+	}
+
+	/**
+	 * 坂本
+	 * 所属グループ一覧の表示
+	 */
+	@Override
+	public List<GroupDisplay> deptGroupList(String user_id) {
+
+		return groupDispCrudRepo.deptGroupList(user_id);
 	}
 
 	//チャット相手を設定

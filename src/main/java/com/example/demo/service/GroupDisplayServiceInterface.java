@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.TaskForm;
@@ -75,6 +76,8 @@ public interface GroupDisplayServiceInterface {
 	//グループの全体進捗更新
 	public void allProgress(int group_id);
 	
+	//所属グループ一覧
+	public List<GroupDisplay> deptGroupList(String user_id);
 	//チャット相手を設定
 	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
 }

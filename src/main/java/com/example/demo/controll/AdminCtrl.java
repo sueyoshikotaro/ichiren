@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -37,7 +35,8 @@ import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者のコントローラ
@@ -49,10 +48,6 @@ public class AdminCtrl {
 	@Autowired
 	@Qualifier("schoolService")
 	SchoolServiceInterface schoolS;
-
-	@Autowired
-	@Qualifier("userListService")
-	UserServiceInterface userListService;
 
 	@Autowired
 	@Qualifier("schoolDisplayService")
