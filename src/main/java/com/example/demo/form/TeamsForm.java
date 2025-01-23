@@ -8,7 +8,7 @@ import lombok.Data;
 public class TeamsForm {
 
 	@Id
-	private String group_id;
+	private int group_id;
 	private String group_name;
 	private String school_name;
 	private String school_id;
@@ -16,6 +16,6 @@ public class TeamsForm {
 	private int group_flg;
 	private String genre;
 	private String work_status;
-	private String all_progress;
+	private int all_progress;
 	private String est_year;
 }
