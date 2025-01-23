@@ -33,59 +33,111 @@
 		<h3>講師退職確認画面</h3> <!--確認画面用の説明用テキスト-->
 
 		<p>退職しますか？</p>
+		<div>
+			<form th:action="@{teDeleteComp}" method="post" th:if="${te != null}">
+				<table border="1">
 
-		<form th:action="@{teDeleteComp}" method="post">
-			<!--		<div th:object="${user}">-->
-			<table border="1">
+					<tr>
+						<th>項目</th>
+						<th>内容</th>
+					</tr>
+					<tr>
+						<th>ユーザID</th>
+						<td th:text="${te.user_id}"></td>
+					</tr>
+					<tr>
+						<th>ユーザ名</th>
+						<td th:text="${te.user_name}"></td>
+					</tr>
+					<tr>
+						<th>パスワード</th>
+						<td th:text="${te.user_pass}"></td>
+					</tr>
+					<tr>
+						<th>所属学校</th>
+						<td th:text="${te.school_name}"></td>
+					</tr>
+					<tr>
+						<th>入学年度</th>
+						<td th:text="${te.enr_year}"></td>
+					</tr>
+
+				</table>
+
+				<button type="button" name="button" value="退職" class="btn btn-danger"
+					onclick="teDeleteAndShowPopup()">退職</button>
 
 				<tr>
-					<th>項目</th>
-					<th>内容</th>
-				</tr>
-				<tr>
-					<th>ユーザID</th>
-					<td th:text="${te.user_id}"></td>
-				</tr>
-				<tr>
-					<th>ユーザ名</th>
-					<td th:text="${te.user_name}"></td>
-				</tr>
-				<tr>
-					<th>パスワード</th>
-					<td th:text="${te.user_pass}"></td>
-				</tr>
-				<tr>
-					<th>所属学校</th>
-					<td th:text="${te.school_name}"></td>
-				</tr>
-				<tr>
-					<th>入学年度</th>
-					<td th:text="${te.enr_year}"></td>
+					<td colspan="2" align="center">
+						<input type="submit" value="退職">
+					</td>
 				</tr>
 
-			</table>
+				<input type="hidden" name="user_id" th:value="${te.user_id}">
+				<input type="hidden" name="user_name" th:value="${te.user_name}">
+				<input type="hidden" name="user_pass" th:value="${te.user_pass}">
+				<input type="hidden" name="school_name" th:value="${te.school_name}">
+				<input type="hidden" name="enr_year" th:value="${te.enr_year}">
+				<input type="hidden" name="user_flg" th:value="${te.user_flg}">
 
-			<br>
-			<br>
-			<br>
+			</form>
+		</div>
 
-			<tr>
-				<td colspan="2" align="center">
-					<input type="submit" value="退職">
-				</td>
-			</tr>
-			<br>
-			<br>
 
-			<input type="hidden" name="user_id" th:value="${te.user_id}">
-			<input type="hidden" name="user_name" th:value="${te.user_name}">
-			<input type="hidden" name="user_pass" th:value="${te.user_pass}">
-			<input type="hidden" name="school_name" th:value="${te.school_name}">
-			<input type="hidden" name="enr_year" th:value="${te.enr_year}">
-			<input type="hidden" name="user_flg" th:value="${te.user_flg}">
-
-		</form>
+		<!-- 講師削除完了のポップアップ -->
+		<div class="modal fade" id="teDeleteModal" tabindex="-1" role="dialog" aria-labelledby="teDeleteModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="teDeleteModalLabel">退職完了</h5>
+					</div>
+					<div class="modal-body">
+						<p>退職が完了しました</p>
+					</div>
+					<div class="modal-footer">
+						<form th:action="@{teList}" method="get">
+							<button type="submit" class="btn btn-danger">講師一覧へ</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+	<script>
+		function teDeleteAndShowPopup() {
+			// フォーム要素を取得
+			var form = document.querySelector('form');
+
+			// コントローラメソッドを呼び出すためにフォームを送信
+			form.action = 'teDeleteComp'; // コントローラメソッドの実際のURLに置き換えてください
+			form.method = 'post';
+
+			// buttonパラメータを追加
+			//var buttonInput = document.createElement('input');
+			//buttonInput.type = 'hidden';
+			//buttonInput.name = 'button';
+			//buttonInput.value = '編集'; // または '戻る' など必要な値を設定
+			//form.appendChild(buttonInput);
+
+			form.submit();
+		}
+	</script>
+
+	<!--ポップアップを表示するためのコード-->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var teDeleteComp = /*[[${teDeleteComp}]]*/ true;
+		$(document).ready(function () {
+			if (teDeleteComp == true) {
+				$('#teDeleteModal').modal('show');
+			}
+		});
+		/*]]>*/
+	</script>
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

@@ -28,7 +28,6 @@ import com.example.demo.form.TaskForm;
 import com.example.demo.form.TaskReqForm;
 import com.example.demo.form.TaskView;
 import com.example.demo.form.TdlistForm;
-import com.example.demo.repository.GroupCrudRepository;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.service.GroupServiceInterface;
 import com.example.demo.service.NoticeServiceInterface;
@@ -43,9 +42,6 @@ public class UserCtrl {
 	//フィールド
 	@Autowired
 	UserCrudRepository userCrudRepo;
-
-	@Autowired
-	GroupCrudRepository groupCrudRepo;
 
 	@Autowired
 	@Qualifier("userService")

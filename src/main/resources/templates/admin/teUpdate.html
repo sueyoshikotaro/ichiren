@@ -32,6 +32,9 @@
 
 		<h2>講師情報編集</h2>
 
+		<!--エラー置き場-->
+		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
+
 		<form th:action="@{teUpdateConfirm}" method="post">
 			<table>
 				<tr>
@@ -78,8 +81,7 @@
 			<input type="hidden" name="enr_year" th:value="${te.enr_year}">
 			<!--			<input type="hidden" name="user_flg" th:value="${te.user_flg}">-->
 
-			<!--エラー置き場-->
-			<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;">エラーメッセージ</p>
+
 
 		</form>
 	</div>
