@@ -6,6 +6,11 @@
 	margin-top: 10px;
 }
 
+/*確認項目*/
+.retirement-item{
+	margin-top: -6px;
+}
+
 /*入力欄*/
 .regist-field {
 	margin-top: -10px;

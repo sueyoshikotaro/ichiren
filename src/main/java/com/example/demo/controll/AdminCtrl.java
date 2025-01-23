@@ -460,7 +460,8 @@ public class AdminCtrl {
 		userDisplayService.PassFormat(u.getUser_id());
 
 		//mav.addObject("user",u);
-		mav.setViewName("admin/updateComp");
+		mav.addObject("passClearConfirm", true);
+		mav.setViewName("admin/passClear");
 
 		return mav;
 	}
@@ -671,6 +672,8 @@ public class AdminCtrl {
 	@PostMapping("teUpdate")
 	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
 
+		
+		System.out.println(u);
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdate");
 

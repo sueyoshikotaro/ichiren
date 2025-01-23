@@ -18,6 +18,7 @@
 	<!-- CSS接続 -->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -29,49 +30,32 @@
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2>タスクどん</h2>
-		<h3>講師退職確認画面</h3> <!--確認画面用の説明用テキスト-->
-
-		<p>退職しますか？</p>
-		<div>
+		<h2>講師退職</h2>
+		<h3>[退職内容確認]</h3> <!--確認画面用の説明用テキスト-->
+		<div class="main-content">
 			<form th:action="@{teDeleteComp}" method="post" th:if="${te != null}">
-				<table border="1">
+				<div class="mb-3 retirement-item">
+					<span class="form-label">講師ID</span>
+					<div type="text" class="form-control" th:text="${te.user_id}"></div>
+				</div>
 
-					<tr>
-						<th>項目</th>
-						<th>内容</th>
-					</tr>
-					<tr>
-						<th>ユーザID</th>
-						<td th:text="${te.user_id}"></td>
-					</tr>
-					<tr>
-						<th>ユーザ名</th>
-						<td th:text="${te.user_name}"></td>
-					</tr>
-					<tr>
-						<th>パスワード</th>
-						<td th:text="${te.user_pass}"></td>
-					</tr>
-					<tr>
-						<th>所属学校</th>
-						<td th:text="${te.school_name}"></td>
-					</tr>
-					<tr>
-						<th>入学年度</th>
-						<td th:text="${te.enr_year}"></td>
-					</tr>
+				<div class="mb-3 retirement-item">
+					<span class="form-label">講師名</span>
+					<div type="text" class="form-control" th:text="${te.user_name}"></div>
+				</div>
 
-				</table>
+				<div class="mb-3 retirement-item">
+					<span class="form-label">所属学校</span>
+					<div type="text" class="form-control" th:text="${te.school_name}"></div>
+				</div>
 
-				<button type="button" name="button" value="退職" class="btn btn-danger"
+				<div class="mb-3 retirement-item">
+					<span class="form-label">入学年度</span>
+					<div type="text" class="form-control" th:text="${te.enr_year}"></div>
+				</div>
+
+				<button type="button" name="button" value="退職" class="control-btn mini-btn"
 					onclick="teDeleteAndShowPopup()">退職</button>
-
-				<tr>
-					<td colspan="2" align="center">
-						<input type="submit" value="退職">
-					</td>
-				</tr>
 
 				<input type="hidden" name="user_id" th:value="${te.user_id}">
 				<input type="hidden" name="user_name" th:value="${te.user_name}">
@@ -83,23 +67,15 @@
 			</form>
 		</div>
 
-
 		<!-- 講師削除完了のポップアップ -->
-		<div class="modal fade" id="teDeleteModal" tabindex="-1" role="dialog" aria-labelledby="teDeleteModalLabel"
-			aria-hidden="true">
+		<div class="modal fade popup-place" id="teDeleteModal" tabindex="-1" role="dialog"
+			aria-labelledby="teDeleteModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="teDeleteModalLabel">退職完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>退職が完了しました</p>
-					</div>
-					<div class="modal-footer">
-						<form th:action="@{teList}" method="get">
-							<button type="submit" class="btn btn-danger">講師一覧へ</button>
-						</form>
-					</div>
+					<p class="modal-text">退職が完了しました</pm>
+					<form th:action="@{teList}" method="get">
+						<button type="submit" class="control-btn return-btn">講師一覧へ</button>
+					</form>
 				</div>
 			</div>
 		</div>

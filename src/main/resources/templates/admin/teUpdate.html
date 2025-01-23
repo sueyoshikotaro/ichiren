@@ -8,7 +8,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|学校情報編集</title>
+	<title>タスクどん|講師情報編集</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +18,7 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -36,52 +37,49 @@
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:action="@{teUpdateConfirm}" method="post">
-			<table>
-				<tr>
-					<th>講師ID</th>
-					<td><input type="text" name="user_id" th:value="${te.user_id}" readonly></td>
-				</tr>
-				<tr>
-					<th>講師名</th>
-					<td><input type="text" name="user_name" th:value="${te.user_name}"></td>
-				</tr>
-				<tr>
-					<th for="school-select">所属学校名</th>
-					<td>
-						<select id="school-select" name="school_name" th:value="${te.school_name}">
-							<option value="">--選択してください</option>
-							<option name="school_name">北海道情報専門学校</option>
-							<option name="school_name">JOHO 新潟情報専門学校</option>
-							<option name="school_name">JOHO 大阪情報専門学校</option>
-							<option name="school_name">名古屋医療情報専門学校</option>
-							<option name="school_name">名古屋情報メディア専門学校</option>
-							<option name="school_name">JOHO 広島情報専門学校</option>
-							<option name="school_name">KCS福岡情報専門学校</option>
-							<option name="school_name">KCS北九州情報専門学校</option>
-							<option name="school_name">KCS大分情報専門学校</option>
-							<option name="school_name">KCS鹿児島情報専門学校</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>入社年月日</th>
-					<td th:text="${te.enr_year}"></td>
-				</tr>
-				<td colspan="2" align="center">
-					<input type="submit" value="確認">
-				</td>
-				</tr>
+			<div class="form-group regist-item">
+				<label class="form-label">講師ID</label>
+				<input type="text" class="form-control regist-field" th:value="${te.user_id}" name="user_id" readonly>
+			</div>
 
-			</table>
+			<div class="form-group regist-item">
+				<label class="form-label">講師名</label>
+				<input type="text" class="form-control regist-field" th:value="${te.user_name}" name="user_name">
+			</div>
 
-			<!--			<input type="hidden" name="user_id" th:value="${te.user_id}">-->
-			<!--			<input type="hidden" name="user_name" th:value="${te.user_name}">-->
-			<!--			<input type="hidden" name="user_pass" th:value="${te.user_pass}">-->
-			<!--			<input type="hidden" name="school_name" th:value="${te.school_name}">-->
-			<input type="hidden" name="enr_year" th:value="${te.enr_year}">
-			<!--			<input type="hidden" name="user_flg" th:value="${te.user_flg}">-->
+			<div class="form-group regist-item">
+				<label class="form-label" for="school-select">所属学校名</label>
+				<select id="school-select" name="school_name" class="form-select regist-field">
+					<option name="school_name">
+						<div th:text="${te.school_name}"></div>
+					</option>
+					<option name="school_name">北海道情報専門学校</option>
+					<option name="school_name">JOHO 新潟情報専門学校</option>
+					<option name="school_name">JOHO 大阪情報専門学校</option>
+					<option name="school_name">名古屋医療情報専門学校</option>
+					<option name="school_name">名古屋情報メディア専門学校</option>
+					<option name="school_name">JOHO 広島情報専門学校</option>
+					<option name="school_name">KCS福岡情報専門学校</option>
+					<option name="school_name">KCS北九州情報専門学校</option>
+					<option name="school_name">KCS大分情報専門学校</option>
+					<option name="school_name">KCS鹿児島情報専門学校</option>
+				</select>
+			</div>
 
+			<div class="form-group regist-item">
+				<label class="form-label">入社年月日</label>
+				<input type="date" th:value="${te.enr_year}" class="form-control regist-field" id="enr_year"
+					name="enr_year" min="1900-01-01" max="9999-12-31" required>
+			</div>
 
+			<button type="submit" class="control-btn mini-btn" value="確認">確認</button>
+
+			<!--<input type="hidden" name="user_id" th:value="${te.user_id}">-->
+			<!--<input type="hidden" name="user_name" th:value="${te.user_name}">-->
+			<!--<input type="hidden" name="user_pass" th:value="${te.user_pass}">-->
+			<!--<input type="hidden" name="school_name" th:value="${te.school_name}">-->
+			<!--<input type="hidden" name="user_flg" th:value="${te.user_flg}">-->
+			<!--<input type="hidden" name="enr_year" th:value="${te.enr_year}">-->
 
 		</form>
 	</div>
