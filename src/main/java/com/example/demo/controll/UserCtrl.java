@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -36,8 +38,6 @@ import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -273,10 +273,7 @@ public class UserCtrl {
 		}
 		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
 
-		System.out.println(noticeList);
-
 		mav.addObject("noticeList", noticeList);
-		mav.setViewName("user/menuUser");
 		mav.setViewName("common/menuUser");
 
 		List<Room> roomList = userDisplayService.roomSelect();
@@ -704,24 +701,24 @@ public class UserCtrl {
 	 * 埋め込み前
 	 * @return
 	 */
-	@GetMapping("noticeDisp")
-	public ModelAndView noticeDisp(ModelAndView mav) {
-
-		// ログインユーザのエンティティを取得
-		User userEntity = (User) session.getAttribute("user");
-
-		// エンティティの中のuser_idを取得
-		String user_id = userEntity.getUser_id();
-
-		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
-
-		System.out.println(noticeList);
-
-		mav.addObject("noticeList", noticeList);
-		mav.setViewName("user/menuUser");
-
-		return mav;
-	}
+	//	@GetMapping("noticeDisp")
+	//	public ModelAndView noticeDisp(ModelAndView mav) {
+	//
+	//		// ログインユーザのエンティティを取得
+	//		User userEntity = (User) session.getAttribute("user");
+	//
+	//		// エンティティの中のuser_idを取得
+	//		String user_id = userEntity.getUser_id();
+	//
+	//		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
+	//
+	//		System.out.println(noticeList);
+	//
+	//		mav.addObject("noticeList", noticeList);
+	//		mav.setViewName("common/menuUser");
+	//
+	//		return mav;
+	//	}
 
 	/*
 	 * 向江
@@ -807,6 +804,7 @@ public class UserCtrl {
 	 * 連絡事項削除確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("noticeDelete")
 	public ModelAndView noticeDelete(ModelAndView mav,
 			@RequestParam(name = "check", required = false) Integer[] check) {
@@ -822,7 +820,7 @@ public class UserCtrl {
 		if (check == null || check.length == 0) {
 
 			mav.addObject("errMsg", "連絡事項を選択してください");
-			mav.setViewName("user/menuUser");
+			mav.setViewName("common/menuUser");
 
 			// チェックボックスが選択されている場合
 		} else {
@@ -831,7 +829,7 @@ public class UserCtrl {
 			List<NoticeViewForm> checkList = new ArrayList<>();
 			for (int i = 0; i < check.length; i++) {
 				NoticeViewForm notice = new NoticeViewForm();
-				List<NoticeViewForm> noticeList =new ArrayList<>(NoticeService.selectNotice(check[i]));
+				List<NoticeViewForm> noticeList = new ArrayList<>(NoticeService.selectNotice(check[i]));
 				notice.setNotice_id(noticeList.get(0).getNotice_id());
 				notice.setUser_name(noticeList.get(0).getUser_name());
 				notice.setTitle(noticeList.get(0).getTitle());
@@ -848,9 +846,10 @@ public class UserCtrl {
 
 	/*
 	 * 向江
-	 * 連絡事項削除確認画面を表示するリクエストハンドラメソッド
+	 * 連絡事項削除完了するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("noticeDeleteConfirm")
 	public ModelAndView noticeDeleteConfirm(ModelAndView mav,
 			@RequestParam(name = "notice_id") Integer[] notice_id) {
@@ -858,10 +857,10 @@ public class UserCtrl {
 		for (int i = 0; i < notice_id.length; i++) {
 			// 連絡事項削除のサービス
 			System.out.println(notice_id[i]);
-			NoticeService.noticeDelete((int)notice_id[i]);
+			NoticeService.noticeDelete((int) notice_id[i]);
 		}
 
-		mav.setViewName("user/menuUser");
+		mav.setViewName("common/menuUser");
 
 		return mav;
 	}
