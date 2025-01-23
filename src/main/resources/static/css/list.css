@@ -95,7 +95,7 @@
 /*メイン項目内のスクロールバー*/
 .main-content {
 	overflow-y: auto;
-	height: 600px;
+	max-height: 600px;
 	padding: 13px;
 	margin-bottom: 20px;
 }
@@ -121,6 +121,11 @@
 .content-child {
 	margin-bottom: 24px;
 	border-top: 2px solid black;
+}
+
+/*繰返し小項目(user作成一覧用)*/
+.user-child {
+	margin-bottom: -6px;
 }
 
 /*講師一覧*/
