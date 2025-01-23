@@ -113,7 +113,7 @@ public class UserCtrl {
 	public ModelAndView loginCheck(ModelAndView mav, String user_id, String user_pass, RedirectAttributes ra) {
 
 		Optional<User> user = userCrudRepo.findById(user_id);
-		
+
 		if (user.isPresent() && user.get().getUser_flg() == 1 && user.get().getUser_pass().equals(user_pass)) {
 
 			session.setAttribute("user_id", user_id);
