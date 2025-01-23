@@ -344,4 +344,10 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		return groupDispCrudRepo.setChatUser(school_id, user_roll);
 	}
 
+	@Override
+	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll) {
+		
+		return groupDispCrudRepo.chatPartnerSearch(school_id, "%"+ search +"%", user_roll);
+	}
+
 }

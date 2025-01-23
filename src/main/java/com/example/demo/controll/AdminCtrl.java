@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -36,8 +38,6 @@ import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
 
-import jakarta.servlet.http.HttpSession;
-
 /**
  * 管理者のコントローラ
  */
@@ -65,7 +65,7 @@ public class AdminCtrl {
 	GroupDisplayServiceInterface groupDispService;
 
 	private int school_id;
-	private String user_id;
+//	private String user_id;
 	
 	/**
 	 * ログイン画面を表示する
@@ -104,7 +104,7 @@ public class AdminCtrl {
 		// エンティティの中のschool_idを取得
 		school_id = userEntity.getSchool_id();
 		// エンティティの中のuser_idを取得
-		user_id = userEntity.getUser_id();
+//		user_id = userEntity.getUser_id();
 
 		return "admin/menuAdmin";
 	}
@@ -1408,7 +1408,27 @@ public class AdminCtrl {
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = groupDispService.setChatUser(school_id, "リーダ");
 		
-		System.out.println(chatPartner);
+		mav.addObject("chatPartner", chatPartner);
+		mav.setViewName("common/chat");
+		return mav;
+	}
+	
+	/**
+	 * 末吉
+	 * チャット相手検索
+	 * @return
+	 */
+	@PostMapping("chatPartnerSearch")
+	public ModelAndView chatSearch(ModelAndView mav,
+			@RequestParam(name = "search", required = false) String search) {
+		
+		//チャットの通信可能相手を格納
+		System.out.println(school_id);
+		System.out.println(search);
+		
+		List<GroupDetailView> chatPartner = groupDispService.chatPartnerSearch(school_id, search, "リーダ");
+		
+		System.out.println("検索" + chatPartner);
 		
 		mav.addObject("chatPartner", chatPartner);
 		mav.setViewName("common/chat");
