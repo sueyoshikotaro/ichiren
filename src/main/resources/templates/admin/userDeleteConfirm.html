@@ -64,6 +64,8 @@
 					</label>
 					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
 				</div>
+				
+				<div id="message" style="display: none;">チェックボックスにチェックしてください</div>
 
 				<button type="button" name="button" value="削除" class="control-btn mini-btn"
 					onclick="userDereteAndShowPopup()">削除</button>
@@ -129,11 +131,14 @@
 			$('#flexCheckDefault').on('change', function () {
 				if ($(this).is(':checked')) {
 					$('button[name="button"]').prop('disabled', false);
+					$('#message').hide();
 				} else {
 					$('button[name="button"]').prop('disabled', true);
+					$('#message').show();
 				}
 			});
 			$('button[name="button"]').prop('disabled', true);
+			$('#message').show();
 		});
 	</script>
 
