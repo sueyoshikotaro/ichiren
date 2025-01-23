@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -35,8 +37,6 @@ import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者のコントローラ
@@ -460,7 +460,8 @@ public class AdminCtrl {
 		userDisplayService.PassFormat(u.getUser_id());
 
 		//mav.addObject("user",u);
-		mav.setViewName("admin/updateComp");
+		mav.addObject("passClearConfirm", true);
+		mav.setViewName("admin/passClear");
 
 		return mav;
 	}
@@ -671,6 +672,8 @@ public class AdminCtrl {
 	@PostMapping("teUpdate")
 	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
 
+		
+		System.out.println(u);
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdate");
 
