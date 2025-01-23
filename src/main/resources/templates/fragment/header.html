@@ -43,35 +43,41 @@
 							<ul class="dropdown-menu dropdown-menu-dark">
 
 								<!--ホーム画面(menuUser)遷移-->
-								<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:onclick="|location.href='@{menu}'|">ホーム</a></li>
 
 								<!--役職判断処理-->
 								<div th:if="${session.user_roll} == 'リーダ'">
-									<li><a class="dropdown-item"
+									<li class="screen-btn"><a class="dropdown-item"
 											th:onclick="|location.href='@{memberList}'|">メンバ一覧</a><!--未実装-->
 									</li>
 								</div>
 
-								<li><a class="dropdown-item" th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
 
-								<li><a class="dropdown-item" th:onclick="|location.href='@{todoList}'|">ToDoリスト</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:onclick="|location.href='@{todoList}'|">ToDoリスト</a></li>
 
 								<!--役職判断処理-->
 								<div th:if="${session.user_roll} == 'リーダ'">
-									<li><a class="dropdown-item"
+									<li class="screen-btn"><a class="dropdown-item"
 											th:onclick="|location.href='@{noticeRegist}'|">連絡事項作成</a></li><!--未実装-->
 								</div>
 
-								<li><a class="dropdown-item" th:onclick="|location.href='@{chat}'|">チャット</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:onclick="|location.href='@{chat}'|">チャット</a></li>
 								<!--未実装-->
 
 								<li>
 									<hr class="dropdown-divider">
 								</li>
 
-								<li><a class="dropdown-item" th:href="@{/taskdon/user/deptGroupList}">所属グループ</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:href="@{/taskdon/user/deptGroupList}">所属グループ</a></li>
 
-								<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -113,21 +119,27 @@
 							<ul class="dropdown-menu dropdown-menu-dark">
 
 								<!--ホーム画面(menuAdmin)遷移-->
-								<li><a class="dropdown-item" th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:onclick="|location.href='@{menu}'|">ホーム</a></li>
 
-								<li><a class="dropdown-item" th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:onclick="|location.href='@{groupList}'|">グループ一覧</a></li>
 
-								<li><a class="dropdown-item" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:onclick="|location.href='@{userList}'|">ユーザ一覧</a></li>
 
-								<li><a class="dropdown-item" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
 								</li>
 
-								<li><a class="dropdown-item" th:onclick="|location.href='@{/nextpage}'|">チャット</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:onclick="|location.href='@{chat}'|">チャット</a></li>
 								<!--未実装-->
 
 								<!--役職判断処理(管理者のBOSS)-->
 								<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
-									<li><a class="dropdown-item" th:onclick="|location.href='@{teList}'|">講師一覧</a>
+									<li class="screen-btn"><a class="dropdown-item"
+											th:onclick="|location.href='@{teList}'|">講師一覧</a>
 									</li>
 								</div>
 
@@ -135,7 +147,8 @@
 									<hr class="dropdown-divider">
 								</li>
 
-								<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -180,7 +193,8 @@
 									<hr class="dropdown-divider">
 								</li>
 
-								<li><a class="dropdown-item" th:href="@{/taskdon/user/logout}">ログアウト</a></li>
+								<li class="screen-btn"><a class="dropdown-item"
+										th:href="@{/taskdon/user/logout}">ログアウト</a></li>
 							</ul>
 						</li>
 					</ul>

@@ -336,4 +336,12 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		return groupDispCrudRepo.deptGroupList(user_id);
 	}
 
+	//チャット相手を設定
+	@Override
+	public List<GroupDetailView> setChatUser(int school_id, String user_roll) {
+		
+		//チャット相手を一覧で格納
+		return groupDispCrudRepo.setChatUser(school_id, user_roll);
+	}
+
 }

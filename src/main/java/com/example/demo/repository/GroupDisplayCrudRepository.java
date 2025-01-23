@@ -183,4 +183,10 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Query("select user_detail.group_id,group_name,genre,user_roll from teams inner join user_Detail on teams.group_id = user_Detail.group_id where user_Detail.user_id = :user_id")
 	public List<GroupDisplay> deptGroupList(String user_id);
+  
+	 * 末吉
+	 * チャット相手を格納
+	 */
+	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1")
+	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
 }

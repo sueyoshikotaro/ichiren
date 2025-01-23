@@ -95,7 +95,7 @@
 /*メイン項目内のスクロールバー*/
 .main-content {
 	overflow-y: auto;
-	height: 600px;
+	max-height: 600px;
 	padding: 13px;
 	margin-bottom: 20px;
 }
@@ -123,8 +123,24 @@
 	border-top: 2px solid black;
 }
 
+/*繰返し小項目(user作成一覧用)*/
+.user-child {
+	margin-bottom: -6px;
+}
+
 /*講師一覧*/
 /*繰返し項目毎のボタングループ*/
 .teList-btn-group {
 	margin-top: 12px;
+}
+
+/*ユーザ一覧*/
+/*繰返し項目毎のボタングループ*/
+.userList-btn-group{
+	margin-top: -10px;
+	margin-bottom: -10px;
+}
+
+.user-content {
+	margin-top: -14px;
 }
