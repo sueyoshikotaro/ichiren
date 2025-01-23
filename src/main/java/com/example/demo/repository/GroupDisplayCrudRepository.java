@@ -194,6 +194,6 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 末吉
 	 * チャット相手を検索
 	 */
-	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1")
+	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1 and u.user_name like concat('%', :search, '%')")
 	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll);
 }

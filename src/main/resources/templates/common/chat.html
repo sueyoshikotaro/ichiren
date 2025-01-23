@@ -28,6 +28,8 @@
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
 
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -56,20 +58,21 @@
 			aria-labelledby="offcanvasExampleLabel">
 			<div class="offcanvas-header">
 				<h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+				<button type="button" class="btn-close" id="closeOffcanvas" aria-label="Close"></button>
 			</div>
 			<div class="offcanvas-body">
 
-				<form th:action="@{chatPartnerSearch}" method="post">
+				<form id="searchForm" th:action="@{chatSearch}" method="post">
 					<!--検索フォーム(予定)-->
 					<div class="input-group mb-3">
 						<!--検索内容入力欄-->
 						<input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
-							aria-describedby="button-addon2" name="serch">
+							aria-describedby="button-addon2" name="search">
 
 
 						<!--検索ボタン-->
-						<button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+						<button class="btn btn-outline-secondary" type="button" id="button-addon2"
+							onclick="chatSearch()">
 							<!--検索ボタンイラスト(bootstrap引用)-->
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 								class="bi bi-search" viewBox="0 0 16 16">
@@ -81,14 +84,13 @@
 				</form>
 
 				<!--チャット相手一覧(リスト,繰返しかな)-->
-				<ul class="list-group">
+				<ul class="list-group" id="chatPartnerList">
 					<li th:each="chat : ${chatPartner}" class="list-group-item list-group-item-action">
 						<span th:text="${chat.user_name}">○○さん</span>
 
 						<span class="badge bg-primary rounded-pill" th:text="${notificationCount}"
 							th:if="${notificationCount != null}">通知数</span>
 					</li>
-
 				</ul>
 
 			</div>
@@ -117,10 +119,53 @@
 					</svg>
 				</button>
 			</div>
-
 		</div>
-
 	</div>
+
+	<!--処理コード欄-->
+	<script th:inline="javascript">
+		function chatSearch() {
+		    const form = document.getElementById("searchForm");
+		    const value = form.querySelector("input[name='search']").value;
+
+		    /*URL指定＆ドロップダウンリストの値引き渡し*/
+		    var url = "chatSearch";
+		    var params = {
+		        "search": value
+		    };
+		    console.log(params)
+
+		    /*チャット相手一覧の再表示メソッドの呼び出し*/
+		    $.ajax({
+		        type: "POST",
+		        url: url,
+		        data: params,
+		        success: function (data) {
+		            console.log(data); // データをコンソールに出力
+
+		            // チャット相手一覧のリストを取得
+		            var chatPartnerList = document.getElementById("chatPartnerList");
+		            console.log(chatPartnerList)
+
+		            // チャット相手一覧のリストを更新
+		            if (data) { // データが存在する場合のみ処理を実行
+		                // HTMLを解析して必要な情報を抽出
+		                var html = $(data);
+		                var chatPartner = html.find("#chatPartnerList li");
+
+		                chatPartnerList.innerHTML = "";
+		                chatPartner.each(function () {
+		                    var li = document.createElement("li");
+		                    li.className = "list-group-item list-group-item-action";
+		                    li.innerHTML = $(this).html();
+		                    chatPartnerList.appendChild(li);
+		                });
+		            }
+		        }
+		    });
+		}
+
+	</script>
 
 	<!-- bootstrapのjsリンク接続 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
