@@ -20,7 +20,7 @@
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
-	
+
 </head>
 
 <body>
@@ -30,6 +30,9 @@
 		<h1 class="app-title">タスクどん</h1>
 
 		<h2>ログイン</h2>
+
+		<!-- エラー文を表示する -->
+		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<!--入力情報(必須)-->
 		<form th:action="@{/taskdon/user/login}" method="post">

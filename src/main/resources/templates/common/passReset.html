@@ -14,6 +14,9 @@
 
 		<h2 class="menu-text">パスワード再設定</h2>
 
+		<!-- エラー文を表示する -->
+		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
+
 		<form th:action=@{/taskdon/user/updatePass} method="post">
 			<div class="">
 				<lavel>新パスワード　　　　　</lavel>
@@ -45,8 +48,8 @@
 						<table>
 							<form th:action="@{/taskdon/user/updatePass}" method="post">
 								<input type="hidden" name="user_id" th:value="${user_id}">
-								<!--<input type="hidden" name="newPass" th:value="&{newPass}">-->
-								<!--<input type="hidden" name="confirmPass" th:value="&{confirmPass}">-->
+								<input type="hidden" name="newPass" id="newPassHidden">
+								<input type="hidden" name="confirmPass" id="confirmPassHidden">
 								<button type="submit" name="button" value="はい" class="btn btn-danger">はい</button>
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
 							</form>
@@ -58,6 +61,18 @@
 
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+		<!--newPassとconfirmPassに値を設定するscript-->
+		<script>
+			$(document).ready(function () {
+				$('#passResetModal').on('show.bs.modal', function (event) {
+					var newPass = $('input[name="newPass"]').val();
+					var confirmPass = $('input[name="confirmPass"]').val();
+					$('#newPassHidden').val(newPass);
+					$('#confirmPassHidden').val(confirmPass);
+				});
+			});
+		</script>
 </body>
 
 </html>

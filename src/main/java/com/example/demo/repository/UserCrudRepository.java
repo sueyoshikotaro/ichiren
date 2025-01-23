@@ -29,4 +29,11 @@ public interface UserCrudRepository extends CrudRepository<User, String> {
 	@Modifying
 	@Query("update user set user.user_pass = :newPass where user.user_id = :user_id")
 	public void userPassReset(String user_id, String newPass);
+
+	/**
+	 * パスワード無効化
+	 */
+	@Modifying
+	@Query("update user set user.user_flg = 0 where user.user_id = :user_id")
+	public void adminDisable(String user_id, int user_flg);
 }

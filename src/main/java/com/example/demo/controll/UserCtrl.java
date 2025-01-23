@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -35,6 +33,8 @@ import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -84,7 +84,8 @@ public class UserCtrl {
 
 		session.invalidate();
 
-		return "common/login";
+		return "redirect:/taskdon/user/login";
+		//return "common/login";
 	}
 
 	/**
@@ -120,23 +121,25 @@ public class UserCtrl {
 
 			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
 
-				return new ModelAndView("redirect:/taskdon/admin/menu");
+				userService.adminDisable(user_id, 0); //adminアカウント無効化
+
+				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合(初回のみ)
 			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
 
-				return new ModelAndView("redirect:/taskdon/admin/menu");
+				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合
 			} else if (user.get().getUser_pass().equals("taskdon1")) {
 
-				return new ModelAndView("redirect:/taskdon/user/passReset");
+				return new ModelAndView("redirect:/taskdon/user/passReset"); //パスワード再設定に遷移
 			} else if (user.get().getUser_id().contains("st")) {
 
-				return new ModelAndView("redirect:/taskdon/user/deptGroupList");
+				return new ModelAndView("redirect:/taskdon/user/deptGroupList"); //ユーザがログインした場合
 			} else {
-
-				mav.setViewName("common/login");
+				mav.addObject("errMsg", "IDまたはパスワードが違います。");
+				mav.setViewName("common/login"); //ログイン失敗
 			}
 		} else {
-			mav.addObject("loginError", "IDまたはパスワードが違います。");
-			mav.setViewName("common/login");
+			mav.addObject("errMsg", "IDまたはパスワードが違います。");
+			mav.setViewName("common/login"); //ログイン失敗
 		}
 
 		return mav;
@@ -148,8 +151,6 @@ public class UserCtrl {
 	 */
 	@GetMapping("passReset")
 	public ModelAndView passReset(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
-
-		System.out.println(user_id);
 
 		mav.addObject("user_id", user_id);
 		mav.addObject("newPass");
@@ -171,40 +172,34 @@ public class UserCtrl {
 
 		User u = user.get();
 
-		String passwordPattern = "^[a-zA-Z0-9]{8,15}$"; // 8-15桁の英数字
-
-		System.out.println(user_id);
-		System.out.println(newPass);
-		System.out.println(confirmPass);
+		String passwordPattern = "^[a-zA-Z0-9]{8,16}$"; // 8-16桁の英数字のみ設定可
 
 		if (!newPass.matches(passwordPattern)) {
 
-			mav.addObject("passwordError", "パスワードは8桁以上16桁以下の英数字でなければなりません。");
+			mav.addObject("errMsg", "パスワードは8桁以上16桁以下の英数字でなければなりません。");
 			mav.addObject("user_id", user_id); // user_idを再度渡す
 			mav.setViewName("common/passReset");
 
 			return mav;
 		} else if (!newPass.equals(confirmPass)) {
 
-			mav.addObject("passwordError", "新パスワードと確認パスワードが一致しません。");
+			mav.addObject("errMsg", "新パスワードと確認パスワードが一致しません。");
 			mav.addObject("user_id", user_id); // user_idを再度渡す
 			mav.setViewName("common/passReset");
 
 			return mav;
-		} else if (!(newPass.equals("taskdon1") && confirmPass.equals("taskdon1"))) {
+		} else if (newPass.equals("taskdon1") && confirmPass.equals("taskdon1")) {
 
-			mav.addObject("passwordError", "'taskdon1'は登録できません。");
+			mav.addObject("errMsg", "'taskdon1'は登録できません。");
 			mav.addObject("user_id", user_id); // user_idを再度渡す
 			mav.setViewName("common/passReset");
 
 			return mav;
 		} else {
 
-			userService.userPassReset(u.getUser_id(), newPass);
+			userService.userPassReset(u.getUser_id(), newPass); //新パスワードに更新
 
-			System.out.println("パスワード更新完了");
-
-			//mav.setViewName("redirect:/taskdon/user/login"); // ログイン画面へリダイレクト
+			mav.setViewName("redirect:/taskdon/user/login"); // ログイン画面へリダイレクト
 
 			return mav;
 		}
@@ -217,8 +212,6 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("/taskdon/admin/menu")
 	public ModelAndView adminMenu(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
-
-		Optional<User> user = userCrudRepo.findById(user_id);
 
 		mav.setViewName("admin/menuAdmin");
 
@@ -251,7 +244,7 @@ public class UserCtrl {
 		} else {
 
 			// ユーザーが存在しない場合のエラー処理
-			mav.setViewName("error");
+			mav.setViewName("errMsg");
 			mav.addObject("errorMessage", "ユーザーが見つかりません。");
 		}
 
@@ -696,7 +689,7 @@ public class UserCtrl {
 	}
 
 	/**
-
+	
 	 * 向江
 	 * 連絡事項一覧画面を表示
 	 * 埋め込み前
@@ -782,7 +775,7 @@ public class UserCtrl {
 	//		
 	//		return mav;
 	//	}
-	
+
 	/**
 	 * チャット画面を表示
 	 * @return
