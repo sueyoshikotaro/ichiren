@@ -853,7 +853,7 @@ public class UserCtrl {
 	@PostMapping("noticeDeleteConfirm")
 	public ModelAndView noticeDeleteConfirm(ModelAndView mav,
 			@RequestParam(name = "notice_id") Integer[] notice_id) {
-		System.out.println("aaaaaaaaaaaaaa");
+		//System.out.println("aaaaaaaaaaaaaa");
 		for (int i = 0; i < notice_id.length; i++) {
 			// 連絡事項削除のサービス
 			System.out.println(notice_id[i]);
