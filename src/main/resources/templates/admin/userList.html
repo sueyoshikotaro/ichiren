@@ -19,6 +19,9 @@
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/list.css}"> <!-- リスト用CSS -->
 
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
@@ -40,14 +43,14 @@
 				<div class="row">
 					<div class="col">
 						<div class="mb-3">
-							<span class="form-label">ユーザID</span>
-							<div type="text" class="form-control" th:text="${user.user_id}"></div>
+							<span class="form-label">ユーザ名</span>
+							<div type="text" class="form-control" th:text="${user.user_name}"></div>
 						</div>
 					</div>
 					<div class="col">
 						<div class="mb-3">
-							<span class="form-label">ユーザ名</span>
-							<div type="text" class="form-control" th:text="${user.user_name}"></div>
+							<span class="form-label">ユーザID</span>
+							<div type="text" class="form-control" th:text="${user.user_id}"></div>
 						</div>
 					</div>
 				</div>

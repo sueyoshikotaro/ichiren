@@ -335,5 +335,44 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 		return groupDispCrudRepo.deptGroupList(user_id);
 	}
-	
+
+	//チャット相手を設定
+	@Override
+	public List<GroupDetailView> setChatUser(int school_id, String user_roll) {
+
+		//チャット相手を一覧で格納
+		return groupDispCrudRepo.setChatUser(school_id, user_roll);
+	}
+
+	//チャット相手を検索
+	@Override
+	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll) {
+		return groupDispCrudRepo.chatPartnerSearch(school_id, search, user_roll);
+	}
+
+	/**
+	 * 湊原
+	 * ユーザ側のメンバー一覧
+	 */
+	@Override
+	public List<GroupMemberDetailView> memberList(int group_id) {
+		return groupDispCrudRepo.memberList(group_id);
+
+	}
+
+	/**
+	 * 湊原
+	 * ユーザ側のグループの全体進捗
+	 */
+	@Override
+	public int selectProgress(int group_id) {
+		return groupDispCrudRepo.selectAllprogress(group_id);
+	}
+
+	@Override
+	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id) {
+
+		return groupDispCrudRepo.memberDetail(user_id, group_id);
+	}
+
 }

@@ -20,6 +20,9 @@
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/control.css}">
 
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
@@ -34,14 +37,15 @@
 		<h3>[退職内容確認]</h3> <!--確認画面用の説明用テキスト-->
 		<div class="main-content">
 			<form th:action="@{teDeleteComp}" method="post" th:if="${te != null}">
-				<div class="mb-3 retirement-item">
-					<span class="form-label">講師ID</span>
-					<div type="text" class="form-control" th:text="${te.user_id}"></div>
-				</div>
 
 				<div class="mb-3 retirement-item">
 					<span class="form-label">講師名</span>
 					<div type="text" class="form-control" th:text="${te.user_name}"></div>
+				</div>
+
+				<div class="mb-3 retirement-item">
+					<span class="form-label">講師ID</span>
+					<div type="text" class="form-control" th:text="${te.user_id}"></div>
 				</div>
 
 				<div class="mb-3 retirement-item">

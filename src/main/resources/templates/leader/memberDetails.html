@@ -8,7 +8,7 @@
 	<meta charset="UTF-8">
 
 	<!-- サイトタイトル -->
-	<title>タスクどん|グループメンバ詳細</title>
+	<title>タスクどん|メンバ詳細</title>
 
 	<!-- デザイン等 -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,9 +19,6 @@
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/list.css}">
-
-	<!--ウェブアイコン-->
-	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -34,9 +31,9 @@
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2>グループメンバ詳細</h2>
+		<h2>メンバ詳細</h2>
 
-		<div th:each="groupDetails : ${group}" th:if="${groupDetailsStat.index == 0}">
+		<div th:each="memberTask:${memberTask}" th:if="${memberTaskStat.index == 0}">
 
 			<div class="row">
 				<div class="col">
@@ -45,23 +42,34 @@
 				<div class="col score-view">
 					<div class="input-group">
 						<span class="input-group-text">スコア</span>
-						<div type="text" class="form-control" th:text="${groupDetails.score}"></div>
+						<div type="text" class="form-control" th:text="${memberTask.score}"></div>
 					</div>
 				</div>
 			</div>
 
 			<div class="group-detail-text-view">
 				<span class="form-label">メンバ</span>
-				<div type="text" class="form-control" th:text="${groupDetails.user_name}"></div>
+				<div type="text" class="form-control" th:text="${memberTask.user_name}"></div>
 			</div>
 
 			<!-- メンバの進捗率(バー&パーセント)を表示する -->
 			<span class="form-label">進捗</span>
 			<div class="progress group-progress" role="progressbar">
 				<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
-					th:style="'width:'+ ${groupDetails.user_progress}+'%'"><label class="var-text group-progress-text"
-						th:text="${groupDetails.user_progress}+'%'"></div>
+					th:style="'width:'+ ${userProgress}+'%'"><label class="var-text group-progress-text"
+						th:text="${userProgress}+'%'"></div>
 			</div>
+
+			<!--				絞り込みドロップダウンリスト-->
+			<!--				<div class="col-md-6">-->
+			<!--					<select class="form-select" aria-label="Default select example" name="selectedValue"-->
+			<!--						th:onchange="taskList(this.value)">-->
+			<!--						<option selected>--</option>-->
+			<!--						<option name="group_user" th:each="user : ${session.groupUser}" th:value="${user}"-->
+			<!--							th:text="${user}">-->
+			<!--						</option>-->
+			<!--					</select>-->
+			<!--				</div>-->
 
 		</div>
 
@@ -75,36 +83,38 @@
 
 		<div class="main-content">
 
-			<div th:each="group : ${group}" class="content-child">
+			<div th:each="memberTask:${memberTask}" class="content-child">
 
-				<div type="text" class="form-control detail-taskName" th:text="${group.task_name}"></div>
+				<div type="text" class="form-control detail-taskName" th:text="${memberTask.task_name}"></div>
 
 				<div class="input-group">
 					<span class="input-group-text">優先度</span>
-					<div type="text" class="form-control" th:text="${group.task_priority}"></div>
+					<div type="text" class="form-control" th:text="${memberTask.task_priority}"></div>
 				</div>
 
 				<!-- タスクの進捗率(バー&パーセント)を表示する -->
 				<span class="form-label">進捗</span>
 				<div class="progress group-progress" role="progressbar">
 					<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
-						th:style="'width:'+ ${group.progress}+'%'"><label class="var-text group-progress-text"
-							th:text="${group.progress}+'%'"></div>
+						th:style="'width:'+ ${memberTask.progress}+'%'"><label class="var-text group-progress-text"
+							th:text="${memberTask.progress}+'%'"></div>
 				</div>
 
 				<!--				<td th:text="${group.app_date}"></td> 更新日 後回しのやつ -->
 
-				<div>
+				<!--タスク詳細 -->
+				<form th:action="@{taskDetails}" method="post">
+					<input type="hidden" name="task_id" th:value="${memberTask.task_id}">
+					<button type="submit" name="button" class="select-btn mini-btn" value="詳細">詳細</button>
+				</form>
 
-					<!--タスク詳細 -->
-					<form th:action="@{taskDeails}" method="get">
-						<input type="hidden" name="task_name" th:value="${group.task_name}">
-						<button type="submit" name="button" class="select-btn mini-btn" value="詳細">詳細</button>
-					</form>
-
-				</div>
 			</div>
+
 		</div>
+
+	</div>
+	<!-- コンテナ最下のボタン -->
+	<!--		<button th:onclick="|location.href='@{/taskdon/admin/groupDetail}'|">戻る</button>-->
 	</div>
 
 	<!--bootstrapのjsリンク接続-->

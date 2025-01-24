@@ -95,7 +95,7 @@
 /*メイン項目内のスクロールバー*/
 .main-content {
 	overflow-y: auto;
-	max-height: 600px;
+	max-height: 500px;
 	padding: 13px;
 	margin-bottom: 20px;
 }
@@ -136,11 +136,58 @@
 
 /*ユーザ一覧*/
 /*繰返し項目毎のボタングループ*/
-.userList-btn-group{
+.userList-btn-group {
 	margin-top: -10px;
 	margin-bottom: -10px;
 }
 
 .user-content {
 	margin-top: -14px;
+}
+
+/*進捗バー用*/
+.group-progress {
+	height: 27px;
+	border: 1.5px solid black;
+	margin-bottom: 13px;
+}
+
+.group-progress-text {
+	font-size: 20px;
+	color: white;
+}
+
+/*グループ一覧*/
+/*絞り込みグループ*/
+.narrow-dowm-group{
+	margin-top: -22px;
+	margin-bottom: 8px;
+}
+
+/*グループ一覧各項目に対して*/
+.groupList-name{
+	margin-bottom: -8px;
+}
+
+.groupList-text{
+	font-size: 20px;
+}
+
+.groupList-whereabouts{
+	margin-bottom: 8px;
+}
+
+.group-detail-text-view{
+	margin-top: 8px;
+}
+
+/*スコア欄*/
+.score-view{
+	margin-bottom: -26px;
+}
+
+/*メンバのタスク名*/
+.detail-taskName{
+	margin-top: 7px;
+	margin-bottom: 7px;
 }

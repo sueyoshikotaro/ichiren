@@ -16,6 +16,10 @@
 
 	<!-- CSS接続 -->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -27,7 +31,7 @@
 <body>
 	<!--コンテナ-->
 	<div class="container">
-		
+
 		<h2>グループメンバ追加</h2>
 		<h3>[追加内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
@@ -72,7 +76,8 @@
 						<p>追加が完了しました</p>
 					</div>
 					<div class="modal-footer">
-						<form th:action="@{groupList}" method="get">
+						<form th:action="@{groupDetail}" method="post">
+							<input type="hidden" name="group_id" th:value="${group_id}">
 							<button type="submit" class="btn btn-danger">グループ一覧へ</button>
 						</form>
 					</div>
