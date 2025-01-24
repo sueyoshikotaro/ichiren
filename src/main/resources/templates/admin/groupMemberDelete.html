@@ -16,6 +16,10 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -83,7 +87,8 @@
 					<div class="modal-footer">
 
 						<form th:action="@{groupDetail}" method="post">
-							<input type="hidden" name="group_id" th:value="${group[0].group_id}" th:if="${group != null}">
+							<input type="hidden" name="group_id" th:value="${group[0].group_id}"
+								th:if="${group != null}">
 							<button type="submit" name="button" value="グループ詳細へ" class="btn btn-danger">グループ詳細へ</button>
 						</form>
 

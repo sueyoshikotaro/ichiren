@@ -20,6 +20,9 @@
 	<link rel="stylesheet" th:href="@{/css/school.css}"> <!-- 学校情報系CSS -->
 	<link rel="stylesheet" th:href="@{/css/control.css}">
 
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
@@ -37,12 +40,12 @@
 		<div th:each="schoolDetails : ${SchoolDisplay}" th:if="${schoolDetailsStat.index == 0}">
 			<div class="mb-3 school-info-text">
 				<span class="form-label" id="basic-addon1">学校名</span>
-				<input type="text" class="form-control" th:value="${schoolDetails.school_name}" readonly>
+				<div type="text" class="form-control" th:text="${schoolDetails.school_name}"></div>
 			</div>
 
 			<div class="mb-3 school-info-text second-text">
 				<span class="form-label" id="basic-addon1">学校ID</span>
-				<input type="text" class="form-control" th:value="${schoolDetails.school_id}" readonly>
+				<div type="text" class="form-control" th:text="${schoolDetails.school_id}"></div>
 			</div>
 		</div>
 
@@ -86,10 +89,11 @@
 				<input type="hidden" name="floor" th:value="${schoolDetails.floor}">
 				<input type="hidden" name="school_id" th:value="${schoolDetails.school_id}">
 				<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
+
 				<button type="button" name="button" value="編集" class="control-btn mini-btn"
 					onclick="schoolEditAndShowPopup()">編集</button>
 
-<!--				<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>-->
+				<!--				<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>-->
 			</div>
 		</form>
 

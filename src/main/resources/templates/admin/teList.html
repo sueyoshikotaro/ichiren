@@ -19,6 +19,9 @@
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/list.css}"> <!-- リスト用CSS -->
 
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
@@ -35,10 +38,12 @@
 		<!-- 一覧表示テーブル -->
 		<!--スクロールバー適応内-->
 		<div class="main-content">
-			<div th:each="te : ${tes}" class="content-child"> <!--繰り返し-->
-				
+
+			<!--繰り返し-->
+			<div th:each="te : ${tes}" class="content-child">
+
 				<div class="input-group">
-					<span class="input-group-text">講師名　</span>
+					<span class="input-group-text">講師名</span>
 					<div th:text="${te.user_name}" class="form-control"></div>
 				</div>
 
@@ -85,7 +90,7 @@
 			</div>
 		</div>
 
-		<button th:onclick="|location.href='@{teInfoRegist}'|" class="move-btn long-btn">新規講師登録</button>
+		<button th:onclick="|location.href='@{teInfoRegist}'|" class="move-btn long-btn">新規登録</button>
 
 	</div>
 

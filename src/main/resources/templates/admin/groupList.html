@@ -17,6 +17,11 @@
 
 	<!-- CSS接続 -->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/list.css}">
+
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -28,77 +33,115 @@
 <body>
 	<!--コンテナ-->
 	<div class="container">
-		
-		<h2>グループ一覧画面</h2><br>
 
-		<select id="year" name="selectedValue" th:onchange="groupList(this.value)">
-			<option>グループ結成年度</option>
-			<option name="est_year" th:each="group : ${groups}" th:value="${group.est_year}"
-				th:text="${group.est_year}">
-			</option>
-		</select>
+		<h2>グループ一覧</h2><br>
 
-		<select id="school" name="selectedValue" th:onchange="groupList(this.value)">
-			<option>学校名</option>
-			<option name="school_name">北海道情報専門学校</option>
-			<option name="school_name">JOHO 新潟情報専門学校</option>
-			<option name="school_name">JOHO 大阪情報専門学校</option>
-			<option name="school_name">名古屋医療情報専門学校</option>
-			<option name="school_name">名古屋情報メディア専門学校</option>
-			<option name="school_name">JOHO 広島情報専門学校</option>
-			<option name="school_name">KCS福岡情報専門学校</option>
-			<option name="school_name">KCS北九州情報専門学校</option>
-			<option name="school_name">KCS大分情報専門学校</option>
-			<option name="school_name">KCS鹿児島情報専門学校</option>
-		</select>
+		<!--絞り込みグループ-->
+		<div class="narrow-dowm-group">
 
-		<select id="genre" name="selectValue" th:onchange="groupList(this.value)">
-			<option>ジャンル</option>
-			<option name="genre" th:each="group : ${groups}" th:value="${group.genre}" th:text="${group.genre}">
-			</option>
-		</select>
+			<!--絞り込み(所属学校)-->
+			<span class="form-label">所属学校</span>
+			<select id="school" name="selectedValue" class="form-select" th:onchange="groupList(this.value)">
+				<option>選択なし</option>
+				<option name="school_name">北海道情報専門学校</option>
+				<option name="school_name">JOHO 新潟情報専門学校</option>
+				<option name="school_name">JOHO 大阪情報専門学校</option>
+				<option name="school_name">名古屋医療情報専門学校</option>
+				<option name="school_name">名古屋情報メディア専門学校</option>
+				<option name="school_name">JOHO 広島情報専門学校</option>
+				<option name="school_name">KCS福岡情報専門学校</option>
+				<option name="school_name">KCS北九州情報専門学校</option>
+				<option name="school_name">KCS大分情報専門学校</option>
+				<option name="school_name">KCS鹿児島情報専門学校</option>
+			</select>
 
-		<script th:inline="javascript">
-			/* グループ結成年度 */
-			function groupList(selectedValue) {
-				/*URL指定＆ドロップダウンリストの値引き渡し*/
-				var url = "groupList";
-				var dropdown = event.target.id;
-				var params = {
-					"selectedValue": selectedValue,
-					"dropdown": dropdown
-				};
-
-
-				/*HTML内容のクリア*/
-				var elements = document.getElementsByClassName("content_child");
-				for (var i = 0; i < elements.length; i++) {
-					elements[i].innerHTML = "";
-				}
-				/*グループ一覧表示メソッドの呼び出し*/
-				$.ajax({
-					type: "GET",
-					url: url,
-					data: params,
-					success: function (data) {
-						var html = $(data).find(".content").html();
-						document.getElementById("data").innerHTML = html;
-					}
-				});
-			}
-		</script>
-
-		<div class="content">
-			<div th:each="group : ${groups}" class="content_child" id="data">
-				<div th:text="'グループ：' + ${group.group_name}"></div>
-				<div class="w-50 p-3">
-					<div th:text="'進捗：' + ${group.all_progress} + '％'"></div>
-					<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
-						aria-valuemin="0" aria-valuemax="100">
-						<div class="progress-bar" th:style="'width:'+ ${group.all_progress}+'%'"></div>
-					</div>
+			<div class="row">
+				<div class="col">
+					<!--絞り込み(結成年度)-->
+					<span class="form-label">結成年度</span>
+					<select id="year" name="selectedValue" class="form-select" th:onchange="groupList(this.value)">
+						<option>選択なし</option>
+						<option name="est_year" th:each="group : ${groups}" th:value="${group.est_year}"
+							th:text="${group.est_year}">
+						</option>
+					</select>
 				</div>
-				<div th:text="'居場所：' + ${group.work_status}"></div>
+				<div class="col">
+					<!--絞り込み(ジャンル-->
+					<span class="form-label">ジャンル</span>
+					<select id="genre" name="selectValue" class="form-select" th:onchange="groupList(this.value)">
+						<option>選択なし</option>
+						<option name="genre" th:each="group : ${groups}" th:value="${group.genre}"
+							th:text="${group.genre}">
+						</option>
+					</select>
+				</div>
+			</div>
+
+			<script th:inline="javascript">
+				/* グループ結成年度 */
+				function groupList(selectedValue) {
+					/*URL指定＆ドロップダウンリストの値引き渡し*/
+					var url = "groupList";
+					var dropdown = event.target.id;
+					var params = {
+						"selectedValue": selectedValue,
+						"dropdown": dropdown
+					};
+
+					/*HTML内容のクリア*/
+					var elements = document.getElementsByClassName("content_child");
+					for (var i = 0; i < elements.length; i++) {
+						elements[i].innerHTML = "";
+					}
+					/*グループ一覧表示メソッドの呼び出し*/
+					$.ajax({
+						type: "GET",
+						url: url,
+						data: params,
+						success: function (data) {
+							var html = $(data).find(".content").html();
+							document.getElementById("data").innerHTML = html;
+						}
+					});
+				}
+			</script>
+		</div>
+
+		<!--メイン項目-->
+		<div class="main-content">
+
+			<div th:each="group : ${groups}" id="data" class="content-child">
+
+				<!--グループ名-->
+				<div class="input-group groupList-name">
+					<span class="form-label groupList-text" th:text="'【'+${group.group_name}+'】'"></span>
+				</div>
+
+				<!--居場所表示-->
+				<div class="input-group groupList-whereabouts">
+					<span class="input-group-text">居場所</span>
+					<div type="text" class="form-control" th:text="${group.work_status}"></div>
+				</div>
+
+				<!--進捗表示-->
+				<span class="form-label">全体進捗</span>
+				<div class="progress group-progress" role="progressbar">
+					<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
+						th:style="'width:'+ ${group.all_progress}+'%'"><label class="var-text group-progress-text"
+							th:text="${group.all_progress}+'%'"></div>
+				</div>
+
+				<!--				<div>-->
+				<!--					<div th:text="'進捗：' + ${group.all_progress} + '％'"></div>-->
+				<!--					<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"-->
+				<!--						aria-valuemin="0" aria-valuemax="100">-->
+				<!--						<div class="progress-bar" th:style="'width:'+ ${group.all_progress}+'%'"></div>-->
+				<!--					</div>-->
+				<!--				</div>-->
+
+				<!--				<div th:text="'居場所：' + ${group.work_status}"></div>-->
+
 				<div>
 					<form th:action="@{groupDetail}" method="post">
 						<input type="hidden" name="group_id" th:value="${group.group_id}">
@@ -110,21 +153,21 @@
 						<input type="hidden" name="all_progress" th:value="${group.all_progress}">
 						<input type="hidden" name="est_year" th:value="${group.est_year}">
 
-						<button type="submit" name="button" class="Confirm-btn" value="詳細">詳細</button>
+						<button type="submit" name="button" class="select-btn mini-btn" value="詳細">詳細</button>
 
 					</form>
 				</div>
+
 			</div>
 		</div>
 
 		<form th:action="@{groupCreate}" method="post">
-			<button type="submit" name="button" class="Confirm-btn" value="作成">作成</button>
+			<button type="submit" name="button" class="move-btn long-btn" value="作成">新規作成</button>
 		</form>
-		
-		<form th:action="@{menu}" method="get">
-			<button type="submit" name="button" class="Confirm-btn" value="メニュー">メニュー</button>
-		</form>
-		
+
+		<!--		<form th:action="@{menu}" method="get">-->
+		<!--			<button type="submit" name="button" class="move-btn mini-btn" value="メニュー">メニュー</button>-->
+		<!--		</form>-->
 
 	</div>
 
