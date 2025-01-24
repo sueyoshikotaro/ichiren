@@ -84,4 +84,14 @@ public interface GroupDisplayServiceInterface {
 
 	//チャット相手検索
 	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll);
+
+	//メンバ一覧表示
+	public List<GroupMemberDetailView> memberList(int group_id);
+
+	//グループの進捗取得
+	public int selectProgress(int attribute);
+
+	//メンバ詳細取得
+	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id);
+
 }
