@@ -374,4 +374,5 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 		return groupDispCrudRepo.memberDetail(user_id, group_id);
 	}
+
 }

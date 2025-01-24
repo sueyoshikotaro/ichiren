@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.User;
+import com.example.demo.form.ChatForm;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupMemberDeleteView;
@@ -31,6 +32,7 @@ import com.example.demo.form.TeamsDisplay;
 import com.example.demo.form.TeamsForm;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
+import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
@@ -59,9 +61,12 @@ public class AdminCtrl {
 	@Qualifier("GroupDisplayImpl")
 	GroupDisplayServiceInterface groupDispService;
 
+	@Autowired
+	@Qualifier("ChatService")
+	ChatServiceInterface chatServise;
+	
 	private int school_id;
-	//	private String user_id;
-
+	private String user_id;
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -99,7 +104,7 @@ public class AdminCtrl {
 		// エンティティの中のschool_idを取得
 		school_id = userEntity.getSchool_id();
 		// エンティティの中のuser_idを取得
-		//		user_id = userEntity.getUser_id();
+		user_id = userEntity.getUser_id();
 
 		return "admin/menuAdmin";
 	}
@@ -1404,8 +1409,7 @@ public class AdminCtrl {
 	public ModelAndView chat(ModelAndView mav) {
 
 		//チャットの通信可能相手を格納
-		List<GroupDetailView> chatPartner = groupDispService.setChatUser(school_id, "リーダ");
-
+		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id, "リーダ");
 		mav.addObject("chatPartner", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
@@ -1420,13 +1424,30 @@ public class AdminCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 
-		System.out.println(search);
-
-		List<GroupDetailView> chatPartner = groupDispService.chatPartnerSearch(school_id, search, "リーダ");
-
-		System.out.println(chatPartner);
-		mav.addObject("chatPartner", chatPartner);
+		//チャット相手を検索し、Listに格納する
+	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+	    mav.addObject("chatPartner", chatPartner);
+	    mav.setViewName("common/chat");
+	    
+	    return mav;
+	}
+	
+	/**
+	 * 末吉
+	 * チャット画面にチャット履歴を表示する
+	 * @return
+	 */
+	@PostMapping("getChatHistory")
+	public ModelAndView getChatHistory(ModelAndView mav,
+	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {System.out.println(chatUser_id);
+		
+		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
+		
+		System.out.println(chatHistory);
+		
+		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
+		
 		return mav;
 	}
 
