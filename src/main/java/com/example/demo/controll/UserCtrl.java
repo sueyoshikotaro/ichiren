@@ -25,6 +25,7 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
 import com.example.demo.form.GroupDisplay;
+import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.NoticeViewForm;
 import com.example.demo.form.Room;
 import com.example.demo.form.TaskForm;
@@ -543,7 +544,7 @@ public class UserCtrl {
 				TaskService.taskReqFlg(t.getRequest_id());
 
 				//スコアの足しこみ
-				score = score + Integer.valueOf(t.getTask_weight());
+				score = score + t.getTask_weight();
 				TaskService.userUpScore(score, t.getUser_name(), group_id);
 
 				mav.addObject("taskAppComp", true);
@@ -777,12 +778,6 @@ public class UserCtrl {
 			NoticeService.noticeRegist(n.getTitle(), n.getContact_msg(), send_date,
 					0, user_id, (int) session.getAttribute("groupId"));
 
-			System.out.println(n.getTitle());
-			System.out.println(n.getContact_msg());
-			System.out.println(send_date);
-			System.out.println(n.getSend_by());
-			System.out.println(n.getGroup_id());
-
 			// ポップアップを表示するために、画面遷移をしないようにする
 			mav.addObject("noticeRegistComp", true);
 			mav.addObject("notice", n);
@@ -808,12 +803,6 @@ public class UserCtrl {
 	@PostMapping("noticeDelete")
 	public ModelAndView noticeDelete(ModelAndView mav,
 			@RequestParam(name = "check", required = false) Integer[] check) {
-
-		// ログインユーザのエンティティを取得
-		User userEntity = (User) session.getAttribute("user");
-
-		// エンティティの中のuser_idを取得
-		String user_id = userEntity.getUser_id();
 
 		//削除ボタンを押下
 		//チェックボックスが選択されていない場合
@@ -853,15 +842,52 @@ public class UserCtrl {
 	@PostMapping("noticeDeleteConfirm")
 	public ModelAndView noticeDeleteConfirm(ModelAndView mav,
 			@RequestParam(name = "notice_id") Integer[] notice_id) {
-		System.out.println("aaaaaaaaaaaaaa");
 		for (int i = 0; i < notice_id.length; i++) {
 			// 連絡事項削除のサービス
-			System.out.println(notice_id[i]);
 			NoticeService.noticeDelete((int) notice_id[i]);
 		}
 
 		mav.setViewName("common/menuUser");
 
+		return mav;
+	}
+
+	/**
+	 * 湊原
+	 * ユーザ側のメンバ一覧を表示するリクエストハンドラメソッド
+	 * @param mav
+	 * @param gmdv
+	 * @return
+	 */
+	@LoginRequired
+	@GetMapping("memberList")
+	public ModelAndView memberList(ModelAndView mav) {
+
+		List<GroupMemberDetailView> group = groupDispService.memberList((int) session.getAttribute("groupId"));
+		int allProgress = groupDispService.selectProgress((int) session.getAttribute("groupId"));
+
+		mav.addObject("progress", allProgress);
+		mav.addObject("group", group);
+		mav.setViewName("leader/memberList");
+		return mav;
+	}
+
+	/**
+	 * 湊原
+	 * ユーザ側のメンバ詳細を表示するリクエストハンドラメソッド
+	 * @param mav
+	 * @param g
+	 * @return
+	 */
+	@LoginRequired
+	@PostMapping("memberDetails")
+	public ModelAndView memberDetails(ModelAndView mav, GroupMemberDetailView g) {
+
+		List<GroupMemberDetailView> membertask = groupDispService.memberDetail(g.getUser_id(), g.getGroup_id());
+
+		mav.addObject("userProgress", g.getUser_progress());
+		mav.addObject("memberTask", membertask);
+		mav.setViewName("leader/memberDetails");
 		return mav;
 	}
 

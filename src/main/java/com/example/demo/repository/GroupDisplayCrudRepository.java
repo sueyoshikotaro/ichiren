@@ -189,11 +189,36 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1")
 	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
-	
+
 	/**
 	 * 末吉
 	 * チャット相手を検索
 	 */
 	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1")
 	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll);
+
+	/**
+	 * 湊原
+	 * ユーザ側のメンバー一覧
+	 * @param group_id
+	 * @return
+	 */
+	@Query("select ud.*,u.user_id,user_name from user_detail ud inner join user u on u.user_id = ud.user_id where ud.group_id = :group_id;")
+	public List<GroupMemberDetailView> memberList(int group_id);
+
+	/**
+	 * 湊原
+	 * グループの進捗率取得
+	 * @param group_id
+	 * @return
+	 */
+	@Query("select all_progress from teams where group_id=:group_id;")
+	public int selectAllprogress(int group_id);
+
+	/*
+	 * 湊原
+	 * グループメンバ詳細表示
+	 */
+	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress,t.task_id, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id")
+	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id);
 }
