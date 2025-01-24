@@ -1326,6 +1326,7 @@ public class AdminCtrl {
 
 		session.removeAttribute("button");
 
+		mav.addObject("group_id", group_id);
 		mav.addObject("groupMemberAddComp", true);
 		mav.setViewName("admin/groupMemberAddConfirm");
 

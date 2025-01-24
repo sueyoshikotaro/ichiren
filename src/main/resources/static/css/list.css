@@ -176,3 +176,18 @@
 .groupList-whereabouts{
 	margin-bottom: 8px;
 }
+
+.group-detail-text-view{
+	margin-top: 8px;
+}
+
+/*スコア欄*/
+.score-view{
+	margin-bottom: -26px;
+}
+
+/*メンバのタスク名*/
+.detail-taskName{
+	margin-top: 7px;
+	margin-bottom: 7px;
+}

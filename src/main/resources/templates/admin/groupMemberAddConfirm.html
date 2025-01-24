@@ -76,7 +76,8 @@
 						<p>追加が完了しました</p>
 					</div>
 					<div class="modal-footer">
-						<form th:action="@{groupList}" method="get">
+						<form th:action="@{groupDetail}" method="post">
+							<input type="hidden" name="group_id" th:value="${group_id}">
 							<button type="submit" class="btn btn-danger">グループ一覧へ</button>
 						</form>
 					</div>
