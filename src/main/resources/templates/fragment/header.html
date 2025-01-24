@@ -15,8 +15,10 @@
 		<!--ナビゲーションバー-->
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container-fluid">
-				<img class="iconLink" th:src="@{/img/icon.png}" th:onclick="|location.href='@{menu}'|" alt="icon"
-					width="48" height="48">
+				<form th:action="@{/taskdon/user/menu}" method="post">
+					<input type="image" class="iconLink menu-link" th:src="@{/img/icon.png}" alt="icon" width="48"
+						height="48">
+				</form>
 				<span class="nav-title">タスクどん</span>
 
 				<!--ドロップダウンメニュー(開閉)-->
@@ -40,29 +42,33 @@
 							<ul class="dropdown-menu dropdown-menu-dark">
 
 								<!--ホーム画面(menuUser)遷移-->
-								<li class="screen-btn"><a class="dropdown-item"
-										th:onclick="|location.href='@{menu}'|">ホーム</a></li>
+
+								<li class="screen-btn">
+									<form th:action="@{/taskdon/user/menu}" method="post">
+										<input type="submit" value="ホーム" class="dropdown-item menu-link">
+									</form>
+								</li>
 
 								<!--役職判断処理-->
 								<div th:if="${session.user_roll} == 'リーダ'">
-									<li class="screen-btn"><a class="dropdown-item"
+									<li class="screen-btn"><a class="dropdown-item menu-link"
 											th:onclick="|location.href='@{memberList}'|">メンバ一覧</a><!--未実装-->
 									</li>
 								</div>
 
-								<li class="screen-btn"><a class="dropdown-item"
+								<li class="screen-btn"><a class="dropdown-item menu-link"
 										th:onclick="|location.href='@{taskList}'|">タスク一覧</a></li>
 
-								<li class="screen-btn"><a class="dropdown-item"
+								<li class="screen-btn"><a class="dropdown-item menu-link"
 										th:onclick="|location.href='@{todoList}'|">ToDoリスト</a></li>
 
 								<!--役職判断処理-->
 								<div th:if="${session.user_roll} == 'リーダ'">
-									<li class="screen-btn"><a class="dropdown-item"
+									<li class="screen-btn"><a class="dropdown-item menu-link"
 											th:onclick="|location.href='@{noticeRegist}'|">連絡事項作成</a></li><!--未実装-->
 								</div>
 
-								<li class="screen-btn"><a class="dropdown-item"
+								<li class="screen-btn"><a class="dropdown-item menu-link"
 										th:onclick="|location.href='@{chat}'|">チャット</a></li>
 								<!--未実装-->
 
@@ -70,7 +76,7 @@
 									<hr class="dropdown-divider">
 								</li>
 
-								<li class="screen-btn"><a class="dropdown-item"
+								<li class="screen-btn"><a class="dropdown-item menu-link"
 										th:href="@{/taskdon/user/deptGroupList}">所属グループ</a></li>
 
 								<li class="screen-btn"><a class="dropdown-item"

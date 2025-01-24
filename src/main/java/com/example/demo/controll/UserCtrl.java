@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -38,6 +36,8 @@ import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -127,16 +127,20 @@ public class UserCtrl {
 
 				userDisplayService.adminDisable(user_id, 0); //adminアカウント無効化
 
-				return new ModelAndView("redirect:/taskdon/admin/teList"); //管理者がログインした場合(初回のみ)
-			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+				return new ModelAndView("redirect:/taskdon/admin/teInfoRegist"); //上位管理者がログインした場合(初回のみ)
 
-				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合
 			} else if (user.get().getUser_pass().equals("taskdon1")) {
 
 				return new ModelAndView("redirect:/taskdon/user/passReset"); //パスワード再設定に遷移
+
+			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+
+				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合
+
 			} else if (user.get().getUser_id().contains("st")) {
 
 				return new ModelAndView("redirect:/taskdon/user/deptGroupList"); //ユーザがログインした場合
+
 			} else {
 				mav.addObject("errMsg", "IDまたはパスワードが違います。");
 				mav.setViewName("common/login"); //ログイン失敗
