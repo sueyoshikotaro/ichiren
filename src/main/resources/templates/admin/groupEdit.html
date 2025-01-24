@@ -16,6 +16,10 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -45,14 +49,14 @@
 						th:value="${groupDetail.group_id}">
 					<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
 				</tr>
-				
+
 				<tr>
 					<th>ジャンル名</th>
 					<td th:text="${groupDetail.genre}"></td>
 					<input type="hidden" name="genre" th:value="${groupDetail.genre}">
 				</tr>
 
-				
+
 				<tr>
 					<td colspan="2">リーダ</td>
 				</tr>
@@ -66,7 +70,7 @@
 					<input type="hidden" name="selectUserName" th:value="${user.user_name}">
 				</tr>
 
-				
+
 				<tr>
 					<td colspan="2">メンバ</td>
 				</tr>
