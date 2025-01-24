@@ -357,8 +357,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	@Override
 	public List<GroupMemberDetailView> memberList(int group_id) {
 		return groupDispCrudRepo.memberList(group_id);
-　}
-	
+
+	}
+
 	/**
 	 * 湊原
 	 * ユーザ側のグループの全体進捗

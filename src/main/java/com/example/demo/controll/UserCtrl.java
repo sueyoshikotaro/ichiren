@@ -847,6 +847,9 @@ public class UserCtrl {
 			NoticeService.noticeDelete((int) notice_id[i]);
 		}
 
+		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
+
+		mav.addObject("noticeList", noticeList);
 		mav.setViewName("common/menuUser");
 
 		return mav;
