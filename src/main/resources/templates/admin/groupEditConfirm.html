@@ -16,6 +16,10 @@
 
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
@@ -73,11 +77,11 @@
 			<button type="button" name="button" value="編集" class="btn btn-danger"
 				onclick="groupEditAndShowPopup()">編集</button>
 		</form>
-		
+
 
 		<!-- ポップアップ -->
-		<div class="modal fade" id="groupEditModal" tabindex="-1" role="dialog"
-			aria-labelledby="groupEditModalLabel" aria-hidden="true">
+		<div class="modal fade" id="groupEditModal" tabindex="-1" role="dialog" aria-labelledby="groupEditModalLabel"
+			aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">

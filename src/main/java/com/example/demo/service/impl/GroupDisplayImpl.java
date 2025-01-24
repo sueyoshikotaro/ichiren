@@ -344,10 +344,10 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		return groupDispCrudRepo.setChatUser(school_id, user_roll);
 	}
 
+	//チャット相手を検索
 	@Override
 	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll) {
-
-		return groupDispCrudRepo.chatPartnerSearch(school_id, "%" + search + "%", user_roll);
+		return groupDispCrudRepo.chatPartnerSearch(school_id, search, user_roll);
 	}
 
 	/**
@@ -357,7 +357,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	@Override
 	public List<GroupMemberDetailView> memberList(int group_id) {
 		return groupDispCrudRepo.memberList(group_id);
-	}
+　}
 	
 	/**
 	 * 湊原

@@ -6,25 +6,18 @@ import org.springframework.context.annotation.Configuration;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
-import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
 import com.example.demo.service.impl.GroupDisplayImpl;
 import com.example.demo.service.impl.NoticeServiceImpl;
 import com.example.demo.service.impl.SchoolDisplayImpl;
-import com.example.demo.service.impl.SchoolServiceImpl;
 import com.example.demo.service.impl.TaskServiceImpl;
 import com.example.demo.service.impl.TodoServiceImpl;
 import com.example.demo.service.impl.UserDisplayImpl;
 
 @Configuration
 public class AppConfig {
-
-	@Bean(name = "schoolService")
-	SchoolServiceInterface schoolService() {
-		return new SchoolServiceImpl();
-	}
 
 	@Bean(name = "schoolDisplayService")
 	SchoolDisplayServiceInterface schoolDisplayService() {

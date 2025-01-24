@@ -21,6 +21,9 @@
 	<link rel="stylesheet" th:href="@{/css/list.css}"> <!-- リスト用CSS -->
 	<link rel="stylesheet" th:href="@{/css/school.css}">
 
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
@@ -39,12 +42,12 @@
 
 			<div class="mb-3 school-info-text">
 				<span class="form-label" id="basic-addon1">学校名</span>
-				<input type="text" class="form-control" th:value="${schoolDetails.school_name}" readonly>
+				<div type="text" class="form-control" th:text="${schoolDetails.school_name}"></div>
 			</div>
 
 			<div class="mb-3 school-info-text second-text">
 				<span class="form-label" id="basic-addon1">学校ID</span>
-				<input type="text" class="form-control" th:value="${schoolDetails.school_id}" readonly>
+				<div type="text" class="form-control" th:text="${schoolDetails.school_id}"></div>
 			</div>
 
 		</div>
@@ -56,7 +59,7 @@
 
 				<!--繰り返し処理-->
 				<div th:each="schoolDetails : ${schoolS}" class="content-child">
-					
+
 					<div class="row">
 						<div class="col">
 							<label for="inputPassword5" class="form-label"
@@ -76,23 +79,23 @@
 						<div class="col">
 							<div class="mb-3">
 								<span class="form-label">建物</span>
-								<input type="text" class="form-control" th:value="${schoolDetails.hall}" readonly>
+								<div type="text" class="form-control" th:text="${schoolDetails.hall}"></div>
 							</div>
 						</div>
 						<div class="col">
 							<div class="mb-3">
 								<span class="form-label">階層</span>
-								<input type="text" class="form-control" th:value="${schoolDetails.floor}" readonly>
+								<div type="text" class="form-control" th:text="${schoolDetails.floor}"></div>
 							</div>
 						</div>
 						<div class="col">
 							<div class="mb-3">
 								<span class="form-label">PC</span>
 								<div th:if="${schoolDetails.pc_flg == 1}">
-									<input type="text" class="form-control" th:value="有" readonly>
+									<div type="text" class="form-control" th:text="有"></div>
 								</div>
 								<div th:unless="${schoolDetails.pc_flg == 1}">
-									<input type="text" class="form-control" th:value="無" readonly>
+									<div type="text" class="form-control" th:text="無"></div>
 								</div>
 							</div>
 						</div>
