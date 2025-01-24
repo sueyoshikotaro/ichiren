@@ -84,16 +84,24 @@
 				</form>
 
 				<!--チャット相手一覧(リスト,繰返しかな)-->
-				<ul class="list-group" id="chatPartnerList">
-					<li th:each="chat : ${chatPartner}" class="list-group-item list-group-item-action">
-						<span th:text="${chat.user_name}">○○さん</span>
+				<form id="userForm">
+					<ul class="list-group" id="chatPartnerList">
+						<li th:each="chat : ${chatPartner}" class="list-group-item list-group-item-action"
+							th:onclick="getChatHistory([[${chat.user_id}]])">
+							<span th:text="${chat.user_name}">○○さん</span>
 
-						<span class="badge bg-primary rounded-pill" th:text="${notificationCount}"
-							th:if="${notificationCount != null}">通知数</span>
-					</li>
-				</ul>
-
+							<!--いったん未実装-->
+							<span class="badge bg-primary rounded-pill" th:text="${notificationCount}"
+								th:if="${notificationCount != null}">通知数</span>
+						</li>
+					</ul>
+				</form>
 			</div>
+		</div>
+
+		<!--チャットテキスト-->
+		<div th:each="chat : ${chatHistory}" id="chat-history">
+			<input type="text" th:text="${chat.msg}" name="chat">
 		</div>
 
 		<!--メイン部分-->
@@ -102,7 +110,7 @@
 			<!--チャット欄(予定)-->
 			<!--チャット相手名表示(ヘッダー？)-->
 
-			<!--チャットテキスト-->
+
 
 			<!--送信欄-->
 			<div class="input-group mb-3">
@@ -125,46 +133,71 @@
 	<!--処理コード欄-->
 	<script th:inline="javascript">
 		function chatSearch() {
-		    const form = document.getElementById("searchForm");
-		    const value = form.querySelector("input[name='search']").value;
+			const form = document.getElementById("searchForm");
+			const value = form.querySelector("input[name='search']").value;
 
-		    /*URL指定＆ドロップダウンリストの値引き渡し*/
-		    var url = "chatSearch";
-		    var params = {
-		        "search": value
-		    };
-		    console.log(params)
+			/*URL指定＆ドロップダウンリストの値引き渡し*/
+			var url = "chatSearch";
+			var params = {
+				"search": value
+			};
+			console.log(params)
 
-		    /*チャット相手一覧の再表示メソッドの呼び出し*/
-		    $.ajax({
-		        type: "POST",
-		        url: url,
-		        data: params,
-		        success: function (data) {
-		            console.log(data); // データをコンソールに出力
 
-		            // チャット相手一覧のリストを取得
-		            var chatPartnerList = document.getElementById("chatPartnerList");
-		            console.log(chatPartnerList)
+			/*チャット相手一覧の再表示メソッドの呼び出し*/
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: params,
+				success: function (data) {
+					console.log(data); // データをコンソールに出力
 
-		            // チャット相手一覧のリストを更新
-		            if (data) { // データが存在する場合のみ処理を実行
-		                // HTMLを解析して必要な情報を抽出
-		                var html = $(data);
-		                var chatPartner = html.find("#chatPartnerList li");
+					// チャット相手一覧のリストを取得
+					/*var chatPartnerList = document.getElementById("chatPartnerList");*/
 
-		                chatPartnerList.innerHTML = "";
-		                chatPartner.each(function () {
-		                    var li = document.createElement("li");
-		                    li.className = "list-group-item list-group-item-action";
-		                    li.innerHTML = $(this).html();
-		                    chatPartnerList.appendChild(li);
-		                });
-		            }
-		        }
-		    });
+
+
+					// チャット相手一覧のリストを更新
+					if (data) { // データが存在する場合のみ処理を実行
+						// HTMLを解析して必要な情報を抽出
+						var html = $(data);
+						var chatPartner = html.find("#chatPartnerList li");
+
+						chatPartnerList.innerHTML = "";
+						chatPartner.each(function () {
+							var li = document.createElement("li");
+							li.className = "list-group-item list-group-item-action";
+							li.innerHTML = $(this).html();
+
+							chatPartnerList.appendChild(li);
+						});
+					}
+				}
+			});
 		}
+	</script>
 
+	<script>
+		function getChatHistory(chatUserId) {
+
+			console.log(chatUserId);
+			$.ajax({
+				type: 'POST',
+				url: 'getChatHistory',
+				data: {chatUserId: chatUserId},
+				success: function (data) {
+
+					var chatHistory = $(data).find('#chat-history').html();
+
+					console.log(chatHistory)
+					//console.log(data);
+					// チャット履歴を表示する
+					document.getElementById('#offcanvasExample').innerHTML = chatHistory;
+					// チャット相手一覧を閉じる
+					document.getElementById("offcanvasExample").style.display = "none";
+				}
+			});
+		}
 	</script>
 
 	<!-- bootstrapのjsリンク接続 -->
