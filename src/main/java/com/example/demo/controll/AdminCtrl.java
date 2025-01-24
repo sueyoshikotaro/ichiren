@@ -35,7 +35,6 @@ import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
-import com.example.demo.service.SchoolServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
 
 /**
@@ -44,10 +43,6 @@ import com.example.demo.service.UserDisplayServiceInterface;
 @Controller
 @RequestMapping("/taskdon/admin")
 public class AdminCtrl {
-
-	@Autowired
-	@Qualifier("schoolService")
-	SchoolServiceInterface schoolS;
 
 	@Autowired
 	@Qualifier("schoolDisplayService")
@@ -1421,21 +1416,18 @@ public class AdminCtrl {
 	 * チャット相手検索
 	 * @return
 	 */
-	@PostMapping("chatPartnerSearch")
+	@PostMapping("chatSearch")
 	public ModelAndView chatSearch(ModelAndView mav,
-			@RequestParam(name = "search", required = false) String search) {
-		
-		//チャットの通信可能相手を格納
-		System.out.println(school_id);
+	        @RequestParam(name = "search", required = false) String search) {
+
 		System.out.println(search);
-		
-		List<GroupDetailView> chatPartner = groupDispService.chatPartnerSearch(school_id, search, "リーダ");
-		
-		System.out.println("検索" + chatPartner);
-		
-		mav.addObject("chatPartner", chatPartner);
-		mav.setViewName("common/chat");
-		return mav;
+	    
+	    List<GroupDetailView> chatPartner = groupDispService.chatPartnerSearch(school_id, search, "リーダ");
+	    
+	    System.out.println(chatPartner);
+	    mav.addObject("chatPartner", chatPartner);
+	    mav.setViewName("common/chat");
+	    return mav;
 	}
 
 }

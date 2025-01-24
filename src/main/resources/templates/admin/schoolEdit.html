@@ -20,6 +20,9 @@
 	<link rel="stylesheet" th:href="@{/css/school.css}"> <!-- 学校情報系CSS -->
 	<link rel="stylesheet" th:href="@{/css/control.css}">
 
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
@@ -39,12 +42,12 @@
 		<div th:each="schoolDetails : ${schoolEdit}" th:if="${schoolDetailsStat.index == 0}">
 			<div class="mb-3 school-info-text">
 				<span class="form-label" id="basic-addon1">学校名</span>
-				<input type="text" class="form-control" th:value="${schoolDetails.school_name}" readonly>
+				<div type="text" class="form-control" th:text="${schoolDetails.school_name}"></div>
 			</div>
 
 			<div class="mb-3 school-info-text second-text">
 				<span class="form-label" id="basic-addon1">学校ID</span>
-				<input type="text" class="form-control" th:value="${schoolDetails.school_id}" readonly>
+				<div type="text" class="form-control" th:text="${schoolDetails.school_id}"></div>
 			</div>
 		</div>
 
@@ -72,7 +75,7 @@
 					<div class="col">
 						<div class="mb-3">
 							<span class="form-label">PC-有無</span>
-							<select th:value="${schoolDetails.pc_flg}" class="form-select" name="pc_flg">
+							<select th:value="${schoolDetails.pc_flg}" class="form-select" name="pc_flg" required>
 								<option th:value="1" th:text="有" th:selected="${schoolDetails.pc_flg == 1}"></option>
 								<option th:value="0" th:text="無" th:selected="${schoolDetails.pc_flg == 0}"></option>
 							</select>

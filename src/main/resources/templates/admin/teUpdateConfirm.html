@@ -20,6 +20,9 @@
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/control.css}">
 
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
@@ -36,27 +39,28 @@
 
 		<form th:action="@{teUpdateComp}" method="post">
 			<div th:each="te : ${te}">
-				<div class="form-group regist-item">
-					<label class="form-label">講師ID</label>
-					<div type="text" class="form-control confirmation-field" th:text="${te.user_id}" name="user_id">
-					</div>
-				</div>
 
 				<div class="form-group regist-item">
 					<label class="form-label">講師名</label>
-					<div type="text" class="form-control confirmation-field" th:text="${te.user_name}" name="user_name">
-					</div>
+					<input type="text" class="form-control confirmation-field" th:value="${te.user_name}"
+						name="user_name" readonly>
+				</div>
+
+				<div class="form-group regist-item">
+					<label class="form-label">講師ID</label>
+					<input type="text" class="form-control confirmation-field" th:value="${te.user_id}" name="user_id"
+						readonly>
 				</div>
 
 				<div class="form-group regist-item">
 					<label class="form-label">所属学校</label>
-					<div type="text" class="form-control confirmation-field" th:text="${te.school_name}"
-						name="school_name"></div>
+					<input type="text" class="form-control confirmation-field" th:value="${te.school_name}"
+						name="school_name" readonly>
 				</div>
 
 				<div class="form-group regist-item">
 					<label class="form-label">入社年月日</label>
-					<div type="text" class="form-control confirmation-field" th:text="${te.enr_year}"></div>
+					<input type="text" class="form-control confirmation-field" th:value="${te.enr_year}" readonly>
 				</div>
 
 				<input type="hidden" name="user_id" th:value="${te.user_id}">
@@ -83,14 +87,13 @@
 		aria-labelledby="teUpdateModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<p class="modal-text">講師情報の編集が完了しました</p>
+				<p class="modal-text">編集が完了しました</p>
 				<form th:action="@{teList}" method="get">
-					<button type="submit" class="btn btn-danger">講師情報一覧へ</button>
+					<button type="submit" class="control-btn return-btn">講師情報一覧へ</button>
 				</form>
 			</div>
 		</div>
 	</div>
-
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	<!--bootstrapのjsリンク接続-->
@@ -133,9 +136,6 @@
 	</script>
 
 	</div>
-
-
-
 
 </body>
 
