@@ -19,11 +19,14 @@
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
 
+	<!--ウェブアイコン-->
+	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
+
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
-	
+
 </head>
 
 <body>
@@ -45,7 +48,7 @@
 		<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
 			<a class="menu-btn" th:onclick="|location.href='@{teList}'|">講師一覧</a>
 		</div>
-		
+
 	</div>
 
 	<!-- bootstrapのjsリンク接続 -->
