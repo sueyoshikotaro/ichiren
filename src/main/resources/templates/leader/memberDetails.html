@@ -31,7 +31,7 @@
 
 		<h2>メンバ詳細</h2>
 		<div>
-			<divth:each="memberTask:${memberTask}">
+			<div th:each="memberTask:${memberTask}"  th:if="${memberTaskStat.index == 0}">
 				<p th:text="${memberTask.user_name}"></p>
 				<p th:text="'スコア：' + ${memberTask.score}"></p>
 
@@ -55,7 +55,7 @@
 				<!--						</option>-->
 				<!--					</select>-->
 				<!--				</div>-->
-			</divth:each="memberTask:${memberTask}">
+			</div>
 
 			<div th:each="memberTask:${memberTask}">
 				<div th:text="'タスク：' + ${memberTask.task_name}"></div>
