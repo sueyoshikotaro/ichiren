@@ -17,7 +17,9 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
-	
+	<link rel="stylesheet" th:href="@{/css/control.css}">
+	<link rel="stylesheet" th:href="@{/css/userSelect.css}">
+
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
@@ -34,77 +36,92 @@
 
 		<h2>グループ作成</h2>
 
-		<!--指示文を表示-->
-		<p th:if="${Msg}" th:text="${Msg}"></p>
-
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:action="@{groupCreateConfirm}" method="post" id="form">
-			<table border="1">
-				<tr>
-					<th>グループ名</th>
 
-					<td th:if="${groupDetail != null}">
-						<input type="text" name="group_name" th:value="${groupDetail.group_name}">
-					</td>
+			<div class="form-group regist-item">
+				<label class="form-label">グループ名</label>
 
-					<td th:unless="${groupDetail != null}">
-						<input type="text" name="group_name" required>
-					</td>
-				</tr>
+				<div th:if="${groupDetail != null}">
+					<input type="text" name="group_name" th:value="${groupDetail.group_name}"
+						class="form-control regist-field">
+				</div>
 
-				<!--プルダウンメニュー-->
-				<tr>
-					<th>ジャンル名</th>
-					<td>
-						<select th:name="genre" th:selected="${genre}">
-							<option th:value="卒業研究" th:text="卒業研究" th:selected="${genre == '卒業研究'}">卒業研究</option>
-							<option th:value="インターン" th:text="インターン" th:selected="${genre == 'インターン'}">インターン</option>
-							<option th:value="設計" th:text="設計" th:selected="${genre == '設計'}">設計</option>
-							<option th:value="イベント" th:text="イベント" th:selected="${genre == 'イベント'}">イベント</option>
-							<option th:value="その他" th:text="その他" th:selected="${genre == 'その他'}">その他</option>
-						</select>
-					</td>
-				</tr>
+				<div th:unless="${groupDetail != null}">
+					<input type="text" name="group_name" class="form-control regist-field" required>
+				</div>
+			</div>
 
-				<tr>
-					<td colspan="2">選択したユーザ</td>
-				</tr>
+			<!--ジャンル選択(プルダウン)-->
+			<div class="form-group regist-item">
+				<label class="form-label">ジャンル</label>
+				<select class="form-select regist-field" th:name="genre" th:selected="${genre}" required>
+					<option th:value="卒業研究" th:text="卒業研究" th:selected="${genre == '卒業研究'}">卒業研究</option>
+					<option th:value="インターン" th:text="インターン" th:selected="${genre == 'インターン'}">インターン</option>
+					<option th:value="設計" th:text="設計" th:selected="${genre == '設計'}">設計</option>
+					<option th:value="イベント" th:text="イベント" th:selected="${genre == 'イベント'}">イベント</option>
+					<option th:value="その他" th:text="その他" th:selected="${genre == 'その他'}">その他</option>
+				</select>
+			</div>
 
-				<tbody th:if="${selectUser != null}">
-					<tr th:each="user : ${selectUser}">
-						<td>
-							<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
-								id="flexCheckDefault">
-							<input type="hidden" name="selectedUserId" th:value="${user.user_id}">
-						</td>
-						<td th:text="${user.user_name}"></td>
-						<input type="hidden" name="selectUserName" th:value="${user.user_name}">
-					</tr>
-				</tbody>
+			<!--ユーザ選択作業,userSelect.cssを使用-->
+			<!--指示文を表示-->
+			<div class="form-froup regist-item userSelect-title">
+				<div class="form-label" th:if="${Msg}" th:text="${Msg}"></div>
+			</div>
 
-				<tbody th:unless="${selectUser != null}">
-					<tr>
-						<td colspan="2">&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="2">&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="2">&nbsp;</td>
-					</tr>
-				</tbody>
-			</table>
-
-			<button type="button" name="button" value="ユーザを選択" class="btn btn-danger"
+			<button type="button" name="button" value="ユーザを選択" class="control-btn logn-btn userSelect-btn"
 				onclick="userSelect()">ユーザを選択</button>
 
-			<button type="button" name="button" value="確認" onclick="formSubmit('確認')">確認</button>
-			<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>
+			<label class="form-label user-select-text userSelect-text" th:text="選択したユーザ"></label>
+
+			<div th:if="${selectUser != null}">
+				<div th:each="user : ${selectUser}">
+					<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
+						id="flexCheckDefault">
+					<input type="hidden" name="selectedUserId" th:value="${user.user_id}">
+
+					<label class="form-label" th:text="${user.user_name}"></label>
+					<input type="hidden" name="selectUserName" th:value="${user.user_name}">
+				</div>
+			</div>
+
+
+			<!--<tbody th:if="${selectUser != null}">-->
+			<!--	<tr th:each="user : ${selectUser}">-->
+			<!--		<td>-->
+			<!--			<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"-->
+			<!--			id="flexCheckDefault">-->
+			<!--			<input type="hidden" name="selectedUserId" th:value="${user.user_id}">-->
+			<!--		</td>-->
+			<!--		<td th:text="${user.user_name}"></td>-->
+			<!--			<input type="hidden" name="selectUserName" th:value="${user.user_name}">-->
+			<!--	</tr>-->
+			<!--</tbody>-->
+
+			<!--不要部分-->
+			<!--<tbody th:unless="${selectUser != null}">-->
+			<!--	<tr>-->
+			<!--		<td colspan="2">&nbsp;</td>-->
+			<!--	</tr>-->
+			<!--	<tr>-->
+			<!--		<td colspan="2">&nbsp;</td>-->
+			<!--	</tr>-->
+			<!--	<tr>-->
+			<!--		<td colspan="2">&nbsp;</td>-->
+			<!--	</tr>-->
+			<!--</tbody>-->
+
+			<button type="button" name="button" value="確認" onclick="formSubmit('確認')"
+				class="control-btn mini-btn">確認</button>
+
+			<!--戻るボタン,一旦保留-->
+			<!--<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>-->
+
 		</form>
 	</div>
-
 
 	<!--ユーザを選択ボタンを押した場合-->
 	<script>
@@ -126,7 +143,6 @@
 			form.submit();
 		}
 	</script>
-
 
 	<!--確認と戻るボタンを押した場合-->
 	<script>
