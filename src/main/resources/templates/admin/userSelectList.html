@@ -17,6 +17,7 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/list.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -38,45 +39,48 @@
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form name="form1" th:action="@{groupCreate}" method="post">
-			<!-- 一覧表示テーブル -->
-			<table border="1">
-				<tr>
-					<th></th>
-					<th>ユーザID</th>
-					<th>ユーザ名</th>
-					<th>パスワード</th>
-					<th>所属学校</th>
-					<th>入学年度</th>
-					<td colspan="2"></td>
-					<!--					<td colspan></td>-->
-				</tr>
 
-				<tr th:each="user : ${users}">
-					<td class="form-check">
-						<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
-							id="flexCheckDefault" th:checked="${user.checked}">
+			<div class="main-content">
+
+				<div th:each="user : ${users}" class="content-child select-user-field" style="margin-bottom: 0px;">
+
+					<div class="form-check form-check-reverse" style="margin-bottom: -20px;">
+						<input class="form-check-input" type="checkbox" name="check" id="flexCheckDefault"
+							th:value="${user.user_id}" th:checked="${user.checked}">
+						<label class="form-check-label">選択</label>
 						<input type="hidden" th:value="${user.user_id}" name="userId">
 						<input type="hidden" th:value="${user.user_name}" name="userName">
-					</td>
-					<td th:text="${user.user_id}"></td>
-					<td th:text="${user.user_name}"></td>
-					<td th:text="${user.user_pass}"></td>
-					<!--					<td th:text="${user.school_id}"></td>-->
-					<td th:text="${user.school_name}"></td>
-					<td th:text="${user.enr_year}"></td>
-				</tr>
+					</div>
 
-			</table>
+					<!--					<div class="form-check">-->
+					<!--						<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"-->
+					<!--							id="flexCheckDefault" th:checked="${user.checked}">-->
+					<!--						<input type="hidden" th:value="${user.user_id}" name="userId">-->
+					<!--						<input type="hidden" th:value="${user.user_name}" name="userName">-->
+					<!--					</div>-->
 
-			<!--グループメンバ追加から遷移してきた場合-->
-			<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
+					<span class="form-label" th:text="'ID:'+${user.user_id}"></span><br>
 
-			<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+					<span class="form-label" th:text="${user.user_name}"></span><br>
 
-			<input type="hidden" name="genre" th:value="${genre}">
+					<span class="form-label" th:text="'所属学校：'+${user.school_name}"></span><br>
+					<span class="form-label" th:text="'入学年度：'+${user.enr_year}"></span>
 
-			<button type="submit">選択</button>
+				</div>
+
+				<!--グループメンバ追加から遷移してきた場合-->
+				<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
+
+				<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+
+				<input type="hidden" name="genre" th:value="${genre}">
+
+			</div>
+
+			<button type="submit" class="select-btn mini-btn">選択</button>
+
 		</form>
+
 	</div>
 
 	<!--bootstrapのjsリンク接続-->
