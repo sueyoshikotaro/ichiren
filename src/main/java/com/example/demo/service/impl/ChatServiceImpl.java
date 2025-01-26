@@ -34,15 +34,22 @@ public class ChatServiceImpl implements ChatServiceInterface {
 	public List<ChatForm> getChatHistory(String user_id, String chatUser_id) {
 		
 		//チャットルーム作成
-		boolean flg = chatCrud.existsChatRoom(user_id, chatUser_id);
+		boolean flg = chatCrud.existsChatRoom(user_id, "st33334444");
+		
+		System.out.println(flg);
 		
 		//チャットルームがすでに存在しない場合チャットルームを作成する
 		if(!flg) {
 			chatCrud.createChatRoom(user_id, chatUser_id);
+			System.out.println("ぞんざいなし！");
+		} else {
+			
 		}
 		
 		//チャットルーム検索
-		int chatRoom_id = chatCrud.chatRoomSearch(user_id, chatUser_id);
+		int chatRoom_id = chatCrud.chatRoomSearch(user_id, "st33334444");
+		
+		System.out.println("履歴：" + chatCrud.getChatHistory(chatRoom_id));
 		
 		return chatCrud.getChatHistory(chatRoom_id);
 	}
