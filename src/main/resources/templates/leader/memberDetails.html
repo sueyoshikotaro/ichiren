@@ -31,56 +31,93 @@
 
 		<h2>メンバ詳細</h2>
 		<div>
-			<div th:each="memberTask:${memberTask}"  th:if="${memberTaskStat.index == 0}">
+			<div th:each="memberTask:${memberTask}" th:if="${memberTaskStat.index == 0}" id="data">
 				<p th:text="${memberTask.user_name}"></p>
 				<p th:text="'スコア：' + ${memberTask.score}"></p>
 
+
 				<!-- ユーザの進捗率(バー&パーセント)を表示する -->
 				<div class="overview">
-					<div th:text="'進捗率：' + ${userProgress} + '％'"></div>
+					<div th:text="'進捗率：' + ${memberTask.user_progress} + '％'"></div>
 					<div class="w-auto p-3">
 						<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
 							aria-valuemin="0" aria-valuemax="100">
-							<div class="progress-bar" th:style="'width:'+ ${userProgress}+'%'"></div>
+							<div class="progress-bar" th:style="'width:'+ ${memberTask.user_progress}+'%'"></div>
 						</div>
 					</div>
 				</div>
-				<!--				絞り込みドロップダウンリスト-->
-				<!--				<div class="col-md-6">-->
-				<!--					<select class="form-select" aria-label="Default select example" name="selectedValue"-->
-				<!--						th:onchange="taskList(this.value)">-->
-				<!--						<option selected>--</option>-->
-				<!--						<option name="group_user" th:each="user : ${session.groupUser}" th:value="${user}"-->
-				<!--							th:text="${user}">-->
-				<!--						</option>-->
-				<!--					</select>-->
-				<!--				</div>-->
+				<!-- 絞り込みドロップダウンリスト-->
+				<div class="col-md-6">
+					<select class="form-select" aria-label="Default select example" name="selectedValue"
+						th:onchange="taskList(this.value)">
+						<option selected>--</option>
+						<option name="select_category" th:each="category : ${Category}"
+							th:value="${category.task_category}" th:text="${category.task_category}">
+						</option>
+					</select>
+				</div>
+				<input type="hidden" name="group_id" th:value="${memberTask.group_id}">
+				<input type="hidden" name="user_id" th:value="${memberTask.user_id}">
 			</div>
-
-			<div th:each="memberTask:${memberTask}">
-				<div th:text="'タスク：' + ${memberTask.task_name}"></div>
-				<div th:text="'優先度：' + ${memberTask.task_priority}"></div>
-				<div th:text="'進捗率：' + ${memberTask.progress} + '％'"></div>
-				<div class="w-25 p-3">
-					<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
-						aria-valuemin="0" aria-valuemax="100">
-						<div class="progress-bar" th:style="'width:'+ ${memberTask.progress}+'%'"></div>
+			<div class="search-result" id="result">
+				<div th:each="memberTask:${memberTask}">
+					<div th:text="'タスク：' + ${memberTask.task_name}"></div>
+					<div th:text="'優先度：' + ${memberTask.task_priority}"></div>
+					<div th:text="'進捗率：' + ${memberTask.progress} + '％'"></div>
+					<div class="w-25 p-3">
+						<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
+							aria-valuemin="0" aria-valuemax="100">
+							<div class="progress-bar" th:style="'width:'+ ${memberTask.progress}+'%'"></div>
+						</div>
 					</div>
-				</div>
-				<!--				<td th:text="${group.app_date}"></td> 更新日 後回しのやつ -->
-				<div>
-					<!--タスク詳細 -->
-					<form th:action="@{taskDetails}" method="post">
-						<input type="hidden" name="task_id" th:value="${memberTask.task_id}">
-						<button type="submit" name="button" class="btn btn-detail" value="詳細">詳細</button>
-					</form>
-				</div>
+					<!--				<td th:text="${group.app_date}"></td> 更新日 後回しのやつ -->
+					<div>
+						<!--タスク詳細 -->
+						<form th:action="@{taskDetails}" method="post">
+							<input type="hidden" name="task_id" th:value="${memberTask.task_id}">
+							<button type="submit" name="button" class="btn btn-detail" value="詳細">詳細</button>
+						</form>
+					</div>
 
+				</div>
 			</div>
 		</div>
+
+
 		<!-- コンテナ最下のボタン -->
-<!--		<button th:onclick="|location.href='@{/taskdon/admin/groupDetail}'|">戻る</button>-->
+		<!--		<button th:onclick="|location.href='@{/taskdon/admin/groupDetail}'|">戻る</button>-->
 	</div>
+
+	<!--処理コード欄-->
+	<script th:inline="javascript">
+		function taskList(selectedValue) {
+			var form = document.getElementById("data");
+			var groupId = form.querySelector("[name='group_id']").value;
+			var userId = form.querySelector("[name='user_id']").value;
+			/*URL指定＆ドロップダウンリストの値引き渡し*/
+			var url = "memberDetails";
+			var params = {
+				"selectedValue": selectedValue,
+				"groupId": groupId,
+				"userId": userId
+			};
+			/*HTML内容のクリア*/
+			var elements = document.getElementsByClassName("search-result");
+			for (var i = 0; i < elements.length; i++) {
+				elements[i].innerHTML = "";
+			}
+			/*タスク一覧表示メソッドの呼び出し*/
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: params,
+				success: function (data) {
+					var html = $(data).find(".search-result").html();
+					document.getElementById("result").innerHTML = html;
+				}
+			});
+		}
+	</script>
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

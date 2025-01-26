@@ -884,11 +884,24 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("memberDetails")
-	public ModelAndView memberDetails(ModelAndView mav, GroupMemberDetailView g) {
-
-		List<GroupMemberDetailView> membertask = groupDispService.memberDetail(g.getUser_id(), g.getGroup_id());
-
-		mav.addObject("userProgress", g.getUser_progress());
+	public ModelAndView memberDetails(ModelAndView mav, GroupMemberDetailView g,
+			@RequestParam(name = "groupId", required = false) Integer groupId,
+			@RequestParam(name = "userId", required = false) String userId,
+			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
+		//ドロップダウンリスト取得処理
+		List<Task> taskCategory = TaskService.selectCategory((int) session.getAttribute("groupId"));
+		
+		List<GroupMemberDetailView> membertask = null;
+		if (groupId == null || userId == null) {
+			selectedValue = "--";
+			//ドロップダウンリストが選択されていない場合の処理
+			membertask = groupDispService.memberDetail(g.getUser_id(),g.getGroup_id(),selectedValue);
+		}else {
+			//ドロップダウンリストが選択されている場合の処理
+			membertask = groupDispService.memberDetail(userId, String.valueOf(groupId),selectedValue);
+		}
+//		mav.addObject("userProgress", g.getUser_progress());
+		mav.addObject("Category", taskCategory);
 		mav.addObject("memberTask", membertask);
 		mav.setViewName("leader/memberDetails");
 		return mav;

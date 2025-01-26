@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * タスクの詳細データを取得
 	 * 湊原
@@ -41,7 +41,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 */
 	@Override
 	public List<Task> taskDetails(int task_id, int group_id) {
-		return repo.selectTaskDetails(task_id,group_id);
+		return repo.selectTaskDetails(task_id, group_id);
 	}
 
 	/**
@@ -104,16 +104,16 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	public void userUpScore(int score, String user_name, int group_id) {
 		repo.updateScore(score, user_name, group_id);
 	}
-	
+
 	/**
 	 * 湊原
 	 * タスクの進捗を更新するメソッド
 	 */
 	@Override
 	public void taskUpProgress(int task_id, int progress) {
-		
+
 		repo.updateProgress(task_id, progress);
-		
+
 	}
 
 	/*
@@ -135,14 +135,24 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	public boolean taskReqFlg(int request_id) {
 		return repo_req.updateFlg(request_id);
 	}
-	
+
 	/**
 	 * 申請登録
 	 * 湊原
 	 * registerTaskReq
 	 */
 	@Override
-	public void registerTaskReq(String req_category,String req_name,String req_content,String req_reason,Date add_date,String user_name,int group_id) {
-		repo_req.registerTaskReq(req_category,req_name,req_content,req_reason,add_date,user_name,group_id);
+	public void registerTaskReq(String req_category, String req_name, String req_content, String req_reason,
+			Date add_date, String user_name, int group_id) {
+		repo_req.registerTaskReq(req_category, req_name, req_content, req_reason, add_date, user_name, group_id);
+	}
+
+	/*
+	 * 湊原
+	 * カテゴリ取得(絞り込み用)
+	 */
+	@Override
+	public List<Task> selectCategory(int group_id) {
+		return repo.selectCategory(group_id);
 	}
 }

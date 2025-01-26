@@ -370,8 +370,16 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	}
 
 	@Override
-	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id) {
+	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id, String selectedValue) {
 
-		return groupDispCrudRepo.memberDetail(user_id, group_id);
+		List<GroupMemberDetailView> result = null;
+		if (selectedValue.equals("--")) {
+			result = groupDispCrudRepo.memberDetail(user_id, group_id);
+		}else {
+			result = groupDispCrudRepo.memberDetail(user_id, group_id, selectedValue);
+		}
+		
+		return result;
 	}
+
 }

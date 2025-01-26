@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
+import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
@@ -35,6 +36,7 @@ import com.example.demo.form.UserDisplay;
 import com.example.demo.form.UserForm;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
+import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
 
 /**
@@ -59,9 +61,14 @@ public class AdminCtrl {
 	@Qualifier("GroupDisplayImpl")
 	GroupDisplayServiceInterface groupDispService;
 
+	//湊原追加
+	@Autowired
+	@Qualifier("taskService")
+	TaskServiceInterface TaskService;
+
 	private int school_id;
-//	private String user_id;
-	
+	//	private String user_id;
+
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -99,7 +106,7 @@ public class AdminCtrl {
 		// エンティティの中のschool_idを取得
 		school_id = userEntity.getSchool_id();
 		// エンティティの中のuser_idを取得
-//		user_id = userEntity.getUser_id();
+		//		user_id = userEntity.getUser_id();
 
 		return "admin/menuAdmin";
 	}
@@ -123,7 +130,7 @@ public class AdminCtrl {
 	 */
 	@GetMapping("schoolDetails")
 	public ModelAndView schoolDetails(ModelAndView mav, Model model) {
-		
+
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 
 		mav.addObject("schoolS", SchoolDetails);
@@ -141,7 +148,7 @@ public class AdminCtrl {
 	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
 			@RequestParam("flexRadioDefault") int room_id, @RequestParam("before_room_name") String room_name,
 			ModelAndView mav) {
-		
+
 		//ラジオボタンで選択したデータを取得
 		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(room_id, school_id);
 
@@ -667,7 +674,6 @@ public class AdminCtrl {
 	@PostMapping("teUpdate")
 	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
 
-		
 		System.out.println(u);
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdate");
@@ -774,7 +780,8 @@ public class AdminCtrl {
 
 		System.out.println(gmdv);
 
-		System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
+		//ドロップダウンリスト取得処理
+		List<Task> taskCategory = TaskService.selectCategory(Integer.parseInt(gmdv.getGroup_id()));
 
 		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(gmdv.getUser_id(), gmdv.getGroup_id());
 
@@ -782,6 +789,7 @@ public class AdminCtrl {
 			System.out.println(g);
 		}
 
+		mav.addObject("Category", taskCategory);
 		mav.addObject("group", group);
 		mav.setViewName("admin/groupMemberDetails");
 
@@ -1095,7 +1103,7 @@ public class AdminCtrl {
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre,
 			@RequestParam(name = "button", required = false) String button) {
-		
+
 		TeamsDisplay teamsDisplay = new TeamsDisplay();
 
 		//ユーザ一覧表示のメソッドを呼び出す
@@ -1403,15 +1411,15 @@ public class AdminCtrl {
 	 */
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
-		
+
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = groupDispService.setChatUser(school_id, "リーダ");
-		
+
 		mav.addObject("chatPartner", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * チャット相手検索
@@ -1419,16 +1427,16 @@ public class AdminCtrl {
 	 */
 	@PostMapping("chatSearch")
 	public ModelAndView chatSearch(ModelAndView mav,
-	        @RequestParam(name = "search", required = false) String search) {
+			@RequestParam(name = "search", required = false) String search) {
 
 		System.out.println(search);
-	    
-	    List<GroupDetailView> chatPartner = groupDispService.chatPartnerSearch(school_id, search, "リーダ");
-	    
-	    System.out.println(chatPartner);
-	    mav.addObject("chatPartner", chatPartner);
-	    mav.setViewName("common/chat");
-	    return mav;
+
+		List<GroupDetailView> chatPartner = groupDispService.chatPartnerSearch(school_id, search, "リーダ");
+
+		System.out.println(chatPartner);
+		mav.addObject("chatPartner", chatPartner);
+		mav.setViewName("common/chat");
+		return mav;
 	}
 
 }

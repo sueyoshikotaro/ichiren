@@ -63,15 +63,21 @@
 						th:text="${groupDetails.user_progress}+'%'"></div>
 			</div>
 
+			<!-- 絞り込みドロップダウンリスト-->
+			<span class="form-label">絞り込み(仮設置)</span>
+			<div class="col-md-6">
+				<select class="form-select" aria-label="Default select example" name="selectedValue"
+					th:onchange="taskList(this.value)">
+					<option selected>--</option>
+					<option name="select_category" th:each="category : ${Category}" th:value="${category.task_category}"
+						th:text="${category.task_category}">
+					</option>
+				</select>
+			</div>
+			<input type="hidden" name="group_id" th:value="${groupDetails.group_id}">
+			<input type="hidden" name="user_id" th:value="${groupDetails.user_id}">
 		</div>
 
-		<span class="form-label">絞り込み(仮設置)</span>
-		<select id="school" name="selectedValue" class="form-select" th:onchange="groupList(this.value)"
-			style="margin-bottom: 10px;">
-			<option>1</option>
-			<option>2</option>
-			<option>3</option>
-		</select>
 
 		<div class="main-content">
 
@@ -106,6 +112,37 @@
 			</div>
 		</div>
 	</div>
+
+	<!--処理コード欄-->
+	<script th:inline="javascript">
+		function taskList(selectedValue) {
+			var form = document.getElementById("data");
+			var groupId = form.querySelector("[name='group_id']").value;
+			var userId = form.querySelector("[name='user_id']").value;
+			/*URL指定＆ドロップダウンリストの値引き渡し*/
+			var url = "memberDetails";
+			var params = {
+				"selectedValue": selectedValue,
+				"groupId": groupId,
+				"userId": userId
+			};
+			/*HTML内容のクリア*/
+			var elements = document.getElementsByClassName("search-result");
+			for (var i = 0; i < elements.length; i++) {
+				elements[i].innerHTML = "";
+			}
+			/*タスク一覧表示メソッドの呼び出し*/
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: params,
+				success: function (data) {
+					var html = $(data).find(".search-result").html();
+					document.getElementById("result").innerHTML = html;
+				}
+			});
+		}
+	</script>
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

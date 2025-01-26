@@ -92,6 +92,8 @@ public interface GroupDisplayServiceInterface {
 	public int selectProgress(int attribute);
 
 	//メンバ詳細取得
-	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id);
+	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id,String seletedValue);
+	
+	
 
 }
