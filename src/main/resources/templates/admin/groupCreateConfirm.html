@@ -17,6 +17,8 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
+	<link rel="stylesheet" th:href="@{/css/list.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -39,60 +41,55 @@
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:action="@{groupCreateComp}" method="post" th:if="${groupDetail != null}">
-			<table border="1">
-				<div>
-					<tr>
-						<th>グループ名</th>
-						<td th:text="${groupDetail.group_name}"></td>
-						<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
-					</tr>
 
-					<tr>
-						<th>ジャンル名</th>
-						<td th:text="${groupDetail.genre}"></td>
-						<input type="hidden" name="genre" th:value="${groupDetail.genre}">
-					</tr>
+			<div class="form-group regist-item">
+				<label class="form-label">グループ名</label>
+				<input type="text" class="form-control confirmation-field" th:value="${groupDetail.group_name}"
+					readonly>
+				<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+			</div>
+
+			<div class="form-group regist-item" style="margin-bottom: 10px;">
+				<label class="form-label">ジャンル名</label>
+				<input type="text" class="form-control confirmation-field" th:value="${groupDetail.genre}" readonly>
+				<input type="hidden" name="genre" th:value="${groupDetail.genre}">
+			</div>
+
+			<div class="main-content">
+
+				<div class="form-group regist-item">
+					<label class="form-label user-roll-text">リーダ</label>
+					<ul class="list-group" th:each="leader : ${leaderUser}">
+						<li class="list-group-item" th:text="${leader.user_name}"></li>
+						<input type="hidden" name="leaderUser_id" th:value="${leader.user_id}">
+						<input type="hidden" name="leaderUser_name" th:value="${leader.user_name}">
+					</ul>
 				</div>
 
-				<tr>
-					<th>リーダ</th>
-				</tr>
-				<tr th:each="leader : ${leaderUser}">
-					<td th:text="${leader.user_name}"></td>
-					<input type="hidden" name="leaderUser_id" th:value="${leader.user_id}">
-					<input type="hidden" name="leaderUser_name" th:value="${leader.user_name}">
-				</tr>
+				<div class="form-group regist-item">
+					<label class="form-label user-roll-text">メンバ</label>
+					<ul class="list-group" th:each="member : ${memberUser}">
+						<li class="list-group-item" th:text="${member.user_name}"></li>
+						<input type="hidden" name="memberUser_id" th:value="${member.user_id}">
+						<input type="hidden" name="memberUser_name" th:value="${member.user_name}">
+					</ul>
+				</div>
 
-				<tr>
-					<th>メンバ</th>
-				</tr>
-				<tr th:each="member : ${memberUser}">
-					<td th:text="${member.user_name}"></td>
-					<input type="hidden" name="memberUser_id" th:value="${member.user_id}">
-					<input type="hidden" name="memberUser_name" th:value="${member.user_name}">
-				</tr>
-			</table>
+				<button type="button" name="button" value="登録" class="control-btn mini-btn"
+					onclick="groupCreateAndShowPopup()">登録</button>
+			</div>
 
-			<button type="button" name="button" value="登録" class="btn btn-danger"
-				onclick="groupCreateAndShowPopup()">登録</button>
 		</form>
 
 		<!-- ポップアップ -->
-		<div class="modal fade" id="groupCreateModal" tabindex="-1" role="dialog"
+		<div class="modal fade popup-place" id="groupCreateModal" tabindex="-1" role="dialog"
 			aria-labelledby="groupCreateModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="groupCreateModalLabel">登録完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>登録が完了しました</p>
-					</div>
-					<div class="modal-footer">
-						<form th:action="@{groupList}" method="get">
-							<button type="submit" class="btn btn-danger">グループ一覧へ</button>
-						</form>
-					</div>
+					<p class="modal-text">登録が完了しました</p>
+					<form th:action="@{groupList}" method="get">
+						<button type="submit" class="control-btn return-btn">グループ一覧へ</button>
+					</form>
 				</div>
 			</div>
 		</div>
