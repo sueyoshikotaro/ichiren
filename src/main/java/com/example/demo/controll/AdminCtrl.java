@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
+import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.form.ChatForm;
 import com.example.demo.form.FormContents;
@@ -37,6 +38,7 @@ import com.example.demo.form.UserForm;
 import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
+import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
 
 /**
@@ -61,12 +63,18 @@ public class AdminCtrl {
 	@Qualifier("GroupDisplayImpl")
 	GroupDisplayServiceInterface groupDispService;
 
+	//湊原追加
+	@Autowired
+	@Qualifier("taskService")
+	TaskServiceInterface TaskService;
+  
 	@Autowired
 	@Qualifier("ChatService")
 	ChatServiceInterface chatServise;
 	
 	private int school_id;
 	private String user_id;
+  
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -778,7 +786,8 @@ public class AdminCtrl {
 
 		System.out.println(gmdv);
 
-		System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
+		//ドロップダウンリスト取得処理
+		List<Task> taskCategory = TaskService.selectCategory(Integer.parseInt(gmdv.getGroup_id()));
 
 		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(gmdv.getUser_id(), gmdv.getGroup_id());
 
@@ -786,6 +795,7 @@ public class AdminCtrl {
 			System.out.println(g);
 		}
 
+		mav.addObject("Category", taskCategory);
 		mav.addObject("group", group);
 		mav.setViewName("admin/groupMemberDetails");
 
@@ -1424,7 +1434,6 @@ public class AdminCtrl {
 	@PostMapping("chatSearch")
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
-
 		//チャット相手を検索し、Listに格納する
 	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
 	    

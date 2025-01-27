@@ -47,4 +47,7 @@ public interface TaskServiceInterface {
 	public void registerTaskReq(String req_category, String req_name, String req_content, String req_reason,
 			Date add_date, String user_name, int group_id);
 
+	//カテゴリ取得(絞り込み用)
+	public List<Task> selectCategory(int group_id);
+
 }

@@ -101,5 +101,14 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	@Query("update task set progress=:progress where task_id=:task_id;")
 	public void updateProgress(int task_id, int progress);
 
+	/**
+	 * 湊原
+	 * ユーザが所属しているグループのカテゴリだけを取得(絞り込み用)
+	 * @param group_id
+	 * @return
+	 */
+	@Query("select distinct task_category from task where group_id=:group_id and task_flg= 1;")
+	public List<Task> selectCategory(int group_id);
+
 	
 }
