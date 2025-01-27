@@ -39,26 +39,26 @@
 
 /*コンテナ*/
 /*移行中*/
-.container {
-	background-image: url(../img/containerImage.png);
-	background-size: cover;
-	max-width: 480px;
-	padding: 20px;
-	margin-top: 8px;
-	border: 2px solid black;
-	border-radius: 10px;
-	font-weight: bold;
-}
+/*.container {*/
+/*	background-image: url(../img/containerImage.png);*/
+/*	background-size: cover;*/
+/*	max-width: 480px;*/
+/*	padding: 20px;*/
+/*	margin-top: 8px;*/
+/*	border: 2px solid black;*/
+/*	border-radius: 10px;*/
+/*	font-weight: bold;*/
+/*}*/
 
 /*全体(body)*/
 /*移行中*/
-body {
-	background-image: url(../img/backImage.png);
-	background-size: 100% auto;
-	background-position: center top;
-	background-repeat: no-repeat;
-	min-height: 100vh;
-	background-size: cover;
-	font-family: 'Sawarabi Mincho', sans-serif;
-	padding-top: 80px;
-}
+/*body {*/
+/*	background-image: url(../img/backImage.png);*/
+/*	background-size: 100% auto;*/
+/*	background-position: center top;*/
+/*	background-repeat: no-repeat;*/
+/*	min-height: 100vh;*/
+/*	background-size: cover;*/
+/*	font-family: 'Sawarabi Mincho', sans-serif;*/
+/*	padding-top: 80px;*/
+/*}*/

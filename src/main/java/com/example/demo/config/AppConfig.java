@@ -3,12 +3,14 @@ package com.example.demo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
+import com.example.demo.service.impl.ChatServiceImpl;
 import com.example.demo.service.impl.GroupDisplayImpl;
 import com.example.demo.service.impl.NoticeServiceImpl;
 import com.example.demo.service.impl.SchoolDisplayImpl;
@@ -57,6 +59,11 @@ public class AppConfig {
 	@Bean(name = "NoticeService")
 	NoticeServiceInterface noticeService() {
 		return new NoticeServiceImpl();
+	}
+	
+	@Bean(name = "ChatService")
+	ChatServiceInterface chatService() {
+		return new ChatServiceImpl();
 	}
 
 }

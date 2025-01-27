@@ -48,14 +48,14 @@
 
 		<!--bootstrap-->
 		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-			aria-controls="offcanvasExample">
+			aria-controls="offcanvasExample" id="showChatPartnerButton">
 			チャット相手一覧表示ボタン
 		</button>
 
 		<!--上記ボタンで開閉可能なチャット相手一覧-->
 		<!--bootstrap-->
 		<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
-			aria-labelledby="offcanvasExampleLabel">
+			aria-labelledby="offcanvasExampleLabel" style="display: block;">
 			<div class="offcanvas-header">
 				<h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
 				<button type="button" class="btn-close" id="closeOffcanvas" aria-label="Close"></button>
@@ -84,15 +84,19 @@
 				</form>
 
 				<!--チャット相手一覧(リスト,繰返しかな)-->
-				<ul class="list-group" id="chatPartnerList">
-					<li th:each="chat : ${chatPartner}" class="list-group-item list-group-item-action">
-						<span th:text="${chat.user_name}">○○さん</span>
+				<form id="userForm" th:style="${'display: block'}">
+					<ul class="list-group" id="chatPartnerList">
+						<li th:each="chat : ${chatPartner}" class="list-group-item list-group-item-action"
+							th:onclick="getChatHistory('${chat.user_id}')">
+							<span th:text="${chat.user_name}">○○さん</span>
+							<span th:text="${chat.user_id}">○○さん</span>
 
-						<span class="badge bg-primary rounded-pill" th:text="${notificationCount}"
-							th:if="${notificationCount != null}">通知数</span>
-					</li>
-				</ul>
-
+							<!--いったん未実装-->
+							<span class="badge bg-primary rounded-pill" th:text="${notificationCount}"
+								th:if="${notificationCount != null}">通知数</span>
+						</li>
+					</ul>
+				</form>
 			</div>
 		</div>
 
@@ -101,8 +105,14 @@
 
 			<!--チャット欄(予定)-->
 			<!--チャット相手名表示(ヘッダー？)-->
+			<div id="chat-history-container">
+				<!--チャット相手のメッセージを表示する場所-->
+				<div th:each="chat : ${chatHistory}">
+					<input type="text" th:text="${chat.msg}" name="chat">
+				</div>
+			</div>
 
-			<!--チャットテキスト-->
+
 
 			<!--送信欄-->
 			<div class="input-group mb-3">
@@ -122,55 +132,165 @@
 		</div>
 	</div>
 
-	<!--処理コード欄-->
+	<!--チャット相手一覧の表示-->
+	<script>
+		$(document).ready(function () {
+			$('#showChatPartnerButton').click(function () {
+				console.log("よびだし！！")
+				// コントロールを呼び出す
+				$.ajax({
+					type: 'GET',
+					url: 'chat',
+					success: function (data) {
+						//var $data = $(data); // dataをDOMとしてパース
+						//var chatPartnerList = $data.find('#chatPartnerList'); // 必要なデータを取得
+
+						var chatPartnerList = data;
+
+						console.log(chatPartnerList);
+
+						// チャット相手一覧を表示する
+						var chatPartnerList = $('#chatPartnerList');
+
+						var chatPartner = chatPartnerList.find('li');
+
+						console.log(chatPartnerList);
+
+						chatPartnerList.empty(); // チャット相手一覧をクリアする
+
+						if (chatPartner.length > 0) {
+							var listItems = [];
+							chatPartner.each(function () {
+								var listItem = $('<li>').addClass('list-group-item list-group-item-action');
+								listItem.text($(this).text());
+								listItem.click(function () {
+									getChatHistory($(this).text());
+								});
+								listItems.push(listItem);
+							});
+							$('#chatPartnerList').append(listItems);
+						}
+					}
+				});
+			});
+		});
+	</script>
+
+	<!--チャット相手表示一覧内の検索-->
 	<script th:inline="javascript">
 		function chatSearch() {
-		    const form = document.getElementById("searchForm");
-		    const value = form.querySelector("input[name='search']").value;
+			const form = document.getElementById("searchForm");
+			const value = form.querySelector("input[name='search']").value;
 
-		    /*URL指定＆ドロップダウンリストの値引き渡し*/
-		    var url = "chatSearch";
-		    var params = {
-		        "search": value
-		    };
-		    console.log(params)
+			/*URL指定＆ドロップダウンリストの値引き渡し*/
+			var url = "chatSearch";
+			var params = {
+				"search": value
+			};
+			console.log(params)
 
-		    /*チャット相手一覧の再表示メソッドの呼び出し*/
-		    $.ajax({
-		        type: "POST",
-		        url: url,
-		        data: params,
-		        success: function (data) {
-		            console.log(data); // データをコンソールに出力
 
-		            // チャット相手一覧のリストを取得
-		            var chatPartnerList = document.getElementById("chatPartnerList");
-		            console.log(chatPartnerList)
+			/*チャット相手一覧の再表示メソッドの呼び出し*/
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: params,
+				success: function (data) {
+					console.log(data); // データをコンソールに出力
 
-		            // チャット相手一覧のリストを更新
-		            if (data) { // データが存在する場合のみ処理を実行
-		                // HTMLを解析して必要な情報を抽出
-		                var html = $(data);
-		                var chatPartner = html.find("#chatPartnerList li");
+					// チャット相手一覧のリストを取得
+					/*var chatPartnerList = document.getElementById("chatPartnerList");*/
 
-		                chatPartnerList.innerHTML = "";
-		                chatPartner.each(function () {
-		                    var li = document.createElement("li");
-		                    li.className = "list-group-item list-group-item-action";
-		                    li.innerHTML = $(this).html();
-		                    chatPartnerList.appendChild(li);
-		                });
-		            }
-		        }
-		    });
+
+
+					// チャット相手一覧のリストを更新
+					if (data) { // データが存在する場合のみ処理を実行
+						// HTMLを解析して必要な情報を抽出
+						var html = $(data);
+						var chatPartner = html.find("#chatPartnerList li");
+
+						chatPartnerList.innerHTML = "";
+						chatPartner.each(function () {
+							var li = document.createElement("li");
+							li.className = "list-group-item list-group-item-action";
+							li.innerHTML = $(this).html();
+
+							chatPartnerList.appendChild(li);
+						});
+					}
+				}
+			});
 		}
+	</script>
 
+
+	<!--チャット履歴表示-->
+	<script>
+		function getChatHistory(chatUserId) {
+
+			console.log("getChatHistory 関数が呼び出されました。");
+
+			console.log(chatUserId);
+			$.ajax({
+				type: 'POST',
+				url: 'getChatHistory',
+				data: {chatUserId: chatUserId},
+				success: function (data) {
+
+
+
+					var chatHistory = data;
+
+					//console.log(chatHistory)
+
+					console.log(document.getElementById("chat-history-container"));
+
+					var chatHistoryElement = document.getElementById("chat-history-container");
+					chatHistoryElement.innerHTML = chatHistory;
+
+
+
+					// チャット相手一覧を非表示にする
+					document.getElementById("offcanvasExample").style.display = "none";
+					// バックドロップを非表示にする
+					document.querySelector(".offcanvas-backdrop").style.display = "none";
+
+					// チャット履歴を表示する
+					var chatHistoryHtml = $(chatHistory);
+					chatHistoryHtml.find(".chat-history-item").each(function () {
+						var chatElement = document.createElement("div");
+						chatElement.innerHTML = $(this).html();
+						chatHistoryElement.appendChild(chatElement);
+					});
+
+
+
+
+
+
+
+
+					//var chatHistory = data;
+					//var chatHistory = $(data).find('#chat-history').html();
+
+
+					//console.log(data);
+					// チャット履歴を表示する
+					//document.getElementById('#offcanvasExample').innerHTML = chatHistory;
+					// チャット相手一覧を閉じる
+					//document.getElementById("offcanvasExample").style.display = "none";
+				}
+			});
+		}
 	</script>
 
 	<!-- bootstrapのjsリンク接続 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
+
+	<!--JavaScript-->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </body>
 

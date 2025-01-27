@@ -78,7 +78,7 @@ public interface GroupDisplayServiceInterface {
 
 	//所属グループ一覧
 	public List<GroupDisplay> deptGroupList(String user_id);
-
+  
 	//チャット相手を設定
 	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
 

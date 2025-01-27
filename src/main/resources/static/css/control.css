@@ -162,3 +162,8 @@
 .file-select {
 	font-size: 14px;
 }
+
+/*選択ユーザの役職欄*/
+.user-roll-text{
+	margin-bottom: 0px;
+}

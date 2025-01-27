@@ -128,6 +128,11 @@
 	margin-bottom: -6px;
 }
 
+/*学校情報詳細画面,学校IDの表示テキスト*/
+.mb-3.school-info-text.second-text {
+	margin-top: -12px;
+}
+
 /*講師一覧*/
 /*繰返し項目毎のボタングループ*/
 .teList-btn-group {
@@ -159,35 +164,50 @@
 
 /*グループ一覧*/
 /*絞り込みグループ*/
-.narrow-dowm-group{
+.narrow-dowm-group {
 	margin-top: -22px;
 	margin-bottom: 8px;
 }
 
 /*グループ一覧各項目に対して*/
-.groupList-name{
+.groupList-name {
 	margin-bottom: -8px;
 }
 
-.groupList-text{
+.groupList-text {
 	font-size: 20px;
 }
 
-.groupList-whereabouts{
+.groupList-whereabouts {
 	margin-bottom: 8px;
 }
 
-.group-detail-text-view{
+.group-detail-text-view {
 	margin-top: 8px;
 }
 
 /*スコア欄*/
-.score-view{
+.score-view {
 	margin-bottom: -26px;
 }
 
+.priority {
+	margin-bottom: -20px;
+}
+
 /*メンバのタスク名*/
-.detail-taskName{
+.detail-taskName {
 	margin-top: 7px;
 	margin-bottom: 7px;
+}
+
+/*3ボタン*/
+.btnS-group {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.btn-group form {
+	margin: 0 10px;
 }

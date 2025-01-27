@@ -128,16 +128,20 @@ public class UserCtrl {
 
 				userDisplayService.adminDisable(user_id, 0); //adminアカウント無効化
 
-				return new ModelAndView("redirect:/taskdon/admin/teList"); //管理者がログインした場合(初回のみ)
-			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+				return new ModelAndView("redirect:/taskdon/admin/teInfoRegist"); //上位管理者がログインした場合(初回のみ)
 
-				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合
 			} else if (user.get().getUser_pass().equals("taskdon1")) {
 
 				return new ModelAndView("redirect:/taskdon/user/passReset"); //パスワード再設定に遷移
+
+			} else if (user.get().getUser_id().contains("te") || user.get().getUser_id().contains("ad")) {
+
+				return new ModelAndView("redirect:/taskdon/admin/menu"); //管理者がログインした場合
+
 			} else if (user.get().getUser_id().contains("st")) {
 
 				return new ModelAndView("redirect:/taskdon/user/deptGroupList"); //ユーザがログインした場合
+
 			} else {
 				mav.addObject("errMsg", "IDまたはパスワードが違います。");
 				mav.setViewName("common/login"); //ログイン失敗
@@ -179,7 +183,14 @@ public class UserCtrl {
 
 		String passwordPattern = "^[a-zA-Z0-9]{8,16}$"; // 8-16桁の英数字のみ設定可
 
-		if (!newPass.matches(passwordPattern)) {
+		if (newPass.equals("") || confirmPass.equals("")) {
+
+			mav.addObject("errMsg", "未入力の項目があります。");
+			mav.addObject("user_id", user_id); // user_idを再度渡す
+			mav.setViewName("common/passReset");
+
+			return mav;
+		} else if (!newPass.matches(passwordPattern)) {
 
 			mav.addObject("errMsg", "パスワードは8桁以上16桁以下の英数字でなければなりません。");
 			mav.addObject("user_id", user_id); // user_idを再度渡す
@@ -854,6 +865,8 @@ public class UserCtrl {
 
 		return mav;
 	}
+	
+	
 
 	/**
 	 * 湊原
