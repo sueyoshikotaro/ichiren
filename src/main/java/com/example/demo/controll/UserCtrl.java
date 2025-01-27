@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -37,8 +39,6 @@ import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -183,7 +183,14 @@ public class UserCtrl {
 
 		String passwordPattern = "^[a-zA-Z0-9]{8,16}$"; // 8-16桁の英数字のみ設定可
 
-		if (!newPass.matches(passwordPattern)) {
+		if (newPass.equals("") || confirmPass.equals("")) {
+
+			mav.addObject("errMsg", "未入力の項目があります。");
+			mav.addObject("user_id", user_id); // user_idを再度渡す
+			mav.setViewName("common/passReset");
+
+			return mav;
+		} else if (!newPass.matches(passwordPattern)) {
 
 			mav.addObject("errMsg", "パスワードは8桁以上16桁以下の英数字でなければなりません。");
 			mav.addObject("user_id", user_id); // user_idを再度渡す
@@ -858,6 +865,8 @@ public class UserCtrl {
 
 		return mav;
 	}
+	
+	
 
 	/**
 	 * 湊原
