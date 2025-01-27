@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -36,8 +38,6 @@ import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者のコントローラ
@@ -1406,6 +1406,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("chat")
+//	@ResponseBody
 	public ModelAndView chat(ModelAndView mav) {
 
 		//チャットの通信可能相手を格納
@@ -1426,6 +1427,9 @@ public class AdminCtrl {
 
 		//チャット相手を検索し、Listに格納する
 	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+	    
+	    System.out.println(chatPartner);
+	    
 	    mav.addObject("chatPartner", chatPartner);
 	    mav.setViewName("common/chat");
 	    
@@ -1439,11 +1443,11 @@ public class AdminCtrl {
 	 */
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
-	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {System.out.println(chatUser_id);
+	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {
+		
+		System.out.println(chatUser_id);
 		
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
-		
-		System.out.println(chatHistory);
 		
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
