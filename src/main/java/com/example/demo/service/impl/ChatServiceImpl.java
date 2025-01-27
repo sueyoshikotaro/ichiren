@@ -67,7 +67,19 @@ public class ChatServiceImpl implements ChatServiceInterface {
 
 	
 	/**
-	 * ユーザ用チャット
+	 * リーダ用のサービス
+	 */
+	//チャット相手を設定
+	@Override
+	public List<GroupDetailView> leaderSetChatAdmin(int school_id) {
+		
+		return chatCrud.leaderSetChatUser(school_id);
+	}
+	
+	
+	
+	/**
+	 * メンバ用のサービス
 	 */
 	//チャット相手を設定
 	@Override

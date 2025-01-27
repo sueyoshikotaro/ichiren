@@ -62,9 +62,21 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	public void updateChat(String user_id, int chatRoom_id, String sendText);
 
 	
+	/**
+	 * リーダ用
+	 */
 	
 	/**
-	 * ユーザ用チャット
+	 * 末吉
+	 * チャット相手を格納
+	 */
+//	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ((ud.group_id = :group_id and t.group_flg = 1) or (u.user_id like 'te%'))")
+	@Query("select * from user where school_id = :school_id and user_id like 'te%'")
+	public List<GroupDetailView> leaderSetChatUser(int school_id);
+	
+	
+	/**
+	 * ユーザ用
 	 */
 	
 	/**
