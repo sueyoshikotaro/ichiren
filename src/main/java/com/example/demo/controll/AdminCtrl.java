@@ -67,14 +67,14 @@ public class AdminCtrl {
 	@Autowired
 	@Qualifier("taskService")
 	TaskServiceInterface TaskService;
-  
+
 	@Autowired
 	@Qualifier("ChatService")
 	ChatServiceInterface chatServise;
-	
+
 	private int school_id;
 	private String user_id;
-  
+
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -586,6 +586,19 @@ public class AdminCtrl {
 			// IDが重複していた場合
 			mav.addObject("errMsg", "IDが重複しています。");
 			mav.setViewName("admin/teInfoRegist");
+
+		}
+
+		String userId = u.getUser_id();
+		if (!userId.startsWith("te") || userId.length() != 10) {
+
+			mav.addObject("errMsg", "講師IDは「te」 + 8桁の数字です。");
+			mav.setViewName("admin/teInfoRegist");
+
+		} else {
+
+			mav.addObject("te", u);
+			mav.setViewName("admin/teInfoRegistConfirm");
 		}
 
 		return mav;
@@ -629,9 +642,7 @@ public class AdminCtrl {
 	 * @return 講師一覧
 	 */
 	@GetMapping("teList")
-	public ModelAndView dispTeList() {
-
-		ModelAndView mav = new ModelAndView();
+	public ModelAndView dispTeList(ModelAndView mav, UserDisplay u) {
 
 		Iterable<UserDisplay> teList = userDisplayService.teList(school_id);
 
@@ -1341,10 +1352,10 @@ public class AdminCtrl {
 
 		session.removeAttribute("button");
 
-		for(String memberUser_id : user_id) {
+		for (String memberUser_id : user_id) {
 			groupDispService.groupDetailCreate(memberUser_id, group_id, "メンバ", 0);
 		}
-			
+
 		mav.addObject("group_id", group_id);
 		mav.addObject("groupMemberAddComp", true);
 		mav.setViewName("admin/groupMemberAddConfirm");
@@ -1421,7 +1432,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("chat")
-//	@ResponseBody
+	//	@ResponseBody
 	public ModelAndView chat(ModelAndView mav) {
 
 		//チャットの通信可能相手を格納
@@ -1440,16 +1451,16 @@ public class AdminCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 		//チャット相手を検索し、Listに格納する
-	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
-	    
-	    System.out.println(chatPartner);
-	    
-	    mav.addObject("chatPartner", chatPartner);
-	    mav.setViewName("common/chat");
-	    
-	    return mav;
+		List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+
+		System.out.println(chatPartner);
+
+		mav.addObject("chatPartner", chatPartner);
+		mav.setViewName("common/chat");
+
+		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * チャット画面にチャット履歴を表示する
@@ -1457,15 +1468,15 @@ public class AdminCtrl {
 	 */
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
-	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {
-		
+			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
+
 		System.out.println(chatUser_id);
-		
+
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
-		
+
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
-		
+
 		return mav;
 	}
 

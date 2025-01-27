@@ -36,6 +36,9 @@
 
 		<h2>新規講師登録</h2>
 
+		<!-- エラー文を表示する -->
+		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
+
 		<form th:action="@{teInfoRegistConfirm}" method="post">
 
 			<div class="form-group regist-item">
@@ -73,8 +76,7 @@
 
 			<button type="submit" class="control-btn mini-btn">確認</button>
 
-			<!--エラー置き場-->
-			<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;">エラーメッセージ</p>
+
 
 		</form>
 

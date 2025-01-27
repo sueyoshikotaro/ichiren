@@ -18,7 +18,6 @@
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/control.css}">
-	<link rel="stylesheet" th:href="@{/css/list.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -36,61 +35,69 @@
 
 		<h2>グループ解散</h2>
 
-		<p>本当にこのグループを解散しますか？</p>
+		<p>本当にこのユーザを削除しますか？</p>
 
 		<div th:if="${teamsDisplay != null}">
 
 			<form th:action="@{groupDissComp}" method="post">
 
-				<div class="form-group regist-item">
-					<label class="form-label">グループ名</label>
-					<div class="form-control confirmation-field" th:text="${teamsDisplay.group_name}"></div>
-					<input type="hidden" name="group_id" th:value="${teamsDisplay.group_id}">
-				</div>
+				<table border="1">
+					<div>
+						<tr>
+							<th>グループ名</th>
+							<td th:text="${teamsDisplay.group_name}"></td>
+							<input type="hidden" name="group_id" th:value="${teamsDisplay.group_id}">
+						</tr>
 
-				<div class="main-content">
+						<tr>
+							<th>リーダ</th>
+						</tr>
+						<tr th:each="leader : ${leaderUser}">
+							<td th:text="${leader.user_name}"></td>
+						</tr>
 
-					<div class="form-group regist-item">
-						<label class="form-label user-roll-text">リーダ</label>
-						<ul class="list-group" th:each="leader : ${leaderUser}">
-							<li class="list-group-item" th:text="${leader.user_name}"></li>
-						</ul>
+						<tr>
+							<th>メンバ</th>
+						</tr>
+						<tr th:each="member : ${memberUser}">
+							<td th:text="${member.user_name}"></td>
+						</tr>
 					</div>
+				</table>
 
-					<div class="form-group regist-item">
-						<label class="form-label user-roll-text">メンバ</label>
-						<ul class="list-group" th:each="member : ${memberUser}">
-							<li class="list-group-item" th:text="${member.user_name}"></li>
-						</ul>
-					</div>
+				<tr>
+					<th>
+						<div class="form-check">
+							<label class="form-check-label" for="flexCheckDefault">
+								一度グループ情報を削除すると元には戻せません
+							</label>
+							<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+						</div>
+					</th>
+				</tr>
 
-				</div>
-
-				<div class="form-check">
-					<label class="form-check-label" for="flexCheckDefault">
-						一度グループ情報を削除すると元には戻せません
-					</label>
-					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-				</div>
-
-				<button type="button" name="button" value="解散" class="control-btn mini-btn"
-					onclick="groupDissAndShowPopup()">解散</button>
-
+				<tr>
+					<td colspan="2" align="center">
+						<button type="button" name="button" value="解散" class="btn btn-danger"
+							onclick="groupDissAndShowPopup()">解散</button>
+					</td>
+				</tr>
 			</form>
 
-			<!-- ポップアップ -->
-			<div class="modal fade popup-place" id="groupDissModal" tabindex="-1" role="dialog"
-				aria-labelledby="groupDissModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<p class="modal-text">解散が完了しました</p>
-						<form th:action="@{groupList}" method="get">
-							<button type="submit" class="control-btn return-btn">グループ一覧へ</button>
-						</form>
-					</div>
+
+
+		</div>
+		<!-- ポップアップ -->
+		<div class="modal fade popup-place" id="groupDissModal" tabindex="-1" role="dialog"
+			aria-labelledby="groupDissModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<p class="modal-text">解散が完了しました</p>
+					<form th:action="@{groupList}" method="get">
+						<button type="submit" class="control-btn return-btn">グループ一覧へ</button>
+					</form>
 				</div>
 			</div>
-
 		</div>
 
 	</div>
@@ -107,11 +114,11 @@
 			form.method = 'post';
 
 			// buttonパラメータを追加
-			//var buttonInput = document.createElement('input');
-			//buttonInput.type = 'hidden';
-			//buttonInput.name = 'button';
-			//buttonInput.value = '編集'; // または '戻る' など必要な値を設定
-			//form.appendChild(buttonInput);
+			var buttonInput = document.createElement('input');
+			buttonInput.type = 'hidden';
+			buttonInput.name = 'button';
+			buttonInput.value = '編集'; // または '戻る' など必要な値を設定
+			form.appendChild(buttonInput);
 
 			form.submit();
 		}
