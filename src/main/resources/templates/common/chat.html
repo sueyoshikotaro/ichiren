@@ -47,8 +47,8 @@
 		</svg>
 
 		<!--bootstrap-->
-		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-			aria-controls="offcanvasExample">
+		<button class="btn btn-primary" type="button" id="showChatPartnerButton" data-bs-toggle="offcanvas"
+			data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
 			チャット相手一覧表示ボタン
 		</button>
 
@@ -112,7 +112,7 @@
 						<span>あなた</span>
 						<span th:text="${chat.msg}"></span>
 					</div>
-					
+
 					<div th:if="${session.user_id} != ${chat.send_by}">
 						<span>リーダ</span>
 						<span th:text="${chat.msg}"></span>
@@ -137,7 +137,7 @@
 			</div>
 		</div>
 	</div>
-  
+
 	<!-- bootstrapのjsリンク接続 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
