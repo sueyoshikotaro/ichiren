@@ -25,7 +25,7 @@
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
-		<th:block th:insert="fragment/header :: headerAdmin">
+		<th:block th:insert="fragment/header :: headerUser">
 	</div>
 
 </head>
@@ -36,7 +36,7 @@
 
 		<h2>メンバ詳細</h2>
 
-		<div th:each="memberTask:${memberTask}" th:if="${memberTaskStat.index == 0}">
+		<div th:each="memberTask:${memberTask}" th:if="${memberTaskStat.index == 0}" id="data">
 
 			<div class="row">
 				<div class="col">
@@ -59,32 +59,26 @@
 			<span class="form-label">進捗</span>
 			<div class="progress group-progress" role="progressbar">
 				<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
-					th:style="'width:'+ ${userProgress}+'%'"><label class="var-text group-progress-text"
-						th:text="${userProgress}+'%'"></div>
+					th:style="'width:'+ ${memberTask.user_progress}+'%'"><label class="var-text group-progress-text"
+						th:text="${memberTask.user_progress}+'%'"></div>
 			</div>
-
-			<!--				絞り込みドロップダウンリスト-->
-			<!--				<div class="col-md-6">-->
-			<!--					<select class="form-select" aria-label="Default select example" name="selectedValue"-->
-			<!--						th:onchange="taskList(this.value)">-->
-			<!--						<option selected>--</option>-->
-			<!--						<option name="group_user" th:each="user : ${session.groupUser}" th:value="${user}"-->
-			<!--							th:text="${user}">-->
-			<!--						</option>-->
-			<!--					</select>-->
-			<!--				</div>-->
+			<!-- 絞り込みドロップダウンリスト-->
+			<span class="form-label">カテゴリ名</span>
+			<div class="col-md-6">
+				<select class="form-select" aria-label="Default select example" name="selectedValue"
+					th:onchange="memberDetails(this.value)">
+					<option selected>選択なし</option>
+					<option name="select_category" th:each="category : ${Category}" th:value="${category.task_category}"
+						th:text="${category.task_category}">
+					</option>
+				</select>
+			</div>
+			<input type="hidden" name="group_id" th:value="${memberTask.group_id}">
+			<input type="hidden" name="user_id" th:value="${memberTask.user_id}">
 
 		</div>
 
-		<span class="form-label">絞り込み(仮設置)</span>
-		<select id="school" name="selectedValue" class="form-select" th:onchange="groupList(this.value)"
-			style="margin-bottom: 10px;">
-			<option>1</option>
-			<option>2</option>
-			<option>3</option>
-		</select>
-
-		<div class="main-content">
+		<div class="main-content" id = "result">
 
 			<div th:each="memberTask:${memberTask}" class="content-child">
 
@@ -114,14 +108,13 @@
 
 		</div>
 
-	</div>
-	<!-- コンテナ最下のボタン -->
-	<!--		<button th:onclick="|location.href='@{/taskdon/admin/groupDetail}'|">戻る</button>-->
+		<!-- コンテナ最下のボタン -->
+		<!--		<button th:onclick="|location.href='@{/taskdon/admin/groupDetail}'|">戻る</button>-->
 	</div>
 
 	<!--処理コード欄-->
 	<script th:inline="javascript">
-		function taskList(selectedValue) {
+		function memberDetails(selectedValue) {
 			var form = document.getElementById("data");
 			var groupId = form.querySelector("[name='group_id']").value;
 			var userId = form.querySelector("[name='user_id']").value;
@@ -133,17 +126,17 @@
 				"userId": userId
 			};
 			/*HTML内容のクリア*/
-			var elements = document.getElementsByClassName("search-result");
+			var elements = document.getElementsByClassName("main-content");
 			for (var i = 0; i < elements.length; i++) {
 				elements[i].innerHTML = "";
 			}
-			/*タスク一覧表示メソッドの呼び出し*/
+			/*グループメンバ詳細表示メソッドの呼び出し*/
 			$.ajax({
 				type: "POST",
 				url: url,
 				data: params,
 				success: function (data) {
-					var html = $(data).find(".search-result").html();
+					var html = $(data).find(".main-content").html();
 					document.getElementById("result").innerHTML = html;
 				}
 			});

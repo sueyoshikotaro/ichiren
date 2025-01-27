@@ -37,81 +37,45 @@
 		<h2>グループ一覧</h2><br>
 
 		<!--絞り込みグループ-->
-		<div class="narrow-dowm-group">
+		<div class="narrow-dowm-group" id="form">
 
 			<!--絞り込み(所属学校)-->
 			<span class="form-label">所属学校</span>
-			<select id="school" name="selectedValue" class="form-select" th:onchange="groupList(this.value)">
-				<option>選択なし</option>
-				<option name="school_name">北海道情報専門学校</option>
-				<option name="school_name">JOHO 新潟情報専門学校</option>
-				<option name="school_name">JOHO 大阪情報専門学校</option>
-				<option name="school_name">名古屋医療情報専門学校</option>
-				<option name="school_name">名古屋情報メディア専門学校</option>
-				<option name="school_name">JOHO 広島情報専門学校</option>
-				<option name="school_name">KCS福岡情報専門学校</option>
-				<option name="school_name">KCS北九州情報専門学校</option>
-				<option name="school_name">KCS大分情報専門学校</option>
-				<option name="school_name">KCS鹿児島情報専門学校</option>
+			<select id="school" name="selectedSchool" class="form-select" th:onchange="groupList()">
+				<option value="0">選択なし</option>
+				<option name="school_id" th:each="school : ${school}" th:value="${school.school_id}"
+					th:text="${school.school_name}">
+				</option>
 			</select>
 
 			<div class="row">
 				<div class="col">
 					<!--絞り込み(結成年度)-->
 					<span class="form-label">結成年度</span>
-					<select id="year" name="selectedValue" class="form-select" th:onchange="groupList(this.value)">
-						<option>選択なし</option>
-						<option name="est_year" th:each="group : ${groups}" th:value="${group.est_year}"
-							th:text="${group.est_year}">
+					<select id="year" name="selectedYear" class="form-select" th:onchange="groupList()">
+						<option value="選択なし">選択なし</option>
+						<option name="est_year" th:each="year : ${year}" th:value="${year.est_year}"
+							th:text="${year.est_year}">
 						</option>
 					</select>
 				</div>
 				<div class="col">
 					<!--絞り込み(ジャンル-->
 					<span class="form-label">ジャンル</span>
-					<select id="genre" name="selectValue" class="form-select" th:onchange="groupList(this.value)">
-						<option>選択なし</option>
-						<option name="genre" th:each="group : ${groups}" th:value="${group.genre}"
-							th:text="${group.genre}">
+					<select id="genre" name="selectedGenre" class="form-select" th:onchange="groupList()">
+						<option value="選択なし">選択なし</option>
+						<option name="genre" th:each="genre : ${genre}" th:value="${genre.genre}"
+							th:text="${genre.genre}">
 						</option>
 					</select>
 				</div>
 			</div>
-
-			<script th:inline="javascript">
-				/* グループ結成年度 */
-				function groupList(selectedValue) {
-					/*URL指定＆ドロップダウンリストの値引き渡し*/
-					var url = "groupList";
-					var dropdown = event.target.id;
-					var params = {
-						"selectedValue": selectedValue,
-						"dropdown": dropdown
-					};
-
-					/*HTML内容のクリア*/
-					var elements = document.getElementsByClassName("content_child");
-					for (var i = 0; i < elements.length; i++) {
-						elements[i].innerHTML = "";
-					}
-					/*グループ一覧表示メソッドの呼び出し*/
-					$.ajax({
-						type: "GET",
-						url: url,
-						data: params,
-						success: function (data) {
-							var html = $(data).find(".content").html();
-							document.getElementById("data").innerHTML = html;
-						}
-					});
-				}
-			</script>
 		</div>
 
 		<!--メイン項目-->
-		<div class="main-content">
+		<div class="main-content" id="data">
 
-			<div th:each="group : ${groups}" id="data" class="content-child">
+			<div th:each="group : ${groups}">
 
 				<!--グループ名-->
 				<div class="input-group groupList-name">
@@ -170,6 +134,51 @@
 		<!--		</form>-->
 
 	</div>
+
+	<script th:inline="javascript">
+		/* グループ結成年度 */
+		function groupList() {
+			var selectedSchool;
+			var selectedYear;
+			var selectedGenre;
+
+			var a = document.getElementsByClassName("form-select");
+			for (var i = 0; i < a.length; i++) {
+				a[i].append(a[i].selected)
+				if (i == 0) {
+					selectedSchool = a[i].value;
+				} else if (i == 1) {
+					selectedYear = a[i].value;
+				} else if (i == 2) {
+					selectedGenre = a[i].value;
+				}
+			}
+
+			/*URL指定＆ドロップダウンリストの値引き渡し*/
+			var url = "groupList";
+			var params = {
+				"selectedSchool": selectedSchool,
+				"selectedYear": selectedYear,
+				"selectedGenre": selectedGenre
+			};
+
+			/*HTML内容のクリア*/
+			var elements = document.getElementsByClassName("main-content");
+			for (var i = 0; i < elements.length; i++) {
+				elements[i].innerHTML = "";
+			}
+			/*グループ一覧表示メソッドの呼び出し*/
+			$.ajax({
+				type: "GET",
+				url: url,
+				data: params,
+				success: function (data) {
+					var html = $(data).find(".main-content").html();
+					document.getElementById("data").innerHTML = html;
+				}
+			});
+		}
+	</script>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"

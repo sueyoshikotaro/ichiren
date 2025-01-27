@@ -36,18 +36,8 @@ public class AppConfig {
 		return new TaskServiceImpl();
 	}
 
-	@Bean(name = "userService")
-	UserDisplayServiceInterface userService() {
-		return new UserDisplayImpl();
-	}
-
 	@Bean(name = "groupService")
 	GroupDisplayServiceInterface groupService() {
-		return new GroupDisplayImpl();
-	}
-
-	@Bean(name = "GroupDisplayImpl")
-	GroupDisplayServiceInterface groupDispService() {
 		return new GroupDisplayImpl();
 	}
 

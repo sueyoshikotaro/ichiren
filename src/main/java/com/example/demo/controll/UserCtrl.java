@@ -58,7 +58,7 @@ public class UserCtrl {
 
 	//坂本追加
 	@Autowired
-	@Qualifier("GroupDisplayImpl")
+	@Qualifier("groupService")
 	GroupDisplayServiceInterface groupDispService;
 
 	//湊原追加
@@ -939,7 +939,7 @@ public class UserCtrl {
 
 		List<GroupMemberDetailView> membertask = null;
 		if (groupId == null || userId == null) {
-			selectedValue = "--";
+			selectedValue = "選択なし";
 			//ドロップダウンリストが選択されていない場合の処理
 			membertask = groupDispService.memberDetail(g.getUser_id(), g.getGroup_id(), selectedValue);
 		} else {

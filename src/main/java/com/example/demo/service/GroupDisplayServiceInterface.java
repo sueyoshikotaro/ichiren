@@ -12,12 +12,7 @@ import com.example.demo.form.TeamsForm;
 public interface GroupDisplayServiceInterface {
 
 	// グループ一覧表示
-	public List<TeamsForm> groupList(String dropdown, String dropid, int school_id);
-
-	// 発足年度で絞り込みする
-	public List<TeamsForm> findDistinctEstYear(String estYear);
-
-	public List<TeamsForm> findAll();
+	public List<TeamsForm> groupList(String est_year, String genre, int school_id);
 
 	//湊原
 	public List<TeamsForm> getTeamsByCriteria(String schoolName);
@@ -93,6 +88,15 @@ public interface GroupDisplayServiceInterface {
 
 	//メンバ詳細取得
 	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id,String seletedValue);
+
+	//結成年度取得(絞り込み用)
+	public List<TeamsForm> selectEstYear();
+
+	//ジャンル取得(絞り込み用)
+	public List<TeamsForm> selectGenre();
+
+	//学校一覧(絞り込み用)
+	List<TeamsForm> selectSchool();
 	
 	
 
