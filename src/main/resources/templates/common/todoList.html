@@ -17,6 +17,7 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/list.css}"> <!-- 共通CSS -->
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -41,6 +42,9 @@
 
 	<!--コンテナ-->
 	<div class="container">
+
+		<h2>ToDoリスト</h2>
+
 		<th:block th:insert="fragment/todoFragment :: list">
 	</div>
 

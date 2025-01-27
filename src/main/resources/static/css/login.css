@@ -5,7 +5,8 @@
 .login-container {
 	background-image: url(../img/containerImage.png);
 	background-size: cover;
-	max-width: 400px;
+	max-width: 460px;
+	min-width: 400px;
 	margin: 40px auto;
 	padding: 20px;
 	border: 2px solid black;
