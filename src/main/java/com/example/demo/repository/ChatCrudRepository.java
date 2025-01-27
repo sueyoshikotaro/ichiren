@@ -15,8 +15,8 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	 * 末吉
 	 * チャット相手を格納
 	 */
-	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1")
-	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
+	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = 'リーダ' and t.group_flg = 1")
+	public List<GroupDetailView> setChatUser(int school_id);
 
 	/**
 	 * 末吉
@@ -50,14 +50,35 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	 * 末吉
 	 * チャット履歴を表示
 	 */
-	@Query("select * from message where room_id = :chatRoom_id")
+	@Query("select * from message m join user u on m.send_by = u.user_id where room_id = :chatRoom_id")
 	public List<ChatForm> getChatHistory(int chatRoom_id);
 	
 	/**
-	 * 
+	 * 末吉
+	 * チャット履歴を更新
 	 */
 	@Modifying
 	@Query("insert into message(send_by, room_id, msg) values(:user_id, :chatRoom_id, :sendText)")
 	public void updateChat(String user_id, int chatRoom_id, String sendText);
 
+	
+	
+	/**
+	 * ユーザ用チャット
+	 */
+	
+	/**
+	 * 末吉
+	 * チャット相手を格納
+	 */
+	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.group_id = :group_id and t.group_flg = 1")
+	public List<GroupDetailView> memberSetChatUser(int school_id, int group_id);
+	
+	/**
+	 * 末吉
+	 * チャット相手を検索
+	 */
+	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.group_id = :group_id and t.group_flg = 1 and u.user_name like concat('%', :search, '%')")
+	public List<GroupDetailView> memberChatPartnerSearch(int school_id, int group_id, String search);
+	
 }

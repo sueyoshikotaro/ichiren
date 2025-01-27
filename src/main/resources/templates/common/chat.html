@@ -88,7 +88,6 @@
 						<li th:each="chat : ${chatPartner}" class="list-group-item list-group-item-action"
 							th:text="${chat.user_name}" th:attr="data-user-id=${chat.user_id}">
 							<span th:text="${chat.user_name}">○○さん</span>
-							<span th:text="${chat.user_id}">○○さん</span>
 
 							<!--いったん未実装-->
 							<span class="badge bg-primary rounded-pill" th:text="${notificationCount}"
@@ -114,7 +113,7 @@
 					</div>
 
 					<div th:if="${session.user_id} != ${chat.send_by}">
-						<span>リーダ</span>
+						<span th:text="${chat.user_name}"></span>
 						<span th:text="${chat.msg}"></span>
 					</div>
 				</div>
@@ -126,7 +125,7 @@
 					aria-label="Recipient's username" aria-describedby="button-addon2" name="send" id="send_input">
 
 				<!--送信ボタン-->
-				<button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="sendMessage()">
+				<button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="sendMessage()" disabledd>
 					<!--送信ボタンイラスト(bootstrap引用)-->
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 						class="bi bi-send" viewBox="0 0 16 16">

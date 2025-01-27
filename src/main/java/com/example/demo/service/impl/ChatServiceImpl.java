@@ -16,10 +16,10 @@ public class ChatServiceImpl implements ChatServiceInterface {
 
 	//チャット相手を設定
 	@Override
-	public List<GroupDetailView> setChatUser(int school_id, String user_roll) {
+	public List<GroupDetailView> setChatUser(int school_id) {
 
 		//チャット相手を一覧で格納
-		return chatCrud.setChatUser(school_id, user_roll);
+		return chatCrud.setChatUser(school_id);
 	}
 
 	//チャット相手を検索
@@ -32,7 +32,7 @@ public class ChatServiceImpl implements ChatServiceInterface {
 	//チャット履歴を表示
 	@Override
 	public List<ChatForm> getChatHistory(String user_id, String chatUser_id) {
-
+		
 		//チャットルーム作成
 		boolean flg = chatCrud.existsChatRoom(user_id, chatUser_id);
 
@@ -54,10 +54,33 @@ public class ChatServiceImpl implements ChatServiceInterface {
 		//チャットルーム検索
 		int chatRoom_id = chatCrud.chatRoomSearch(user_id, chatUser_id);
 
-		//チャット履歴を更新
-		chatCrud.updateChat(user_id, chatRoom_id, sendText);
+		System.out.println(sendText);
+		
+		if(sendText != null && !sendText.isEmpty()) {
+			//チャット履歴を更新
+			chatCrud.updateChat(user_id, chatRoom_id, sendText);
+		}
+		
 
 		return chatCrud.getChatHistory(chatRoom_id);
+	}
+
+	
+	/**
+	 * ユーザ用チャット
+	 */
+	//チャット相手を設定
+	@Override
+	public List<GroupDetailView> memberSetChatUser(int school_id, int group_id) {
+		
+		return chatCrud.memberSetChatUser(school_id, group_id);
+	}
+
+	//チャット相手検索
+	@Override
+	public List<GroupDetailView> memberChatPartnerSearch(int school_id, int group_id, String search) {
+		
+		return chatCrud.memberChatPartnerSearch(school_id, group_id, search);
 	}
 
 }

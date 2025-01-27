@@ -18,4 +18,7 @@ public class ChatForm {
 	private String send_by;
 	private String msg;
 	private Date msg_date;
+	
+	//userテーブル
+	private String user_name;
 }
