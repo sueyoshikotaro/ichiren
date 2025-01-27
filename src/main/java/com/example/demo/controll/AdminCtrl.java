@@ -1432,11 +1432,11 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("chat")
-	//	@ResponseBody
 	public ModelAndView chat(ModelAndView mav) {
 
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id, "リーダ");
+		System.out.println(chatPartner);
 		mav.addObject("chatPartner", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
@@ -1451,14 +1451,14 @@ public class AdminCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 		//チャット相手を検索し、Listに格納する
-		List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
-
-		System.out.println(chatPartner);
-
-		mav.addObject("chatPartner", chatPartner);
-		mav.setViewName("common/chat");
-
-		return mav;
+	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+	    
+	    System.out.println("チャット相手：" + chatPartner);
+	    
+	    mav.addObject("chatPartner", chatPartner);
+	    mav.setViewName("common/chat");
+	    
+	    return mav;
 	}
 
 	/**
@@ -1468,15 +1468,32 @@ public class AdminCtrl {
 	 */
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
-			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
-
-		System.out.println(chatUser_id);
-
+	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
 
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
 
+		return mav;
+	}
+	
+	/**
+	 * 末吉
+	 * チャット送信
+	 * @return
+	 */
+	@PostMapping("sendChat")
+	public ModelAndView sendChat(ModelAndView mav,
+	        @RequestParam(name = "sendInput", required = false) String sendText,
+	        @RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
+		
+		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
+		
+		System.out.println("更新後：" + chatHistory);
+		
+		mav.addObject("chatHistory", chatHistory);
+		mav.setViewName("common/chat");
+		
 		return mav;
 	}
 
