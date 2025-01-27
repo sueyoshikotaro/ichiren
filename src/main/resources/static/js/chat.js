@@ -38,6 +38,7 @@ $(document).ready(function() {
 						listItem.attr('data-user-id', $(this).attr('data-user-id')); // ここで属性を設定しています
 
 						listItem.click(function() {
+							console.log('リストアイテムがクリックされました');
 							var userId = $(this).attr('data-user-id');
 							console.log(userId);
 							getChatHistory(userId);
@@ -52,10 +53,7 @@ $(document).ready(function() {
 	});
 });
 
-/**
- * 末吉
- * チャット相手表示一覧内の検索
- */
+
 function chatSearch() {
 	const form = document.getElementById("searchForm");
 	const value = form.querySelector("input[name='search']").value;
@@ -74,26 +72,38 @@ function chatSearch() {
 		url: url,
 		data: params,
 		success: function(data) {
-
-			// チャット相手一覧のリストを取得
-			/*var chatPartnerList = document.getElementById("chatPartnerList");*/
-
-
-
 			// チャット相手一覧のリストを更新
 			if (data) { // データが存在する場合のみ処理を実行
-				// HTMLを解析して必要な情報を抽出
-				var html = $(data);
-				var chatPartner = html.find("#chatPartnerList li");
 
-				chatPartnerList.innerHTML = "";
-				chatPartner.each(function() {
-					var li = document.createElement("li");
-					li.className = "list-group-item list-group-item-action";
-					li.innerHTML = $(this).html();
+				var chatPartnerList = data;
 
-					chatPartnerList.appendChild(li);
-				});
+				// チャット相手一覧を表示する
+				var chatPartnerListElement = $('#chatPartnerList');
+
+				// チャット相手一覧をクリアする
+				chatPartnerListElement.empty();
+
+				// チャット相手一覧を取得する
+				var chatPartner = $(data).find('#chatPartnerList li');
+
+				if (chatPartner.length > 0) {
+					var listItems = [];
+					chatPartner.each(function() {
+						var listItem = $('<li>').addClass('list-group-item list-group-item-action');
+						listItem.text($(this).text());
+
+						listItem.attr('data-user-id', $(this).attr('data-user-id')); // ここで属性を設定しています
+
+						listItem.click(function() {
+							var userId = $(this).attr('data-user-id');
+							console.log(userId);
+							getChatHistory(userId);
+						});
+
+						listItems.push(listItem);
+					});
+					chatPartnerListElement.append(listItems);
+				}
 			}
 		}
 	});
@@ -114,8 +124,6 @@ function getChatHistory(chatUserId) {
 		url: 'getChatHistory',
 		data: { chatUserId: chatUserId },
 		success: function(data) {
-			console.log("getChatHistory 関数が呼び出されました。");
-			console.log(data);
 			document.body.innerHTML = data; // HTML全体を再描画
 
 			// チャット相手一覧を非表示にする
@@ -182,3 +190,8 @@ window.addEventListener('load', function() {
 		getChatHistory(chatPartnerUserId);
 	}
 });
+
+
+/**
+ * ログアウトしたらCookie情報を削除
+ */

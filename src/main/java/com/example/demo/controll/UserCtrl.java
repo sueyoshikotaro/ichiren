@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +25,8 @@ import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
+import com.example.demo.form.ChatForm;
+import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.NoticeViewForm;
@@ -32,13 +37,12 @@ import com.example.demo.form.TaskView;
 import com.example.demo.form.TdlistForm;
 import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.repository.UserDisplayCrudRepository;
+import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -76,9 +80,19 @@ public class UserCtrl {
 	@Qualifier("NoticeService")
 	NoticeServiceInterface NoticeService;
 
+	//末吉追加
+	@Autowired
+	@Qualifier("ChatService")
+	ChatServiceInterface chatServise;
+
 	//セッション
 	@Autowired
 	HttpSession session;
+
+	//末吉追加(セッション情報格納)
+	private int school_id;
+	private int group_id;
+	private String user_id;
 
 	/**
 	 * ログアウト画面を表示
@@ -953,9 +967,92 @@ public class UserCtrl {
 		return mav;
 	}
 
+	
 	/**
+	 * 末吉追加
 	 * チャット画面を表示
 	 * @return
 	 */
+	@GetMapping("chat")
+	public ModelAndView chat(ModelAndView mav) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
+
+		group_id = (int) session.getAttribute("groupId");
+
+		user_id = userEntity.getUser_id();
+		//チャットの通信可能相手を格納
+		List<GroupDetailView> chatPartner = chatServise.memberSetChatUser(school_id, group_id);
+
+		//ログインしているユーザの分のデータはListから除外する
+		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
+				.filter(chat -> !chat.getUser_id().equals(userEntity.getUser_id()))
+				.collect(Collectors.toList());
+
+		mav.addObject("chatPartner", filteredChatPartner);
+		mav.setViewName("common/chat");
+		return mav;
+	}
+
+	/**
+	 * 末吉追加
+	 * チャット相手検索
+	 * @return
+	 */
+	@PostMapping("chatSearch")
+	public ModelAndView chatSearch(ModelAndView mav,
+			@RequestParam(name = "search", required = false) String search) {
+		
+		//チャット相手を検索し、Listに格納する
+		List<GroupDetailView> chatPartner = chatServise.memberChatPartnerSearch(school_id, group_id, search);
+
+		//ログインしているユーザの分のデータはListから除外する
+		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
+				.filter(chat -> !chat.getUser_id().equals(user_id))
+				.collect(Collectors.toList());
+
+		mav.addObject("chatPartner", filteredChatPartner);
+		mav.setViewName("common/chat");
+
+		return mav;
+	}
+
+	/**
+	 * 末吉追加
+	 * チャット画面にチャット履歴を表示する
+	 * @return
+	 */
+	@PostMapping("getChatHistory")
+	public ModelAndView getChatHistory(ModelAndView mav,
+			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
+		
+		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
+		mav.addObject("chatHistory", chatHistory);
+		mav.setViewName("common/chat");
+
+		return mav;
+	}
+
+	/**
+	 * 末吉追加
+	 * チャット送信
+	 * @return
+	 */
+	@PostMapping("sendChat")
+	public ModelAndView sendChat(ModelAndView mav,
+			@RequestParam(name = "sendInput", required = false) String sendText,
+			@RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
+
+		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
+		
+		mav.addObject("chatHistory", chatHistory);
+		mav.setViewName("common/chat");
+
+		return mav;
+	}
 
 }

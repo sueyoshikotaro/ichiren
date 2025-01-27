@@ -1453,6 +1453,7 @@ public class AdminCtrl {
 		return mav;
 	}
 
+	
 	/**
 	 * 末吉
 	 * チャット画面
@@ -1462,8 +1463,8 @@ public class AdminCtrl {
 	public ModelAndView chat(ModelAndView mav) {
 
 		//チャットの通信可能相手を格納
-		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id, "リーダ");
-		System.out.println(chatPartner);
+		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
+		
 		mav.addObject("chatPartner", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
@@ -1479,8 +1480,6 @@ public class AdminCtrl {
 			@RequestParam(name = "search", required = false) String search) {
 		//チャット相手を検索し、Listに格納する
 	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
-	    
-	    System.out.println("チャット相手：" + chatPartner);
 	    
 	    mav.addObject("chatPartner", chatPartner);
 	    mav.setViewName("common/chat");
@@ -1515,8 +1514,6 @@ public class AdminCtrl {
 	        @RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
 		
 		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
-		
-		System.out.println("更新後：" + chatHistory);
 		
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
