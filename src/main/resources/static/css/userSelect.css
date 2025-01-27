@@ -1,16 +1,26 @@
 @charset "UTF-8";
 /*ユーザ選択の為*/
 
-.userSelect-title{
+.userSelect-title {
 	margin-top: 15px;
 }
 
-.userSelect-text{
+.userSelect-text {
 	margin-top: 10px;
 	margin-left: 7px;
 	font-size: 18px;
 }
 
-.userSelect-btn{
+.userSelect-btn {
 	margin-left: 7px;
+}
+
+.select-userS {
+	border: 3px solid black;
+	border-radius: 6px;
+}
+
+.selectUser-content{
+	margin-left: 10px;
+	font-size: 16px;
 }

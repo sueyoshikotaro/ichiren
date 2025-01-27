@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|グループ解散</title>
+	<title>タスクどん|グループ削除</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +17,7 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -30,74 +31,74 @@
 
 <body>
 	<!--コンテナ-->
-	<div class="container" th:if="${teamsDisplay != null}">
+	<div class="container">
+
 		<h2>グループ解散</h2>
 
 		<p>本当にこのユーザを削除しますか？</p>
 
-		<form th:action="@{groupDissComp}" method="post">
-			<table border="1">
-				<div>
-					<tr>
-						<th>グループ名</th>
-						<td th:text="${teamsDisplay.group_name}"></td>
-						<input type="hidden" name="group_id" th:value="${teamsDisplay.group_id}">
-					</tr>
+		<div th:if="${teamsDisplay != null}">
 
-					<tr>
-						<th>リーダ</th>
-					</tr>
-					<tr th:each="leader : ${leaderUser}">
-						<td th:text="${leader.user_name}"></td>
-					</tr>
+			<form th:action="@{groupDissComp}" method="post">
 
-					<tr>
-						<th>メンバ</th>
-					</tr>
-					<tr th:each="member : ${memberUser}">
-						<td th:text="${member.user_name}"></td>
-					</tr>
-				</div>
-			</table>
+				<table border="1">
+					<div>
+						<tr>
+							<th>グループ名</th>
+							<td th:text="${teamsDisplay.group_name}"></td>
+							<input type="hidden" name="group_id" th:value="${teamsDisplay.group_id}">
+						</tr>
 
-			<tr>
-				<th>
-					<div class="form-check">
-						<label class="form-check-label" for="flexCheckDefault">
-							一度グループ情報を削除すると元には戻せません
-						</label>
-						<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+						<tr>
+							<th>リーダ</th>
+						</tr>
+						<tr th:each="leader : ${leaderUser}">
+							<td th:text="${leader.user_name}"></td>
+						</tr>
+
+						<tr>
+							<th>メンバ</th>
+						</tr>
+						<tr th:each="member : ${memberUser}">
+							<td th:text="${member.user_name}"></td>
+						</tr>
 					</div>
-				</th>
-			</tr>
+				</table>
 
-			<tr>
-				<td colspan="2" align="center">
-					<button type="button" name="button" value="解散" class="btn btn-danger"
-						onclick="groupDissAndShowPopup()">解散</button>
-				</td>
-			</tr>
-		</form>
+				<tr>
+					<th>
+						<div class="form-check">
+							<label class="form-check-label" for="flexCheckDefault">
+								一度グループ情報を削除すると元には戻せません
+							</label>
+							<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+						</div>
+					</th>
+				</tr>
 
-		<!-- ポップアップ -->
-		<div class="modal fade" id="groupDissModal" tabindex="-1" role="dialog" aria-labelledby="groupDissModalLabel"
-			aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="groupDissModalLabel">解散完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>解散が完了しました</p>
-					</div>
-					<div class="modal-footer">
+				<tr>
+					<td colspan="2" align="center">
+						<button type="button" name="button" value="解散" class="btn btn-danger"
+							onclick="groupDissAndShowPopup()">解散</button>
+					</td>
+				</tr>
+			</form>
+
+			<!-- ポップアップ -->
+			<div class="modal fade popup-place" id="groupDissModal" tabindex="-1" role="dialog"
+				aria-labelledby="groupDissModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<p class="modal-text">解散が完了しました</p>
 						<form th:action="@{groupList}" method="get">
-							<button type="submit" class="btn btn-danger">グループ一覧へ</button>
+							<button type="submit" class="control-btn return-btn">グループ一覧へ</button>
 						</form>
 					</div>
 				</div>
 			</div>
+
 		</div>
+
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

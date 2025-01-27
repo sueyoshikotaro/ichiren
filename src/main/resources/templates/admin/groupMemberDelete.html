@@ -17,6 +17,8 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
+	<link rel="stylesheet" th:href="@{/css/list.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -39,60 +41,60 @@
 		<!--		<p th:if="${Msg}" th:text="${Msg}"></p>-->
 
 		<div th:if="${user != null}">
-			<tr th:each="groupMemberDelete : ${user}" th:if="${groupMemberDeleteStat.index == 0}">
-				<p th:text="${groupMemberDelete.user_name}"></p>
-			</tr>
+
+			<div th:each="groupMemberDelete : ${user}" th:if="${groupMemberDeleteStat.index == 0}">
+
+				<div class="input-group">
+					<span class="input-group-text">メンバ名</span>
+					<div type="text" class="form-control" th:text="${groupMemberDelete.user_name}"></div>
+				</div>
+
+			</div>
 
 			<form th:action="@{groupMemberDeleteConfirm}" method="post">
-				<table>
-					<tr>
-						<th>タスク名</th>
-						<th>タスク内容</th>
-					</tr>
 
-					<tr th:each="user : ${user}">
-						<td th:text="${user.task_name}"></td>
-						<td th:text="${user.task_content}"></td>
+				<div class="main-content">
+
+					<div th:each="user : ${user}" class="content-child">
+
+						<div class="mb-3 retirement-item" style="margin-top: 6px;">
+							<span class="form-label">タスク名</span>
+							<div type="text" class="form-control" th:text="${user.task_name}"></div>
+						</div>
+
+						<div class="mb-3 retirement-item">
+							<span class="form-label">タスク内容</span>
+							<div type="text" class="form-control" th:text="${user.task_content}"></div>
+						</div>
+
 						<input type="hidden" name="task_id" th:value="${user.task_id}">
-					</tr>
 
-					<tr>
-						<td colspan="2" align="right">
+					</div>
 
-							<input type="hidden" name="user_id" th:value="${user[0].user_id}">
-							<input type="hidden" name="group_id" th:value="${user[0].group_id}">
+				</div>
 
+				<input type="hidden" name="user_id" th:value="${user[0].user_id}">
+				<input type="hidden" name="group_id" th:value="${user[0].group_id}">
 
-							<button type="button" name="button" value="削除" class="btn btn-danger"
-								onclick="groupMemberDeleteAndShowPopup()">削除</button>
-							<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>
-						</td>
-					</tr>
-				</table>
+				<button type="button" name="button" value="削除" class="control-btn mini-btn"
+					onclick="groupMemberDeleteAndShowPopup()">削除</button>
+
+				<!--<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>-->
+
 			</form>
 		</div>
 
-
 		<!-- ポップアップ -->
-		<div class="modal fade" id="groupMemberDeleteModal" tabindex="-1" role="dialog"
+		<div class="modal fade popup-place" id="groupMemberDeleteModal" tabindex="-1" role="dialog"
 			aria-labelledby="groupMemberDeleteModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="groupMemberDeleteModalLabel">削除完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>削除が完了しました</p>
-					</div>
-					<div class="modal-footer">
-
-						<form th:action="@{groupDetail}" method="post">
-							<input type="hidden" name="group_id" th:value="${group[0].group_id}"
-								th:if="${group != null}">
-							<button type="submit" name="button" value="グループ詳細へ" class="btn btn-danger">グループ詳細へ</button>
-						</form>
-
-					</div>
+					<p class="modal-text">削除が完了しました</p>
+					<form th:action="@{groupDetail}" method="post">
+						<input type="hidden" name="group_id" th:value="${group[0].group_id}" th:if="${group != null}">
+						<button type="submit" name="button" value="グループ詳細へ"
+							class="control-btn return-btn">グループ詳細へ</button>
+					</form>
 				</div>
 			</div>
 		</div>
