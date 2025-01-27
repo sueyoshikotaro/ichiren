@@ -15,5 +15,8 @@ public interface ChatServiceInterface {
 	
 	//チャット履歴を表示
 	public List<ChatForm> getChatHistory(String user_id, String chatUser_id);
+	
+	//チャットを送信し、更新後のチャット履歴を格納
+	public List<ChatForm> sendChat(String user_id, String chatUser_id, String sendText);
 
 }

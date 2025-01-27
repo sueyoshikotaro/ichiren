@@ -17,6 +17,8 @@
 	<!-- CSS接続 -->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
+	<link rel="stylesheet" th:href="@{/css/userSelect.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -41,45 +43,38 @@
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:action="@{groupMemberAddConfirm}" method="post">
-			<table border="1">
-				<tr>
-				<tr>
-					<th>グループ名</th>
-					<td th:text="${groupDetail.group_name}"></td>
-					<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
-					<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
-				</tr>
 
-				<tr>
-					<td colspan="2">選択したユーザ</td>
-				</tr>
+			<div class="form-group regist-item">
+				<label class="form-label">グループ名</label>
+				<input type="text" th:value="${groupDetail.group_name}" class="form-control regist-field" readonly>
+				<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
+				<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+			</div>
 
-				<tbody th:if="${selectUser != null}">
-					<tr th:each="user : ${selectUser}">
-						<td th:text="${user.user_name}"></td>
-						<input type="hidden" name="selectedUserId" th:value="${user.user_id}">
-						<input type="hidden" name="selectUserName" th:value="${user.user_name}">
-					</tr>
-				</tbody>
-
-				<tbody th:unless="${selectUser != null}">
-					<tr>
-						<td colspan="2">&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="2">&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="2">&nbsp;</td>
-					</tr>
-				</tbody>
-			</table>
-
-			<button type="button" name="button" value="ユーザを選択" class="btn btn-danger"
+			<!--ユーザ選択作業,userSelect.cssを使用-->
+			<button type="button" name="button" value="ユーザを選択" class="control-btn logn-btn userSelect-btn"
 				onclick="userSelect()">ユーザを選択</button>
 
-			<button type="button" name="button" value="確認" onclick="formSubmit('確認')">確認</button>
-			<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>
+			<label class="form-label user-select-text userSelect-text" th:text="選択したユーザ"></label>
+
+			<div th:if="${selectUser != null}" class="select-userS main-content">
+				<div th:each="user : ${selectUser}" style="font-size: 16px;">
+					<label class="form-label" th:text="${user.user_name}" style="margin-left: 8px;"></label>
+					<input type="hidden" name="selectedUserId" th:value="${user.user_id}">
+					<input type="hidden" name="selectUserName" th:value="${user.user_name}">
+				</div>
+			</div>
+
+			</table>
+
+			<!--			<button type="button" name="button" value="ユーザを選択" class="btn btn-danger"-->
+			<!--				onclick="userSelect()">ユーザを選択</button>-->
+
+			<button type="button" name="button" value="確認" onclick="formSubmit('確認')"
+				class="control-btn mini-btn">確認</button>
+
+			<!--<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>-->
+
 		</form>
 
 	</div>

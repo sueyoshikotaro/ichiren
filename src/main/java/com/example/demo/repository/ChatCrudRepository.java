@@ -53,5 +53,11 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	@Query("select * from message where room_id = :chatRoom_id")
 	public List<ChatForm> getChatHistory(int chatRoom_id);
 	
+	/**
+	 * 
+	 */
+	@Modifying
+	@Query("insert into message(send_by, room_id, msg) values(:user_id, :chatRoom_id, :sendText)")
+	public void updateChat(String user_id, int chatRoom_id, String sendText);
 
 }

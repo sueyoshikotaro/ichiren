@@ -10,10 +10,10 @@ import com.example.demo.repository.ChatCrudRepository;
 import com.example.demo.service.ChatServiceInterface;
 
 public class ChatServiceImpl implements ChatServiceInterface {
-	
+
 	@Autowired
 	ChatCrudRepository chatCrud;
-	
+
 	//チャット相手を設定
 	@Override
 	public List<GroupDetailView> setChatUser(int school_id, String user_roll) {
@@ -32,26 +32,32 @@ public class ChatServiceImpl implements ChatServiceInterface {
 	//チャット履歴を表示
 	@Override
 	public List<ChatForm> getChatHistory(String user_id, String chatUser_id) {
-		
+
 		//チャットルーム作成
-		boolean flg = chatCrud.existsChatRoom(user_id, "st33334444");
-		
-		System.out.println(flg);
-		
+		boolean flg = chatCrud.existsChatRoom(user_id, chatUser_id);
+
 		//チャットルームがすでに存在しない場合チャットルームを作成する
-		if(!flg) {
+		if (!flg) {
 			chatCrud.createChatRoom(user_id, chatUser_id);
-			System.out.println("ぞんざいなし！");
-		} else {
-			
 		}
-		
+
 		//チャットルーム検索
-		int chatRoom_id = chatCrud.chatRoomSearch(user_id, "st33334444");
-		
-		System.out.println("履歴：" + chatCrud.getChatHistory(chatRoom_id));
-		
+		int chatRoom_id = chatCrud.chatRoomSearch(user_id, chatUser_id);
+
 		return chatCrud.getChatHistory(chatRoom_id);
 	}
-	
+
+	//チャットを送信し、更新後のチャット履歴を格納
+	@Override
+	public List<ChatForm> sendChat(String user_id, String chatUser_id, String sendText) {
+
+		//チャットルーム検索
+		int chatRoom_id = chatCrud.chatRoomSearch(user_id, chatUser_id);
+
+		//チャット履歴を更新
+		chatCrud.updateChat(user_id, chatRoom_id, sendText);
+
+		return chatCrud.getChatHistory(chatRoom_id);
+	}
+
 }

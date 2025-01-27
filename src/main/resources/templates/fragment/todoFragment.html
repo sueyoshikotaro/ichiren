@@ -6,6 +6,14 @@
 <head>
 	<!--必須項目-->
 	<meta charset="UTF-8">
+
+	<!-- デザイン等 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 </head>
 
 <body>
@@ -13,37 +21,50 @@
 	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExampleSide"
 		aria-labelledby="offcanvasExampleLabel" th:fragment="toggle">
 		<div class="offcanvas-header">
-			<h2 class="offcanvas-title" id="offcanvasExampleLabel">ToDo一覧</h2>
+			<h2 class="offcanvas-title" id="offcanvasExampleLabel">ToDoリスト</h2>
 			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		<div class="offcanvas-body">
-			<form th:action="@{todoListChange}" method="post" id="form" th:fragment="list"> <!--リスト-->
-				<div th:each="todo:${todoList}" class="data">
-					<div th:text="${todo.tdlist_content}" class="text" th:if="${todo.tdlist_flg} == 1"
-						style="text-decoration: line-through;"></div>
-					<div th:text="${todo.tdlist_content}" class="text" th:if="${todo.tdlist_flg} == 0"
-						style="text-decoration: none;"></div>
+			<form th:action="@{todoListChange}" method="post" id="form" th:fragment="list">
+
+				<div th:each="todo:${todoList}" class="data d-flex justify-content-between">
+
+					<!--					<div class="">-->
+
 					<!--チェックボックス-->
-					<div class="form-check" id="check">
+					<div class="form-check" id="check" style="width: 20px; margin-left: 5px;">
 						<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="tdlist_id"
-							th:value="${todo.tdlist_id}" th:if="${todo.tdlist_flg} == 1" checked>
+							th:value="${todo.tdlist_id}" th:if="${todo.tdlist_flg} == 1" style="font-size: 20px;"
+							checked>
 						<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="tdlist_id"
-							th:value="${todo.tdlist_id}" th:if="${todo.tdlist_flg} == 0">
+							th:value="${todo.tdlist_id}" th:if="${todo.tdlist_flg} == 0" style="font-size: 20px;">
+					</div>
+
+					<!--ToDoテキスト-->
+					<div class="text flex-grow-1" th:text="${todo.tdlist_content}" th:if="${todo.tdlist_flg} == 1"
+						style="text-decoration: line-through; border-bottom: solid black 2px; font-size: 20px; width: 200px;">
+					</div>
+					<div class="text flex-grow-1" th:text="${todo.tdlist_content}" th:if="${todo.tdlist_flg} == 0"
+						style="text-decoration: none; border-bottom: solid black 2px; font-size: 20px; width: 200px;">
 					</div>
 
 					<!--ラジオボタン-->
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="flexRadioDefault"
-							th:value="${todo.tdlist_id}" id="flexRadioDefault1" th:checked="${todo.tdlist_id} == ${id}">
-						<label class="form-check-label"></label>
+							th:value="${todo.tdlist_id}" id="flexRadioDefault1" th:checked="${todo.tdlist_id} == ${id}"
+							style="font-size: 20px;">
 					</div>
+
+					<!--					</div>-->
 
 				</div>
 
 				<!--機能ボタン-->
-				<button type="submit" name="button" value="edit">編集</button>
-				<button type="submit" name="button" value="regist">登録</button>
-				<button type="submit" name="button" value="delete">削除</button>
+				<div class="btn-group btnS-group" style="margin-top: 16px;">
+					<button type="submit" name="button" value="edit" class="move-btn mini-btn">編集</button>
+					<button type="submit" name="button" value="regist" class="move-btn mini-btn">登録</button>
+					<button type="submit" name="button" value="delete" class="move-btn mini-btn">削除</button>
+				</div>
 
 			</form>
 		</div>

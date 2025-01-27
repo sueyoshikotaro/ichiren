@@ -17,6 +17,8 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
+	<link rel="stylesheet" th:href="@{/css/list.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -41,53 +43,54 @@
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:action="@{groupEditConfirm}" method="post" id="form">
-			<table border="1">
-				<tr>
-					<th>グループ名</th>
-					<td th:text="${groupDetail.group_name}"></td>
-					<input type="hidden" name="group_id" th:if="${groupDetail != null}"
-						th:value="${groupDetail.group_id}">
-					<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
-				</tr>
 
-				<tr>
-					<th>ジャンル名</th>
-					<td th:text="${groupDetail.genre}"></td>
-					<input type="hidden" name="genre" th:value="${groupDetail.genre}">
-				</tr>
+			<div class="form-group regist-item">
+				<label class="form-label">グループ名</label>
+				<div type="text" class="form-control confirmation-field" th:text="${groupDetail.group_name}"></div>
+				<input type="hidden" name="group_id" th:if="${groupDetail != null}" th:value="${groupDetail.group_id}">
+				<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+			</div>
 
+			<div class="form-group regist-item">
+				<label class="form-label">ジャンル名</label>
+				<div type="text" class="form-control confirmation-field" th:text="${groupDetail.genre}"></div>
+				<input type="hidden" name="genre" th:value="${groupDetail.genre}">
+			</div>
 
-				<tr>
-					<td colspan="2">リーダ</td>
-				</tr>
-				<tr th:each="user : ${leaderUser}">
-					<td>
+			<div class="row" style="margin-top: 12px;">
+				<label class="form-label">リーダかメンバを選択しなおせます<br>
+					※チェック有がリーダ,無がメンバ
+				</label>
+				<div class="col main-content">
+					<!--リーダ-->
+					<label class="form-label" style="text-decoration: underline;">リーダ</label>
+					<div th:each="user : ${leaderUser}">
 						<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
 							id="flexCheckDefault" th:checked="${leaderUser.contains(user)}">
 						<input type="hidden" name="selectedUserId" th:value="${user.user_id}">
-					</td>
-					<td th:text="${user.user_name}"></td>
-					<input type="hidden" name="selectUserName" th:value="${user.user_name}">
-				</tr>
 
-
-				<tr>
-					<td colspan="2">メンバ</td>
-				</tr>
-				<tr th:each="user : ${memberUser}">
-					<td>
+						<span class="form-label" th:text="${user.user_name}"></span>
+						<input type="hidden" name="selectUserName" th:value="${user.user_name}">
+					</div>
+				</div>
+				<div class="col main-content">
+					<!--メンバ-->
+					<label class="form-label" style="text-decoration: underline;">メンバ</label>
+					<div th:each="user : ${memberUser}">
 						<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
 							id="flexCheckDefault">
 						<input type="hidden" name="selectedUserId" th:value="${user.user_id}">
-					</td>
-					<td th:text="${user.user_name}"></td>
-					<input type="hidden" name="selectUserName" th:value="${user.user_name}">
-				</tr>
-			</table>
 
+						<span class="form-label" th:text="${user.user_name}"></span>
+						<input type="hidden" name="selectUserName" th:value="${user.user_name}">
+					</div>
+				</div>
+			</div>
 
-			<button type="button" name="button" value="確認" onclick="formSubmit('確認')">確認</button>
-			<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>
+			<button type="button" name="button" value="確認" onclick="formSubmit('確認')"
+				class="control-btn mini-btn">確認</button>
+
+			<!--				<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>-->
 
 		</form>
 
