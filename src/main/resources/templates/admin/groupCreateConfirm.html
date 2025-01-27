@@ -60,7 +60,7 @@
 				<div class="form-group regist-item">
 					<label class="form-label user-roll-text">リーダ</label>
 					<ul class="list-group" th:each="leader : ${leaderUser}">
-						<li class="list-group-item" th:text="${leader.user_name}"></li>
+						<li class="list-group-item" th:text="${leader.user_name}" style="border-radius: 7px;"></li>
 						<input type="hidden" name="leaderUser_id" th:value="${leader.user_id}">
 						<input type="hidden" name="leaderUser_name" th:value="${leader.user_name}">
 					</ul>
@@ -69,15 +69,16 @@
 				<div class="form-group regist-item">
 					<label class="form-label user-roll-text">メンバ</label>
 					<ul class="list-group" th:each="member : ${memberUser}">
-						<li class="list-group-item" th:text="${member.user_name}"></li>
+						<li class="list-group-item" th:text="${member.user_name}" style="border-radius: 7px;"></li>
 						<input type="hidden" name="memberUser_id" th:value="${member.user_id}">
 						<input type="hidden" name="memberUser_name" th:value="${member.user_name}">
 					</ul>
 				</div>
 
-				<button type="button" name="button" value="登録" class="control-btn mini-btn"
-					onclick="groupCreateAndShowPopup()">登録</button>
 			</div>
+
+			<button type="button" name="button" value="登録" class="control-btn mini-btn"
+				onclick="groupCreateAndShowPopup()">登録</button>
 
 		</form>
 
