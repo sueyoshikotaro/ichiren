@@ -31,50 +31,60 @@
 </head>
 
 <body>
-	<div th:fragment="notice">
+	<div>
+		<div th:fragment="notice">
 
-		<h2 class="menu-text">連絡事項一覧</h2>
+			<h2 class="menu-text">連絡事項一覧</h2>
 
-		<!-- エラー文を表示する -->
-		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
+			<!-- エラー文を表示する -->
+			<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
-		<form th:action="@{noticeDelete}" method="post">
-			<div th:each="notice : ${noticeList}">
-				<div class="form-check">
-					<input class="form-check-input notice-checkbox" type="checkbox" name="check"
-						th:value="${notice.notice_id}">
-					<!--<input type="hidden" th:value="${notice.notice_id}" name="notice_id">-->
+			<form th:action="@{noticeDelete}" method="post" id="noticeForm">
+				<div th:each="notice : ${noticeList}">
+					<div class="form-check">
+						<input class="form-check-input notice-checkbox" type="checkbox" name="check"
+							th:value="${notice.notice_id}" th:if="${session.user_roll} == 'リーダ'">
+					</div>
+					<div th:text="${notice.user_name}"></div>
+					<div th:text="${notice.title}"></div>
+					<div th:text="${notice.contact_msg}"></div>
+					<div th:text="${notice.send_date}"></div><br>
 				</div>
-				<div th:text="${notice.user_name}"></div>
-				<div th:text="${notice.title}"></div>
-				<div th:text="${notice.contact_msg}"></div>
-				<div th:text="${notice.send_date}"></div>
-			</div>
+			</form>
 
 			<!--コンテナ最下のボタン-->
-			<form th:action="@{/taskdon/user/menu}" method="post">
-				<button type="submit" name="button" value="削除" class="btn menu-link">削除</button>
-			</form>
-		</form>
-
+			<button type="submit" name="button" value="削除" class="btn menu-link" th:if="${session.user_roll} == 'リーダ'"
+				id="deleteButton" form="noticeForm">削除</button>
+		</div>
 	</div>
 
 	<!--チェックボックスが押されていない間ボタンを無効化-->
 	<script>
 		$(document).ready(function () {
-			$('.notice-checkbox').on('change', function () {
-				let checked = $('.notice-checkbox:checked').length > 0; // チェックされているか確認
-				$('button[name="button"]').prop('disabled', !checked);
+			const deleteButton = $('#deleteButton');
+
+			// 親要素（form要素）にイベントを委譲
+			$('#noticeForm').on('change', '.notice-checkbox', function () {
+				const checkedCount = $('.notice-checkbox:checked').length;
+				deleteButton.prop('disabled', checkedCount === 0);
 			});
-			$('button[name="button"]').prop('disabled', true); // 初期状態は無効
+
+			// 初期状態を設定（ページロード時）
+			const checkedCount = $('.notice-checkbox:checked').length;
+			deleteButton.prop('disabled', checkedCount === 0);
 		});
 	</script>
+
+	<!--$('.notice-checkbox').on('change', function () {-->
+	<!--	let checked = $('.notice-checkbox:checked').length > 0; // チェックされているか確認-->
+	<!--	$('#deleteButton').prop('disabled', !checked);-->
+	<!--});-->
+	<!--$('#deleteButton').prop('disabled', true); // 初期状態は無効-->
 
 	<!-- bootstrapのjsリンク接続 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
-
 </body>
 
 </html>

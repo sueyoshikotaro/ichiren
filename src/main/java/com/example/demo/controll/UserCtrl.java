@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -39,6 +37,8 @@ import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -88,6 +88,9 @@ public class UserCtrl {
 	@GetMapping("logout")
 	public String logout() {
 
+		// ログアウト時に居場所を'休憩中'に設定するフラグをセッションに保存
+		session.setAttribute("logoutFlg", true);
+
 		session.invalidate();
 
 		return "redirect:/taskdon/user/login";
@@ -100,6 +103,13 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("login")
 	public String login() {
+
+		Boolean logoutFlg = (Boolean) session.getAttribute("logoutFlg");
+		if (logoutFlg != null && logoutFlg) {
+
+			session.setAttribute("currentPlace", "休憩中");
+			session.removeAttribute("logoutFlg");
+		}
 
 		return "common/login";
 	}
@@ -241,9 +251,16 @@ public class UserCtrl {
 	@GetMapping("deptGroupList")
 	public ModelAndView deptGroupList(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
+		Boolean deptGroupFlg = (Boolean) session.getAttribute("deptGroupFlg");
+		if (deptGroupFlg != null && deptGroupFlg) {
+
+			session.setAttribute("currentPlace", "休憩中");
+			session.removeAttribute("deptGroupFlg");
+		}
+
 		if (user_id == null || user_id.isEmpty()) {
 
-			// セッションからも取得を試みる
+			// セッションから取得
 			user_id = (String) session.getAttribute("user_id");
 		}
 
@@ -265,6 +282,16 @@ public class UserCtrl {
 		}
 
 		return mav;
+	}
+
+	@LoginRequired
+	@GetMapping("getPlace")
+	public String getPlace() {
+
+		// 所属グループ遷移時に居場所を'休憩中'に設定するフラグをセッションに保存
+		session.setAttribute("deptGroupFlg", true);
+
+		return "redirect:/taskdon/user/deptGroupList";
 	}
 
 	/**
@@ -820,28 +847,36 @@ public class UserCtrl {
 		if (check == null || check.length == 0) {
 
 			mav.addObject("errMsg", "連絡事項を選択してください");
-			mav.setViewName("common/menuUser");
 
+			List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
+			List<Room> roomList = userDisplayService.roomSelect();
+			mav.addObject("noticeList", noticeList);
+			mav.addObject("roomList", roomList);
+
+			return new ModelAndView("redirect:/taskdon/user/menu");
 			// チェックボックスが選択されている場合
 		} else {
 
 			//チェックボックスで選択した連絡事項IDを格納
 			List<NoticeViewForm> checkList = new ArrayList<>();
 			for (int i = 0; i < check.length; i++) {
+
 				NoticeViewForm notice = new NoticeViewForm();
 				List<NoticeViewForm> noticeList = new ArrayList<>(NoticeService.selectNotice(check[i]));
-				notice.setNotice_id(noticeList.get(0).getNotice_id());
-				notice.setUser_name(noticeList.get(0).getUser_name());
-				notice.setTitle(noticeList.get(0).getTitle());
-				notice.setContact_msg(noticeList.get(0).getContact_msg());
-				notice.setSend_date(noticeList.get(0).getSend_date());
-				checkList.add(notice);
+
+				if (!noticeList.isEmpty()) {
+
+					notice.setNotice_id(noticeList.get(0).getNotice_id());
+					notice.setUser_name(noticeList.get(0).getUser_name());
+					notice.setTitle(noticeList.get(0).getTitle());
+					notice.setContact_msg(noticeList.get(0).getContact_msg());
+					notice.setSend_date(noticeList.get(0).getSend_date());
+					checkList.add(notice);
+				}
 			}
 			mav.addObject("notice", checkList);
-			mav.setViewName("leader/noticeDeleteConfirm");
+			return new ModelAndView("leader/noticeDeleteConfirm");
 		}
-		return mav;
-
 	}
 
 	/*
@@ -865,8 +900,6 @@ public class UserCtrl {
 
 		return mav;
 	}
-	
-	
 
 	/**
 	 * 湊原
@@ -903,17 +936,17 @@ public class UserCtrl {
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
 		//ドロップダウンリスト取得処理
 		List<Task> taskCategory = TaskService.selectCategory((int) session.getAttribute("groupId"));
-		
+
 		List<GroupMemberDetailView> membertask = null;
 		if (groupId == null || userId == null) {
 			selectedValue = "--";
 			//ドロップダウンリストが選択されていない場合の処理
-			membertask = groupDispService.memberDetail(g.getUser_id(),g.getGroup_id(),selectedValue);
-		}else {
+			membertask = groupDispService.memberDetail(g.getUser_id(), g.getGroup_id(), selectedValue);
+		} else {
 			//ドロップダウンリストが選択されている場合の処理
-			membertask = groupDispService.memberDetail(userId, String.valueOf(groupId),selectedValue);
+			membertask = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
 		}
-//		mav.addObject("userProgress", g.getUser_progress());
+		//		mav.addObject("userProgress", g.getUser_progress());
 		mav.addObject("Category", taskCategory);
 		mav.addObject("memberTask", membertask);
 		mav.setViewName("leader/memberDetails");
