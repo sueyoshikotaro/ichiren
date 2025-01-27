@@ -1333,13 +1333,18 @@ public class AdminCtrl {
 	 */
 	@PostMapping("groupMemberAddComp")
 	public ModelAndView groupMemberAddComp(ModelAndView mav,
-			@RequestParam(name = "memberUser_id", required = false) String user_id,
+			@RequestParam(name = "memberUser_id", required = false) String[] user_id,
 			@RequestParam(name = "group_id", required = false) int group_id) {
 
-		groupDispService.groupDetailCreate(user_id, group_id, "メンバ", 0);
+		System.out.println(user_id);
+		System.out.println(group_id);
 
 		session.removeAttribute("button");
 
+		for(String memberUser_id : user_id) {
+			groupDispService.groupDetailCreate(memberUser_id, group_id, "メンバ", 0);
+		}
+			
 		mav.addObject("group_id", group_id);
 		mav.addObject("groupMemberAddComp", true);
 		mav.setViewName("admin/groupMemberAddConfirm");

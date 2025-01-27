@@ -17,6 +17,8 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
+	<link rel="stylesheet" th:href="@{/css/list.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -39,62 +41,55 @@
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:action="@{groupEditComp}" method="post" th:if="${groupDetail != null}">
-			<table border="1">
-				<div>
-					<tr>
-						<th>グループ名</th>
-						<td th:text="${groupDetail.group_name}"></td>
-						<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
-						<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
-					</tr>
 
-					<tr>
-						<th>ジャンル名</th>
-						<td th:text="${groupDetail.genre}"></td>
-						<input type="hidden" name="genre" th:value="${groupDetail.genre}">
-					</tr>
+			<div class="form-group regist-item">
+				<label class="form-label">グループ名</label>
+				<div type="text" class="form-control confirmation-field" th:text="${groupDetail.group_name}"></div>
+				<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
+				<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+			</div>
+
+			<div class="form-group regist-item">
+				<label class="form-label">ジャンル名</label>
+				<div type="text" class="form-control confirmation-field" th:text="${groupDetail.genre}"></div>
+				<input type="hidden" name="genre" th:value="${groupDetail.genre}">
+			</div>
+
+			<div class="row" style="margin-top: 12px;">
+				<div class="col main-content">
+					<!--リーダ-->
+					<label class="form-label" style="text-decoration: underline;">リーダ</label>
+					<div th:each="leader : ${leaderUser}">
+						<span class="form-label" th:text="${leader.user_name}"></span>
+						<input type="hidden" name="leaderUser_id" th:value="${leader.user_id}">
+						<input type="hidden" name="leaderUser_name" th:value="${leader.user_name}">
+					</div>
 				</div>
+				<div class="col main-content">
+					<!--メンバ-->
+					<label class="form-label" style="text-decoration: underline;">メンバ</label>
+					<div th:each="member : ${memberUser}">
+						<span class="form-label" th:text="${member.user_name}"></span>
+						<input type="hidden" name="memberUser_id" th:value="${member.user_id}">
+						<input type="hidden" name="memberUser_name" th:value="${member.user_name}">
+					</div>
+				</div>
+			</div>
 
-				<tr>
-					<th>リーダ</th>
-				</tr>
-				<tr th:each="leader : ${leaderUser}">
-					<td th:text="${leader.user_name}"></td>
-					<input type="hidden" name="leaderUser_id" th:value="${leader.user_id}">
-					<input type="hidden" name="leaderUser_name" th:value="${leader.user_name}">
-				</tr>
-
-				<tr>
-					<th>メンバ</th>
-				</tr>
-				<tr th:each="member : ${memberUser}">
-					<td th:text="${member.user_name}"></td>
-					<input type="hidden" name="memberUser_id" th:value="${member.user_id}">
-					<input type="hidden" name="memberUser_name" th:value="${member.user_name}">
-				</tr>
-			</table>
-
-			<button type="button" name="button" value="編集" class="btn btn-danger"
+			<button type="button" name="button" value="編集" class="control-btn mini-btn"
 				onclick="groupEditAndShowPopup()">編集</button>
+
 		</form>
 
-
 		<!-- ポップアップ -->
-		<div class="modal fade" id="groupEditModal" tabindex="-1" role="dialog" aria-labelledby="groupEditModalLabel"
-			aria-hidden="true">
+		<div class="modal fade popup-place" id="groupEditModal" tabindex="-1" role="dialog"
+			aria-labelledby="groupEditModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="groupEditModalLabel">編集完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>編集が完了しました</p>
-					</div>
-					<div class="modal-footer">
-						<form th:action="@{groupList}" method="get">
-							<button type="submit" class="btn btn-danger">グループ一覧へ</button>
-						</form>
-					</div>
+					<p class="modal-text">編集が完了しました</p>
+					<form th:action="@{groupList}" method="get">
+						<button type="submit" class="control-btn return-btn">グループ一覧へ</button>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -138,6 +133,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
+		
 </body>
 
 </html>
