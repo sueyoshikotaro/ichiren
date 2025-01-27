@@ -18,23 +18,32 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 
 	/*
 	 * 向江
-	 * 管理者_グループ一覧表示用のSQL
+	 * 管理者_絞り込み兼グループ一覧表示
 	 */
-	@Query("select t.*, s.school_name from teams t inner join school s on t.school_id = s.school_id where group_flg = 1 and t.school_id = :school_id")
-	public List<TeamsForm> groupList(int school_id);
-
-	/*
-	 * 管理者_グループ一覧
-	 * グループ発足年度で絞り込みをする
-	 */
-	@Query("select * from teams where group_flg = 1 and est_year = :estYear")
+	//全て「選択なし」の場合
+	@Query("select * from teams where group_flg = 1")
+	public List<TeamsForm> groupList();
+	//全て選択されている場合
+	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE t.school_id = :school_id AND t.genre = :genre AND Year(t.est_year) = :est_year AND t.group_flg = 1")
+	public List<TeamsForm> groupList(String genre, String est_year, int school_id);
+	//学校と結成年度が選択されている場合 兼 デフォルトでの絞り込み
+	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE t.school_id = :school_id AND Year(t.est_year) = :est_year AND t.group_flg = 1")
+	public List<TeamsForm> groupList1(String est_year, int school_id);
+	//ジャンルと学校が選択されている場合
+	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE t.school_id = :school_id AND genre = :genre AND t.group_flg = 1")
+	public List<TeamsForm> groupList2(String genre, int school_id);
+	//結成年度とジャンルが選択されている場合
+	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE Year(t.est_year) = :year AND t.genre = :genre AND t.group_flg = 1")
+	public List<TeamsForm> groupList(String year, String genre);
+	//結成年度のみ選択されている場合
+	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and est_year = :estYear")
 	public List<TeamsForm> groupListYear(String estYear);
-
-	@Query("select teams.*,school.school_name from teams inner join school on teams.school_id = school.school_id where group_flg = 1 and school.school_name = :schoolName")
-	public List<TeamsForm> groupListSchool(String schoolName);
-
-	@Query("select * from teams where group_flg = 1 and genre = :Genre")
-	public List<TeamsForm> groupListGenre(String Genre);
+	//学校のみ選択されている場合
+	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and t.school_id = :school_id")
+	public List<TeamsForm> groupListSchool(int school_id);
+	//ジャンルのみ選択されている場合
+	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and genre = :genre")
+	public List<TeamsForm> groupListGenre(String genre);
 
 	/**
 	 * 湊原
@@ -222,10 +231,32 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress,t.task_id, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id")
 	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id);
 
-	/*
-	 * 湊原
-	 * グループメンバ詳細表示
-	 */
 	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress,t.task_id, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id and task_category = :selectedValue")
 	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id, String selectedValue);
+
+	/**
+	 * 湊原
+	 * 所属学校取得(絞り込み用)
+	 */
+	@Query("SELECT distinct school_name,school_id FROM school;")
+	public List<TeamsForm> selectSchool();
+
+	/**
+	 * 湊原
+	 * 結成年度取得(絞り込み用)
+	 */
+	@Query("SELECT distinct YEAR(est_year) AS est_year FROM teams WHERE YEAR(est_year) != 9999;")
+	public List<TeamsForm> selectEstYear();
+
+	/**
+	 * 湊原
+	 * ジャンル取得(絞り込み用)
+	 * @return
+	 */
+	@Query("SELECT distinct genre FROM teams;")
+	public List<TeamsForm> selectGenre();
+
+	
+
+
 }

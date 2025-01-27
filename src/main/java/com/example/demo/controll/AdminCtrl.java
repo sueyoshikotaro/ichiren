@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -60,21 +61,21 @@ public class AdminCtrl {
 	HttpSession session;
 
 	@Autowired
-	@Qualifier("GroupDisplayImpl")
+	@Qualifier("groupService")
 	GroupDisplayServiceInterface groupDispService;
 
 	//湊原追加
 	@Autowired
 	@Qualifier("taskService")
 	TaskServiceInterface TaskService;
-  
+
 	@Autowired
 	@Qualifier("ChatService")
 	ChatServiceInterface chatServise;
-	
+
 	private int school_id;
 	private String user_id;
-  
+
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -735,23 +736,40 @@ public class AdminCtrl {
 	 * グループ一覧画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("groupList")
 	public ModelAndView groupList(ModelAndView mav,
-			@RequestParam(required = false) String selectedValue,
-			@RequestParam(name = "dropdown", required = false) String drop) {
+			@RequestParam(name = "selectedSchool", required = false) Integer selectedSchool,
+			@RequestParam(name = "selectedYear", required = false) String selectedYear,
+			@RequestParam(name = "selectedGenre", required = false) String selectedGenre) {
 
-		List<TeamsForm> group;
+		System.out.println(selectedSchool);
+		System.out.println(selectedYear);
+		System.out.println(selectedGenre);
+		System.out.println(school_id);
 
-		String dropid = null;
-		String dropdown = "--";
-		mav.getModel().clear();
-		if (drop != null) {
-			dropdown = selectedValue;
-			group = groupDispService.groupList(dropdown, drop, school_id);
-		} else {
-			group = groupDispService.groupList(dropdown, dropid, school_id);
+		//結成年度取得
+		List<TeamsForm> year = groupDispService.selectEstYear();
+		//所属学校
+		List<TeamsForm> school = groupDispService.selectSchool();
+		//ジャンル
+		List<TeamsForm> genre = groupDispService.selectGenre();
+
+		List<TeamsForm> group = null;
+		Calendar calendar = Calendar.getInstance();
+		int y = calendar.get(Calendar.YEAR);
+		System.out.println(y);
+		if (selectedGenre == null) {
+			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
+		} else if(selectedSchool != null || selectedYear != null) {
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
+			group = groupDispService.groupList(selectedYear, selectedGenre, (int) selectedSchool);
 		}
+		System.out.println(group);
 
+		mav.addObject("school", school);
+		mav.addObject("genre", genre);
+		mav.addObject("year", year);
 		mav.addObject("groups", group);
 		mav.setViewName("admin/groupList");
 
@@ -780,19 +798,28 @@ public class AdminCtrl {
 	 * グループメンバ詳細画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupMemberDetails")
 	public ModelAndView memberDetails(ModelAndView mav,
-			GroupMemberDetailView gmdv) {
-
-		System.out.println(gmdv);
+			GroupMemberDetailView gmdv,
+			@RequestParam(name = "groupId", required = false) Integer groupId,
+			@RequestParam(name = "userId", required = false) String userId,
+			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
 
 		//ドロップダウンリスト取得処理
-		List<Task> taskCategory = TaskService.selectCategory(Integer.parseInt(gmdv.getGroup_id()));
+		List<Task> taskCategory = null;
 
-		List<GroupMemberDetailView> group = groupDispService.groupMemberDetail(gmdv.getUser_id(), gmdv.getGroup_id());
+		List<GroupMemberDetailView> group = null;
 
-		for (GroupMemberDetailView g : group) {
-			System.out.println(g);
+		if (groupId == null || userId == null) {
+			taskCategory = TaskService.selectCategory(Integer.parseInt(gmdv.getGroup_id()));
+			selectedValue = "選択なし";
+			//ドロップダウンリストが選択されていない場合の処理
+			group = groupDispService.memberDetail(gmdv.getUser_id(), gmdv.getGroup_id(), selectedValue);
+		} else {
+			taskCategory = TaskService.selectCategory((int) groupId);
+			//ドロップダウンリストが選択されている場合の処理
+			group = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
 		}
 
 		mav.addObject("Category", taskCategory);
@@ -1416,7 +1443,7 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@GetMapping("chat")
-//	@ResponseBody
+	//	@ResponseBody
 	public ModelAndView chat(ModelAndView mav) {
 
 		//チャットの通信可能相手を格納
@@ -1435,16 +1462,16 @@ public class AdminCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 		//チャット相手を検索し、Listに格納する
-	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
-	    
-	    System.out.println(chatPartner);
-	    
-	    mav.addObject("chatPartner", chatPartner);
-	    mav.setViewName("common/chat");
-	    
-	    return mav;
+		List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+
+		System.out.println(chatPartner);
+
+		mav.addObject("chatPartner", chatPartner);
+		mav.setViewName("common/chat");
+
+		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * チャット画面にチャット履歴を表示する
@@ -1452,15 +1479,15 @@ public class AdminCtrl {
 	 */
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
-	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {
-		
+			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
+
 		System.out.println(chatUser_id);
-		
+
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
-		
+
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
-		
+
 		return mav;
 	}
 

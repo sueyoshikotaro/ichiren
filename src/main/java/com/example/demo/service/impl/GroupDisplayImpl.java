@@ -23,45 +23,96 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ一覧
 	 */
 	@Override
-	public List<TeamsForm> groupList(String dropdown, String dropid, int school_id) {
+	public List<TeamsForm> groupList(String year, String genre, int school_id) {
 
 		List<TeamsForm> result = null;
-		if (dropdown.equals("--")) {
-			result = groupDispCrudRepo.groupList(school_id);
+		if (genre == null) {
+			result = groupDispCrudRepo.groupList1(year, school_id);
 		} else {
-			if (dropid.equals("year")) {
-				if (dropdown.equals("グループ結成年度")) {
-					result = groupDispCrudRepo.groupList(school_id);
-				} else {
-					result = groupDispCrudRepo.groupListYear(dropdown);
+			if (genre.equals("選択なし") && year.equals("選択なし") && school_id == 0) {
+				result = groupDispCrudRepo.groupList();
+			} else {
+				if (!genre.equals("選択なし") && !year.equals("選択なし")) {
+					result = groupDispCrudRepo.groupList(year, genre);
 				}
-			} else if (dropid.equals("school")) {
-				if (dropdown.equals("学校名")) {
-					result = groupDispCrudRepo.groupList(school_id);
-				} else {
-					result = groupDispCrudRepo.groupListSchool(dropdown);
+				if (!genre.equals("選択なし") && school_id != 0) {
+					result = groupDispCrudRepo.groupList2(genre, school_id);
 				}
-			} else if (dropid.equals("genre")) {
-				if (dropdown.equals("ジャンル")) {
-					result = groupDispCrudRepo.groupList(school_id);
-				} else {
-					result = groupDispCrudRepo.groupListGenre(dropdown);
+				if (!year.equals("選択なし") && school_id != 0) {
+					result = groupDispCrudRepo.groupList1(year, school_id);
+				}
+				
+				if (!genre.equals("選択なし") && year.equals("選択なし") && school_id == 0) {
+					result = groupDispCrudRepo.groupListGenre(genre);
+				}
+				if (genre.equals("選択なし") && !year.equals("選択なし") && school_id == 0) {
+					result = groupDispCrudRepo.groupListYear(year);
+				}
+				if (genre.equals("選択なし") && year.equals("選択なし") && school_id != 0) {
+					result = groupDispCrudRepo.groupListSchool(school_id);
+				}
+				
+				if (!genre.equals("選択なし") && !year.equals("選択なし") && school_id != 0) {
+					result = groupDispCrudRepo.groupList(genre, year, school_id);
 				}
 			}
 		}
 		return result;
 	}
+	//		else if() {
+	//			
+	//		}
 
-	/*
-	 * Codeium
-	 * 向江
-	 * 年だけ抽出
-	 */
-	@Override
-	public List<TeamsForm> findAll() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
+	//	}else if(genre.equals("選択なし")&&year.equals("選択なし")&&school_id==0)
+	//
+	//	{
+	//		result = groupDispCrudRepo.groupList();
+	//	}else if(genre.equals("選択なし")&&year.equals("選択なし"))
+	//	{
+	//		result = groupDispCrudRepo.groupListSchool(school_id);
+	//	}else if(genre.equals("選択なし")&&school_id==0)
+	//	{
+	//		result = groupDispCrudRepo.groupListYear(year);
+	//	}else if(year.equals("選択なし")&&school_id==0)
+	//	{
+	//		result = groupDispCrudRepo.groupListGenre(genre);
+	//	}else
+	//	{
+	//		result = groupDispCrudRepo.groupList(genre, year, school_id);
+	//	}
+
+	//		} else if(year.equals("選択なし") && school_id == 0){
+	//			result = groupDispCrudRepo.groupList(year, genre, school_id);
+	//		} else if(school_id == 0){
+	//			result = groupDispCrudRepo.groupList(year, genre, school_id);
+	//		}
+	//		result = groupDispCrudRepo.groupList(year, genre, school_id);
+	//	}
+
+	//		String dropdown = year;
+	//		String dropid = genre;
+	//		if (dropdown.equals("--")) {
+	//		} else {
+	//			if (dropid.equals("year")) {
+	//				if (dropdown.equals("グループ結成年度")) {
+	//					result = groupDispCrudRepo.groupList(school_id);
+	//				} else {
+	//					result = groupDispCrudRepo.groupListYear(dropdown);
+	//				}
+	//			} else if (dropid.equals("school")) {
+	//				if (dropdown.equals("学校名")) {
+	//					result = groupDispCrudRepo.groupList(school_id);
+	//				} else {
+	//					result = groupDispCrudRepo.groupListSchool(dropdown);
+	//				}
+	//			} else if (dropid.equals("genre")) {
+	//				if (dropdown.equals("ジャンル")) {
+	//					result = groupDispCrudRepo.groupList(school_id);
+	//				} else {
+	//					result = groupDispCrudRepo.groupListGenre(dropdown);
+	//				}
+	//			}
+	//		}
 
 	/*
 	 * 湊原
@@ -92,12 +143,6 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	public List<GroupMemberDetailView> groupMemberDetail(String user_id, String group_id) {
 
 		return groupDispCrudRepo.groupMemberDetail(user_id, group_id);
-	}
-
-	@Override
-	public List<TeamsForm> findDistinctEstYear(String estYear) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
 	}
 
 	/*
@@ -373,13 +418,41 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id, String selectedValue) {
 
 		List<GroupMemberDetailView> result = null;
-		if (selectedValue.equals("--")) {
+		if (selectedValue.equals("選択なし")) {
 			result = groupDispCrudRepo.memberDetail(user_id, group_id);
-		}else {
+		} else {
 			result = groupDispCrudRepo.memberDetail(user_id, group_id, selectedValue);
 		}
-		
+
 		return result;
+	}
+
+	/**
+	 * 湊原
+	 * 学校一覧(絞り込み用)
+	 */
+	@Override
+	public List<TeamsForm> selectSchool() {
+		return groupDispCrudRepo.selectSchool();
+	}
+
+	/**
+	 * 湊原
+	 * グループ結成年度一覧(絞り込み用)
+	 */
+	@Override
+	public List<TeamsForm> selectEstYear() {
+
+		return groupDispCrudRepo.selectEstYear();
+	}
+
+	/**
+	 * 湊原
+	 * ジャンル一覧(絞り込み用)
+	 */
+	@Override
+	public List<TeamsForm> selectGenre() {
+		return groupDispCrudRepo.selectGenre();
 	}
 
 }
