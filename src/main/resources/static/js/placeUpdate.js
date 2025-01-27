@@ -23,38 +23,41 @@ function toggleLinkStatus() {
 		}
 	});
 
+	//localStorage.setItem('selectedPlace', selectedOption); // Local Storageに保存
 	sessionStorage.setItem('selectedPlace', selectedOption); // Session Storageに保存
 }
 
 //現在の選択項目を保持
 function restoreSelectedPlace() {
 	const selectElement = document.querySelector('.place-update');
-	if (!selectElement) {
-		const savedPlace = sessionStorage.getItem('selectedPlace'); // Session Storageから取得
+	if (!selectElement) return;
 
-		if (savedPlace) {
-			for (let i = 0; i < selectElement.options.length; i++) {
-				if (selectElement.options[i].text === savedPlace) {
-					selectElement.selectedIndex = i;
-					break;
-				}
+	//const savedPlace = localStorage.getItem('selectedPlace'); // Local Storageから取得                   
+	const savedPlace = sessionStorage.getItem('selectedPlace'); // Session Storageから取得
+
+	if (savedPlace) {
+		for (let i = 0; i < selectElement.options.length; i++) {
+			if (selectElement.options[i].text === savedPlace) {
+				selectElement.selectedIndex = i;
+				break;
 			}
-			toggleLinkStatus(); // リンクの状態を更新
 		}
+		toggleLinkStatus(); //リンクの状態を更新
 	}
 }
 
+//ページロード時に呼出
 document.addEventListener('DOMContentLoaded', () => {
-	restoreSelectedPlace(); // ページロード時に復元
+	restoreSelectedPlace();
 	toggleLinkStatus(); // 初期状態を設定
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-	const selectElement = document.querySelector('.place-update');
-	if (selectElement) {
-		selectElement.addEventListener('change', toggleLinkStatus);
-	}
-});
+//document.addEventListener('DOMContentLoaded', () => {
+const selectElement = document.querySelector('.place-update');
+if (selectElement) {
+	selectElement.addEventListener('change', toggleLinkStatus);
+}
+//});
 
 
 //ログアウト時、居場所を'休憩中'に設定
