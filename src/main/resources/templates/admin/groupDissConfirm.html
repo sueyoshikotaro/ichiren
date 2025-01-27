@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!--サイトタイトル-->
-	<title>タスクどん|グループ削除</title>
+	<title>タスクどん|グループ解散</title>
 
 	<!--デザイン等-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,19 +84,20 @@
 				</tr>
 			</form>
 
-			<!-- ポップアップ -->
-			<div class="modal fade popup-place" id="groupDissModal" tabindex="-1" role="dialog"
-				aria-labelledby="groupDissModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<p class="modal-text">解散が完了しました</p>
-						<form th:action="@{groupList}" method="get">
-							<button type="submit" class="control-btn return-btn">グループ一覧へ</button>
-						</form>
-					</div>
+
+
+		</div>
+		<!-- ポップアップ -->
+		<div class="modal fade popup-place" id="groupDissModal" tabindex="-1" role="dialog"
+			aria-labelledby="groupDissModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<p class="modal-text">解散が完了しました</p>
+					<form th:action="@{groupList}" method="get">
+						<button type="submit" class="control-btn return-btn">グループ一覧へ</button>
+					</form>
 				</div>
 			</div>
-
 		</div>
 
 	</div>
@@ -113,11 +114,11 @@
 			form.method = 'post';
 
 			// buttonパラメータを追加
-			//var buttonInput = document.createElement('input');
-			//buttonInput.type = 'hidden';
-			//buttonInput.name = 'button';
-			//buttonInput.value = '編集'; // または '戻る' など必要な値を設定
-			//form.appendChild(buttonInput);
+			var buttonInput = document.createElement('input');
+			buttonInput.type = 'hidden';
+			buttonInput.name = 'button';
+			buttonInput.value = '編集'; // または '戻る' など必要な値を設定
+			form.appendChild(buttonInput);
 
 			form.submit();
 		}

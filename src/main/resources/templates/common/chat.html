@@ -48,14 +48,14 @@
 
 		<!--bootstrap-->
 		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-			aria-controls="offcanvasExample" id="showChatPartnerButton">
+			aria-controls="offcanvasExample">
 			チャット相手一覧表示ボタン
 		</button>
 
 		<!--上記ボタンで開閉可能なチャット相手一覧-->
 		<!--bootstrap-->
 		<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
-			aria-labelledby="offcanvasExampleLabel" style="display: block;">
+			aria-labelledby="offcanvasExampleLabel">
 			<div class="offcanvas-header">
 				<h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
 				<button type="button" class="btn-close" id="closeOffcanvas" aria-label="Close"></button>
@@ -68,7 +68,6 @@
 						<!--検索内容入力欄-->
 						<input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
 							aria-describedby="button-addon2" name="search">
-
 
 						<!--検索ボタン-->
 						<button class="btn btn-outline-secondary" type="button" id="button-addon2"
@@ -138,7 +137,7 @@
 			</div>
 		</div>
 	</div>
-
+  
 	<!-- bootstrapのjsリンク接続 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
@@ -149,7 +148,6 @@
 
 	<!--chat.jsへのリンク-->
 	<script th:src="@{/js/chat.js}"></script>
-
 </body>
 
 </html>

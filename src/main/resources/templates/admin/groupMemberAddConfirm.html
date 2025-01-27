@@ -17,6 +17,8 @@
 	<!-- CSS接続 -->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
+	<link rel="stylesheet" th:href="@{/css/list.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -39,48 +41,41 @@
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:adtion="groupMemberAddComp" method="post">
-			<table border="1">
-				<div th:if="${groupDetail != null}">
-					<tr>
-						<th>グループ名</th>
-						<td th:text="${groupDetail.group_name}"></td>
-						<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
-						<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
-					</tr>
-				</div>
 
-				<tr>
-					<th>メンバ</th>
-				</tr>
-				<tr th:each="member : ${addMember}">
-					<td th:text="${member.user_name}"></td>
+			<div th:if="${groupDetail != null}">
+				<div class="form-group regist-item">
+					<label class="form-label">グループ名</label>
+					<input type="text" class="form-control confirmation-field" th:value="${groupDetail.group_name}"
+						readonly>
+					<input type="hidden" name="group_id" th:value="${groupDetail.group_id}">
+					<input type="hidden" name="group_name" th:value="${groupDetail.group_name}">
+				</div>
+			</div>
+
+			<div class="form-group regist-item main-content">
+				<label class="form-label user-roll-text">追加メンバ一覧</label>
+				<ul class="list-group" th:each="member : ${addMember}">
+					<li class="list-group-item" th:text="${member.user_name}" style="border-radius: 7px;"></li>
 					<input type="hidden" name="memberUser_id" th:value="${member.user_id}">
 					<input type="hidden" name="memberUser_name" th:value="${member.user_name}">
-				</tr>
-			</table>
+				</ul>
+			</div>
 
-			<button type="button" name="button" value="追加" class="btn btn-danger"
+			<button type="button" name="button" value="追加" class="control-btn mini-btn"
 				onclick="groupMemberAddAndShowPopup()">追加</button>
+
 		</form>
 
-
 		<!-- ポップアップ -->
-		<div class="modal fade" id="groupMemberAddModal" tabindex="-1" role="dialog"
+		<div class="modal fade popup-place" id="groupMemberAddModal" tabindex="-1" role="dialog"
 			aria-labelledby="groupMemberAddModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="groupMemberAddModalLabel">追加完了</h5>
-					</div>
-					<div class="modal-body">
-						<p>追加が完了しました</p>
-					</div>
-					<div class="modal-footer">
-						<form th:action="@{groupDetail}" method="post">
-							<input type="hidden" name="group_id" th:value="${group_id}">
-							<button type="submit" class="btn btn-danger">グループ一覧へ</button>
-						</form>
-					</div>
+					<p class="modal-text">追加が完了しました</p>
+					<form th:action="@{groupDetail}" method="post">
+						<input type="hidden" name="group_id" th:value="${group_id}">
+						<button type="submit" class="control-btn return-btn">グループ一覧へ</button>
+					</form>
 				</div>
 			</div>
 		</div>

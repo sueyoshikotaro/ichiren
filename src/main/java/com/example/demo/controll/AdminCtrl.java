@@ -67,14 +67,14 @@ public class AdminCtrl {
 	@Autowired
 	@Qualifier("taskService")
 	TaskServiceInterface TaskService;
-  
+
 	@Autowired
 	@Qualifier("ChatService")
 	ChatServiceInterface chatServise;
-	
+
 	private int school_id;
 	private String user_id;
-  
+
 	/**
 	 * ログイン画面を表示する
 	 * @return
@@ -586,6 +586,19 @@ public class AdminCtrl {
 			// IDが重複していた場合
 			mav.addObject("errMsg", "IDが重複しています。");
 			mav.setViewName("admin/teInfoRegist");
+
+		}
+
+		String userId = u.getUser_id();
+		if (!userId.startsWith("te") || userId.length() != 10) {
+
+			mav.addObject("errMsg", "講師IDは「te」 + 8桁の数字です。");
+			mav.setViewName("admin/teInfoRegist");
+
+		} else {
+
+			mav.addObject("te", u);
+			mav.setViewName("admin/teInfoRegistConfirm");
 		}
 
 		return mav;
@@ -629,9 +642,7 @@ public class AdminCtrl {
 	 * @return 講師一覧
 	 */
 	@GetMapping("teList")
-	public ModelAndView dispTeList() {
-
-		ModelAndView mav = new ModelAndView();
+	public ModelAndView dispTeList(ModelAndView mav, UserDisplay u) {
 
 		Iterable<UserDisplay> teList = userDisplayService.teList(school_id);
 
@@ -1333,12 +1344,17 @@ public class AdminCtrl {
 	 */
 	@PostMapping("groupMemberAddComp")
 	public ModelAndView groupMemberAddComp(ModelAndView mav,
-			@RequestParam(name = "memberUser_id", required = false) String user_id,
+			@RequestParam(name = "memberUser_id", required = false) String[] user_id,
 			@RequestParam(name = "group_id", required = false) int group_id) {
 
-		groupDispService.groupDetailCreate(user_id, group_id, "メンバ", 0);
+		System.out.println(user_id);
+		System.out.println(group_id);
 
 		session.removeAttribute("button");
+
+		for (String memberUser_id : user_id) {
+			groupDispService.groupDetailCreate(memberUser_id, group_id, "メンバ", 0);
+		}
 
 		mav.addObject("group_id", group_id);
 		mav.addObject("groupMemberAddComp", true);
@@ -1444,7 +1460,7 @@ public class AdminCtrl {
 	    
 	    return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * チャット画面にチャット履歴を表示する
@@ -1453,12 +1469,11 @@ public class AdminCtrl {
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
 	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {
-		
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
-		
+
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
-		
+
 		return mav;
 	}
 	
