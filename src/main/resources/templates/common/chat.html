@@ -85,7 +85,22 @@
 				<!--チャット相手一覧(リスト,繰返しかな)-->
 				<form id="userForm" th:style="${'display: block'}">
 					<ul class="list-group" id="chatPartnerList">
-						<li th:each="chat : ${chatPartner}" class="list-group-item list-group-item-action"
+						
+						<!--管理者を表示-->
+						<span>管理者</span>
+						<li th:each="chat : ${chatPartnerAdmin}" class="list-group-item list-group-item-action"
+							th:text="${chat.user_name}" th:attr="data-user-id=${chat.user_id}">
+							<span th:text="${chat.user_name}">○○さん</span>
+
+							<!--いったん未実装-->
+							<span class="badge bg-primary rounded-pill" th:text="${notificationCount}"
+								th:if="${notificationCount != null}">通知数</span>
+						</li>
+						
+						
+						<!--リーダ、メンバを表示-->
+						<span>リーダ、メンバ</span>
+						<li th:each="chat : ${chatPartnerUser}" class="list-group-item list-group-item-action"
 							th:text="${chat.user_name}" th:attr="data-user-id=${chat.user_id}">
 							<span th:text="${chat.user_name}">○○さん</span>
 

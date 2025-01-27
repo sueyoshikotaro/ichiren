@@ -19,8 +19,16 @@ public interface ChatServiceInterface {
 	//チャットを送信し、更新後のチャット履歴を格納
 	public List<ChatForm> sendChat(String user_id, String chatUser_id, String sendText);
 
+	
 	/**
-	 * ユーザ用チャット
+	 * リーダ用のサービス
+	 */
+	//チャット相手(管理者)を設定
+	public List<GroupDetailView> leaderSetChatAdmin(int school_id);
+
+	
+	/**
+	 * メンバ用のサービス
 	 */
 	//チャット相手を設定
 	public List<GroupDetailView> memberSetChatUser(int school_id, int group_id);

@@ -93,6 +93,7 @@ public class UserCtrl {
 	private int school_id;
 	private int group_id;
 	private String user_id;
+	private String user_roll;
 
 	/**
 	 * ログアウト画面を表示
@@ -967,7 +968,6 @@ public class UserCtrl {
 		return mav;
 	}
 
-	
 	/**
 	 * 末吉追加
 	 * チャット画面を表示
@@ -985,15 +985,44 @@ public class UserCtrl {
 		group_id = (int) session.getAttribute("groupId");
 
 		user_id = userEntity.getUser_id();
-		//チャットの通信可能相手を格納
-		List<GroupDetailView> chatPartner = chatServise.memberSetChatUser(school_id, group_id);
 
-		//ログインしているユーザの分のデータはListから除外する
-		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
-				.filter(chat -> !chat.getUser_id().equals(userEntity.getUser_id()))
-				.collect(Collectors.toList());
+		user_roll = (String) session.getAttribute("user_roll");
 
-		mav.addObject("chatPartner", filteredChatPartner);
+		if (user_roll.equals("リーダ")) {
+
+			//チャットの通信可能相手(管理者)を格納
+			List<GroupDetailView> chatPartnerAdmin = chatServise.leaderSetChatAdmin(school_id);
+
+			//チャットの通信可能相手(リーダ,ユーザ)を格納
+			//チャットの通信可能相手を格納
+			List<GroupDetailView> chatPartnerUser = chatServise.memberSetChatUser(school_id, group_id);
+
+			//ログインしているユーザの分のデータはListから除外する
+			List<GroupDetailView> filteredChatPartner = chatPartnerUser.stream()
+					.filter(chat -> !chat.getUser_id().equals(userEntity.getUser_id()))
+					.collect(Collectors.toList());
+
+			mav.addObject("chatPartnerUser", filteredChatPartner);
+			mav.addObject("chatPartnerAdmin", chatPartnerAdmin);
+
+			System.out.println("リーダ：" + filteredChatPartner);
+			System.out.println("管理者：" + chatPartnerAdmin);
+
+			//メンバだった時
+		} else {
+			//チャットの通信可能相手を格納
+			List<GroupDetailView> chatPartner = chatServise.memberSetChatUser(school_id, group_id);
+
+			//ログインしているユーザの分のデータはListから除外する
+			List<GroupDetailView> filteredChatPartner = chatPartner.stream()
+					.filter(chat -> !chat.getUser_id().equals(userEntity.getUser_id()))
+					.collect(Collectors.toList());
+
+			mav.addObject("chatPartner", filteredChatPartner);
+
+			System.out.println(filteredChatPartner);
+		}
+
 		mav.setViewName("common/chat");
 		return mav;
 	}
@@ -1006,7 +1035,7 @@ public class UserCtrl {
 	@PostMapping("chatSearch")
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
-		
+
 		//チャット相手を検索し、Listに格納する
 		List<GroupDetailView> chatPartner = chatServise.memberChatPartnerSearch(school_id, group_id, search);
 
@@ -1029,7 +1058,7 @@ public class UserCtrl {
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
-		
+
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
@@ -1048,7 +1077,7 @@ public class UserCtrl {
 			@RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
 
 		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
-		
+
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
 
