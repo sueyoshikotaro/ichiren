@@ -24,7 +24,7 @@
 		<th:block th:insert="fragment/header :: headerUser">
 	</div>
 	<!-- 共通header呼出し(管理者用) -->
-	<div>
+	<div th:unless="${#strings.startsWith(session.user.user_id, 'st')}">
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
 
@@ -100,7 +100,7 @@
 						
 						<!--リーダ、メンバを表示-->
 						<span>リーダ、メンバ</span>
-						<li th:each="chat : ${chatPartnerUser}" class="list-group-item list-group-item-action"
+						<li th:each="chat : ${chatPartnerMember}" class="list-group-item list-group-item-action"
 							th:text="${chat.user_name}" th:attr="data-user-id=${chat.user_id}">
 							<span th:text="${chat.user_name}">○○さん</span>
 
