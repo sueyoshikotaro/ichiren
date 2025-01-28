@@ -719,14 +719,17 @@ public class AdminCtrl {
 
 		// 編集ボタンを押下
 		if (button.equals("編集")) {
+			System.out.println(u);
+			System.out.println(u.getUser_name());
+			System.out.println(u.getSchool_name());
+			System.out.println(u.getEnr_year());
+			System.out.println(u.getUser_id());
+			userDisplayService.teInfoUpdate(u.getUser_name(), u.getSchool_name(), u.getEnr_year(), u.getUser_id());
 
-			userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(), 1);
 
 			// ポップアップを表示するために、画面遷移しないようにする
 			mav.addObject("teUpdateComp", true);
 			mav.setViewName("admin/teUpdateConfirm");
-
-			return mav;
 
 			//戻るボタンを押下
 
@@ -734,8 +737,10 @@ public class AdminCtrl {
 
 			mav.addObject("te", u);
 			mav.setViewName("admin/teUpdate");
-			return mav;
+
 		}
+
+		return mav;
 	}
 
 	/*
@@ -828,6 +833,10 @@ public class AdminCtrl {
 			//ドロップダウンリストが選択されている場合の処理
 			group = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
 		}
+
+		System.out.println(taskCategory);
+		System.out.println(group);
+		System.out.println();
 
 		mav.addObject("Category", taskCategory);
 		mav.addObject("group", group);
@@ -1459,8 +1468,6 @@ public class AdminCtrl {
 
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
-
-		System.out.println("メンバ" + chatPartner);
 
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
