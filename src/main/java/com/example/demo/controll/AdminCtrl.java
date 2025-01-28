@@ -730,16 +730,16 @@ public class AdminCtrl {
 			mav.addObject("teUpdateComp", true);
 			mav.setViewName("admin/teUpdateConfirm");
 
-			return mav;
-
 			//戻るボタンを押下
 
 		} else {
 
 			mav.addObject("te", u);
 			mav.setViewName("admin/teUpdate");
-			return mav;
+
 		}
+
+		return mav;
 	}
 
 	/*
@@ -772,7 +772,7 @@ public class AdminCtrl {
 		System.out.println(y);
 		if (selectedGenre == null) {
 			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
-		} else if(selectedSchool != null || selectedYear != null) {
+		} else if (selectedSchool != null || selectedYear != null) {
 			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
 			group = groupDispService.groupList(selectedYear, selectedGenre, (int) selectedSchool);
 		}
@@ -832,6 +832,10 @@ public class AdminCtrl {
 			//ドロップダウンリストが選択されている場合の処理
 			group = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
 		}
+
+		System.out.println(taskCategory);
+		System.out.println(group);
+		System.out.println();
 
 		mav.addObject("Category", taskCategory);
 		mav.addObject("group", group);
@@ -1453,7 +1457,6 @@ public class AdminCtrl {
 		return mav;
 	}
 
-	
 	/**
 	 * 末吉
 	 * チャット画面
@@ -1464,9 +1467,7 @@ public class AdminCtrl {
 
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
-		
-		System.out.println("メンバ" + chatPartner);
-		
+
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
@@ -1481,12 +1482,12 @@ public class AdminCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 		//チャット相手を検索し、Listに格納する
-	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
-	    
-	    mav.addObject("chatPartnerMember", chatPartner);
-	    mav.setViewName("common/chat");
-	    
-	    return mav;
+		List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+
+		mav.addObject("chatPartnerMember", chatPartner);
+		mav.setViewName("common/chat");
+
+		return mav;
 	}
 
 	/**
@@ -1496,7 +1497,7 @@ public class AdminCtrl {
 	 */
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
-	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {
+			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
 
 		mav.addObject("chatHistory", chatHistory);
@@ -1504,7 +1505,7 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * チャット送信
@@ -1512,11 +1513,11 @@ public class AdminCtrl {
 	 */
 	@PostMapping("sendChat")
 	public ModelAndView sendChat(ModelAndView mav,
-	        @RequestParam(name = "sendInput", required = false) String sendText,
-	        @RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
-		
+			@RequestParam(name = "sendInput", required = false) String sendText,
+			@RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
+
 		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
-		
+
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
 
