@@ -113,8 +113,8 @@
 			<!--	</tr>-->
 			<!--</tbody>-->
 
-			<button type="button" name="button" value="確認" onclick="formSubmit('確認')"
-				class="control-btn mini-btn">確認</button>
+			<button type="button" name="button" value="確認" onclick="formSubmit('確認')" class="control-btn mini-btn"
+				th:disabled="${#lists.isEmpty(selectUser)}">確認</button>
 
 			<!--戻るボタン,一旦保留-->
 			<!--<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>-->

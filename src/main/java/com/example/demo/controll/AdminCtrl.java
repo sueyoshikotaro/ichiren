@@ -9,8 +9,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -35,12 +33,13 @@ import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsDisplay;
 import com.example.demo.form.TeamsForm;
 import com.example.demo.form.UserDisplay;
-import com.example.demo.form.UserForm;
 import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者のコントローラ
@@ -338,7 +337,6 @@ public class AdminCtrl {
 			//戻るボタンを押下
 		} else {
 
-			System.out.println(s);
 			mav.addObject("schoolAdd", s);
 			mav.setViewName("admin/schoolAdd");
 
@@ -510,22 +508,22 @@ public class AdminCtrl {
 	@PostMapping("userRegistConfirm")
 	public ModelAndView userRegistConfirm(@RequestParam("csvFile") MultipartFile csvFile, ModelAndView mav) {
 		// CSVファイルを読み込み、ユーザ情報を取得する
-		List<UserForm> users = new ArrayList<>();
+		List<UserDisplay> users = new ArrayList<>();
 
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(csvFile.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-				UserForm user = new UserForm();
+				UserDisplay user = new UserDisplay();
 
 				values[0] = values[0].replaceAll("\\p{C}", "");
 				user.setUser_id(values[0]);
 				user.setUser_name(values[1]);
 				user.setUser_pass(values[2]);
-				user.setSchool_id(values[3]);
-				user.setEnr_year(values[4]);
-				user.setUser_flg(Integer.parseInt(values[5]));
+				user.setSchool_id(school_id);
+				user.setEnr_year(values[3]);
+				user.setUser_flg(Integer.parseInt(values[4]));
 				users.add(user);
 			}
 		} catch (IOException e) {
@@ -593,20 +591,8 @@ public class AdminCtrl {
 	@PostMapping("teInfoRegistConfirm")
 	public ModelAndView dispTeInfoRegistConf(UserDisplay u, ModelAndView mav) {
 
-		if (userDisplayService.userIDCheck(u.getUser_id())) {
-
-			mav.addObject("te", u);
-			mav.setViewName("admin/teInfoRegistConfirm");
-
-		} else {
-
-			// IDが重複していた場合
-			mav.addObject("errMsg", "IDが重複しています。");
-			mav.setViewName("admin/teInfoRegist");
-
-		}
-
 		String userId = u.getUser_id();
+
 		if (!userId.startsWith("te") || userId.length() != 10) {
 
 			mav.addObject("errMsg", "講師IDは「te」 + 8桁の数字です。");
@@ -614,10 +600,18 @@ public class AdminCtrl {
 
 		} else {
 
-			mav.addObject("te", u);
-			mav.setViewName("admin/teInfoRegistConfirm");
-		}
+			if (userDisplayService.userIDCheck(u.getUser_id())) {
 
+				mav.addObject("te", u);
+				mav.setViewName("admin/teInfoRegistConfirm");
+
+			} else {
+
+				// IDが重複していた場合
+				mav.addObject("errMsg", "IDが重複しています。");
+				mav.setViewName("admin/teInfoRegist");
+			}
+		}
 		return mav;
 	}
 
@@ -708,7 +702,6 @@ public class AdminCtrl {
 	@PostMapping("teUpdate")
 	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
 
-		System.out.println(u);
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdate");
 
@@ -739,14 +732,17 @@ public class AdminCtrl {
 
 		// 編集ボタンを押下
 		if (button.equals("編集")) {
+			System.out.println(u);
+			System.out.println(u.getUser_name());
+			System.out.println(u.getSchool_name());
+			System.out.println(u.getEnr_year());
+			System.out.println(u.getUser_id());
+			userDisplayService.teInfoUpdate(u.getUser_name(), u.getSchool_name(), u.getEnr_year(), u.getUser_id());
 
-			userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(), 1);
 
 			// ポップアップを表示するために、画面遷移しないようにする
 			mav.addObject("teUpdateComp", true);
 			mav.setViewName("admin/teUpdateConfirm");
-
-			return mav;
 
 			//戻るボタンを押下
 
@@ -754,8 +750,10 @@ public class AdminCtrl {
 
 			mav.addObject("te", u);
 			mav.setViewName("admin/teUpdate");
-			return mav;
+
 		}
+
+		return mav;
 	}
 
 	/*
@@ -780,13 +778,15 @@ public class AdminCtrl {
 		List<TeamsForm> group = null;
 		Calendar calendar = Calendar.getInstance();
 		int y = calendar.get(Calendar.YEAR);
+
 		if (selectedGenre == null) {
+			
 			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
+		
 		} else if (selectedSchool != null || selectedYear != null) {
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
+
 			group = groupDispService.groupList(selectedYear, selectedGenre, (int) selectedSchool);
 		}
-		System.out.println(group);
 
 		mav.addObject("school", school);
 		mav.addObject("genre", genre);
@@ -842,6 +842,10 @@ public class AdminCtrl {
 			//ドロップダウンリストが選択されている場合の処理
 			group = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
 		}
+
+		System.out.println(taskCategory);
+		System.out.println(group);
+		System.out.println();
 
 		mav.addObject("Category", taskCategory);
 		mav.addObject("group", group);
@@ -1021,8 +1025,6 @@ public class AdminCtrl {
 
 		//グループメンバ削除確認画面のテーブルを表示する
 		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
-
-		System.out.println(group);
 
 		for (int i = 0; i < group.size(); i++) {
 
@@ -1217,7 +1219,6 @@ public class AdminCtrl {
 			@RequestParam(name = "genre", required = false) String genre) {
 
 		TeamsDisplay teamsDisplay = new TeamsDisplay();
-		teamsDisplay.setGroup_name(group_name);
 		teamsDisplay.setGenre(genre);
 
 		//リーダに任命するメンバ
@@ -1226,17 +1227,33 @@ public class AdminCtrl {
 		//リーダ以外のメンバ
 		List<UserDisplay> memberUser = new ArrayList<>();
 
+		//エラー画面に遷移したときに選択したユーザを確認できるように
+		List<User> userIdAndName = new ArrayList<>();
+		for (int i = 0; i < user_id.length; i++) {
+			User user = new User();
+			user.setUser_id(user_id[i]);
+			user.setUser_name(user_name[i]);
+			userIdAndName.add(user);
+		}
+		
 		if (group_name == null || group_name.isEmpty()) {
 
+			mav.addObject("selectUser", userIdAndName);
+			mav.addObject("genre", genre);
+			mav.addObject("groupDetail", teamsDisplay);
 			mav.addObject("errMsg", "グループ名を入力してください");
 			mav.setViewName("admin/groupCreate");
 
 		} else if (group_name.length() > 20) {
 
+			mav.addObject("selectUser", userIdAndName);
+			mav.addObject("genre", genre);
+			mav.addObject("groupDetail", teamsDisplay);
 			mav.addObject("errMsg", "20文字以内のグループ名にしてください");
 			mav.setViewName("admin/groupCreate");
 		} else {
 
+			teamsDisplay.setGroup_name(group_name);
 			if (user_id != null && check != null) {
 				for (int i = 0; i < user_id.length; i++) {
 
@@ -1262,13 +1279,11 @@ public class AdminCtrl {
 				mav.addObject("memberUser", memberUser);
 				mav.setViewName("admin/groupCreateConfirm");
 
-				//ユーザが選択されていない場合
-			} else if (user_id == null) {
-
-				mav.addObject("errMsg", "ユーザを選択してください");
-				mav.setViewName("admin/groupCreate");
-
 			} else {
+				
+				mav.addObject("selectUser", userIdAndName);
+				mav.addObject("groupDetail", teamsDisplay);
+				mav.addObject("genre", genre);
 				mav.addObject("errMsg", "一人以上のリーダを選択してください");
 				mav.setViewName("admin/groupCreate");
 			}
@@ -1349,11 +1364,6 @@ public class AdminCtrl {
 		//リーダ以外のメンバ
 		List<UserDisplay> addMember = new ArrayList<>();
 
-		//グループIDとグループ名を格納
-		//		TeamsDisplay teamsDisplay = new TeamsDisplay();
-		//		teamsDisplay.setGroup_name(group_name);
-		//		teamsDisplay.setGroup_id(group_id);
-
 		if (user_id != null) {
 			//追加するメンバをListに格納
 			for (int i = 0; i < user_id.length; i++) {
@@ -1384,9 +1394,6 @@ public class AdminCtrl {
 			@RequestParam(name = "memberUser_id", required = false) String[] user_id,
 			@RequestParam(name = "group_id", required = false) int group_id) {
 
-		System.out.println(user_id);
-		System.out.println(group_id);
-
 		session.removeAttribute("button");
 
 		for (String memberUser_id : user_id) {
@@ -1410,17 +1417,6 @@ public class AdminCtrl {
 			@RequestParam("user_id") String[] user_id,
 			@RequestParam("user_name") String[] user_name,
 			@RequestParam("user_roll") String[] user_roll) {
-
-		System.out.println("kaisann");
-		System.out.println(teamsDisplay.getGroup_id());
-		System.out.println(teamsDisplay.getGroup_name());
-		for (String id : user_id) {
-			System.out.println(id);
-
-		}
-		for (String name : user_name) {
-			System.out.println(name);
-		}
 
 		List<TeamsDisplay> leaderList = new ArrayList<>();
 		List<TeamsDisplay> memberList = new ArrayList<>();
@@ -1473,9 +1469,7 @@ public class AdminCtrl {
 
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
-
-		System.out.println("メンバ" + chatPartner);
-
+    
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;

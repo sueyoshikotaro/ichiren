@@ -211,3 +211,26 @@
 .btn-group form {
 	margin: 0 10px;
 }
+
+.list-open-btn {
+	position: fixed;
+	top: 98px;
+	right: 20px;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 50px;
+	background-color: #333333;
+	color: #fff;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+}
+
+.list-open-btn:hover {
+	transform: scale(0.9);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.list-open-btn:active {
+	transform: scale(0.8);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
