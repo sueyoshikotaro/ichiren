@@ -189,7 +189,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 坂本
 	 * 所属グループ一覧
 	 */
-	@Query("select user_detail.group_id,group_name,genre,user_roll from teams inner join user_Detail on teams.group_id = user_Detail.group_id where user_Detail.user_id = :user_id")
+	@Query("select user_detail.group_id,group_name,genre,user_roll from teams inner join user_detail on teams.group_id = user_detail.group_id where user_detail.user_id = :user_id")
 	public List<GroupDisplay> deptGroupList(String user_id);
 
 	/*
