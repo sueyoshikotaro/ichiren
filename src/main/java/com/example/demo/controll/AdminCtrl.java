@@ -35,7 +35,6 @@ import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsDisplay;
 import com.example.demo.form.TeamsForm;
 import com.example.demo.form.UserDisplay;
-import com.example.demo.form.UserForm;
 import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -338,7 +337,6 @@ public class AdminCtrl {
 			//戻るボタンを押下
 		} else {
 
-			System.out.println(s);
 			mav.addObject("schoolAdd", s);
 			mav.setViewName("admin/schoolAdd");
 
@@ -494,22 +492,22 @@ public class AdminCtrl {
 	@PostMapping("userRegistConfirm")
 	public ModelAndView userRegistConfirm(@RequestParam("csvFile") MultipartFile csvFile, ModelAndView mav) {
 		// CSVファイルを読み込み、ユーザ情報を取得する
-		List<UserForm> users = new ArrayList<>();
+		List<UserDisplay> users = new ArrayList<>();
 
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(csvFile.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-				UserForm user = new UserForm();
+				UserDisplay user = new UserDisplay();
 
 				values[0] = values[0].replaceAll("\\p{C}", "");
 				user.setUser_id(values[0]);
 				user.setUser_name(values[1]);
 				user.setUser_pass(values[2]);
-				user.setSchool_id(values[3]);
-				user.setEnr_year(values[4]);
-				user.setUser_flg(Integer.parseInt(values[5]));
+				user.setSchool_id(school_id);
+				user.setEnr_year(values[3]);
+				user.setUser_flg(Integer.parseInt(values[4]));
 				users.add(user);
 			}
 		} catch (IOException e) {
@@ -692,7 +690,6 @@ public class AdminCtrl {
 	@PostMapping("teUpdate")
 	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
 
-		System.out.println(u);
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdate");
 
@@ -754,11 +751,6 @@ public class AdminCtrl {
 			@RequestParam(name = "selectedYear", required = false) String selectedYear,
 			@RequestParam(name = "selectedGenre", required = false) String selectedGenre) {
 
-		System.out.println(selectedSchool);
-		System.out.println(selectedYear);
-		System.out.println(selectedGenre);
-		System.out.println(school_id);
-
 		//結成年度取得
 		List<TeamsForm> year = groupDispService.selectEstYear();
 		//所属学校
@@ -769,14 +761,15 @@ public class AdminCtrl {
 		List<TeamsForm> group = null;
 		Calendar calendar = Calendar.getInstance();
 		int y = calendar.get(Calendar.YEAR);
-		System.out.println(y);
+		
 		if (selectedGenre == null) {
+			
 			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
-		} else if(selectedSchool != null || selectedYear != null) {
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
+		
+		} else if (selectedSchool != null || selectedYear != null) {
+
 			group = groupDispService.groupList(selectedYear, selectedGenre, (int) selectedSchool);
 		}
-		System.out.println(group);
 
 		mav.addObject("school", school);
 		mav.addObject("genre", genre);
@@ -1012,8 +1005,6 @@ public class AdminCtrl {
 		//グループメンバ削除確認画面のテーブルを表示する
 		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
 
-		System.out.println(group);
-
 		for (int i = 0; i < group.size(); i++) {
 
 			//更新後のスコアと進捗度を計算するサービスを呼び出す
@@ -1207,7 +1198,6 @@ public class AdminCtrl {
 			@RequestParam(name = "genre", required = false) String genre) {
 
 		TeamsDisplay teamsDisplay = new TeamsDisplay();
-		teamsDisplay.setGroup_name(group_name);
 		teamsDisplay.setGenre(genre);
 
 		//リーダに任命するメンバ
@@ -1216,17 +1206,33 @@ public class AdminCtrl {
 		//リーダ以外のメンバ
 		List<UserDisplay> memberUser = new ArrayList<>();
 
+		//エラー画面に遷移したときに選択したユーザを確認できるように
+		List<User> userIdAndName = new ArrayList<>();
+		for (int i = 0; i < user_id.length; i++) {
+			User user = new User();
+			user.setUser_id(user_id[i]);
+			user.setUser_name(user_name[i]);
+			userIdAndName.add(user);
+		}
+		
 		if (group_name == null || group_name.isEmpty()) {
 
+			mav.addObject("selectUser", userIdAndName);
+			mav.addObject("genre", genre);
+			mav.addObject("groupDetail", teamsDisplay);
 			mav.addObject("errMsg", "グループ名を入力してください");
 			mav.setViewName("admin/groupCreate");
 
 		} else if (group_name.length() > 20) {
 
+			mav.addObject("selectUser", userIdAndName);
+			mav.addObject("genre", genre);
+			mav.addObject("groupDetail", teamsDisplay);
 			mav.addObject("errMsg", "20文字以内のグループ名にしてください");
 			mav.setViewName("admin/groupCreate");
 		} else {
 
+			teamsDisplay.setGroup_name(group_name);
 			if (user_id != null && check != null) {
 				for (int i = 0; i < user_id.length; i++) {
 
@@ -1252,13 +1258,11 @@ public class AdminCtrl {
 				mav.addObject("memberUser", memberUser);
 				mav.setViewName("admin/groupCreateConfirm");
 
-				//ユーザが選択されていない場合
-			} else if (user_id == null) {
-
-				mav.addObject("errMsg", "ユーザを選択してください");
-				mav.setViewName("admin/groupCreate");
-
 			} else {
+				
+				mav.addObject("selectUser", userIdAndName);
+				mav.addObject("groupDetail", teamsDisplay);
+				mav.addObject("genre", genre);
 				mav.addObject("errMsg", "一人以上のリーダを選択してください");
 				mav.setViewName("admin/groupCreate");
 			}
@@ -1339,11 +1343,6 @@ public class AdminCtrl {
 		//リーダ以外のメンバ
 		List<UserDisplay> addMember = new ArrayList<>();
 
-		//グループIDとグループ名を格納
-		//		TeamsDisplay teamsDisplay = new TeamsDisplay();
-		//		teamsDisplay.setGroup_name(group_name);
-		//		teamsDisplay.setGroup_id(group_id);
-
 		if (user_id != null) {
 			//追加するメンバをListに格納
 			for (int i = 0; i < user_id.length; i++) {
@@ -1374,9 +1373,6 @@ public class AdminCtrl {
 			@RequestParam(name = "memberUser_id", required = false) String[] user_id,
 			@RequestParam(name = "group_id", required = false) int group_id) {
 
-		System.out.println(user_id);
-		System.out.println(group_id);
-
 		session.removeAttribute("button");
 
 		for (String memberUser_id : user_id) {
@@ -1400,17 +1396,6 @@ public class AdminCtrl {
 			@RequestParam("user_id") String[] user_id,
 			@RequestParam("user_name") String[] user_name,
 			@RequestParam("user_roll") String[] user_roll) {
-
-		System.out.println("kaisann");
-		System.out.println(teamsDisplay.getGroup_id());
-		System.out.println(teamsDisplay.getGroup_name());
-		for (String id : user_id) {
-			System.out.println(id);
-
-		}
-		for (String name : user_name) {
-			System.out.println(name);
-		}
 
 		List<TeamsDisplay> leaderList = new ArrayList<>();
 		List<TeamsDisplay> memberList = new ArrayList<>();
@@ -1453,7 +1438,6 @@ public class AdminCtrl {
 		return mav;
 	}
 
-	
 	/**
 	 * 末吉
 	 * チャット画面
@@ -1464,9 +1448,7 @@ public class AdminCtrl {
 
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
-		
-		System.out.println("メンバ" + chatPartner);
-		
+
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
@@ -1481,12 +1463,12 @@ public class AdminCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 		//チャット相手を検索し、Listに格納する
-	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
-	    
-	    mav.addObject("chatPartnerMember", chatPartner);
-	    mav.setViewName("common/chat");
-	    
-	    return mav;
+		List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+
+		mav.addObject("chatPartnerMember", chatPartner);
+		mav.setViewName("common/chat");
+
+		return mav;
 	}
 
 	/**
@@ -1496,7 +1478,7 @@ public class AdminCtrl {
 	 */
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
-	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {
+			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
 
 		mav.addObject("chatHistory", chatHistory);
@@ -1504,7 +1486,7 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * チャット送信
@@ -1512,11 +1494,11 @@ public class AdminCtrl {
 	 */
 	@PostMapping("sendChat")
 	public ModelAndView sendChat(ModelAndView mav,
-	        @RequestParam(name = "sendInput", required = false) String sendText,
-	        @RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
-		
+			@RequestParam(name = "sendInput", required = false) String sendText,
+			@RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
+
 		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
-		
+
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
 
