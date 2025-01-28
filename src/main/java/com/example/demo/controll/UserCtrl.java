@@ -501,6 +501,8 @@ public class UserCtrl {
 		//セッション情報の取得
 		int groupId = (int) session.getAttribute("groupId");
 
+		System.out.println(t);
+		
 		//スコアの足しこみ
 		int score = TaskService.userScore(t.getUser_name(), groupId);
 		score = score + Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level());
