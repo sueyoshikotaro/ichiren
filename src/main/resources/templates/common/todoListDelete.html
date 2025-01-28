@@ -17,6 +17,7 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/list.css}"> <!-- 共通CSS -->
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -29,11 +30,6 @@
 </head>
 
 <body>
-	<!--ドロップダウンメニュー(開閉)-->
-	<button th:if="${button != null}" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExampleSide"
-		aria-controls="offcanvasExample">
-		<span class="navbar-toggler-icon"></span>
-	</button>
 	<!--Fragment使ってコードの部品化-->
 	<div>
 		<th:block th:insert="fragment/todoFragment :: toggle">
@@ -41,25 +37,61 @@
 
 	<!--コンテナ-->
 	<div class="container">
+
+		<h2>ToDoリスト</h2>
+		<h3>
+			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+				class="bi bi-clipboard-check" viewBox="0 0 16 16" style="margin-right: -15px; margin-bottom: 4px;">
+				<path fill-rule="evenodd"
+					d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0" />
+				<path
+					d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+				<path
+					d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+			</svg>
+			【削除内容】
+		</h3>
+
+		<button th:if="${button != null}" type="button" data-bs-toggle="offcanvas"
+			data-bs-target="#offcanvasExampleSide" aria-controls="offcanvasExample" class="list-open-btn">
+			<span>LIST</span>
+		</button>
+
 		<!--削除の場合-->
 		<form th:action="@{deleteConfirm}" method="post">
+
 			<div th:each="todo:${todo}">
+
 				<input type="hidden" name="tdlist_id" th:value="${todo.tdlist_id}">
-				<div>こちらのToDoを削除しますか？</div>
 
-				<div>
-					<label>ToDo内容</label>
-					<input type="text" name="tdlist_content" th:value="${todo.tdlist_content}" readonly></input>
+				<p>こちらのToDoを削除しますか？</p>
+
+				<div class="mb-3 school-info-text">
+					<span class="form-label">内容</span>
+					<div type="text" th:text="${todo.tdlist_content}" class="form-control" name="tdlist_content"
+						required></div>
 				</div>
 
-				<div class="dropdown mt-3">
-					<label>重要度</label>
-					<div name="importance" th:value="${todo.importance}" th:text="${todo.importance}"></div>
+				<div class="mb-3 school-info-text">
+					<span class="form-label">重要度</span>
+					<div type="text" th:text="${todo.importance}" th:value="${todo.importance}" class="form-control"
+						required></div>
 				</div>
+
 			</div>
-			<button type="submit" value="delete">削除</button>
+
+			<button type="submit" value="delete" class="select-btn long-btn" style="margin-top: 18px;">削除</button>
+
 		</form>
-		<button th:onclick="|location.href='@{/taskdon/user/todoList}'|">取消</button>
+
+		<div class="row">
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col">
+				<button th:onclick="|location.href='@{/taskdon/user/todoList}'|" class="select-btn mini-btn"
+					style="margin-top: -32px;">取消</button>
+			</div>
+		</div>
 
 	</div>
 
