@@ -9,8 +9,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -41,6 +39,8 @@ import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者のコントローラ
@@ -577,20 +577,8 @@ public class AdminCtrl {
 	@PostMapping("teInfoRegistConfirm")
 	public ModelAndView dispTeInfoRegistConf(UserDisplay u, ModelAndView mav) {
 
-		if (userDisplayService.userIDCheck(u.getUser_id())) {
-
-			mav.addObject("te", u);
-			mav.setViewName("admin/teInfoRegistConfirm");
-
-		} else {
-
-			// IDが重複していた場合
-			mav.addObject("errMsg", "IDが重複しています。");
-			mav.setViewName("admin/teInfoRegist");
-
-		}
-
 		String userId = u.getUser_id();
+
 		if (!userId.startsWith("te") || userId.length() != 10) {
 
 			mav.addObject("errMsg", "講師IDは「te」 + 8桁の数字です。");
@@ -598,10 +586,18 @@ public class AdminCtrl {
 
 		} else {
 
-			mav.addObject("te", u);
-			mav.setViewName("admin/teInfoRegistConfirm");
-		}
+			if (userDisplayService.userIDCheck(u.getUser_id())) {
 
+				mav.addObject("te", u);
+				mav.setViewName("admin/teInfoRegistConfirm");
+
+			} else {
+
+				// IDが重複していた場合
+				mav.addObject("errMsg", "IDが重複しています。");
+				mav.setViewName("admin/teInfoRegist");
+			}
+		}
 		return mav;
 	}
 
@@ -772,7 +768,7 @@ public class AdminCtrl {
 		System.out.println(y);
 		if (selectedGenre == null) {
 			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
-		} else if(selectedSchool != null || selectedYear != null) {
+		} else if (selectedSchool != null || selectedYear != null) {
 			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
 			group = groupDispService.groupList(selectedYear, selectedGenre, (int) selectedSchool);
 		}
@@ -1453,7 +1449,6 @@ public class AdminCtrl {
 		return mav;
 	}
 
-	
 	/**
 	 * 末吉
 	 * チャット画面
@@ -1464,9 +1459,9 @@ public class AdminCtrl {
 
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
-		
+
 		System.out.println("メンバ" + chatPartner);
-		
+
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
@@ -1481,12 +1476,12 @@ public class AdminCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 		//チャット相手を検索し、Listに格納する
-	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
-	    
-	    mav.addObject("chatPartnerMember", chatPartner);
-	    mav.setViewName("common/chat");
-	    
-	    return mav;
+		List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+
+		mav.addObject("chatPartnerMember", chatPartner);
+		mav.setViewName("common/chat");
+
+		return mav;
 	}
 
 	/**
@@ -1496,7 +1491,7 @@ public class AdminCtrl {
 	 */
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
-	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {
+			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
 
 		mav.addObject("chatHistory", chatHistory);
@@ -1504,7 +1499,7 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * チャット送信
@@ -1512,11 +1507,11 @@ public class AdminCtrl {
 	 */
 	@PostMapping("sendChat")
 	public ModelAndView sendChat(ModelAndView mav,
-	        @RequestParam(name = "sendInput", required = false) String sendText,
-	        @RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
-		
+			@RequestParam(name = "sendInput", required = false) String sendText,
+			@RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
+
 		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
-		
+
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
 
