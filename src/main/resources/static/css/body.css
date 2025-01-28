@@ -18,7 +18,7 @@ body {
 	background-image: url(../img/containerImage.png);
 	background-size: cover;
 	max-width: 800px;
-	min-width: 390px;
+	min-width: 380px;
 	min-height: 500px;
 	padding: 20px;
 	margin-top: 8px;
@@ -29,7 +29,7 @@ body {
 }
 
 /*確認用のタイトルテキスト(コンテナ内)*/
-h3{
+h3 {
 	margin-top: -5px;
 }
 
@@ -74,4 +74,11 @@ a.menu-btn:hover {
 a.menu-btn:hover::before {
 	top: 0;
 	left: 0;
+}
+
+/*アプリ名(ログインコンテナ内)*/
+.app-title {
+	font-weight: bold;
+	color: #454545;
+	text-shadow: 3px 3px #AAAAAA;
 }
