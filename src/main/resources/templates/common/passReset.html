@@ -1,15 +1,22 @@
+<!-- 必須情報(下記2項目) -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<!-- 必須項目 -->
 	<meta charset="UTF-8">
+
+	<!-- サイトタイトル -->
 	<title>タスクどん|パスワード再設定</title>
+
+	<!-- デザイン等 -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
 	<!--CSS接続-->
-	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -17,52 +24,76 @@
 </head>
 
 <body>
-
+	<!--コンテナ-->
 	<div class="container">
 
-		<h2 class="menu-text">パスワード再設定</h2>
+		<h1 class="app-title">タスクどん</h1>
+
+		<h2 style="margin-top: 15px;">パスワード再設定</h2>
 
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:action=@{/taskdon/user/updatePass} method="post">
-			<div class="">
-				<lavel>新パスワード　　　　　</lavel>
-				<input type="text" name="newPass" required>
+
+			<p style="margin-top: 16px;">新しいパスワードを入力してください</p>
+
+			<div class="mb-3">
+				<!--アイコン画像(bootstrap引用)-->
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key"
+					viewBox="0 0 16 16">
+					<path
+						d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8m4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5" />
+					<path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+				</svg>
+				<span class="form-label">パスワード</span>
+				<input type="password" name="newPass" class="form-control" required style="max-width: 360px;">
+				<div id="passwordHelpBlock" class="form-text"> <!--入力欄下の注釈-->
+					8桁以上,16桁未満の英数字.
+				</div>
 			</div>
-			<div class="">
-				<lavel>新パスワード（確認用）</lavel>
-				<input type="text" name="confirmPass" required>
+			<div class="mb-3">
+				<!--アイコン画像(bootstrap引用)-->
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key"
+					viewBox="0 0 16 16">
+					<path
+						d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8m4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5" />
+					<path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+				</svg>
+				<span class="form-label">パスワード(確認用)</span>
+				<input type="password" name="confirmPass" class="form-control" required style="max-width: 360px;">
 			</div>
+
 			<!--パスワード再設定確認(ポップアップ)-->
-			<div>
-				<button type="button" class="btn btn-danger" data-toggle="modal"
+			<div style="margin-top: 40px;">
+				<button type="button" class="control-btn long-btn" data-toggle="modal"
 					data-target="#passResetModal">確認</button>
 			</div>
+
 		</form>
 
 		<!--ポップアップ-->
-		<div class="modal fade" id="passResetModal" tabindex="-1" role="dialog" aria-labelledby="passResetModalLabel"
-			aria-hidden="true">
+		<div class="modal fade popup-place" id="passResetModal" tabindex="-1" role="dialog"
+			aria-labelledby="passResetModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="passResetModalLabel">パスワード再設定確認</h5>
-					</div>
-					<div class="modal-body">
-						<p>パスワードを更新しますか?</p>
-					</div>
-					<div class="modal-footer">
-						<table>
-							<form th:action="@{/taskdon/user/updatePass}" method="post">
-								<input type="hidden" name="user_id" th:value="${user_id}">
-								<input type="hidden" name="newPass" id="newPassHidden">
-								<input type="hidden" name="confirmPass" id="confirmPassHidden">
-								<button type="submit" name="button" value="はい" class="btn btn-danger">はい</button>
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
-							</form>
-						</table>
-					</div>
+					<center>
+						<h3 class="confirm-text">再設定確認</h3>
+					</center>
+
+					<p class="modal-text">パスワードを更新しますか?</p>
+
+					<form th:action="@{/taskdon/user/updatePass}" method="post">
+						<input type="hidden" name="user_id" th:value="${user_id}">
+						<input type="hidden" name="newPass" id="newPassHidden">
+						<input type="hidden" name="confirmPass" id="confirmPassHidden">
+
+						<div class="btn-group">
+							<button type="submit" name="button" value="はい" class="answer-btn yes-btn">はい</button>
+							<button type="button" class="answer-btn no-btn" data-dismiss="modal">いいえ</button>
+						</div>
+					</form>
+
 				</div>
 			</div>
 		</div>
@@ -81,6 +112,7 @@
 				});
 			});
 		</script>
+
 </body>
 
 </html>
