@@ -94,7 +94,7 @@
 				</div>
 
 				<div class="group-detail-text-view">
-					<span class="form-label">メンバ</span>
+					<span class="form-label" th:text="${group.user_roll}"></span>
 					<div type="text" class="form-control" th:text="${group.user_name}"></div>
 				</div>
 
@@ -164,7 +164,7 @@
 		</div>
 
 	</div>
-	
+
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
