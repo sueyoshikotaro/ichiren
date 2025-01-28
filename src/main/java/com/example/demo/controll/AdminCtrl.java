@@ -1465,7 +1465,9 @@ public class AdminCtrl {
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
 		
-		mav.addObject("chatPartnerUser", chatPartner);
+		System.out.println(chatPartner);
+		
+		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
 	}
@@ -1481,7 +1483,7 @@ public class AdminCtrl {
 		//チャット相手を検索し、Listに格納する
 	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
 	    
-	    mav.addObject("chatPartnerUser", chatPartner);
+	    mav.addObject("chatPartnerMember", chatPartner);
 	    mav.setViewName("common/chat");
 	    
 	    return mav;
