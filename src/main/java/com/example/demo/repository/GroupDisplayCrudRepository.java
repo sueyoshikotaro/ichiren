@@ -60,7 +60,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * グループ詳細表示
 	 */
-	@Query("select t.group_id, t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score, ud.user_roll, u.user_id, u.school_id from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.group_id = :group_id")
+	@Query("select t.group_id, t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score, ud.user_roll, u.user_id, u.school_id from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.group_id = :group_id order by ud.user_roll desc")
 	public List<GroupDetailView> groupDetail(int group_id);
 
 	/*
@@ -189,7 +189,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 坂本
 	 * 所属グループ一覧
 	 */
-	@Query("select user_detail.group_id,group_name,genre,user_roll from teams inner join user_Detail on teams.group_id = user_Detail.group_id where user_Detail.user_id = :user_id")
+	@Query("select user_detail.group_id,group_name,genre,user_roll from teams inner join user_detail on teams.group_id = user_detail.group_id where user_detail.user_id = :user_id")
 	public List<GroupDisplay> deptGroupList(String user_id);
 
 	/*
@@ -228,10 +228,10 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 湊原
 	 * グループメンバ詳細表示
 	 */
-	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress,t.task_id, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id")
+	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress,t.task_id, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id and t.group_id = ud.group_id")
 	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id);
 
-	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress,t.task_id, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id and task_category = :selectedValue")
+	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress,t.task_id, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id and task_category = :selectedValue and t.group_id = ud.group_id")
 	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id, String selectedValue);
 
 	/**

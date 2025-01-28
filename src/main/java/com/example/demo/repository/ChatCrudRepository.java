@@ -15,7 +15,7 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	 * 末吉
 	 * チャット相手を格納
 	 */
-	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = 'リーダ' and t.group_flg = 1")
+	@Query("select distinct u.user_id, u.user_name, t.group_name from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = 'リーダ' and t.group_flg = 1 group by u.user_id")
 	public List<GroupDetailView> setChatUser(int school_id);
 
 	/**

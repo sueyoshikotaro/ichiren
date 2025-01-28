@@ -56,35 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 });
 
+// ログアウトor所属グループ遷移時、居場所を'休憩中'に設定
+const logoutOrDeptGroupLink = document.querySelectorAll('a[href="/taskdon/user/logout"], a[href="/taskdon/user/getPlace"]');
 
-//ログアウト時、居場所を'休憩中'に設定
-const logoutLink = document.querySelector('a[href="/taskdon/user/logout"]'); //ログアウトリンク
+logoutOrDeptGroupLink.forEach(link => {
 
-if (logoutLink) {
-	logoutLink.addEventListener('click', (event) => {
-		event.preventDefault();//デフォルトの遷移をキャンセル
+	link.addEventListener('click', (event) => {
+
+		event.preventDefault();
 		const selectElement = document.querySelector('.place-update');
-		if (selectElement) {
-			selectElement.value = "休憩中"; // select要素の値を変更
-			toggleLinkStatus(); // リンクの状態を更新
-		}
-		sessionStorage.removeItem('selectedPlace');
-		window.location.href = "/taskdon/user/logout";//遷移処理
-	});
-}
 
-//所属グループ遷移時、居場所を'休憩中'に設定
-const deptGroupLink = document.querySelector('a[href="/taskdon/user/getPlace"]'); //所属グループリンク
-
-if (deptGroupLink) {
-	deptGroupLink.addEventListener('click', (event) => {
-		event.preventDefault();//デフォルトの遷移をキャンセル
-		const selectElement = document.querySelector('.place-update');
 		if (selectElement) {
+
 			selectElement.value = "休憩中"; // select要素の値を変更
-			toggleLinkStatus(); // リンクの状態を更新
+			toggleLinkStatus(); // リンクの状態を更新し、UIを強制的に更新
 		}
+
 		sessionStorage.removeItem('selectedPlace');
-		window.location.href = "/taskdon/user/getPlace";//遷移処理
+		window.location.href = link.href;
 	});
-}
+});
