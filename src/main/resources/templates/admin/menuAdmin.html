@@ -42,9 +42,12 @@
 
 		<a class="menu-btn" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
 
-		<a class="menu-btn" th:onclick="|location.href='@{chat}'|">チャット</a><!--未実装-->
+		<!-- ログインしているユーザが大ボスの場合非表示 -->
+		<div th:if="${#strings.startsWith(session.user.user_id, 'te')}">
+			<a class="menu-btn" th:onclick="|location.href='@{chat}'|">チャット</a><!--未実装-->
+		</div>
 
-		<!-- ログインしているユーザが大ボスの場合 -->
+		<!-- ログインしているユーザが大ボスの場合表示 -->
 		<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
 			<a class="menu-btn" th:onclick="|location.href='@{teList}'|">講師一覧</a>
 		</div>

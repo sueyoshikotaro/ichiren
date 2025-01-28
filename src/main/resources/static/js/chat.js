@@ -63,8 +63,6 @@ function chatSearch() {
 	var params = {
 		"search": value
 	};
-	console.log(params)
-
 
 	/*チャット相手一覧の再表示メソッドの呼び出し*/
 	$.ajax({
@@ -77,6 +75,8 @@ function chatSearch() {
 
 				var chatPartnerList = data;
 
+				console.log(chatPartnerList);
+				
 				// チャット相手一覧を表示する
 				var chatPartnerListElement = $('#chatPartnerList');
 

@@ -25,6 +25,9 @@ public interface ChatServiceInterface {
 	 */
 	//チャット相手(管理者)を設定
 	public List<GroupDetailView> leaderSetChatAdmin(int school_id);
+	
+	//チャット相手検索
+	public List<GroupDetailView> AdminChatPartnerSearch(int school_id, String search);
 
 	
 	/**

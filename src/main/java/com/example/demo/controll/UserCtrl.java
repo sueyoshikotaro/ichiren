@@ -979,51 +979,32 @@ public class UserCtrl {
 		// ログインユーザのエンティティを取得
 		User userEntity = (User) session.getAttribute("user");
 
-		// エンティティの中のschool_idを取得
+		// エンティティの中の値をそれぞれ取得
 		school_id = userEntity.getSchool_id();
-
 		group_id = (int) session.getAttribute("groupId");
-
 		user_id = userEntity.getUser_id();
-
 		user_roll = (String) session.getAttribute("user_roll");
 
+		//リーダの場合は管理者とグループメンバすべてを格納
 		if (user_roll.equals("リーダ")) {
 
 			//チャットの通信可能相手(管理者)を格納
 			List<GroupDetailView> chatPartnerAdmin = chatServise.leaderSetChatAdmin(school_id);
 
-			//チャットの通信可能相手(リーダ,ユーザ)を格納
-			//チャットの通信可能相手を格納
-			List<GroupDetailView> chatPartnerUser = chatServise.memberSetChatUser(school_id, group_id);
-
-			//ログインしているユーザの分のデータはListから除外する
-			List<GroupDetailView> filteredChatPartner = chatPartnerUser.stream()
-					.filter(chat -> !chat.getUser_id().equals(userEntity.getUser_id()))
-					.collect(Collectors.toList());
-
-			mav.addObject("chatPartnerUser", filteredChatPartner);
 			mav.addObject("chatPartnerAdmin", chatPartnerAdmin);
-
-			System.out.println("リーダ：" + filteredChatPartner);
-			System.out.println("管理者：" + chatPartnerAdmin);
-
-			//メンバだった時
-		} else {
-			//チャットの通信可能相手を格納
-			List<GroupDetailView> chatPartner = chatServise.memberSetChatUser(school_id, group_id);
-
-			//ログインしているユーザの分のデータはListから除外する
-			List<GroupDetailView> filteredChatPartner = chatPartner.stream()
-					.filter(chat -> !chat.getUser_id().equals(userEntity.getUser_id()))
-					.collect(Collectors.toList());
-
-			mav.addObject("chatPartner", filteredChatPartner);
-
-			System.out.println(filteredChatPartner);
 		}
 
+		//チャットの通信可能相手を格納
+		List<GroupDetailView> chatPartner = chatServise.memberSetChatUser(school_id, group_id);
+
+		//ログインしているユーザの分のデータはListから除外する
+		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
+				.filter(chat -> !chat.getUser_id().equals(userEntity.getUser_id()))
+				.collect(Collectors.toList());
+
+		mav.addObject("chatPartnerMember", filteredChatPartner);
 		mav.setViewName("common/chat");
+		
 		return mav;
 	}
 
@@ -1036,15 +1017,23 @@ public class UserCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 
-		//チャット相手を検索し、Listに格納する
+		//リーダの場合は管理者とグループメンバのすべてから検索し格納
+		if (user_roll.equals("リーダ")) {
+			//チャットの通信可能相手(管理者)を格納
+			List<GroupDetailView> chatPartnerAdmin = chatServise.AdminChatPartnerSearch(school_id, search);
+			System.out.println("リーダ：" + chatPartnerAdmin);
+			mav.addObject("chatPartnerAdmin", chatPartnerAdmin);
+		}
+
+		//チャット相手を検索し、Listに格納
 		List<GroupDetailView> chatPartner = chatServise.memberChatPartnerSearch(school_id, group_id, search);
 
-		//ログインしているユーザの分のデータはListから除外する
+		//ログインしているユーザの分のデータはListから除外
 		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
 				.filter(chat -> !chat.getUser_id().equals(user_id))
 				.collect(Collectors.toList());
 
-		mav.addObject("chatPartner", filteredChatPartner);
+		mav.addObject("chatPartnerMember", filteredChatPartner);
 		mav.setViewName("common/chat");
 
 		return mav;
@@ -1052,7 +1041,7 @@ public class UserCtrl {
 
 	/**
 	 * 末吉追加
-	 * チャット画面にチャット履歴を表示する
+	 * チャット画面にチャット履歴を表示
 	 * @return
 	 */
 	@PostMapping("getChatHistory")
