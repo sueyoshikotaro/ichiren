@@ -1465,6 +1465,8 @@ public class AdminCtrl {
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
 		
+		System.out.println("メンバ" + chatPartner);
+		
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
