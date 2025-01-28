@@ -33,12 +33,9 @@
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2>所属グループ</h2>
+		<h2 style="margin-bottom: 25px;">所属グループ</h2>
 
 		<!--所属グループを表示(下記)-->
-		<label for="inputPassword5" class="form-label">　　 グループ</label>
-		<hr class="underline"> <!--表示テキストの下線-->
-
 		<!--所属グループ分だけ繰り返し-->
 		<div class="input-group" th:each="deptGroup : ${session.deptGroupList}">
 			<div class="hstack gap-3">
