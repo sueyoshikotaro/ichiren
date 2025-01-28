@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -43,6 +41,8 @@ import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -862,36 +862,28 @@ public class UserCtrl {
 		if (check == null || check.length == 0) {
 
 			mav.addObject("errMsg", "連絡事項を選択してください");
+			mav.setViewName("common/menuUser");
 
-			List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
-			List<Room> roomList = userDisplayService.roomSelect();
-			mav.addObject("noticeList", noticeList);
-			mav.addObject("roomList", roomList);
-
-			return new ModelAndView("redirect:/taskdon/user/menu");
 			// チェックボックスが選択されている場合
 		} else {
 
 			//チェックボックスで選択した連絡事項IDを格納
 			List<NoticeViewForm> checkList = new ArrayList<>();
 			for (int i = 0; i < check.length; i++) {
-
 				NoticeViewForm notice = new NoticeViewForm();
 				List<NoticeViewForm> noticeList = new ArrayList<>(NoticeService.selectNotice(check[i]));
-
-				if (!noticeList.isEmpty()) {
-
-					notice.setNotice_id(noticeList.get(0).getNotice_id());
-					notice.setUser_name(noticeList.get(0).getUser_name());
-					notice.setTitle(noticeList.get(0).getTitle());
-					notice.setContact_msg(noticeList.get(0).getContact_msg());
-					notice.setSend_date(noticeList.get(0).getSend_date());
-					checkList.add(notice);
-				}
+				notice.setNotice_id(noticeList.get(0).getNotice_id());
+				notice.setUser_name(noticeList.get(0).getUser_name());
+				notice.setTitle(noticeList.get(0).getTitle());
+				notice.setContact_msg(noticeList.get(0).getContact_msg());
+				notice.setSend_date(noticeList.get(0).getSend_date());
+				checkList.add(notice);
 			}
 			mav.addObject("notice", checkList);
-			return new ModelAndView("leader/noticeDeleteConfirm");
+			mav.setViewName("leader/noticeDeleteConfirm");
 		}
+		return mav;
+
 	}
 
 	/*
