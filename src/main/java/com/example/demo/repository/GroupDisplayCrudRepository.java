@@ -23,24 +23,31 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	//全て「選択なし」の場合
 	@Query("select * from teams where group_flg = 1")
 	public List<TeamsForm> groupList();
+
 	//全て選択されている場合
 	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE t.school_id = :school_id AND t.genre = :genre AND Year(t.est_year) = :est_year AND t.group_flg = 1")
 	public List<TeamsForm> groupList(String genre, String est_year, int school_id);
+
 	//学校と結成年度が選択されている場合 兼 デフォルトでの絞り込み
 	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE t.school_id = :school_id AND Year(t.est_year) = :est_year AND t.group_flg = 1")
 	public List<TeamsForm> groupList1(String est_year, int school_id);
+
 	//ジャンルと学校が選択されている場合
 	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE t.school_id = :school_id AND genre = :genre AND t.group_flg = 1")
 	public List<TeamsForm> groupList2(String genre, int school_id);
+
 	//結成年度とジャンルが選択されている場合
 	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE Year(t.est_year) = :year AND t.genre = :genre AND t.group_flg = 1")
 	public List<TeamsForm> groupList(String year, String genre);
+
 	//結成年度のみ選択されている場合
 	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and est_year = :estYear")
 	public List<TeamsForm> groupListYear(String estYear);
+
 	//学校のみ選択されている場合
 	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and t.school_id = :school_id")
 	public List<TeamsForm> groupListSchool(int school_id);
+
 	//ジャンルのみ選択されている場合
 	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and genre = :genre")
 	public List<TeamsForm> groupListGenre(String genre);
@@ -246,7 +253,10 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 結成年度取得(絞り込み用)
 	 */
 	@Query("SELECT distinct YEAR(est_year) AS est_year FROM teams WHERE YEAR(est_year) != 9999;")
-	public List<TeamsForm> selectEstYear();
+	public List<TeamsForm> selectgroupEstYear();
+
+	@Query("SELECT distinct YEAR(enr_year) AS est_year FROM user WHERE YEAR(enr_year) != 9999 and user_id like '%st%';")
+	public List<TeamsForm> selectuserEstYear();
 
 	/**
 	 * 湊原
@@ -255,8 +265,5 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Query("SELECT distinct genre FROM teams;")
 	public List<TeamsForm> selectGenre();
-
-	
-
 
 }

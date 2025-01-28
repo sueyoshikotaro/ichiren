@@ -395,16 +395,32 @@ public class AdminCtrl {
 	 * ユーザ一覧のリクエストハンドラメソッド
 	 * @return ユーザ一覧
 	 */
-
+	@LoginRequired
 	@GetMapping("userList")
-	public ModelAndView userList() {
+	public ModelAndView userList(@RequestParam(name = "selectedSchool", required = false) Integer selectedSchool,
+			@RequestParam(name = "selectedYear", required = false) String selectedYear) {
 
 		//ModelAndViewのインスタンス生成
 		ModelAndView mav = new ModelAndView();
 
-		//サービスのメソッドを呼び出す
-		Iterable<UserDisplay> userList = userDisplayService.userList(school_id);
+		//結成年度取得
+		List<TeamsForm> year = groupDispService.selectEstYear("user");
+		//所属学校
+		List<TeamsForm> school = groupDispService.selectSchool();
 
+		Calendar calendar = Calendar.getInstance();
+		int y = calendar.get(Calendar.YEAR);
+		Iterable<UserDisplay> userList = null;
+		if ((selectedSchool == null && selectedYear == null) || (selectedSchool == 0 && selectedYear.equals("選択なし"))) {
+			userList = userDisplayService.userFilterList(school_id, String.valueOf(y));
+		}else {
+			userList = userDisplayService.userFilterList((int)selectedSchool, selectedYear);
+		}
+		//サービスのメソッドを呼び出す
+		
+
+		mav.addObject("school", school);
+		mav.addObject("year", year);
 		mav.addObject("users", userList);
 		mav.setViewName("admin/userList");
 
@@ -754,13 +770,8 @@ public class AdminCtrl {
 			@RequestParam(name = "selectedYear", required = false) String selectedYear,
 			@RequestParam(name = "selectedGenre", required = false) String selectedGenre) {
 
-		System.out.println(selectedSchool);
-		System.out.println(selectedYear);
-		System.out.println(selectedGenre);
-		System.out.println(school_id);
-
 		//結成年度取得
-		List<TeamsForm> year = groupDispService.selectEstYear();
+		List<TeamsForm> year = groupDispService.selectEstYear("group");
 		//所属学校
 		List<TeamsForm> school = groupDispService.selectSchool();
 		//ジャンル
@@ -769,10 +780,9 @@ public class AdminCtrl {
 		List<TeamsForm> group = null;
 		Calendar calendar = Calendar.getInstance();
 		int y = calendar.get(Calendar.YEAR);
-		System.out.println(y);
 		if (selectedGenre == null) {
 			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
-		} else if(selectedSchool != null || selectedYear != null) {
+		} else if (selectedSchool != null || selectedYear != null) {
 			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
 			group = groupDispService.groupList(selectedYear, selectedGenre, (int) selectedSchool);
 		}
@@ -1453,7 +1463,6 @@ public class AdminCtrl {
 		return mav;
 	}
 
-	
 	/**
 	 * 末吉
 	 * チャット画面
@@ -1464,9 +1473,9 @@ public class AdminCtrl {
 
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
-		
+
 		System.out.println("メンバ" + chatPartner);
-		
+
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
@@ -1481,12 +1490,12 @@ public class AdminCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 		//チャット相手を検索し、Listに格納する
-	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
-	    
-	    mav.addObject("chatPartnerMember", chatPartner);
-	    mav.setViewName("common/chat");
-	    
-	    return mav;
+		List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+
+		mav.addObject("chatPartnerMember", chatPartner);
+		mav.setViewName("common/chat");
+
+		return mav;
 	}
 
 	/**
@@ -1496,7 +1505,7 @@ public class AdminCtrl {
 	 */
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
-	        @RequestParam(name = "chatUserId", required = false) String chatUser_id) {
+			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
 
 		mav.addObject("chatHistory", chatHistory);
@@ -1504,7 +1513,7 @@ public class AdminCtrl {
 
 		return mav;
 	}
-	
+
 	/**
 	 * 末吉
 	 * チャット送信
@@ -1512,11 +1521,11 @@ public class AdminCtrl {
 	 */
 	@PostMapping("sendChat")
 	public ModelAndView sendChat(ModelAndView mav,
-	        @RequestParam(name = "sendInput", required = false) String sendText,
-	        @RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
-		
+			@RequestParam(name = "sendInput", required = false) String sendText,
+			@RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
+
 		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
-		
+
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
 

@@ -90,7 +90,7 @@ public interface GroupDisplayServiceInterface {
 	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id,String seletedValue);
 
 	//結成年度取得(絞り込み用)
-	public List<TeamsForm> selectEstYear();
+	public List<TeamsForm> selectEstYear(String value);
 
 	//ジャンル取得(絞り込み用)
 	public List<TeamsForm> selectGenre();
