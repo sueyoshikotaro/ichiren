@@ -24,7 +24,7 @@
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
-	<div>
+	<div th:unless="${#strings.startsWith(session.user.user_id, 'admin')}">
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
 
