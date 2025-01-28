@@ -723,8 +723,13 @@ public class AdminCtrl {
 
 		// 編集ボタンを押下
 		if (button.equals("編集")) {
+			System.out.println(u);
+			System.out.println(u.getUser_name());
+			System.out.println(u.getSchool_name());
+			System.out.println(u.getEnr_year());
+			System.out.println(u.getUser_id());
+			userDisplayService.teInfoUpdate(u.getUser_name(), u.getSchool_name(), u.getEnr_year(), u.getUser_id());
 
-			userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(), 1);
 
 			// ポップアップを表示するために、画面遷移しないようにする
 			mav.addObject("teUpdateComp", true);
