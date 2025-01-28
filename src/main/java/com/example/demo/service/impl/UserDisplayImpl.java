@@ -25,8 +25,30 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 */
 	@Override
 	public Iterable<UserDisplay> userList(int school_id) {
-
 		return userCrudRepo.userList(school_id);
+	}
+
+	/**
+	 * 湊原
+	 * 絞り込み検索結果
+	 */
+	@Override
+	public Iterable<UserDisplay> userFilterList(int school_id, String est_year) {
+		Iterable<UserDisplay> result = null;
+		if (!est_year.equals("選択なし")) {
+			result = userCrudRepo.userList(est_year);
+			if (school_id != 0) {
+				result = userCrudRepo.userList(school_id, est_year);
+			}
+		} else if (school_id != 0) {
+			result = userCrudRepo.userList(school_id);
+			if (!est_year.equals("選択なし")) {
+				result = userCrudRepo.userList(school_id, est_year);
+			}
+		} else {
+			result = userCrudRepo.userList(school_id, est_year);
+		}
+		return result;
 	}
 
 	/*
@@ -35,7 +57,6 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 */
 	@Override
 	public void DeleteUser(String user_id) {
-
 		userCrudRepo.DeleteUser(user_id);
 	}
 
@@ -45,7 +66,6 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 */
 	@Override
 	public void PassFormat(String user_id) {
-
 		userCrudRepo.PassFormat(user_id);
 	}
 

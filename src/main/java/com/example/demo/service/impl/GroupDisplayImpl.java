@@ -41,7 +41,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 				if (!year.equals("選択なし") && school_id != 0) {
 					result = groupDispCrudRepo.groupList1(year, school_id);
 				}
-				
+
 				if (!genre.equals("選択なし") && year.equals("選択なし") && school_id == 0) {
 					result = groupDispCrudRepo.groupListGenre(genre);
 				}
@@ -51,7 +51,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 				if (genre.equals("選択なし") && year.equals("選択なし") && school_id != 0) {
 					result = groupDispCrudRepo.groupListSchool(school_id);
 				}
-				
+
 				if (!genre.equals("選択なし") && !year.equals("選択なし") && school_id != 0) {
 					result = groupDispCrudRepo.groupList(genre, year, school_id);
 				}
@@ -441,9 +441,15 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ結成年度一覧(絞り込み用)
 	 */
 	@Override
-	public List<TeamsForm> selectEstYear() {
+	public List<TeamsForm> selectEstYear(String value) {
+		List<TeamsForm> result = null;
+		if (value.equals("user")) {
+			result = groupDispCrudRepo.selectuserEstYear();
+		}else if(value.equals("group")) {
+			result = groupDispCrudRepo.selectgroupEstYear();
+		}
+		return result;
 
-		return groupDispCrudRepo.selectEstYear();
 	}
 
 	/**

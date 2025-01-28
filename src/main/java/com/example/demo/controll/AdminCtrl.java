@@ -393,16 +393,32 @@ public class AdminCtrl {
 	 * ユーザ一覧のリクエストハンドラメソッド
 	 * @return ユーザ一覧
 	 */
-
+	@LoginRequired
 	@GetMapping("userList")
-	public ModelAndView userList() {
+	public ModelAndView userList(@RequestParam(name = "selectedSchool", required = false) Integer selectedSchool,
+			@RequestParam(name = "selectedYear", required = false) String selectedYear) {
 
 		//ModelAndViewのインスタンス生成
 		ModelAndView mav = new ModelAndView();
 
-		//サービスのメソッドを呼び出す
-		Iterable<UserDisplay> userList = userDisplayService.userList(school_id);
+		//結成年度取得
+		List<TeamsForm> year = groupDispService.selectEstYear("user");
+		//所属学校
+		List<TeamsForm> school = groupDispService.selectSchool();
 
+		Calendar calendar = Calendar.getInstance();
+		int y = calendar.get(Calendar.YEAR);
+		Iterable<UserDisplay> userList = null;
+		if ((selectedSchool == null && selectedYear == null) || (selectedSchool == 0 && selectedYear.equals("選択なし"))) {
+			userList = userDisplayService.userFilterList(school_id, String.valueOf(y));
+		}else {
+			userList = userDisplayService.userFilterList((int)selectedSchool, selectedYear);
+		}
+		//サービスのメソッドを呼び出す
+		
+
+		mav.addObject("school", school);
+		mav.addObject("year", year);
 		mav.addObject("users", userList);
 		mav.setViewName("admin/userList");
 
@@ -753,7 +769,7 @@ public class AdminCtrl {
 			@RequestParam(name = "selectedGenre", required = false) String selectedGenre) {
 
 		//結成年度取得
-		List<TeamsForm> year = groupDispService.selectEstYear();
+		List<TeamsForm> year = groupDispService.selectEstYear("group");
 		//所属学校
 		List<TeamsForm> school = groupDispService.selectSchool();
 		//ジャンル
@@ -762,7 +778,7 @@ public class AdminCtrl {
 		List<TeamsForm> group = null;
 		Calendar calendar = Calendar.getInstance();
 		int y = calendar.get(Calendar.YEAR);
-		
+
 		if (selectedGenre == null) {
 			
 			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
@@ -1453,7 +1469,7 @@ public class AdminCtrl {
 
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
-
+    
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;

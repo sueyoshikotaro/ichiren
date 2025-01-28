@@ -51,4 +51,7 @@ public interface UserDisplayServiceInterface {
 
 	//居場所選択
 	public List<Room> roomSelect();
+
+	//絞り込み検索結果
+	public Iterable<UserDisplay> userFilterList(int school_id, String est_year);
 }
