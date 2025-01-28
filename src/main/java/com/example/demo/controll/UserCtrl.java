@@ -231,7 +231,7 @@ public class UserCtrl {
 			return mav;
 		} else if (newPass.equals("taskdon1") && confirmPass.equals("taskdon1")) {
 
-			mav.addObject("errMsg", "'taskdon1'は登録できません。");
+			mav.addObject("errMsg", "'taskdon1'はデフォルトパスワードのため、登録できません。");
 			mav.addObject("user_id", user_id); // user_idを再度渡す
 			mav.setViewName("common/passReset");
 
@@ -267,6 +267,7 @@ public class UserCtrl {
 	public ModelAndView deptGroupList(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
 		Boolean deptGroupFlg = (Boolean) session.getAttribute("deptGroupFlg");
+
 		if (deptGroupFlg != null && deptGroupFlg) {
 
 			session.setAttribute("currentPlace", "休憩中");
@@ -318,6 +319,8 @@ public class UserCtrl {
 	public ModelAndView menu(@RequestParam(name = "group_id", required = false) Integer group_id,
 			@RequestParam(name = "user_roll", required = false) String user_roll,
 			ModelAndView mav) {
+
+		System.out.println(session.getAttribute("currentPlace"));
 
 		if (group_id != null && user_roll != null) {
 			//セッションに値を設定
@@ -502,7 +505,7 @@ public class UserCtrl {
 		int groupId = (int) session.getAttribute("groupId");
 
 		System.out.println(t);
-		
+
 		//スコアの足しこみ
 		int score = TaskService.userScore(t.getUser_name(), groupId);
 		score = score + Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level());
