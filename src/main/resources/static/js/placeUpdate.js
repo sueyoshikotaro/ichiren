@@ -2,7 +2,6 @@
 
 //'休憩中'の間リンクを無効化
 function toggleLinkStatus() {
-	// ... (既存のコード)
 	const selectElement = document.querySelector('.place-update');
 	if (!selectElement) return;
 
@@ -23,7 +22,6 @@ function toggleLinkStatus() {
 		}
 	});
 
-	//localStorage.setItem('selectedPlace', selectedOption); // Local Storageに保存
 	sessionStorage.setItem('selectedPlace', selectedOption); // Session Storageに保存
 }
 
@@ -32,7 +30,6 @@ function restoreSelectedPlace() {
 	const selectElement = document.querySelector('.place-update');
 	if (!selectElement) return;
 
-	//const savedPlace = localStorage.getItem('selectedPlace'); // Local Storageから取得                   
 	const savedPlace = sessionStorage.getItem('selectedPlace'); // Session Storageから取得
 
 	if (savedPlace) {
@@ -52,12 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	toggleLinkStatus(); // 初期状態を設定
 });
 
-//document.addEventListener('DOMContentLoaded', () => {
-const selectElement = document.querySelector('.place-update');
-if (selectElement) {
-	selectElement.addEventListener('change', toggleLinkStatus);
-}
-//});
+document.addEventListener('DOMContentLoaded', () => {
+	const selectElement = document.querySelector('.place-update');
+	if (selectElement) {
+		selectElement.addEventListener('change', toggleLinkStatus);
+	}
+});
 
 
 //ログアウト時、居場所を'休憩中'に設定

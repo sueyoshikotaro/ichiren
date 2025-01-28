@@ -19,6 +19,8 @@
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
 
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 	<!-- 共通header呼出し(ユーザ用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerUser">
@@ -66,6 +68,23 @@
 
 	<!--休憩中の間、リンクを無効化-->
 	<script th:src="@{/js/placeUpdate.js}"></script>
+
+	<!--チェックボックスが押されていない間ボタンを無効化-->
+	<script th:inline="javascript">
+		$(document).ready(function () {
+			const deleteButton = $('#deleteButton');
+
+			// 親要素（form要素）にイベントを委譲
+			$('#noticeForm').on('change', '.notice-checkbox', function () {
+				const checkedCount = $('.notice-checkbox:checked').length;
+				deleteButton.prop('disabled', checkedCount === 0);
+			});
+
+			// 初期状態を設定（ページロード時）
+			const checkedCount = $('.notice-checkbox:checked').length;
+			deleteButton.prop('disabled', checkedCount === 0);
+		});
+	</script>
 
 	<!-- bootstrapのjsリンク接続 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
