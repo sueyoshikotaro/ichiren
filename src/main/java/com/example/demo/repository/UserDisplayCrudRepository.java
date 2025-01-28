@@ -75,8 +75,8 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	 * 講師情報編集用のSQL
 	 */
 	@Modifying
-	@Query("update user set user_name = :user_name, school_id = (select school_id from school where school_name = :school_name), enr_year = :enr_year, user_flg = :user_flg where user_id = :user_id")
-	public void teInfoUpdate(String user_id, String user_name, String school_name, String enr_year, int user_flg);
+	@Query("update user set user_name = :user_name, school_id = (select school_id from school where school_name = :school_name), enr_year = :enr_year where user_id = :user_id")
+	public void teInfoUpdate(String user_name, String school_name, String enr_year, String user_id);
 
 	/*
 	 * 向江

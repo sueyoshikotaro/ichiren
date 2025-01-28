@@ -59,14 +59,13 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 		String flg = userCrudRepo.selectById(user_id);
 
-		if (flg != "") {
+		if (flg == "") {
 			System.out.println("重複しないユーザID");
 			return true;
 		} else {
 			System.out.println("重複するユーザID");
 			return false;
 		}
-
 	}
 
 	/*
@@ -134,9 +133,9 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	 * 講師情報編集
 	 */
 	@Override
-	public void teInfoUpdate(String user_id, String user_name, String school_name, String enr_year, int user_flg) {
+	public void teInfoUpdate(String user_name, String school_name, String enr_year, String user_id) {
 
-		userCrudRepo.teInfoUpdate(user_id, user_name, school_name, enr_year, 1);
+		userCrudRepo.teInfoUpdate(user_name, school_name, enr_year, user_id);
 
 	}
 

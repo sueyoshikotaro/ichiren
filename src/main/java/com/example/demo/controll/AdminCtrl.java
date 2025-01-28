@@ -9,8 +9,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -40,6 +38,8 @@ import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
+
+import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者のコントローラ
@@ -575,20 +575,8 @@ public class AdminCtrl {
 	@PostMapping("teInfoRegistConfirm")
 	public ModelAndView dispTeInfoRegistConf(UserDisplay u, ModelAndView mav) {
 
-		if (userDisplayService.userIDCheck(u.getUser_id())) {
-
-			mav.addObject("te", u);
-			mav.setViewName("admin/teInfoRegistConfirm");
-
-		} else {
-
-			// IDが重複していた場合
-			mav.addObject("errMsg", "IDが重複しています。");
-			mav.setViewName("admin/teInfoRegist");
-
-		}
-
 		String userId = u.getUser_id();
+
 		if (!userId.startsWith("te") || userId.length() != 10) {
 
 			mav.addObject("errMsg", "講師IDは「te」 + 8桁の数字です。");
@@ -596,10 +584,18 @@ public class AdminCtrl {
 
 		} else {
 
-			mav.addObject("te", u);
-			mav.setViewName("admin/teInfoRegistConfirm");
-		}
+			if (userDisplayService.userIDCheck(u.getUser_id())) {
 
+				mav.addObject("te", u);
+				mav.setViewName("admin/teInfoRegistConfirm");
+
+			} else {
+
+				// IDが重複していた場合
+				mav.addObject("errMsg", "IDが重複しています。");
+				mav.setViewName("admin/teInfoRegist");
+			}
+		}
 		return mav;
 	}
 
@@ -720,14 +716,17 @@ public class AdminCtrl {
 
 		// 編集ボタンを押下
 		if (button.equals("編集")) {
+			System.out.println(u);
+			System.out.println(u.getUser_name());
+			System.out.println(u.getSchool_name());
+			System.out.println(u.getEnr_year());
+			System.out.println(u.getUser_id());
+			userDisplayService.teInfoUpdate(u.getUser_name(), u.getSchool_name(), u.getEnr_year(), u.getUser_id());
 
-			userDisplayService.teInfoUpdate(u.getUser_id(), u.getUser_name(), u.getSchool_name(), u.getEnr_year(), 1);
 
 			// ポップアップを表示するために、画面遷移しないようにする
 			mav.addObject("teUpdateComp", true);
 			mav.setViewName("admin/teUpdateConfirm");
-
-			return mav;
 
 			//戻るボタンを押下
 
@@ -735,8 +734,10 @@ public class AdminCtrl {
 
 			mav.addObject("te", u);
 			mav.setViewName("admin/teUpdate");
-			return mav;
+
 		}
+
+		return mav;
 	}
 
 	/*
@@ -825,6 +826,10 @@ public class AdminCtrl {
 			//ドロップダウンリストが選択されている場合の処理
 			group = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
 		}
+
+		System.out.println(taskCategory);
+		System.out.println(group);
+		System.out.println();
 
 		mav.addObject("Category", taskCategory);
 		mav.addObject("group", group);

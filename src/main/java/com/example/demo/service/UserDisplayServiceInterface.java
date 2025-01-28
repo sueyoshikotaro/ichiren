@@ -38,7 +38,7 @@ public interface UserDisplayServiceInterface {
 	public Iterable<UserDisplay> teList(int school_id);
 
 	// 講師編集
-	public void teInfoUpdate(String user_id, String user_name, String school_name, String enr_year, int user_flg);
+	public void teInfoUpdate(String user_name, String school_name, String enr_year, String user_id);
 
 	// 講師退職
 	public void teInfoDelete(String user_id);

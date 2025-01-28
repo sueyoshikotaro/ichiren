@@ -60,15 +60,9 @@
 
 				<div class="form-group regist-item">
 					<label class="form-label">入社年月日</label>
-					<input type="text" class="form-control confirmation-field" th:value="${te.enr_year}" readonly>
+					<input type="text" class="form-control confirmation-field" th:value="${te.enr_year}" name="enr_year"
+						readonly>
 				</div>
-
-				<input type="hidden" name="user_id" th:value="${te.user_id}">
-				<input type="hidden" name="user_name" th:value="${te.user_name}">
-				<input type="hidden" name="user_pass" th:value="${te.user_pass}">
-				<input type="hidden" name="school_name" th:value="${te.school_name}">
-				<input type="hidden" name="enr_year" th:value="${te.enr_year}">
-				<input type="hidden" name="user_flg" th:value="${te.user_flg}">
 
 				<button type="button" name="button" value="編集" class="control-btn mini-btn"
 					onclick="teUpdateAndShowPopup()">編集</button>
