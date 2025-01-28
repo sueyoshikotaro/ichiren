@@ -76,6 +76,12 @@ public class ChatServiceImpl implements ChatServiceInterface {
 		return chatCrud.leaderSetChatUser(school_id);
 	}
 	
+	//チャット相手検索
+	@Override
+	public List<GroupDetailView> AdminChatPartnerSearch(int school_id, String search) {
+
+		return chatCrud.AdminChatPartnerSearch(school_id, search);
+	}
 	
 	
 	/**

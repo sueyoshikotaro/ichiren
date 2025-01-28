@@ -1481,7 +1481,7 @@ public class AdminCtrl {
 		//チャット相手を検索し、Listに格納する
 	    List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
 	    
-	    mav.addObject("chatPartner", chatPartner);
+	    mav.addObject("chatPartnerUser", chatPartner);
 	    mav.setViewName("common/chat");
 	    
 	    return mav;
