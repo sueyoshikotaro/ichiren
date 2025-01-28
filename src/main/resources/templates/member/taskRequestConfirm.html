@@ -61,7 +61,7 @@
 			<textarea th:text="${taskRequest.req_reason}" class="form-control" readonly></textarea>
 		</div>
 
-		<form th:action="taskRegistComplete" method="post">
+		<form th:action="taskRequestComplete" method="post">
 			<input type="hidden" name="req_name" th:value="${taskRequest.req_name}">
 			<input type="hidden" name="req_category" th:value="${taskRequest.req_category}">
 			<input type="hidden" name="req_content" th:value="${taskRequest.req_content}">
