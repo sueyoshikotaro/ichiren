@@ -29,7 +29,7 @@
 
 		<h1 class="app-title">タスクどん</h1>
 
-		<h2>ログイン</h2>
+		<h2 style="margin-top: 15px;">ログイン</h2>
 
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
@@ -37,7 +37,7 @@
 		<!--入力情報(必須)-->
 		<form th:action="@{/taskdon/user/login}" method="post">
 			<!--ID入力欄-->
-			<div class="form-group">
+			<div class="form-group" style="margin-top: 15px;">
 				<!--アイコン画像(bootstrap引用)-->
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
 					viewBox="0 0 16 16">
@@ -48,12 +48,13 @@
 				<input type="text" id="user_id" name="user_id" class="form-control" aria-labelledby="passwordHelpBlock"
 					placeholder="例:st○○○○○○○○" th:value="${user_pass}" required>
 			</div>
+			
 			<div id="passwordHelpBlock" class="form-text"> <!--入力欄下の注釈-->
 				学生(st+学籍番号),管理者(te+8桁の英数字).
 			</div>
 
 			<!--PASS入力欄-->
-			<div class="form-group">
+			<div class="form-group" style="margin-top: 20px;">
 				<!--アイコン画像(bootstrap引用)-->
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key"
 					viewBox="0 0 16 16">
@@ -90,12 +91,13 @@
 					</span>
 				</div>
 			</div>
+			
 			<div id="passwordHelpBlock" class="form-text"> <!--入力欄下の注釈-->
 				8桁以上,16桁未満の英数字.
 			</div>
 
 			<!--ログインボタン-->
-			<div class="button-group">
+			<div class="button-group" style="margin-top: 20px;">
 				<button type="submit" class="login-button">ログイン</button>
 			</div>
 		</form>

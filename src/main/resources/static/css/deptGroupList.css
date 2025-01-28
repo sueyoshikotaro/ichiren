@@ -1,6 +1,17 @@
 @charset "UTF-8";
 /*所属グループ一覧専用*/
 
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.hstack {
+	justify-content: center;
+	width: 100%;
+}
+
 /*グループテキストの下線*/
 .underline {
 	margin-top: -10px;
@@ -9,6 +20,7 @@
 
 /*繰返し内容*/
 .hstack.gap-3 {
+	border-top: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
 }
 
@@ -34,6 +46,7 @@
 	font-size: 20px;
 	font-weight: bold;
 	border: 2px solid black;
+	border-radius: 10px;
 	color: black;
 	cursor: pointer;
 	position: relative;
