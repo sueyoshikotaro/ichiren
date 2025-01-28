@@ -826,9 +826,6 @@ public class AdminCtrl {
 			taskCategory = TaskService.selectCategory(Integer.parseInt(gmdv.getGroup_id()));
 			selectedValue = "選択なし";
 			//ドロップダウンリストが選択されていない場合の処理
-			System.out.println(gmdv.getUser_id());
-			System.out.println(gmdv.getGroup_id());
-			System.out.println(selectedValue);
 			group = groupDispService.memberDetail(gmdv.getUser_id(), gmdv.getGroup_id(), selectedValue);
 		} else {
 			taskCategory = TaskService.selectCategory((int) groupId);
