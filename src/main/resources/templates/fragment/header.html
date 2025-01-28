@@ -132,12 +132,14 @@
 								<li class="screen-btn"><a class="dropdown-item"
 										th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
 								</li>
-
-								<li class="screen-btn"><a class="dropdown-item"
-										th:onclick="|location.href='@{chat}'|">チャット</a></li>
-								<!--未実装-->
-
-								<!--役職判断処理(管理者のBOSS)-->
+								
+								<!--役職判断処理(管理者のBOSSの場合非表示)-->
+								<div th:if="${#strings.startsWith(session.user.user_id, 'te')}">
+									<li class="screen-btn"><a class="dropdown-item"
+											th:onclick="|location.href='@{chat}'|">チャット</a></li>
+								</div>
+								
+								<!--役職判断処理(管理者のBOSSの場合表示)-->
 								<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
 									<li class="screen-btn"><a class="dropdown-item"
 											th:onclick="|location.href='@{teList}'|">講師一覧</a>
