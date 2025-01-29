@@ -17,7 +17,7 @@
 			<div class="container-fluid">
 				<form th:action="@{/taskdon/user/menu}" method="post">
 					<input type="image" class="iconLink menu-link" th:src="@{/img/icon.png}" alt="icon" width="48"
-						height="48">
+						height="48" style="margin-bottom: -6.5px;">
 				</form>
 				<span class="nav-title">タスクどん</span>
 
@@ -52,7 +52,7 @@
 								<!--役職判断処理-->
 								<div th:if="${session.user_roll} == 'リーダ'">
 									<li class="screen-btn"><a class="dropdown-item menu-link"
-											th:onclick="|location.href='@{memberList}'|">メンバ一覧</a><!--未実装-->
+											th:onclick="|location.href='@{memberList}'|">メンバ一覧</a>
 									</li>
 								</div>
 
@@ -65,12 +65,11 @@
 								<!--役職判断処理-->
 								<div th:if="${session.user_roll} == 'リーダ'">
 									<li class="screen-btn"><a class="dropdown-item menu-link"
-											th:onclick="|location.href='@{noticeRegist}'|">連絡事項作成</a></li><!--未実装-->
+											th:onclick="|location.href='@{noticeRegist}'|">連絡事項作成</a></li>
 								</div>
 
 								<li class="screen-btn"><a class="dropdown-item menu-link"
 										th:onclick="|location.href='@{chat}'|">チャット</a></li>
-								<!--未実装-->
 
 								<li>
 									<hr class="dropdown-divider">
