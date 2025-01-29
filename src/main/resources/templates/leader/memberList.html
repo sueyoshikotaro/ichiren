@@ -46,8 +46,8 @@
 			<div class="group-detail-text-view">
 				<!-- グループ全体の進捗率(バー&パーセント)を表示する -->
 				<span class="form-label">全体進捗</span>
-				<div class="progress group-progress" role="progressbar">
-					<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
+				<div class="progress group-progress all-progress" role="progressbar">
+					<div class="progress-bar progress-bar-striped progress-bar-animated"
 						th:style="'width:'+ ${progress}+'%'"><label class="var-text group-progress-text"
 							th:text="${progress}+'%'"></div>
 				</div>
@@ -79,7 +79,7 @@
 
 				<!-- メンバの進捗率(バー&パーセント)を表示する -->
 				<span class="form-label">進捗</span>
-				<div class="progress group-progress" role="progressbar">
+				<div class="progress group-progress individual-progress" role="progressbar">
 					<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
 						th:style="'width:'+ ${group.user_progress}+'%'"><label class="var-text group-progress-text"
 							th:text="${group.user_progress}+'%'"></div>
