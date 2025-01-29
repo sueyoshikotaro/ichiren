@@ -223,9 +223,10 @@
 	margin: 0 10px;
 }
 
+/*todoリスト用*/
 .list-open-btn {
 	position: fixed;
-	top: 98px;
+	top: 85px;
 	right: 20px;
 	padding: 10px 20px;
 	border: none;

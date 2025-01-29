@@ -38,10 +38,9 @@
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2>ToDoリスト</h2>
-		<h3>
-			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-				class="bi bi-clipboard-check" viewBox="0 0 16 16" style="margin-right: -15px; margin-bottom: 4px;">
+		<h2>ToDoリスト
+			<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+				class="bi bi-clipboard-check" viewBox="0 0 16 16" style="margin-bottom: 6px; margin-left: -6px;">
 				<path fill-rule="evenodd"
 					d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0" />
 				<path
@@ -49,9 +48,10 @@
 				<path
 					d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
 			</svg>
-			【内容編集】
-		</h3>
+		</h2>
+		<h3>【内容編集】</h3>
 
+		<!--開閉ボタン(BootStrap)-->
 		<button th:if="${button != null}" type="button" data-bs-toggle="offcanvas"
 			data-bs-target="#offcanvasExampleSide" aria-controls="offcanvasExample" class="list-open-btn">
 			<span>LIST</span>
@@ -69,7 +69,7 @@
 				<div class="mb-3 school-info-text">
 					<span class="form-label">内容</span>
 					<input type="text" th:value="${todo.tdlist_content}" class="form-control" name="tdlist_content"
-						style="height: 50px;" required>
+						required>
 				</div>
 
 				<div class="row">

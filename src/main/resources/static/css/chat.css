@@ -1,0 +1,48 @@
+@charset "UTF-8";
+/* チャット専用 */
+
+/*相手一覧の開閉用ボタン(ToDoとほぼ同じ)*/
+.subject-open-btn {
+	position: fixed;
+	top: 85px;
+	right: 20px;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 50px;
+	background-color: #333333;
+	color: #fff;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+}
+
+.subject-open-btn:hover {
+	transform: scale(0.9);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.subject-open-btn:active {
+	transform: scale(0.8);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/*チャット欄*/
+.chat-main-content {
+	background-image: url(../img/chat-background.png);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	min-width: 344px;
+	max-width: 756px;
+	height: 520px;
+	margin-top: 20px;
+
+	/* 背景の際デザイン部分 */
+	border-radius: 10px;
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+/*送信欄*/
+.send-group {
+	margin-top: 6px;
+	border-radius: 14px;
+}
