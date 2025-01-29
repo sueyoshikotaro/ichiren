@@ -135,6 +135,7 @@ public class AdminCtrl {
 	 * 学校情報詳細画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("schoolDetails")
 	public ModelAndView schoolDetails(ModelAndView mav, Model model) {
 
@@ -151,6 +152,7 @@ public class AdminCtrl {
 	 * 学校情報編集、削除、追加画面の表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("schoolDetailsChange")
 	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
 			@RequestParam("flexRadioDefault") int room_id, @RequestParam("before_room_name") String room_name,
@@ -197,6 +199,7 @@ public class AdminCtrl {
 	 * 学校情報編集確認画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("schoolEditConfirm")
 	public ModelAndView schoolEditConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
@@ -229,6 +232,7 @@ public class AdminCtrl {
 	 * 学校情報編集完了画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("schoolEditComp")
 	public ModelAndView schoolEditComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav) {
 
@@ -283,6 +287,7 @@ public class AdminCtrl {
 	 * 学校情報追加確認画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("schoolAddConfirm")
 	public ModelAndView schoolAddConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
@@ -312,6 +317,7 @@ public class AdminCtrl {
 	 * 学校情報追加完了
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("schoolAddComp")
 	public ModelAndView schoolAddComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
@@ -352,6 +358,7 @@ public class AdminCtrl {
 	 * 学校情報削除画面の戻るボタンを押下
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("schoolDeleteConfirm")
 	public ModelAndView schoolDeleteConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
@@ -373,6 +380,7 @@ public class AdminCtrl {
 	 * 学校情報削除完了
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("schoolDeleteComp")
 	public ModelAndView schoolDeleteComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
 			Model model) {
@@ -395,7 +403,7 @@ public class AdminCtrl {
 	 * ユーザ一覧のリクエストハンドラメソッド
 	 * @return ユーザ一覧
 	 */
-
+	@LoginRequired
 	@GetMapping("userList")
 	public ModelAndView userList() {
 
@@ -417,6 +425,7 @@ public class AdminCtrl {
 	 * ユーザ削除確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("userDelete")
 	public ModelAndView userDelete(UserDisplay u, ModelAndView mav) {
 
@@ -430,6 +439,7 @@ public class AdminCtrl {
 	 * ユーザ削除完了画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("userDeleteConfirm")
 	public ModelAndView userDeleteConfirm(UserDisplay u, ModelAndView mav) {
 
@@ -447,6 +457,7 @@ public class AdminCtrl {
 	 * パスワード初期化確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("passClear")
 	public ModelAndView passClear(UserDisplay u, ModelAndView mav) {
 
@@ -462,6 +473,7 @@ public class AdminCtrl {
 	 * パスワード初期化完了後の画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("passClearConfirm")
 	public ModelAndView passClearConfirm(UserDisplay u, ModelAndView mav) {
 
@@ -480,6 +492,7 @@ public class AdminCtrl {
 	 * ユーザ作成画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("userRegist")
 	public String userRegist() {
 
@@ -491,6 +504,7 @@ public class AdminCtrl {
 	 * ユーザ作成確認画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("userRegistConfirm")
 	public ModelAndView userRegistConfirm(@RequestParam("csvFile") MultipartFile csvFile, ModelAndView mav) {
 		// CSVファイルを読み込み、ユーザ情報を取得する
@@ -527,6 +541,7 @@ public class AdminCtrl {
 	 * 新規ユーザ作成完了
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("userRegistComp")
 	public ModelAndView userRegistComplete(@RequestParam("button") String button,
 			@RequestParam("user_id") String[] userIds,
@@ -562,6 +577,7 @@ public class AdminCtrl {
 	 * 新規講師登録画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("teInfoRegist")
 	public String dispRegist() {
 
@@ -574,6 +590,7 @@ public class AdminCtrl {
 	 * @param u
 	 * @param mav
 	 */
+	@LoginRequired
 	@PostMapping("teInfoRegistConfirm")
 	public ModelAndView dispTeInfoRegistConf(UserDisplay u, ModelAndView mav) {
 
@@ -612,6 +629,7 @@ public class AdminCtrl {
 	 * @param mav 
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("teInfoRegistComp")
 	public ModelAndView teInfoRegistComp(@RequestParam("button") String button, UserDisplay u, ModelAndView mav,
 			Model model) {
@@ -642,6 +660,7 @@ public class AdminCtrl {
 	 * 講師一覧画面を表示するリクエストハンドラメソッド
 	 * @return 講師一覧
 	 */
+	@LoginRequired
 	@GetMapping("teList")
 	public ModelAndView dispTeList(ModelAndView mav, UserDisplay u) {
 
@@ -658,6 +677,7 @@ public class AdminCtrl {
 	 * 講師退職確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("teDeleteConfirm")
 	public ModelAndView dispTeDelete(UserDisplay u, ModelAndView mav) {
 
@@ -672,6 +692,7 @@ public class AdminCtrl {
 	 * 講師情報退職完了画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("teDeleteComp")
 	public ModelAndView TeDeleteComp(UserDisplay u, ModelAndView mav) {
 
@@ -689,6 +710,7 @@ public class AdminCtrl {
 	 * 講師編集画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("teUpdate")
 	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
 
@@ -704,6 +726,7 @@ public class AdminCtrl {
 	 * 講師情報編集確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("teUpdateConfirm")
 	public ModelAndView dispTeUpdateConfirm(UserDisplay u, ModelAndView mav) {
 
@@ -718,18 +741,14 @@ public class AdminCtrl {
 	 * 講師情報編集完了画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("teUpdateComp")
 	public ModelAndView teUpdateComp(@RequestParam("button") String button, UserDisplay u, ModelAndView mav) {
 
 		// 編集ボタンを押下
 		if (button.equals("編集")) {
-			System.out.println(u);
-			System.out.println(u.getUser_name());
-			System.out.println(u.getSchool_name());
-			System.out.println(u.getEnr_year());
-			System.out.println(u.getUser_id());
+			
 			userDisplayService.teInfoUpdate(u.getUser_name(), u.getSchool_name(), u.getEnr_year(), u.getUser_id());
-
 
 			// ポップアップを表示するために、画面遷移しないようにする
 			mav.addObject("teUpdateComp", true);
@@ -759,11 +778,6 @@ public class AdminCtrl {
 			@RequestParam(name = "selectedYear", required = false) String selectedYear,
 			@RequestParam(name = "selectedGenre", required = false) String selectedGenre) {
 
-		System.out.println(selectedSchool);
-		System.out.println(selectedYear);
-		System.out.println(selectedGenre);
-		System.out.println(school_id);
-
 		//結成年度取得
 		List<TeamsForm> year = groupDispService.selectEstYear();
 		//所属学校
@@ -774,14 +788,13 @@ public class AdminCtrl {
 		List<TeamsForm> group = null;
 		Calendar calendar = Calendar.getInstance();
 		int y = calendar.get(Calendar.YEAR);
-		System.out.println(y);
+
 		if (selectedGenre == null) {
 			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
 		} else if (selectedSchool != null || selectedYear != null) {
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
+			
 			group = groupDispService.groupList(selectedYear, selectedGenre, (int) selectedSchool);
 		}
-		System.out.println(group);
 
 		mav.addObject("school", school);
 		mav.addObject("genre", genre);
@@ -797,6 +810,7 @@ public class AdminCtrl {
 	 * グループ詳細画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupDetail")
 	public ModelAndView groupDetail(ModelAndView mav,
 			GroupMemberDeleteView g) {
@@ -854,6 +868,7 @@ public class AdminCtrl {
 	 * タスク詳細閲覧画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("taskDeails")
 	public ModelAndView taskDeails(ModelAndView mav, TaskForm t) {
 
@@ -871,6 +886,7 @@ public class AdminCtrl {
 	 * グループ編集画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupEdit")
 	public ModelAndView groupEdit(ModelAndView mav, TeamsDisplay t,
 			@RequestParam(name = "user_id", required = false) String[] user_id,
@@ -915,6 +931,7 @@ public class AdminCtrl {
 	 * グループ編集確認画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupEditConfirm")
 	public ModelAndView groupEditConfirm(ModelAndView mav, TeamsDisplay t,
 			@RequestParam(name = "check", required = false) String[] check,
@@ -966,6 +983,7 @@ public class AdminCtrl {
 	 * グループ編集完了
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupEditComp")
 	public ModelAndView groupEditComp(ModelAndView mav, TeamsDisplay t,
 			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
@@ -996,6 +1014,7 @@ public class AdminCtrl {
 	 * グループメンバ削除確認画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupMemberDelDisp")
 	public ModelAndView groupMemberDeleteDisp(ModelAndView mav,
 			GroupMemberDeleteView g) {
@@ -1014,14 +1033,13 @@ public class AdminCtrl {
 	 * グループメンバ削除確認画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupMemberDeleteConfirm")
 	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
 			GroupMemberDeleteView g, ModelAndView mav) {
 
 		//グループメンバ削除確認画面のテーブルを表示する
 		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
-
-		System.out.println(group);
 
 		for (int i = 0; i < group.size(); i++) {
 
@@ -1053,18 +1071,11 @@ public class AdminCtrl {
 	}
 
 	/**
-	 * グループ解散確認画面を表示する
-	 * @return
-	 */
-	public String groupDeleteConfirm() {
-		return "groupDeleteConfirm";
-	}
-
-	/**
 	 * 末吉
 	 * グループ作成画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupCreate")
 	public ModelAndView groupCreate(ModelAndView mav,
 			@RequestParam(name = "check", required = false) String[] check,
@@ -1149,6 +1160,7 @@ public class AdminCtrl {
 	 * ユーザ選択画面を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupMemberSelect")
 	public ModelAndView groupMemberSelect(ModelAndView mav,
 			@RequestParam(name = "selectedUserId", required = false) String selectedUserId,
@@ -1207,6 +1219,7 @@ public class AdminCtrl {
 	 * グループ作成確認画面
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupCreateConfirm")
 	public ModelAndView groupCreateConfirm(ModelAndView mav,
 			@RequestParam(name = "check", required = false) String[] check,
@@ -1281,6 +1294,7 @@ public class AdminCtrl {
 	 * グループ作成完了
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupCreateComp")
 	public ModelAndView groupCreateComplete(ModelAndView mav, TeamsDisplay teamsDisplay,
 			@RequestParam(name = "group_name", required = false) String group_name,
@@ -1325,6 +1339,7 @@ public class AdminCtrl {
 	 * グループメンバ追加
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupMemberAdd")
 	public ModelAndView groupMemberAdd(ModelAndView mav, TeamsDisplay teamsDisplay) {
 
@@ -1340,6 +1355,7 @@ public class AdminCtrl {
 	 * グループメンバ追加確認
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupMemberAddConfirm")
 	public ModelAndView groupMemberAddConfirm(ModelAndView mav, TeamsDisplay teamsDisplay,
 			@RequestParam(name = "selectedUserId", required = false) String[] user_id,
@@ -1378,13 +1394,11 @@ public class AdminCtrl {
 	 * 末吉
 	 * グループメンバ追加完了
 	 */
+	@LoginRequired
 	@PostMapping("groupMemberAddComp")
 	public ModelAndView groupMemberAddComp(ModelAndView mav,
 			@RequestParam(name = "memberUser_id", required = false) String[] user_id,
 			@RequestParam(name = "group_id", required = false) int group_id) {
-
-		System.out.println(user_id);
-		System.out.println(group_id);
 
 		session.removeAttribute("button");
 
@@ -1404,15 +1418,13 @@ public class AdminCtrl {
 	 * グループ解散確認
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupDissConfirm")
 	public ModelAndView groupDelete(ModelAndView mav, TeamsDisplay teamsDisplay,
 			@RequestParam("user_id") String[] user_id,
 			@RequestParam("user_name") String[] user_name,
 			@RequestParam("user_roll") String[] user_roll) {
 
-		System.out.println("kaisann");
-		System.out.println(teamsDisplay.getGroup_id());
-		System.out.println(teamsDisplay.getGroup_name());
 		for (String id : user_id) {
 			System.out.println(id);
 
@@ -1450,6 +1462,7 @@ public class AdminCtrl {
 	 * グループ解散完了
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("groupDissComp")
 	public ModelAndView groupDissComp(ModelAndView mav,
 			@RequestParam(name = "group_id", required = false) int group_id) {
@@ -1467,6 +1480,7 @@ public class AdminCtrl {
 	 * チャット画面
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
 
@@ -1483,6 +1497,7 @@ public class AdminCtrl {
 	 * チャット相手検索
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("chatSearch")
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
@@ -1500,6 +1515,7 @@ public class AdminCtrl {
 	 * チャット画面にチャット履歴を表示する
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
@@ -1516,6 +1532,7 @@ public class AdminCtrl {
 	 * チャット送信
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("sendChat")
 	public ModelAndView sendChat(ModelAndView mav,
 			@RequestParam(name = "sendInput", required = false) String sendText,
