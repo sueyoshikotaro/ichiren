@@ -88,7 +88,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 末吉
 	 * メンバが受け持つ全てのタスクを取得
 	 */
-	@Query("select * from task t join user_detail ud on t.user_id = ud.user_id where t.user_id = :user_id and t.group_id = :group_id")
+	@Query("select * from task t join user_detail ud on t.user_id = ud.user_id where ud.user_id = :user_id and ud.group_id = :group_id")
 	public List<TaskForm> taskList(String user_id, int group_id);
 
 	/*
@@ -184,6 +184,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Query("update user_detail set score = :scoreResult, user_progress = :userProgressResult where user_id = :user_id and group_id = :group_id")
 	public void updateScore(String user_id, int group_id, int scoreResult, int userProgressResult);
 
+	/**
+	 * 末吉
+	 * タスクの進捗を変更したユーザの進捗更新
+	 */
+	@Modifying
+	@Query("update user_detail set user_progress = :userProgressResult where user_id = :user_id and group_id = :group_id")
+	public void updateProgress(int group_id, String user_id, int userProgressResult);
+	
 	/**
 	 * 末吉
 	 * all_progressを更新する

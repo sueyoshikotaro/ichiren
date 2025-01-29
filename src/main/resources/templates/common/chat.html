@@ -101,8 +101,9 @@
 						<!--リーダ、メンバを表示-->
 						<span>リーダ、メンバ</span>
 						<li th:each="chat : ${chatPartnerMember}" class="list-group-item list-group-item-action"
-							th:text="${chat.user_name + ' (' + chat.group_name + ')'}" th:attr="data-user-id=${chat.user_id}">
-							
+							th:text="${chat.user_name + ' (' + chat.group_name + ')'}"
+							th:attr="data-user-id=${chat.user_id}">
+
 						</li>
 					</ul>
 				</form>
@@ -113,19 +114,29 @@
 		<div class="chat-column">
 
 			<!--チャット欄(予定)-->
+			<div>
+
+			</div>
 			<!--チャット相手名表示(ヘッダー？)-->
 			<div id="chat-history-container"
 				style="border: black solid 3px; border-radius: 4px; height: 500px; width: 350px; margin-top: 10px; margin-bottom: 10px; background-color: beige;">
 				<!--チャット相手のメッセージを表示する場所-->
 				<div class="chat-history" th:each="chat : ${chatHistory}">
+					<span th:text="${#dates.format(chat.msg_date, 'dd') + '日'}"></span>
 					<div th:if="${session.user_id} == ${chat.send_by}">
-						<span>あなた</span>
-						<span th:text="${chat.msg}"></span>
+						<div>
+							<span>あなた</span>
+							<span th:text="${chat.msg}"></span>
+						</div>
+						<span th:text="${#dates.format(chat.msg_date, 'HH:mm')}"></span>
 					</div>
 
 					<div th:if="${session.user_id} != ${chat.send_by}">
-						<span th:text="${chat.user_name}"></span>
-						<span th:text="${chat.msg}"></span>
+						<div>
+							<span th:text="${chat.user_name}"></span>
+							<span th:text="${chat.msg}"></span>
+						</div>
+						<span th:text="${#dates.format(chat.msg_date, 'HH:mm')}"></span>
 					</div>
 				</div>
 			</div>

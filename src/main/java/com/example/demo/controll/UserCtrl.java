@@ -340,7 +340,7 @@ public class UserCtrl {
 
 			// エンティティの中の値をそれぞれフィールドに設定
 			school_id = userEntity.getSchool_id();
-			group_id = (int) session.getAttribute("groupId");
+			this.group_id = (int) session.getAttribute("groupId");
 			user_id = userEntity.getUser_id();
 			user_roll = (String) session.getAttribute("user_roll");
 		}
@@ -470,7 +470,10 @@ public class UserCtrl {
 		mav.getModel().clear();
 		if (progress != null) {
 			TaskService.taskUpProgress(task_id, Integer.valueOf(progress));
-
+			
+			//メンバの進捗更新
+			groupDispService.updateProgress(user_id, group_id);
+			
 			//全体進捗更新
 			groupDispService.allProgress(group_id);
 		}
@@ -531,8 +534,6 @@ public class UserCtrl {
 	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
 		//セッション情報の取得
 		int groupId = (int) session.getAttribute("groupId");
-
-		System.out.println(t);
 
 		//スコアの足しこみ
 		int score = TaskService.userScore(t.getUser_name(), groupId);
@@ -609,7 +610,6 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskAppComplete")
 	public ModelAndView taskAppComplete(ModelAndView mav, TaskView t) {
-		System.out.println(t);
 		//日付型定義
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		//変数定義
@@ -844,8 +844,6 @@ public class UserCtrl {
 			@RequestParam(name = "button") String button,
 			@ModelAttribute NoticeViewForm n,
 			@RequestParam(name = "title") String title) throws ParseException {
-
-		System.out.println(title);
 
 		// ログインユーザのエンティティを取得
 		User userEntity = (User) session.getAttribute("user");

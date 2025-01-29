@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -38,8 +40,6 @@ import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者のコントローラ
@@ -732,11 +732,6 @@ public class AdminCtrl {
 
 		// 編集ボタンを押下
 		if (button.equals("編集")) {
-			System.out.println(u);
-			System.out.println(u.getUser_name());
-			System.out.println(u.getSchool_name());
-			System.out.println(u.getEnr_year());
-			System.out.println(u.getUser_id());
 			userDisplayService.teInfoUpdate(u.getUser_name(), u.getSchool_name(), u.getEnr_year(), u.getUser_id());
 
 
@@ -842,10 +837,6 @@ public class AdminCtrl {
 			//ドロップダウンリストが選択されている場合の処理
 			group = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
 		}
-
-		System.out.println(taskCategory);
-		System.out.println(group);
-		System.out.println();
 
 		mav.addObject("Category", taskCategory);
 		mav.addObject("group", group);
