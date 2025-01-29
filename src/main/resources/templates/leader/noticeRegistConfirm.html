@@ -52,8 +52,7 @@
 			<input type="hidden" name="send_by" th:value="${notice.send_by}">
 			<input type="hidden" name="group_id" th:value="${notice.group_id}">
 
-			<button type="button" name="button" value="登録" class="Confirm-btn"
-				onclick="noticeRegistAndShowPopup()">登録</button>
+			<button type="submit" name="button" value="登録" class="Confirm-btn">登録</button>
 		</form>
 
 		<!-- ポップアップ -->
@@ -65,7 +64,6 @@
 					<form th:action="@{menu}" method="post">
 						<button type="submit" name="button" value="メニュー" class="btn menu-btn">メニュー</button>
 					</form>
-
 				</div>
 			</div>
 		</div>
@@ -73,26 +71,6 @@
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-
-	<script>
-		function noticeRegistAndShowPopup() {
-			// フォーム要素を取得
-			var form = document.querySelector('form');
-
-			// コントローラメソッドを呼び出すためにフォームを送信
-			form.action = 'noticeRegistComp'; // コントローラメソッドの実際のURLに置き換えてください
-			form.method = 'post';
-
-			// buttonパラメータを追加
-			var buttonInput = document.createElement('input');
-			buttonInput.type = 'hidden';
-			buttonInput.name = 'button';
-			buttonInput.value = '登録'; // または '戻る' など必要な値を設定
-			form.appendChild(buttonInput);
-
-			form.submit();
-		}
-	</script>
 
 	<!--ポップアップを表示するためのコード-->
 	<script th:inline="javascript">

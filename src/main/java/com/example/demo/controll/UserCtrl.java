@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -41,8 +45,6 @@ import com.example.demo.service.NoticeServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.TodoServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/taskdon/user")
@@ -101,10 +103,15 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@GetMapping("logout")
-	public String logout() {
+	public String logout(HttpServletResponse response) {
 
 		// ログアウト時に居場所を'休憩中'に設定するフラグをセッションに保存
 		session.setAttribute("logoutFlg", true);
+
+		// Cookie情報を削除
+		Cookie cookie = new Cookie("chatPartnerUserId", null);
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
 
 		session.invalidate();
 
@@ -326,7 +333,16 @@ public class UserCtrl {
 			//セッションに値を設定
 			session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ名,担当者検索用
 			session.setAttribute("groupId", group_id); //グループID,
-			session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用
+			session.setAttribute("user_roll", user_roll); //役職,ユーザ種別分類用]
+
+			// ログインユーザのエンティティを取得
+			User userEntity = (User) session.getAttribute("user");
+
+			// エンティティの中の値をそれぞれフィールドに設定
+			school_id = userEntity.getSchool_id();
+			group_id = (int) session.getAttribute("groupId");
+			user_id = userEntity.getUser_id();
+			user_roll = (String) session.getAttribute("user_roll");
 		}
 		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
 
@@ -347,6 +363,15 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定
+		school_id = userEntity.getSchool_id();
+		group_id = (int) session.getAttribute("groupId");
+		user_id = userEntity.getUser_id();
+		user_roll = (String) session.getAttribute("user_roll");
 
 		return "common/menuUser";
 	}
@@ -445,6 +470,9 @@ public class UserCtrl {
 		mav.getModel().clear();
 		if (progress != null) {
 			TaskService.taskUpProgress(task_id, Integer.valueOf(progress));
+
+			//全体進捗更新
+			groupDispService.allProgress(group_id);
 		}
 		mav.addObject("task", TaskService.taskDetails(task_id, (int) session.getAttribute("groupId")));
 		mav.setViewName("common/taskDetails");
@@ -814,9 +842,10 @@ public class UserCtrl {
 	@PostMapping("noticeRegistComp")
 	public ModelAndView noticeRegistComp(ModelAndView mav,
 			@RequestParam(name = "button") String button,
-			NoticeViewForm n) throws ParseException {
+			@ModelAttribute NoticeViewForm n,
+			@RequestParam(name = "title") String title) throws ParseException {
 
-		System.out.println(n);
+		System.out.println(title);
 
 		// ログインユーザのエンティティを取得
 		User userEntity = (User) session.getAttribute("user");
@@ -831,7 +860,6 @@ public class UserCtrl {
 
 		//登録ボタンを押下
 		if (button.equals("登録")) {
-
 			send_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(sdf);
 			NoticeService.noticeRegist(n.getTitle(), n.getContact_msg(), send_date,
 					0, user_id, (int) session.getAttribute("groupId"));
@@ -973,14 +1001,14 @@ public class UserCtrl {
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
 
-		// ログインユーザのエンティティを取得
-		User userEntity = (User) session.getAttribute("user");
-
-		// エンティティの中の値をそれぞれ取得
-		school_id = userEntity.getSchool_id();
-		group_id = (int) session.getAttribute("groupId");
-		user_id = userEntity.getUser_id();
-		user_roll = (String) session.getAttribute("user_roll");
+//		// ログインユーザのエンティティを取得
+//		User userEntity = (User) session.getAttribute("user");
+//
+//		// エンティティの中の値をそれぞれ取得
+//		school_id = userEntity.getSchool_id();
+//		group_id = (int) session.getAttribute("groupId");
+//		user_id = userEntity.getUser_id();
+//		user_roll = (String) session.getAttribute("user_roll");
 
 		//リーダの場合は管理者とグループメンバすべてを格納
 		if (user_roll.equals("リーダ")) {
@@ -996,12 +1024,12 @@ public class UserCtrl {
 
 		//ログインしているユーザの分のデータはListから除外する
 		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
-				.filter(chat -> !chat.getUser_id().equals(userEntity.getUser_id()))
+				.filter(chat -> !chat.getUser_id().equals(user_id))
 				.collect(Collectors.toList());
 
 		mav.addObject("chatPartnerMember", filteredChatPartner);
 		mav.setViewName("common/chat");
-		
+
 		return mav;
 	}
 
