@@ -24,7 +24,7 @@
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
-	<div>
+	<div th:unless="${#strings.startsWith(session.user.user_id, 'admin')}">
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
 
@@ -73,6 +73,8 @@
 				<input type="date" class="form-control regist-field" id="enr_year" name="enr_year" min="1900-01-01"
 					max="9999-12-31" required>
 			</div>
+			
+			<input type="hidden" id="user_id" name="user_id" th:value="user_id">
 
 			<button type="submit" class="control-btn mini-btn">確認</button>
 

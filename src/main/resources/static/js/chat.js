@@ -38,9 +38,7 @@ $(document).ready(function() {
 						listItem.attr('data-user-id', $(this).attr('data-user-id')); // ここで属性を設定しています
 
 						listItem.click(function() {
-							console.log('リストアイテムがクリックされました');
 							var userId = $(this).attr('data-user-id');
-							console.log(userId);
 							getChatHistory(userId);
 						});
 
@@ -75,8 +73,6 @@ function chatSearch() {
 
 				var chatPartnerList = data;
 
-				console.log(chatPartnerList);
-				
 				// チャット相手一覧を表示する
 				var chatPartnerListElement = $('#chatPartnerList');
 
@@ -96,7 +92,6 @@ function chatSearch() {
 
 						listItem.click(function() {
 							var userId = $(this).attr('data-user-id');
-							console.log(userId);
 							getChatHistory(userId);
 						});
 
@@ -153,7 +148,6 @@ function sendMessage() {
 	//Cookie情報を取得
 	var chatPartnerUserId = getCookie("chatPartnerUserId");
 
-	console.log(sendInput);
 	// コントロールを呼び出す
 	$.ajax({
 		type: 'POST',
@@ -161,7 +155,6 @@ function sendMessage() {
 		data: { sendInput: sendInput, chatPartnerUserId: chatPartnerUserId },
 		success: function(data) {
 			console.log("チャット送信しましたーーーーーーー！！！");
-			console.log(data);
 			document.body.innerHTML = data; // HTML全体を再描画
 		}
 	});

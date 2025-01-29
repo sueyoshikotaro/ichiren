@@ -35,31 +35,31 @@
 
 		<h2>ユーザ一覧</h2>
 
-		<!--ユーザ一覧表示-->
-		<div class="main-content">
-
-			<div class="row">
-				<div class="col">
-					<!--絞り込み(学校)-->
-					<span class="form-label">学校</span>
-					<select id="year" name="selectedYear" class="form-select" th:onchange="groupList()">
-						<option value="選択なし">選択なし</option>
-						<option name="est_year" th:each="year : ${year}" th:value="${year.est_year}"
-							th:text="${year.est_year}">
-						</option>
-					</select>
-				</div>
-				<div class="col">
-					<!--絞り込み(年度)-->
-					<span class="form-label">年度</span>
-					<select id="genre" name="selectedGenre" class="form-select" th:onchange="groupList()">
-						<option value="選択なし">選択なし</option>
-						<option name="genre" th:each="genre : ${genre}" th:value="${genre.genre}"
-							th:text="${genre.genre}">
-						</option>
-					</select>
-				</div>
+		<div class="row" style="margin-bottom: 14px;">
+			<div class="col">
+				<!--絞り込み(学校)-->
+				<span class="form-label">学校</span>
+				<select id="school" name="selectedSchool" class="form-select" th:onchange="groupList()">
+					<option value="0">選択なし</option>
+					<option name="school_id" th:each="school : ${school}" th:value="${school.school_id}"
+						th:text="${school.school_name}">
+					</option>
+				</select>
 			</div>
+			<div class="col">
+				<!--絞り込み(年度)-->
+				<span class="form-label">年度</span>
+				<select id="year" name="selectedYear" class="form-select" th:onchange="groupList()">
+					<option value="選択なし">選択なし</option>
+					<option name="est_year" th:each="year : ${year}" th:value="${year.est_year}"
+						th:text="${year.est_year} + 年">
+					</option>
+				</select>
+			</div>
+		</div>
+
+		<!--ユーザ一覧表示-->
+		<div class=" main-content" id="data">
 
 			<!--繰り返し処理-->
 			<div th:each="user : ${users}" class="content-child" style="margin-top: 16px;">
@@ -131,7 +131,6 @@
 		function groupList() {
 			var selectedSchool;
 			var selectedYear;
-			var selectedGenre;
 
 			var a = document.getElementsByClassName("form-select");
 			for (var i = 0; i < a.length; i++) {
@@ -140,17 +139,14 @@
 					selectedSchool = a[i].value;
 				} else if (i == 1) {
 					selectedYear = a[i].value;
-				} else if (i == 2) {
-					selectedGenre = a[i].value;
 				}
 			}
 
 			/*URL指定＆ドロップダウンリストの値引き渡し*/
-			var url = "groupList";
+			var url = "userList";
 			var params = {
 				"selectedSchool": selectedSchool,
-				"selectedYear": selectedYear,
-				"selectedGenre": selectedGenre
+				"selectedYear": selectedYear
 			};
 
 			/*HTML内容のクリア*/

@@ -78,7 +78,7 @@
 			<label class="form-label user-select-text userSelect-text" th:text="選択したユーザ"></label>
 
 			<div th:if="${selectUser != null}" class="select-userS">
-				<div th:each="user : ${selectUser}" style="font-size: 16px;">
+				<div th:each="user : ${selectUser}" style="font-size: 16px; margin-top: 5px;">
 					<input class="form-check-input" type="checkbox" name="check" th:value="${user.user_id}"
 						id="flexCheckDefault" style="margin-left: 13px;">
 					<input type="hidden" name="selectedUserId" th:value="${user.user_id}">
@@ -113,8 +113,8 @@
 			<!--	</tr>-->
 			<!--</tbody>-->
 
-			<button type="button" name="button" value="確認" onclick="formSubmit('確認')"
-				class="control-btn mini-btn">確認</button>
+			<button type="button" name="button" value="確認" onclick="formSubmit('確認')" class="control-btn mini-btn"
+				th:disabled="${#lists.isEmpty(selectUser)}">確認</button>
 
 			<!--戻るボタン,一旦保留-->
 			<!--<button type="button" name="button" value="戻る" onclick="formSubmit('戻る')">戻る</button>-->

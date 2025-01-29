@@ -68,6 +68,9 @@ public interface GroupDisplayServiceInterface {
 	//グループメンバ削除のリファクタリング(試しに)
 	public Object[] scoreCalc(int group_id, String user_id);
 
+	//タスクの進捗を更新したメンバの進捗更新
+	public void updateProgress(String user_id, int group_id);
+	
 	//グループの全体進捗更新
 	public void allProgress(int group_id);
 
@@ -90,7 +93,7 @@ public interface GroupDisplayServiceInterface {
 	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id,String seletedValue);
 
 	//結成年度取得(絞り込み用)
-	public List<TeamsForm> selectEstYear();
+	public List<TeamsForm> selectEstYear(String value);
 
 	//ジャンル取得(絞り込み用)
 	public List<TeamsForm> selectGenre();

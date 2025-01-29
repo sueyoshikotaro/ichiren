@@ -34,6 +34,10 @@ public interface UserDisplayServiceInterface {
 	public void registerUser(String user_id, String user_name, String user_pass, String school_name, String enr_year,
 			int user_flg);
 
+	//新規講師登録(admin)
+//	public void insertAdminTeach(String user_id, String user_name, String user_pass, String school_name,
+//			String enr_year, int user_flg);
+
 	// 講師一覧表示
 	public Iterable<UserDisplay> teList(int school_id);
 
@@ -51,4 +55,8 @@ public interface UserDisplayServiceInterface {
 
 	//居場所選択
 	public List<Room> roomSelect();
+
+	//絞り込み検索結果
+	public Iterable<UserDisplay> userFilterList(int school_id, String est_year);
+
 }

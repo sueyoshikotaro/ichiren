@@ -35,7 +35,6 @@ import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsDisplay;
 import com.example.demo.form.TeamsForm;
 import com.example.demo.form.UserDisplay;
-import com.example.demo.form.UserForm;
 import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -344,7 +343,6 @@ public class AdminCtrl {
 			//戻るボタンを押下
 		} else {
 
-			System.out.println(s);
 			mav.addObject("schoolAdd", s);
 			mav.setViewName("admin/schoolAdd");
 
@@ -405,14 +403,29 @@ public class AdminCtrl {
 	 */
 	@LoginRequired
 	@GetMapping("userList")
-	public ModelAndView userList() {
+	public ModelAndView userList(@RequestParam(name = "selectedSchool", required = false) Integer selectedSchool,
+			@RequestParam(name = "selectedYear", required = false) String selectedYear) {
 
 		//ModelAndViewのインスタンス生成
 		ModelAndView mav = new ModelAndView();
 
-		//サービスのメソッドを呼び出す
-		Iterable<UserDisplay> userList = userDisplayService.userList(school_id);
+		//結成年度取得
+		List<TeamsForm> year = groupDispService.selectEstYear("user");
+		//所属学校
+		List<TeamsForm> school = groupDispService.selectSchool();
 
+		Calendar calendar = Calendar.getInstance();
+		int y = calendar.get(Calendar.YEAR);
+		Iterable<UserDisplay> userList = null;
+		if ((selectedSchool == null && selectedYear == null) || (selectedSchool == 0 && selectedYear.equals("選択なし"))) {
+			userList = userDisplayService.userFilterList(school_id, String.valueOf(y));
+		} else {
+			userList = userDisplayService.userFilterList((int) selectedSchool, selectedYear);
+		}
+		//サービスのメソッドを呼び出す
+
+		mav.addObject("school", school);
+		mav.addObject("year", year);
 		mav.addObject("users", userList);
 		mav.setViewName("admin/userList");
 
@@ -508,22 +521,22 @@ public class AdminCtrl {
 	@PostMapping("userRegistConfirm")
 	public ModelAndView userRegistConfirm(@RequestParam("csvFile") MultipartFile csvFile, ModelAndView mav) {
 		// CSVファイルを読み込み、ユーザ情報を取得する
-		List<UserForm> users = new ArrayList<>();
+		List<UserDisplay> users = new ArrayList<>();
 
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(csvFile.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-				UserForm user = new UserForm();
+				UserDisplay user = new UserDisplay();
 
 				values[0] = values[0].replaceAll("\\p{C}", "");
 				user.setUser_id(values[0]);
 				user.setUser_name(values[1]);
 				user.setUser_pass(values[2]);
-				user.setSchool_id(values[3]);
-				user.setEnr_year(values[4]);
-				user.setUser_flg(Integer.parseInt(values[5]));
+				user.setSchool_id(school_id);
+				user.setEnr_year(values[3]);
+				user.setUser_flg(Integer.parseInt(values[4]));
 				users.add(user);
 			}
 		} catch (IOException e) {
@@ -594,20 +607,8 @@ public class AdminCtrl {
 	@PostMapping("teInfoRegistConfirm")
 	public ModelAndView dispTeInfoRegistConf(UserDisplay u, ModelAndView mav) {
 
-		if (userDisplayService.userIDCheck(u.getUser_id())) {
-
-			mav.addObject("te", u);
-			mav.setViewName("admin/teInfoRegistConfirm");
-
-		} else {
-
-			// IDが重複していた場合
-			mav.addObject("errMsg", "IDが重複しています。");
-			mav.setViewName("admin/teInfoRegist");
-
-		}
-
 		String userId = u.getUser_id();
+
 		if (!userId.startsWith("te") || userId.length() != 10) {
 
 			mav.addObject("errMsg", "講師IDは「te」 + 8桁の数字です。");
@@ -615,10 +616,18 @@ public class AdminCtrl {
 
 		} else {
 
-			mav.addObject("te", u);
-			mav.setViewName("admin/teInfoRegistConfirm");
-		}
+			if (userDisplayService.userIDCheck(u.getUser_id())) {
 
+				mav.addObject("te", u);
+				mav.setViewName("admin/teInfoRegistConfirm");
+
+			} else {
+
+				// IDが重複していた場合
+				mav.addObject("errMsg", "IDが重複しています。");
+				mav.setViewName("admin/teInfoRegist");
+			}
+		}
 		return mav;
 	}
 
@@ -714,7 +723,6 @@ public class AdminCtrl {
 	@PostMapping("teUpdate")
 	public ModelAndView dispTeUpdate(UserDisplay u, ModelAndView mav) {
 
-		System.out.println(u);
 		mav.addObject("te", u);
 		mav.setViewName("admin/teUpdate");
 
@@ -747,7 +755,7 @@ public class AdminCtrl {
 
 		// 編集ボタンを押下
 		if (button.equals("編集")) {
-			
+
 			userDisplayService.teInfoUpdate(u.getUser_name(), u.getSchool_name(), u.getEnr_year(), u.getUser_id());
 
 			// ポップアップを表示するために、画面遷移しないようにする
@@ -779,7 +787,7 @@ public class AdminCtrl {
 			@RequestParam(name = "selectedGenre", required = false) String selectedGenre) {
 
 		//結成年度取得
-		List<TeamsForm> year = groupDispService.selectEstYear();
+		List<TeamsForm> year = groupDispService.selectEstYear("group");
 		//所属学校
 		List<TeamsForm> school = groupDispService.selectSchool();
 		//ジャンル
@@ -790,9 +798,11 @@ public class AdminCtrl {
 		int y = calendar.get(Calendar.YEAR);
 
 		if (selectedGenre == null) {
+
 			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
+
 		} else if (selectedSchool != null || selectedYear != null) {
-			
+
 			group = groupDispService.groupList(selectedYear, selectedGenre, (int) selectedSchool);
 		}
 
@@ -851,10 +861,6 @@ public class AdminCtrl {
 			//ドロップダウンリストが選択されている場合の処理
 			group = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
 		}
-
-		System.out.println(taskCategory);
-		System.out.println(group);
-		System.out.println();
 
 		mav.addObject("Category", taskCategory);
 		mav.addObject("group", group);
@@ -1229,7 +1235,6 @@ public class AdminCtrl {
 			@RequestParam(name = "genre", required = false) String genre) {
 
 		TeamsDisplay teamsDisplay = new TeamsDisplay();
-		teamsDisplay.setGroup_name(group_name);
 		teamsDisplay.setGenre(genre);
 
 		//リーダに任命するメンバ
@@ -1238,17 +1243,33 @@ public class AdminCtrl {
 		//リーダ以外のメンバ
 		List<UserDisplay> memberUser = new ArrayList<>();
 
+		//エラー画面に遷移したときに選択したユーザを確認できるように
+		List<User> userIdAndName = new ArrayList<>();
+		for (int i = 0; i < user_id.length; i++) {
+			User user = new User();
+			user.setUser_id(user_id[i]);
+			user.setUser_name(user_name[i]);
+			userIdAndName.add(user);
+		}
+
 		if (group_name == null || group_name.isEmpty()) {
 
+			mav.addObject("selectUser", userIdAndName);
+			mav.addObject("genre", genre);
+			mav.addObject("groupDetail", teamsDisplay);
 			mav.addObject("errMsg", "グループ名を入力してください");
 			mav.setViewName("admin/groupCreate");
 
 		} else if (group_name.length() > 20) {
 
+			mav.addObject("selectUser", userIdAndName);
+			mav.addObject("genre", genre);
+			mav.addObject("groupDetail", teamsDisplay);
 			mav.addObject("errMsg", "20文字以内のグループ名にしてください");
 			mav.setViewName("admin/groupCreate");
 		} else {
 
+			teamsDisplay.setGroup_name(group_name);
 			if (user_id != null && check != null) {
 				for (int i = 0; i < user_id.length; i++) {
 
@@ -1274,13 +1295,11 @@ public class AdminCtrl {
 				mav.addObject("memberUser", memberUser);
 				mav.setViewName("admin/groupCreateConfirm");
 
-				//ユーザが選択されていない場合
-			} else if (user_id == null) {
-
-				mav.addObject("errMsg", "ユーザを選択してください");
-				mav.setViewName("admin/groupCreate");
-
 			} else {
+
+				mav.addObject("selectUser", userIdAndName);
+				mav.addObject("groupDetail", teamsDisplay);
+				mav.addObject("genre", genre);
 				mav.addObject("errMsg", "一人以上のリーダを選択してください");
 				mav.setViewName("admin/groupCreate");
 			}
@@ -1364,11 +1383,6 @@ public class AdminCtrl {
 		//リーダ以外のメンバ
 		List<UserDisplay> addMember = new ArrayList<>();
 
-		//グループIDとグループ名を格納
-		//		TeamsDisplay teamsDisplay = new TeamsDisplay();
-		//		teamsDisplay.setGroup_name(group_name);
-		//		teamsDisplay.setGroup_id(group_id);
-
 		if (user_id != null) {
 			//追加するメンバをListに格納
 			for (int i = 0; i < user_id.length; i++) {
@@ -1424,14 +1438,6 @@ public class AdminCtrl {
 			@RequestParam("user_id") String[] user_id,
 			@RequestParam("user_name") String[] user_name,
 			@RequestParam("user_roll") String[] user_roll) {
-
-		for (String id : user_id) {
-			System.out.println(id);
-
-		}
-		for (String name : user_name) {
-			System.out.println(name);
-		}
 
 		List<TeamsDisplay> leaderList = new ArrayList<>();
 		List<TeamsDisplay> memberList = new ArrayList<>();
