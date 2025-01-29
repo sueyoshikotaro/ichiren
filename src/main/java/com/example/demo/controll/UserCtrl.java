@@ -327,8 +327,6 @@ public class UserCtrl {
 			@RequestParam(name = "user_roll", required = false) String user_roll,
 			ModelAndView mav) {
 
-		System.out.println(session.getAttribute("currentPlace"));
-
 		if (group_id != null && user_roll != null) {
 			//セッションに値を設定
 			session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ名,担当者検索用
@@ -471,10 +469,10 @@ public class UserCtrl {
 		mav.getModel().clear();
 		if (progress != null) {
 			TaskService.taskUpProgress(task_id, Integer.valueOf(progress));
-			
+
 			//メンバの進捗更新
 			groupDispService.updateProgress(user_id, group_id);
-			
+
 			//全体進捗更新
 			groupDispService.allProgress(group_id);
 		}
@@ -926,16 +924,25 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("noticeDeleteConfirm")
 	public ModelAndView noticeDeleteConfirm(ModelAndView mav,
-			@RequestParam(name = "notice_id") Integer[] notice_id) {
-		for (int i = 0; i < notice_id.length; i++) {
-			// 連絡事項削除のサービス
-			NoticeService.noticeDelete((int) notice_id[i]);
+			@RequestParam(name = "notice_id", required = false) Integer[] notice_id,
+			@RequestParam(name = "action") String action) {
+
+		if (action.equals("yes") && notice_id != null) {
+
+			for (int i = 0; i < notice_id.length; i++) {
+				// 連絡事項削除のサービス
+				NoticeService.noticeDelete((int) notice_id[i]);
+			}
 		}
 
 		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
 
 		mav.addObject("noticeList", noticeList);
 		mav.setViewName("common/menuUser");
+
+		List<Room> roomList = userDisplayService.roomSelect();
+
+		mav.addObject("roomList", roomList);
 
 		return mav;
 	}
@@ -1000,14 +1007,14 @@ public class UserCtrl {
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
 
-//		// ログインユーザのエンティティを取得
-//		User userEntity = (User) session.getAttribute("user");
-//
-//		// エンティティの中の値をそれぞれ取得
-//		school_id = userEntity.getSchool_id();
-//		group_id = (int) session.getAttribute("groupId");
-//		user_id = userEntity.getUser_id();
-//		user_roll = (String) session.getAttribute("user_roll");
+		//		// ログインユーザのエンティティを取得
+		//		User userEntity = (User) session.getAttribute("user");
+		//
+		//		// エンティティの中の値をそれぞれ取得
+		//		school_id = userEntity.getSchool_id();
+		//		group_id = (int) session.getAttribute("groupId");
+		//		user_id = userEntity.getUser_id();
+		//		user_roll = (String) session.getAttribute("user_roll");
 
 		//リーダの場合は管理者とグループメンバすべてを格納
 		if (user_roll.equals("リーダ")) {

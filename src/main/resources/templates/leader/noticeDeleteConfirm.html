@@ -42,10 +42,9 @@
 				<div th:text="${notice.contact_msg}"></div>
 				<div th:text="${notice.send_date}"></div>
 				<input type="hidden" name="notice_id" th:value="${notice.notice_id}">
-				<!--<input type="hidden" name="check" th:value="${notice.notice_id}">-->
 			</div>
-			<button type="submit" name="button" value="削除" class="btn">削除</button>
-			<button type="submit" class="btn btn-back">いいえ</button>
+			<button type="submit" name="action" value="yes" class="btn">削除</button>
+			<button type="submit" name="action" value="no" class="btn btn-back">いいえ</button>
 		</form>
 	</div>
 
