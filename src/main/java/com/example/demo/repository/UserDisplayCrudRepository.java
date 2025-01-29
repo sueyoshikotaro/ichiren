@@ -72,6 +72,14 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	@Query("insert into user (user_id, user_name, user_pass, school_id, enr_year, user_flg) VALUES (:user_id, :user_name, 'taskdon1', (select school_id FROM school WHERE school_name = :school_name), :enr_year, 1)")
 	public void teInfoRegist(String user_id, String user_name, String user_pass, String school_id, String enr_year,
 			int user_flg);
+	
+	/**
+	 * 坂本
+	 * adminログイン時の講師登録
+	 * id,passチェック
+	 */
+//	@Query("select count(*) from user where user_id = :user_id and user_pass = :user_pass and user_id like '%te%'")
+//	public int adminTeachCheck(String user_id, String user_pass);
 
 	/*
 	 * 向江
