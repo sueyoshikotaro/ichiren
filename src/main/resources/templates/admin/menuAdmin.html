@@ -36,20 +36,20 @@
 		<h2 class="menu-text">ホーム</h2>
 
 		<!-- 遷移先 -->
-		<a class="menu-btn" th:onclick="|location.href='@{groupList}'|">グループ一覧</a>
+		<a class="menu-btn" th:onclick="|location.href='@{groupList}'|" style="margin-top: 40px;">グループ一覧</a>
 
-		<a class="menu-btn" th:onclick="|location.href='@{userList}'|">ユーザ一覧</a>
+		<a class="menu-btn" th:onclick="|location.href='@{userList}'|" style="margin-top: 32px;">ユーザ一覧</a>
 
-		<a class="menu-btn" th:onclick="|location.href='@{schoolDetails}'|">学校情報詳細</a>
+		<a class="menu-btn" th:onclick="|location.href='@{schoolDetails}'|" style="margin-top: 32px;">学校情報詳細</a>
 
 		<!-- ログインしているユーザが大ボスの場合非表示 -->
 		<div th:if="${#strings.startsWith(session.user.user_id, 'te')}">
-			<a class="menu-btn" th:onclick="|location.href='@{chat}'|">チャット</a><!--未実装-->
+			<a class="menu-btn" th:onclick="|location.href='@{chat}'|" style="margin-top: 32px;">チャット</a>
 		</div>
 
 		<!-- ログインしているユーザが大ボスの場合表示 -->
 		<div th:if="${#strings.startsWith(session.user.user_id, 'ad')}">
-			<a class="menu-btn" th:onclick="|location.href='@{teList}'|">講師一覧</a>
+			<a class="menu-btn" th:onclick="|location.href='@{teList}'|" style="margin-top: 32px;">講師一覧</a>
 		</div>
 
 	</div>
