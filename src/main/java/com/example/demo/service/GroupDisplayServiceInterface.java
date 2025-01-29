@@ -68,6 +68,9 @@ public interface GroupDisplayServiceInterface {
 	//グループメンバ削除のリファクタリング(試しに)
 	public Object[] scoreCalc(int group_id, String user_id);
 
+	//タスクの進捗を更新したメンバの進捗更新
+	public void updateProgress(String user_id, int group_id);
+	
 	//グループの全体進捗更新
 	public void allProgress(int group_id);
 

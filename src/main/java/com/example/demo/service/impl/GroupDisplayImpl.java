@@ -345,6 +345,34 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		return result;
 	}
 
+	/**
+	 * 末吉
+	 * タスク進捗を変更したユーザの進捗更新
+	 */
+	@Override
+	public void updateProgress(String user_id, int group_id) {
+
+		//タスクの進捗度の合計値格納
+		int progressSum = 0;
+
+		//割り振られるユーザのタスク情報を取得
+		List<TaskForm> updateUserTask = groupDispCrudRepo.taskList(user_id, group_id);
+
+		System.out.println(updateUserTask);
+		
+		for(TaskForm i : updateUserTask) {
+			progressSum += i.getProgress();
+			
+			System.out.println(progressSum);
+		}
+		
+		//更新するユーザ
+		int userProgressResult = progressSum / updateUserTask.size();
+		
+		groupDispCrudRepo.updateProgress(group_id, user_id, userProgressResult);
+
+	}
+
 	//グループの全体進捗更新
 	@Override
 	public void allProgress(int group_id) {
@@ -445,7 +473,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		List<TeamsForm> result = null;
 		if (value.equals("user")) {
 			result = groupDispCrudRepo.selectuserEstYear();
-		}else if(value.equals("group")) {
+		} else if (value.equals("group")) {
 			result = groupDispCrudRepo.selectgroupEstYear();
 		}
 		return result;
