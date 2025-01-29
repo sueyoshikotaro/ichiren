@@ -342,7 +342,7 @@ public class UserCtrl {
 			school_id = userEntity.getSchool_id();
 			this.group_id = (int) session.getAttribute("groupId");
 			user_id = userEntity.getUser_id();
-			user_roll = (String) session.getAttribute("user_roll");
+			this.user_roll = (String) session.getAttribute("user_roll");
 		}
 		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
 
