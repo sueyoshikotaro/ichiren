@@ -49,7 +49,7 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 */
 	@Modifying
 	@Query("insert into task(task_category, task_name, task_content, task_status, start_date, end_date, task_priority, task_level, task_weight, progress, task_flg, user_id, group_id)"
-			+ "	VALUES(:task_category, :task_name, :task_content, :task_status, :start_date, :end_date, :task_priority,:task_level, :task_weight, 0, 1, (SELECT user_id FROM user WHERE user_name=:user_name), 1);")
+			+ "	VALUES(:task_category, :task_name, :task_content, :task_status, :start_date, :end_date, :task_priority,:task_level, :task_weight, 0, 1, (SELECT user_id FROM user WHERE user_name=:user_name), :group_id);")
 	public boolean registerTask(String task_category, String task_name, String task_content, String task_status,
 			Date start_date, Date end_date, int task_priority, int task_level, int task_weight, String user_name, int group_id);
 

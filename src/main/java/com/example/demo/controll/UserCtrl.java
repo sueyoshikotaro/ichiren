@@ -438,6 +438,7 @@ public class UserCtrl {
 		Date st_date = null;
 		Date end_date = null;
 		int group_id = (int) session.getAttribute("groupId");
+		System.out.println(group_id);
 		int score = TaskService.userScore(t.getUser_name(), group_id);
 		try {
 			st_date = sdf.parse(t.getStart_date());
