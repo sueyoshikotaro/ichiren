@@ -21,7 +21,6 @@ body {
 	min-width: 380px;
 	min-height: 500px;
 	padding: 20px;
-	margin-top: 8px;
 	margin-bottom: 8px;
 	border: 2px solid black;
 	border-radius: 10px;
@@ -81,4 +80,25 @@ a.menu-btn:hover::before {
 	font-weight: bold;
 	color: #454545;
 	text-shadow: 3px 3px #AAAAAA;
+}
+
+/*連絡事項を開くボタン*/
+.notice-open-btn {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	width: 90px;
+	height: 36px;
+	margin: auto;
+	font-weight: bold;
+	border: 2px solid #27acd9;
+	background: #27acd9;
+	color: #fff;
+	border-radius: 100vh;
+	transition: 0.5s;
+}
+
+.notice-open-btn:hover {
+	color: #27acd9;
+	background: #fff;
 }
