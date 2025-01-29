@@ -152,14 +152,25 @@
 
 /*進捗バー用*/
 .group-progress {
-	height: 27px;
 	border: 1.5px solid black;
 	margin-bottom: 13px;
 }
 
 .group-progress-text {
-	font-size: 20px;
+	font-size: 19px;
 	color: white;
+}
+
+/*全体進捗*/
+.all-progress{
+	height: 32px;
+	border-radius: 15px;
+}
+
+/*個人進捗*/
+.individual-progress{
+	height: 26px;
+	border-radius: 30px;
 }
 
 /*グループ一覧*/

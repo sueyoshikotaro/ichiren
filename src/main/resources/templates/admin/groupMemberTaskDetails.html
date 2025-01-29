@@ -60,8 +60,8 @@
 
 			<!-- タスクの進捗率(バー&パーセント)を表示する -->
 			<span class="form-label">タスク-進捗</span>
-			<div class="progress group-progress" role="progressbar">
-				<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
+			<div class="progress group-progress individual-progress" role="progressbar">
+				<div class="progress-bar progress-bar-striped bg-warning progress-bar-animated"
 					th:style="'width:'+ ${task.progress}+'%'"><label class="var-text group-progress-text"
 						th:text="${task.progress}+'%'"></div>
 			</div>

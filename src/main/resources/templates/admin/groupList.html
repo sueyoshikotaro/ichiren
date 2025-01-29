@@ -75,7 +75,7 @@
 		<!--メイン項目-->
 		<div class="main-content" id="data">
 
-			<div th:each="group : ${groups}">
+			<div th:each="group : ${groups}" class="content-child">
 
 				<!--グループ名-->
 				<div class="input-group groupList-name">
@@ -90,8 +90,8 @@
 
 				<!--進捗表示-->
 				<span class="form-label">全体進捗</span>
-				<div class="progress group-progress" role="progressbar">
-					<div class="progress-bar progress-bar-striped bg-info progress-bar-animated"
+				<div class="progress group-progress all-progress" role="progressbar">
+					<div class="progress-bar progress-bar-striped progress-bar-animated"
 						th:style="'width:'+ ${group.all_progress}+'%'"><label class="var-text group-progress-text"
 							th:text="${group.all_progress}+'%'"></div>
 				</div>
