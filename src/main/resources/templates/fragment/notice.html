@@ -12,7 +12,6 @@
 
 <body>
 	<div th:fragment="notice">
-
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
@@ -32,9 +31,7 @@
 		<!--コンテナ最下のボタン-->
 		<button type="submit" name="button" value="削除" class="btn" th:if="${session.user_roll} == 'リーダ'"
 			id="deleteButton" form="noticeForm">削除</button>
-
 	</div>
-	
 </body>
 
 </html>
