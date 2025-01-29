@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -38,8 +40,6 @@ import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
 import com.example.demo.service.TaskServiceInterface;
 import com.example.demo.service.UserDisplayServiceInterface;
-
-import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者のコントローラ
@@ -411,11 +411,10 @@ public class AdminCtrl {
 		Iterable<UserDisplay> userList = null;
 		if ((selectedSchool == null && selectedYear == null) || (selectedSchool == 0 && selectedYear.equals("選択なし"))) {
 			userList = userDisplayService.userFilterList(school_id, String.valueOf(y));
-		}else {
-			userList = userDisplayService.userFilterList((int)selectedSchool, selectedYear);
+		} else {
+			userList = userDisplayService.userFilterList((int) selectedSchool, selectedYear);
 		}
 		//サービスのメソッドを呼び出す
-		
 
 		mav.addObject("school", school);
 		mav.addObject("year", year);
@@ -739,7 +738,6 @@ public class AdminCtrl {
 			System.out.println(u.getUser_id());
 			userDisplayService.teInfoUpdate(u.getUser_name(), u.getSchool_name(), u.getEnr_year(), u.getUser_id());
 
-
 			// ポップアップを表示するために、画面遷移しないようにする
 			mav.addObject("teUpdateComp", true);
 			mav.setViewName("admin/teUpdateConfirm");
@@ -780,9 +778,9 @@ public class AdminCtrl {
 		int y = calendar.get(Calendar.YEAR);
 
 		if (selectedGenre == null) {
-			
+
 			group = groupDispService.groupList(String.valueOf(y), selectedGenre, school_id);
-		
+
 		} else if (selectedSchool != null || selectedYear != null) {
 
 			group = groupDispService.groupList(selectedYear, selectedGenre, (int) selectedSchool);
@@ -1235,7 +1233,7 @@ public class AdminCtrl {
 			user.setUser_name(user_name[i]);
 			userIdAndName.add(user);
 		}
-		
+
 		if (group_name == null || group_name.isEmpty()) {
 
 			mav.addObject("selectUser", userIdAndName);
@@ -1280,7 +1278,7 @@ public class AdminCtrl {
 				mav.setViewName("admin/groupCreateConfirm");
 
 			} else {
-				
+
 				mav.addObject("selectUser", userIdAndName);
 				mav.addObject("groupDetail", teamsDisplay);
 				mav.addObject("genre", genre);
@@ -1469,7 +1467,7 @@ public class AdminCtrl {
 
 		//チャットの通信可能相手を格納
 		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
-    
+
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;

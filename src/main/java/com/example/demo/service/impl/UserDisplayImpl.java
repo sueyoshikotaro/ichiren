@@ -139,6 +139,18 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	}
 
 	/*
+	 * 坂本
+	 * 上位講師登録
+	 */
+//	@Override
+//	public void insertAdminTeach(String user_id, String user_name, String user_pass, String school_name,
+//			String enr_year, int user_flg) {
+//		
+//		
+//
+//	}
+
+	/*
 	 * 向江
 	 * 講師一覧表示
 	 */
@@ -202,5 +214,4 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 		return userCrudRepo.roomSelect();
 
 	}
-
 }
