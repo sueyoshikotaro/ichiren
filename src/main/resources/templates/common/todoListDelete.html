@@ -60,8 +60,12 @@
 		<!--削除の場合-->
 		<form th:action="@{deleteConfirm}" method="post">
 
-			<div th:each="todo:${todo}">
-
+			<!-- エラー文-->
+			<div th:if="${#lists.isEmpty(todo)}">
+				<p>選択されている項目がありません</p>
+			</div>
+			<!-- 選択されている場合 -->
+			<div th:each="todo:${todo}" th:unless="${#lists.isEmpty(todo)}">
 				<input type="hidden" name="tdlist_id" th:value="${todo.tdlist_id}">
 
 				<p>こちらのToDoを削除しますか？</p>
