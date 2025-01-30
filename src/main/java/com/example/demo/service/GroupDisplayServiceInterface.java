@@ -101,6 +101,7 @@ public interface GroupDisplayServiceInterface {
 	//学校一覧(絞り込み用)
 	List<TeamsForm> selectSchool();
 	
-	
+	//居場所更新
+	public void roomUpdate(String work_status, int group_id);
 
 }

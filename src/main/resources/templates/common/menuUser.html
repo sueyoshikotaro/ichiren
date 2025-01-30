@@ -39,12 +39,13 @@
 			<div class="col">
 				<!--居場所更新-->
 				<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
-					<select class="form-select place-update" aria-label="Default select example">
-						<option selected value="休憩中">休憩中</option>
-						<option th:each="room : ${roomList}"
-							th:value="${room.room_name} + '(' + ${room.hall} + ${room.floor} + ')'"
+					<select class="form-select place-update" aria-label="Default select example"
+						th:onchange="updateStatus(this.value)">
+						<option th:selected="${room} == '休憩中'" value="休憩中">休憩中</option>
+						<option th:each="room : ${roomList}" th:selected="${room} == ${room.room_name}"
+							th:value="${room.room_name}"
 							th:text="${room.room_name} + '(' + ${room.hall} + ${room.floor} + ')'"></option>
-						<option value="校外作業中">校外作業中</option>
+						<option th:selected="${room} == '校外作業中'" value="校外作業中">校外作業中</option>
 					</select>
 				</div>
 			</div>
@@ -112,6 +113,26 @@
 			const checkedCount = $('.notice-checkbox:checked').length;
 			deleteButton.prop('disabled', checkedCount === 0);
 		});
+	</script>
+
+	<!--居場所更新-->
+	<script th:inline="javascript">
+		function updateStatus(updateStatus) {
+			var updateStatus;
+
+			/*URL指定＆ドロップダウンリストの値引き渡し*/
+			var url = "updateStatus";
+			var params = {
+				"updateStatus": updateStatus
+			};
+
+			/*グループ一覧表示メソッドの呼び出し*/
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: params
+			});
+		}
 	</script>
 
 	<!-- bootstrapのjsリンク接続 -->

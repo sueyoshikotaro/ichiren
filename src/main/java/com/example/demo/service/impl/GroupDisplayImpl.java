@@ -488,5 +488,14 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	public List<TeamsForm> selectGenre() {
 		return groupDispCrudRepo.selectGenre();
 	}
-
+	
+	/**
+	 * 末吉
+	 * 居場所更新
+	 */
+	@Override
+	public void roomUpdate(String work_status, int group_id) {
+		
+		groupDispCrudRepo.roomUpdate(work_status, group_id);
+	}
 }

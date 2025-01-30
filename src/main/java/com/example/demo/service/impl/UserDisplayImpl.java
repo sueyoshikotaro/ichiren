@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.form.Room;
 import com.example.demo.form.UserDisplay;
+import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.repository.UserDisplayCrudRepository;
 import com.example.demo.repository.UserViewCrudRepository;
 import com.example.demo.service.UserDisplayServiceInterface;
@@ -19,6 +20,9 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	@Autowired
 	UserViewCrudRepository userViewCrudRepo;
 
+	@Autowired
+	GroupDisplayCrudRepository groupCrudRepo;
+	
 	/*
 	 * 向江
 	 * ユーザ一覧
@@ -79,7 +83,7 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 		String flg = userCrudRepo.selectById(user_id);
 
-		if (flg == "") {
+		if (flg != "") {
 			System.out.println("重複しないユーザID");
 			return true;
 		} else {
@@ -211,7 +215,7 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	@Override
 	public List<Room> roomSelect() {
 
-		return userCrudRepo.roomSelect();
+		return groupCrudRepo.roomSelect();
 
 	}
 }
