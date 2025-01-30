@@ -35,6 +35,7 @@
 
 	<!--Js使用の為-->
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -62,55 +63,72 @@
 
 			<!-- 一覧題名(Offcamvas内部) -->
 			<div class="offcanvas-header">
-				<h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+				<h3 class="offcanvas-title" id="offcanvasExampleLabel"
+					style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);">相手一覧/チャット</h3>
 				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
+
+			<!-- 相手一覧(メイン/body) -->
 			<div class="offcanvas-body">
 
-				<form id="searchForm" th:action="@{chatSearch}" method="post">
-					<!--検索フォーム(予定)-->
-					<div class="input-group mb-3">
+				<form id="searchForm" th:action="@{chatSearch}" method="post"> <!--検索Form-->
+
+					<label class="form-label" style="margin-bottom: 0px;">
+						相手検索
+					</label>
+
+					<!--検索欄-->
+					<div class="input-group mb-3 search-place" style="margin-top: 0px;">
 						<!--検索内容入力欄-->
-						<input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
-							aria-describedby="button-addon2" name="search">
+						<input type="text" class="form-control" placeholder="入力欄" aria-label="Recipient's username"
+							aria-describedby="button-addon2" name="search" style="border: 2px solid black;">
 
 						<!--検索ボタン-->
-						<button class="btn btn-outline-secondary" type="button" id="button-addon2"
-							onclick="chatSearch()">
+						<button class="btn btn-dark" type="button" id="button-addon2" onclick="chatSearch()"
+							style="border: 2px solid black;">
+
 							<!--検索ボタンイラスト(bootstrap引用)-->
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-								class="bi bi-search" viewBox="0 0 16 16">
+							<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"
+								class="bi bi-search" viewBox="0 0 16 16" style="margin-bottom: 1px;">
 								<path
 									d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
 							</svg>
+
 						</button>
 					</div>
 				</form>
 
-				<!--チャット相手一覧(リスト,繰返しかな)-->
-				<form id="userForm" th:style="${'display: block'}">
+				<!--チャット相手一覧-->
+				<form id="userForm" th:style="${'display: block'}" class="chat-partner-list">
+
+					<!--リスト-->
 					<ul class="list-group" id="chatPartnerList">
 
 						<!--管理者を表示-->
-						<span>管理者</span>
 						<li th:each="chat : ${chatPartnerAdmin}" class="list-group-item list-group-item-action"
 							th:text="${chat.user_name}" th:attr="data-user-id=${chat.user_id}">
+
 							<span th:text="${chat.user_name}">○○さん</span>
 
-							<!--いったん未実装-->
+							<!--未実装部分-->
 							<span class="badge bg-primary rounded-pill" th:text="${notificationCount}"
 								th:if="${notificationCount != null}">通知数</span>
+
 						</li>
 
-						<!--リーダ、メンバを表示-->
-						<span>リーダ、メンバ</span>
+						<!--リーダ&メンバを表示-->
 						<li th:each="chat : ${chatPartnerMember}" class="list-group-item list-group-item-action"
 							th:text="${chat.user_name + ' (' + chat.group_name + ')'}"
 							th:attr="data-user-id=${chat.user_id}">
-
 						</li>
+
 					</ul>
 				</form>
+
+				<!--相手一覧の注釈-->
+				<p style="margin-top: 30px;">※検索結果がゼロの場合は検索欄を消し,<br>
+					検索ボタンを押下すれば,初期状態に戻ります。</p>
+
 			</div>
 		</div>
 
@@ -120,27 +138,34 @@
 			<!--チャットテキスト表示欄-->
 			<div id="chat-history-container" class="chat-column">
 
-				<!--チャット相手のメッセージを表示する場所-->
+				<!--メッセージ表示欄-->
 				<div class="chat-history chat-column" th:each="chat : ${chatHistory}">
+
+					<!--自分メッセージ欄-->
+					<div th:if="${session.user_id} == ${chat.send_by}" class="my-content">
+
+						<div class="my-content-text">
+							<span th:text="${chat.msg}"></span>
+						</div>
+
+						<span th:text="${#dates.format(chat.msg_date, 'dd.HH:mm')}" class="send-days"></span>
+
+					</div>
+
+					<!--相手メッセージ欄-->
+					<div th:if="${session.user_id} != ${chat.send_by}" class="partner-content">
+
+						<div class="partner-content-text">
+							<span th:text="'【'+${chat.user_name}+'】'"></span><br>
+							<span th:text="${chat.msg}"></span>
+						</div>
+
+						<span th:text="${#dates.format(chat.msg_date, 'dd.HH:mm')}" class="send-days"></span>
+
+					</div>
+
 					<!--<span th:text="${#dates.format(chat.msg_date, 'dd') + '日'}"></span>-->
-					<div th:if="${session.user_id} == ${chat.send_by}">
 
-						<div>
-							<span>あなた</span>
-							<span th:text="${chat.msg}"></span>
-						</div>
-
-						<span th:text="${#dates.format(chat.msg_date, 'dd.HH:mm')}"></span>
-
-					</div>
-
-					<div th:if="${session.user_id} != ${chat.send_by}">
-						<div>
-							<span th:text="${chat.user_name}"></span>
-							<span th:text="${chat.msg}"></span>
-						</div>
-						<span th:text="${#dates.format(chat.msg_date, 'dd.HH:mm')}"></span>
-					</div>
 				</div>
 			</div>
 
@@ -148,7 +173,7 @@
 
 		<!--送信欄-->
 		<div class="input-group mb-3 send-group">
-			<input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"
+			<input type="text" class="form-control" placeholder="入力欄" aria-label="Recipient's username"
 				aria-describedby="button-addon2" name="send" id="send_input">
 
 			<!--送信ボタン-->
@@ -174,7 +199,7 @@
 
 	<!--chat.jsへのリンク-->
 	<script th:src="@{/js/chat.js}"></script>
-	
+
 </body>
 
 </html>
