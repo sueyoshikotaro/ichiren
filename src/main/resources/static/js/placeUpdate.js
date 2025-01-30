@@ -1,4 +1,4 @@
-//居場所更新のscript
+//居場所更新用
 
 //'休憩中'の間リンクを無効化
 function toggleLinkStatus() {

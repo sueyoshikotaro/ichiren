@@ -25,6 +25,31 @@
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+/*相手一覧(リスト部分)*/
+/*スクロール機能(相手が多い場合)*/
+.chat-partner-list {
+	overflow-y: auto;
+	max-height: 520px;
+	padding: 12px;
+	margin-top: 20px;
+}
+
+.chat-partner-list::-webkit-scrollbar {
+	width: 12px;
+}
+
+.chat-partner-list::-webkit-scrollbar-thumb {
+	background-color: #ccc;
+	border-radius: 10px;
+	border: 2px solid grey;
+}
+
+.chat-partner-list::-webkit-scrollbar-track {
+	background-color: #fff;
+	border-radius: 10px;
+	border: 2px solid #EEEEEE;
+}
+
 /*チャット欄*/
 .chat-main-content {
 	background-image: url(../img/chat-background.png);
@@ -36,9 +61,93 @@
 	height: 520px;
 	margin-top: 20px;
 
-	/* 背景の際デザイン部分 */
+	/* 背景の縁部分 */
 	border-radius: 10px;
 	box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+
+	/*チャットテキスト欄*/
+	overflow-y: scroll;
+
+	flex-direction: column-reverse;
+	display: flex;
+}
+
+.chat-main-content::-webkit-scrollbar {
+	width: 12px;
+}
+
+.chat-main-content::-webkit-scrollbar-thumb {
+	background-color: #ccc;
+	border-radius: 10px;
+	border: 2px solid grey;
+}
+
+.chat-main-content::-webkit-scrollbar-track {
+	background-color: #fff;
+	border-radius: 10px;
+	border: 2px solid #EEEEEE;
+}
+
+/*チャットテキスト*/
+/*自分欄*/
+.my-content {
+	border-radius: 10px;
+	text-align: right;
+	background-color: rgba(255, 255, 200, 0.5);
+	/* 透明度が少々あるクリーム色 */
+	max-width: 60%;
+	/* 横幅を全体の3分の2ぐらいに設定 */
+	border: 1px solid #ccc;
+	padding: 3px;
+	/* 内側に少しだけ空間をあける */
+	margin-bottom: 6px;
+	/* 下に少しだけ空間をあける */
+	float: right;
+
+	margin-right: 5px;
+	align-self: flex-end;
+}
+
+/*自分テキスト*/
+.my-content-text {
+	color: black;
+	font-size: 13px;
+	text-align: left;
+	/* これを追加 */
+}
+
+/*相手欄*/
+.partner-content {
+	border-radius: 10px;
+	text-align: left;
+	background-color: rgba(255, 255, 200, 0.5);
+	/* 透明度が少々あるクリーム色 */
+	max-width: 60%;
+	/* 横幅を全体の3分の2ぐらいに設定 */
+	border: 1px solid #ccc;
+	padding: 3px;
+	/* 内側に少しだけ空間をあける */
+	margin-bottom: 6px;
+	/* 下に少しだけ空間をあける */
+	float: left;
+
+	margin-left: 4px;
+}
+
+/*相手テキスト*/
+.partner-content-text {
+	color: black;
+	font-size: 13px;
+}
+
+/*改行やサイズ調整のための領域*/
+.chat-column {
+	display: flex;
+	flex-direction: column;
+}
+
+.send-days {
+	font-size: 11px;
 }
 
 /*送信欄*/
