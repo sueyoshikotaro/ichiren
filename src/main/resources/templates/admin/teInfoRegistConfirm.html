@@ -79,7 +79,12 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<p class="modal-text">登録が完了しました</p>
-					<form th:action="@{teList}" method="get">
+					
+					<form th:action="@{/taskdon/user/login}" method="get" th:if="${#strings.startsWith(session.user.user_id, 'admin')}">
+						<button type="submit" class="control-btn return-btn">ログインへ</button>
+					</form>
+					
+					<form th:action="@{teList}" method="get" th:unless="${#strings.startsWith(session.user.user_id, 'admin')}">
 						<button type="submit" class="control-btn return-btn">講師情報一覧へ</button>
 					</form>
 				</div>

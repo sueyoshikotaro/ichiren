@@ -11,6 +11,7 @@ import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
+import com.example.demo.form.Room;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsForm;
 
@@ -191,7 +192,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Modifying
 	@Query("update user_detail set user_progress = :userProgressResult where user_id = :user_id and group_id = :group_id")
 	public void updateProgress(int group_id, String user_id, int userProgressResult);
-	
+
 	/**
 	 * 末吉
 	 * all_progressを更新する
@@ -273,5 +274,20 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	@Query("SELECT distinct genre FROM teams;")
 	public List<TeamsForm> selectGenre();
+
+	/**
+	 * 坂本
+	 * 教室情報一覧取得
+	 */
+	@Query("select room.room_id, room.room_name, room.hall, room.floor from room")
+	public List<Room> roomSelect();
+	
+	/**
+	 * 末吉
+	 * 居場所更新
+	 */
+	@Modifying
+	@Query("update teams set work_status = :work_status where group_id = :group_id")
+	public void roomUpdate(String work_status, int group_id);
 
 }

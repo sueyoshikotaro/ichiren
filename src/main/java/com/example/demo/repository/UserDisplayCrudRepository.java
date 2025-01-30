@@ -6,7 +6,6 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.example.demo.form.Room;
 import com.example.demo.form.UserDisplay;
 
 public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, String> {
@@ -128,14 +127,5 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	@Modifying
 	@Query("update user set user.user_flg = 0 where user.user_id = :user_id")
 	public void adminDisable(String user_id, int user_flg);
-
-	/**
-	 * 坂本
-	 * 居場所更新
-	 */
-	@Query("select room.room_id, room.room_name, room.hall, room.floor from room")
-	public List<Room> roomSelect();
-
-	
 
 }

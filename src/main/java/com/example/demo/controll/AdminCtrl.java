@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
+import com.example.demo.entity.School;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.form.ChatForm;
@@ -35,6 +37,7 @@ import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsDisplay;
 import com.example.demo.form.TeamsForm;
 import com.example.demo.form.UserDisplay;
+import com.example.demo.repository.SchoolDisplayCrudRepository;
 import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -47,6 +50,10 @@ import com.example.demo.service.UserDisplayServiceInterface;
 @Controller
 @RequestMapping("/taskdon/admin")
 public class AdminCtrl {
+
+	//フィールド
+	@Autowired
+	SchoolDisplayCrudRepository schoolCrudRepo;
 
 	@Autowired
 	@Qualifier("schoolDisplayService")
@@ -592,9 +599,15 @@ public class AdminCtrl {
 	 */
 	@LoginRequired
 	@GetMapping("teInfoRegist")
-	public String dispRegist() {
+	public ModelAndView dispRegist(ModelAndView mav) {
+		
+		Optional<School> school = schoolCrudRepo.findById(school_id);
 
-		return "admin/teInfoRegist";
+		mav.addObject("school_name", school.get().getSchool_name());
+		System.out.println(school.get().getSchool_name());
+		mav.setViewName("admin/teInfoRegist");
+
+		return mav;
 	}
 
 	/*
@@ -607,27 +620,62 @@ public class AdminCtrl {
 	@PostMapping("teInfoRegistConfirm")
 	public ModelAndView dispTeInfoRegistConf(UserDisplay u, ModelAndView mav) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
+		// エンティティの中のuser_idを取得
+		user_id = userEntity.getUser_id();
+
+		//入力したユーザIDを取得
 		String userId = u.getUser_id();
 
-		if (!userId.startsWith("te") || userId.length() != 10) {
+		//admin○○アカウントでログインしているとき
+		if (user_id.startsWith("admin")) {
+			//adユーザを作成しようとしている場合
+			if (userId.startsWith("ad") || userId.length() != 10) {
+				if (userDisplayService.userIDCheck(userId)) {
 
-			mav.addObject("errMsg", "講師IDは「te」 + 8桁の数字です。");
-			mav.setViewName("admin/teInfoRegist");
+					mav.addObject("te", u);
+					mav.setViewName("admin/teInfoRegistConfirm");
+
+				} else {
+
+					// IDが重複していた場合
+					mav.addObject("errMsg", "IDが重複しています。");
+					mav.setViewName("admin/teInfoRegist");
+				}
+
+				//adユーザ以外を作成しようとしている場合
+			} else {
+
+				mav.addObject("errMsg", "adで始まる登録者自身の情報を入力して下さい。");
+				mav.setViewName("admin/teInfoRegist");
+			}
 
 		} else {
+			if (!userId.startsWith("te") || userId.length() != 10) {
 
-			if (userDisplayService.userIDCheck(u.getUser_id())) {
-
-				mav.addObject("te", u);
-				mav.setViewName("admin/teInfoRegistConfirm");
+				mav.addObject("errMsg", "講師IDは「te」 + 8桁の数字です。");
+				mav.setViewName("admin/teInfoRegist");
 
 			} else {
 
-				// IDが重複していた場合
-				mav.addObject("errMsg", "IDが重複しています。");
-				mav.setViewName("admin/teInfoRegist");
+				if (userDisplayService.userIDCheck(u.getUser_id())) {
+
+					mav.addObject("te", u);
+					mav.setViewName("admin/teInfoRegistConfirm");
+
+				} else {
+
+					// IDが重複していた場合
+					mav.addObject("errMsg", "IDが重複しています。");
+					mav.setViewName("admin/teInfoRegist");
+				}
 			}
 		}
+
 		return mav;
 	}
 

@@ -107,12 +107,16 @@ public class UserCtrl {
 
 		// ログアウト時に居場所を'休憩中'に設定するフラグをセッションに保存
 		session.setAttribute("logoutFlg", true);
+		
+		//居場所を'休憩中'に更新
+		groupDispService.roomUpdate("休憩中", group_id);
 
 		// Cookie情報を削除
 		Cookie cookie = new Cookie("chatPartnerUserId", null);
 		cookie.setMaxAge(0);
 		response.addCookie(cookie);
 
+		//セッション情報を削除
 		session.invalidate();
 
 		return "redirect:/taskdon/user/login";
@@ -277,6 +281,9 @@ public class UserCtrl {
 
 		if (deptGroupFlg != null && deptGroupFlg) {
 
+			//居場所を'休憩中'に更新
+			groupDispService.roomUpdate("休憩中", group_id);
+			
 			session.setAttribute("currentPlace", "休憩中");
 			session.removeAttribute("deptGroupFlg");
 		}
@@ -372,6 +379,28 @@ public class UserCtrl {
 		user_roll = (String) session.getAttribute("user_roll");
 
 		return "common/menuUser";
+	}
+	
+	/**
+	 * 末吉
+	 * 居場所更新
+	 */
+	@LoginRequired
+	@PostMapping("updateStatus")
+	public ModelAndView roomUpdate(ModelAndView mav,
+			@RequestParam(name = "updateStatus", required = false) String updateStatus) {
+		
+		//居場所更新
+		groupDispService.roomUpdate(updateStatus, group_id);
+		
+		//居場所情報取得
+		List<Room> roomList = userDisplayService.roomSelect();
+
+		mav.addObject("status", updateStatus);
+		mav.addObject("roomList", roomList);
+		mav.setViewName("common/menuUser");
+		
+		return mav;
 	}
 
 	/**
