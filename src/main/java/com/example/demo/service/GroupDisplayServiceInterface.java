@@ -6,6 +6,7 @@ import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
+import com.example.demo.form.Room;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsForm;
 
@@ -70,13 +71,13 @@ public interface GroupDisplayServiceInterface {
 
 	//タスクの進捗を更新したメンバの進捗更新
 	public void updateProgress(String user_id, int group_id);
-	
+
 	//グループの全体進捗更新
 	public void allProgress(int group_id);
 
 	//所属グループ一覧
 	public List<GroupDisplay> deptGroupList(String user_id);
-  
+
 	//チャット相手を設定
 	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
 
@@ -90,7 +91,7 @@ public interface GroupDisplayServiceInterface {
 	public int selectProgress(int attribute);
 
 	//メンバ詳細取得
-	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id,String seletedValue);
+	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id, String seletedValue);
 
 	//結成年度取得(絞り込み用)
 	public List<TeamsForm> selectEstYear(String value);
@@ -100,7 +101,10 @@ public interface GroupDisplayServiceInterface {
 
 	//学校一覧(絞り込み用)
 	List<TeamsForm> selectSchool();
-	
+
+	//居場所選択
+	public List<Room> roomSelect(int school_id);
+
 	//居場所更新
 	public void roomUpdate(String work_status, int group_id);
 

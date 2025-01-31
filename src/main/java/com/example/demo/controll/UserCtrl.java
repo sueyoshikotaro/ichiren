@@ -96,7 +96,8 @@ public class UserCtrl {
 	private int group_id;
 	private String user_id;
 	private String user_roll;
-
+	private String status;
+	
 	/**
 	 * ログアウト画面を表示
 	 * @return
@@ -107,7 +108,7 @@ public class UserCtrl {
 
 		// ログアウト時に居場所を'休憩中'に設定するフラグをセッションに保存
 		session.setAttribute("logoutFlg", true);
-		
+
 		//居場所を'休憩中'に更新
 		groupDispService.roomUpdate("休憩中", group_id);
 
@@ -281,9 +282,9 @@ public class UserCtrl {
 
 		if (deptGroupFlg != null && deptGroupFlg) {
 
-			//居場所を'休憩中'に更新
+			//居場所を'休憩中'に更新_末吉追加
 			groupDispService.roomUpdate("休憩中", group_id);
-			
+
 			session.setAttribute("currentPlace", "休憩中");
 			session.removeAttribute("deptGroupFlg");
 		}
@@ -325,6 +326,7 @@ public class UserCtrl {
 	}
 
 	/**
+	 * 坂本・末吉
 	 * メニュー(ユーザ)
 	 * @return
 	 */
@@ -334,6 +336,7 @@ public class UserCtrl {
 			@RequestParam(name = "user_roll", required = false) String user_roll,
 			ModelAndView mav) {
 
+		//所属グループ一覧画面から遷移してきた場合
 		if (group_id != null && user_roll != null) {
 			//セッションに値を設定
 			session.setAttribute("groupUser", TaskService.taskUserSearch(group_id)); //ユーザ名,担当者検索用
@@ -348,14 +351,30 @@ public class UserCtrl {
 			this.group_id = (int) session.getAttribute("groupId");
 			user_id = userEntity.getUser_id();
 			this.user_roll = (String) session.getAttribute("user_roll");
+			
+			//居場所の初期値を休憩中にする
+			status = "休憩中";
 		}
+		//連絡事項一覧取得
 		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
 
 		mav.addObject("noticeList", noticeList);
 		mav.setViewName("common/menuUser");
 
-		List<Room> roomList = userDisplayService.roomSelect();
+		//居場所リストに表示する内容取得
+		List<Room> roomList = groupDispService.roomSelect(school_id);
+		
+		// リストの先頭の列に値を追加
+		Room room = new Room();
+		room.setRoom_name("休憩中");
+		roomList.add(0, room);
 
+		// リストの最後の列に値を追加
+		room = new Room();
+		room.setRoom_name("校外作業中");
+		roomList.add(room);
+
+		mav.addObject("status", status);
 		mav.addObject("roomList", roomList);
 
 		return mav;
@@ -380,7 +399,7 @@ public class UserCtrl {
 
 		return "common/menuUser";
 	}
-	
+
 	/**
 	 * 末吉
 	 * 居場所更新
@@ -389,17 +408,20 @@ public class UserCtrl {
 	@PostMapping("updateStatus")
 	public ModelAndView roomUpdate(ModelAndView mav,
 			@RequestParam(name = "updateStatus", required = false) String updateStatus) {
+
+		//フィールド変数に居場所情報を格納
+		status = updateStatus;
 		
 		//居場所更新
 		groupDispService.roomUpdate(updateStatus, group_id);
-		
+
 		//居場所情報取得
-		List<Room> roomList = userDisplayService.roomSelect();
+		List<Room> roomList = groupDispService.roomSelect(school_id);
 
 		mav.addObject("status", updateStatus);
 		mav.addObject("roomList", roomList);
 		mav.setViewName("common/menuUser");
-		
+
 		return mav;
 	}
 
@@ -969,7 +991,7 @@ public class UserCtrl {
 		mav.addObject("noticeList", noticeList);
 		mav.setViewName("common/menuUser");
 
-		List<Room> roomList = userDisplayService.roomSelect();
+		List<Room> roomList = groupDispService.roomSelect(school_id);
 
 		mav.addObject("roomList", roomList);
 

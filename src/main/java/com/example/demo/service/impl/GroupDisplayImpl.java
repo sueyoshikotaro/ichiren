@@ -8,6 +8,7 @@ import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
+import com.example.demo.form.Room;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsForm;
 import com.example.demo.repository.GroupDisplayCrudRepository;
@@ -491,6 +492,16 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	
 	/**
 	 * 末吉
+	 * 居場所一覧
+	 */
+	@Override
+	public List<Room> roomSelect(int school_id) {
+		
+		return groupDispCrudRepo.roomSelect(school_id);
+	}
+	
+	/**
+	 * 末吉
 	 * 居場所更新
 	 */
 	@Override
@@ -498,4 +509,5 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		
 		groupDispCrudRepo.roomUpdate(work_status, group_id);
 	}
+	
 }
