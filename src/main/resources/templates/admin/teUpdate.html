@@ -1,4 +1,3 @@
-<!-- 講師情報編集機能 (担当:向江)-->
 <!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -34,9 +33,9 @@
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2>講師情報編集</h2>
+		<h2 style="margin-bottom: 30px;">講師情報編集</h2>
 
-		<!--エラー置き場-->
+		<!--エラー-->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
 		<form th:action="@{teUpdateConfirm}" method="post">
@@ -46,12 +45,12 @@
 				<input type="text" class="form-control regist-field" th:value="${te.user_name}" name="user_name">
 			</div>
 
-			<div class="form-group regist-item">
+			<div class="form-group regist-item" style="margin-top: 22px;">
 				<label class="form-label">講師ID</label>
 				<input type="text" class="form-control regist-field" th:value="${te.user_id}" name="user_id" readonly>
 			</div>
 
-			<div class="form-group regist-item">
+			<div class="form-group regist-item" style="margin-top: 22px;">
 				<label class="form-label" for="school-select">所属学校名</label>
 				<select id="school-select" name="school_name" class="form-select regist-field">
 					<option name="school_name" th:selected="${te.school_name=='北海道情報専門学校'}">北海道情報専門学校</option>
@@ -67,13 +66,20 @@
 				</select>
 			</div>
 
-			<div class="form-group regist-item">
+			<div class="form-group regist-item" style="margin-top: 22px;">
 				<label class="form-label">入社年月日</label>
 				<input type="date" th:value="${te.enr_year}" class="form-control regist-field" id="enr_year"
 					name="enr_year" min="1900-01-01" max="9999-12-31" required>
 			</div>
 
-			<button type="submit" class="control-btn mini-btn" value="確認">確認</button>
+			<button type="submit" class="control-btn mini-btn" value="確認"
+				style="margin-top: 30px; margin-bottom: 20px;">確認
+				<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
+					class="bi bi-arrow-right-circle" viewBox="0 0 16 16" style="margin-bottom: 3.5px;">
+					<path fill-rule="evenodd"
+						d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+				</svg>
+			</button>
 
 		</form>
 	</div>
