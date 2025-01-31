@@ -1,8 +1,5 @@
 package com.example.demo.service;
 
-import java.util.List;
-
-import com.example.demo.form.Room;
 import com.example.demo.form.UserDisplay;
 
 public interface UserDisplayServiceInterface {
@@ -52,9 +49,6 @@ public interface UserDisplayServiceInterface {
 
 	//パスワード無効化
 	public void adminDisable(String user_id, int user_flg);
-
-	//居場所選択
-	public List<Room> roomSelect();
 
 	//絞り込み検索結果
 	public Iterable<UserDisplay> userFilterList(int school_id, String est_year);

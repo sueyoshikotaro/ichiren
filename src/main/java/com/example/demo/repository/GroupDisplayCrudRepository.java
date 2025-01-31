@@ -279,8 +279,8 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 坂本
 	 * 教室情報一覧取得
 	 */
-	@Query("select room.room_id, room.room_name, room.hall, room.floor from room")
-	public List<Room> roomSelect();
+	@Query("select room_id, room_name, hall, floor from room where school_id = :school_id")
+	public List<Room> roomSelect(int school_id);
 	
 	/**
 	 * 末吉
