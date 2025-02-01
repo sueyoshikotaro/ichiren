@@ -97,7 +97,10 @@ public class UserCtrl {
 	private String user_id;
 	private String user_roll;
 	private String status;
-	
+
+	//湊原追加
+	private int progress;
+
 	/**
 	 * ログアウト画面を表示
 	 * @return
@@ -351,7 +354,7 @@ public class UserCtrl {
 			this.group_id = (int) session.getAttribute("groupId");
 			user_id = userEntity.getUser_id();
 			this.user_roll = (String) session.getAttribute("user_roll");
-			
+
 			//居場所の初期値を休憩中にする
 			status = "休憩中";
 		}
@@ -363,7 +366,7 @@ public class UserCtrl {
 
 		//居場所リストに表示する内容取得
 		List<Room> roomList = groupDispService.roomSelect(school_id);
-		
+
 		// リストの先頭の列に値を追加
 		Room room = new Room();
 		room.setRoom_name("休憩中");
@@ -411,7 +414,7 @@ public class UserCtrl {
 
 		//フィールド変数に居場所情報を格納
 		status = updateStatus;
-		
+
 		//居場所更新
 		groupDispService.roomUpdate(updateStatus, group_id);
 
@@ -515,19 +518,37 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("taskDetails")
-	public ModelAndView taskDetail(@RequestParam(name = "taskProgress", required = false) String progress,
+	public ModelAndView taskDetail(@RequestParam(name = "taskProgress", required = false) Integer progress,
 			@RequestParam(name = "task_id") Integer task_id, ModelAndView mav) {
 		mav.getModel().clear();
+		List<Task> detail = TaskService.taskDetails(task_id, (int) session.getAttribute("groupId"));
+		this.progress = detail.get(0).getProgress();
+		String taskstatus = null;
 		if (progress != null) {
-			TaskService.taskUpProgress(task_id, Integer.valueOf(progress));
+			if (progress == 100) {
+				taskstatus = "完了";
+			} else {
+				if (this.progress == progress) {
+					taskstatus = detail.get(0).getTask_status();
+				} else {
+					if (this.progress < progress) {
+						taskstatus = "着手";
+					} else {
+						taskstatus = "出戻り";
+					}
+				}
+			}
 
+			TaskService.taskUpProgress(task_id, Integer.valueOf(progress), taskstatus);
 			//メンバの進捗更新
 			groupDispService.updateProgress(user_id, group_id);
-
 			//全体進捗更新
 			groupDispService.allProgress(group_id);
+
+			this.progress = progress;
+			detail = TaskService.taskDetails(task_id, (int) session.getAttribute("groupId"));
 		}
-		mav.addObject("task", TaskService.taskDetails(task_id, (int) session.getAttribute("groupId")));
+		mav.addObject("task", detail);
 		mav.setViewName("common/taskDetails");
 		return mav;
 	}
@@ -746,11 +767,9 @@ public class UserCtrl {
 	public ModelAndView todoList(ModelAndView mav,
 			@RequestParam(name = "tdlist_id", required = false) Integer tdlist_id,
 			@RequestParam(name = "checked", required = false) Boolean checked) {
-		System.out.println(tdlist_id);
 		if (tdlist_id != null) {
 			if (checked != null) {
 				if (checked) {
-					System.out.println(checked);
 					TodoService.todoUpFlg(tdlist_id, 1);
 				} else {
 					TodoService.todoUpFlg(tdlist_id, 0);
@@ -848,8 +867,6 @@ public class UserCtrl {
 	//		String user_id = userEntity.getUser_id();
 	//
 	//		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
-	//
-	//		System.out.println(noticeList);
 	//
 	//		mav.addObject("noticeList", noticeList);
 	//		mav.setViewName("common/menuUser");

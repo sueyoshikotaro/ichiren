@@ -35,7 +35,7 @@ public interface TaskServiceInterface {
 	public void userUpScore(int score, String user_name, int group_id);
 
 	//タスクの進捗を更新するメソッド
-	public void taskUpProgress(int task_id, int progress);
+	public void taskUpProgress(int task_id, int progress, String task_status);
 
 	//タスク未承認一覧表示
 	public List<TaskReqView> selectTaskUnapproved(int group_id);
