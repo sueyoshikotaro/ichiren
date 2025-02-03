@@ -86,8 +86,9 @@
 				<div th:if="${#lists.isEmpty(todoList)}">
 					<p style="margin-bottom: 50px;">　ToDoリストが空です。　</p>
 				</div>
+
 				<!--機能ボタン-->
-				<div class="btn-group btnS-group" style="margin-top: 16px;">
+				<div class="btn-group btnS-group" style="margin-top: 16px;" th:if="${#lists.isEmpty(todoList)}">
 					<button type="submit" name="button" value="regist" class="move-btn mini-btn">登録</button>
 				</div>
 
