@@ -25,6 +25,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'com.amazonaws:aws-java-sdk-core:1.12.388'
+    implementation 'com.amazonaws:aws-java-sdk-lambda:1.12.780'
 	
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
