@@ -7,7 +7,6 @@
 <head>
 	<!-- 必須項目 -->
 	<meta charset="UTF-8">
-
 </head>
 
 <body>
@@ -15,23 +14,30 @@
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
 
-		<form th:action="@{noticeDelete}" method="post" id="noticeForm">
-			<div th:each="notice : ${noticeList}">
-				<div class="form-check">
+		<form th:action="@{noticeDelete}" method="post" id="noticeForm" class="notice-content">
+			<div th:each="notice : ${noticeList}" style="border-top: solid 2px black;">
+				<div class="form-check" style="margin-top: 10px;">
 					<input class="form-check-input notice-checkbox" type="checkbox" name="check"
 						th:value="${notice.notice_id}" th:if="${session.user_roll} == 'リーダ'" th:onchange="">
+
+					<!--連絡タイトル-->
+					<div th:text="'【'+${notice.title}+'】'" style="margin-left: -10px;"></div>
+
 				</div>
-				<div th:text="${notice.user_name}"></div>
-				<div th:text="${notice.title}"></div>
-				<div th:text="${notice.contact_msg}"></div>
-				<div th:text="${notice.send_date}"></div><br>
+
+				<textarea type="text" th:text="${notice.contact_msg}" class="form-control" name="contact_msg" rows="3"
+					readonly></textarea>
+
+				<div th:text="'送信者【'+${notice.user_name}+'】'"></div>
+
+				<div th:text="'/'+${notice.send_date}+'_(送信時間)'"></div><br>
 			</div>
 		</form>
 
 		<!--コンテナ最下のボタン-->
-		<button type="submit" name="button" value="削除" class="btn" th:if="${session.user_roll} == 'リーダ'"
-			id="deleteButton" form="noticeForm">削除</button>
-			
+		<button type="submit" name="button" value="削除" th:if="${session.user_roll} == 'リーダ'"
+			id="deleteButton" class="select-btn" form="noticeForm">削除</button>
+
 	</div>
 </body>
 
