@@ -60,60 +60,17 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		}
 		return result;
 	}
-	//		else if() {
-	//			
-	//		}
 
-	//	}else if(genre.equals("選択なし")&&year.equals("選択なし")&&school_id==0)
-	//
-	//	{
-	//		result = groupDispCrudRepo.groupList();
-	//	}else if(genre.equals("選択なし")&&year.equals("選択なし"))
-	//	{
-	//		result = groupDispCrudRepo.groupListSchool(school_id);
-	//	}else if(genre.equals("選択なし")&&school_id==0)
-	//	{
-	//		result = groupDispCrudRepo.groupListYear(year);
-	//	}else if(year.equals("選択なし")&&school_id==0)
-	//	{
-	//		result = groupDispCrudRepo.groupListGenre(genre);
-	//	}else
-	//	{
-	//		result = groupDispCrudRepo.groupList(genre, year, school_id);
-	//	}
+	/**
+	 * 末吉
+	 * 絞り込み検索結果
+	 */
+	@Override
+	public List<GroupDisplay> groupInfo(int group_id) {
 
-	//		} else if(year.equals("選択なし") && school_id == 0){
-	//			result = groupDispCrudRepo.groupList(year, genre, school_id);
-	//		} else if(school_id == 0){
-	//			result = groupDispCrudRepo.groupList(year, genre, school_id);
-	//		}
-	//		result = groupDispCrudRepo.groupList(year, genre, school_id);
-	//	}
-
-	//		String dropdown = year;
-	//		String dropid = genre;
-	//		if (dropdown.equals("--")) {
-	//		} else {
-	//			if (dropid.equals("year")) {
-	//				if (dropdown.equals("グループ結成年度")) {
-	//					result = groupDispCrudRepo.groupList(school_id);
-	//				} else {
-	//					result = groupDispCrudRepo.groupListYear(dropdown);
-	//				}
-	//			} else if (dropid.equals("school")) {
-	//				if (dropdown.equals("学校名")) {
-	//					result = groupDispCrudRepo.groupList(school_id);
-	//				} else {
-	//					result = groupDispCrudRepo.groupListSchool(dropdown);
-	//				}
-	//			} else if (dropid.equals("genre")) {
-	//				if (dropdown.equals("ジャンル")) {
-	//					result = groupDispCrudRepo.groupList(school_id);
-	//				} else {
-	//					result = groupDispCrudRepo.groupListGenre(dropdown);
-	//				}
-	//			}
-	//		}
+		System.out.println(group_id);
+		return groupDispCrudRepo.groupInfo(group_id);
+	}
 
 	/*
 	 * 湊原
@@ -182,9 +139,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ削除画面を表示するためだけのメソッド
 	 */
 	@Override
-	public List<GroupMemberDeleteView> grMemDelDisp(String user_id) {
+	public List<GroupMemberDeleteView> grMemDelDisp(String user_id, int group_id) {
 
-		return groupDispCrudRepo.grMemDelDisp(user_id);
+		return groupDispCrudRepo.grMemDelDisp(user_id, group_id);
 	}
 
 	/*
@@ -209,14 +166,6 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		List<GroupMemberDeleteView> group = groupDispCrudRepo.membersScore(group_id);
 
 		return group;
-		//		// membersScore の一つ目の要素を取得
-		//		GroupMemberDeleteView firstMember = group.get(0);
-		//		
-		//		// score と user_id を含む新しいオブジェクトを返す
-		//		List<GroupMemberDeleteView> result = new ArrayList<>();
-		//		result.add(firstMember);
-
-		//		return result;
 
 	}
 
@@ -359,17 +308,14 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		//割り振られるユーザのタスク情報を取得
 		List<TaskForm> updateUserTask = groupDispCrudRepo.taskList(user_id, group_id);
 
-		System.out.println(updateUserTask);
-		
-		for(TaskForm i : updateUserTask) {
+		//ユーザの進捗度の計算
+		for (TaskForm i : updateUserTask) {
 			progressSum += i.getProgress();
-			
-			System.out.println(progressSum);
 		}
-		
+
 		//更新するユーザ
 		int userProgressResult = progressSum / updateUserTask.size();
-		
+
 		groupDispCrudRepo.updateProgress(group_id, user_id, userProgressResult);
 
 	}
@@ -386,18 +332,21 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 		List<GroupDetailView> taskList = groupDispCrudRepo.groupDetail(group_id);
 
-		System.out.println(taskList.size());
-
+		//全体進捗の計算
 		for (GroupDetailView progressSum : taskList) {
 			all_progress += progressSum.getUser_progress();
 		}
-
-		//更新後の全体進捗の計算
-		all_progress_result = all_progress / taskList.size();
+		
+		//グループにメンバがいる場合
+		if (!taskList.isEmpty()) {
+			//更新後の全体進捗の計算
+			all_progress_result = all_progress / taskList.size();
+		} else {
+			all_progress_result = 0;
+		}
 
 		//全体進捗の更新
-		groupDispCrudRepo.allProgressUpdate(taskList.get(0).getGroup_id(), all_progress_result);
-
+		groupDispCrudRepo.allProgressUpdate(group_id, all_progress_result);
 	}
 
 	/**
@@ -489,25 +438,25 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	public List<TeamsForm> selectGenre() {
 		return groupDispCrudRepo.selectGenre();
 	}
-	
+
 	/**
 	 * 末吉
 	 * 居場所一覧
 	 */
 	@Override
 	public List<Room> roomSelect(int school_id) {
-		
+
 		return groupDispCrudRepo.roomSelect(school_id);
 	}
-	
+
 	/**
 	 * 末吉
 	 * 居場所更新
 	 */
 	@Override
 	public void roomUpdate(String work_status, int group_id) {
-		
+
 		groupDispCrudRepo.roomUpdate(work_status, group_id);
 	}
-	
+
 }

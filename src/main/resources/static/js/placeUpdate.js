@@ -1,7 +1,9 @@
 //居場所更新用
 
 //絶対に呼び出す処理
-toggleLinkStatus();
+window.addEventListener('DOMContentLoaded', function() {
+	toggleLinkStatus();
+});
 
 //'休憩中'の間リンクを無効化
 function toggleLinkStatus() {
@@ -9,6 +11,8 @@ function toggleLinkStatus() {
 
 	const selectedOption = selectElement.options[selectElement.selectedIndex].text;
 	const links = document.querySelectorAll('.menu-link');
+
+	console.log(selectedOption)
 
 	links.forEach(link => {
 		if (selectedOption === '休憩中') {

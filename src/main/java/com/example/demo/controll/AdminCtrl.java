@@ -30,6 +30,7 @@ import com.example.demo.entity.User;
 import com.example.demo.form.ChatForm;
 import com.example.demo.form.FormContents;
 import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.SchoolDisplay;
@@ -600,7 +601,7 @@ public class AdminCtrl {
 	@LoginRequired
 	@GetMapping("teInfoRegist")
 	public ModelAndView dispRegist(ModelAndView mav) {
-		
+
 		Optional<School> school = schoolCrudRepo.findById(school_id);
 
 		mav.addObject("school_name", school.get().getSchool_name());
@@ -873,8 +874,21 @@ public class AdminCtrl {
 	public ModelAndView groupDetail(ModelAndView mav,
 			GroupMemberDeleteView g) {
 
+		System.out.println(g.getGroup_id());
+
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
 
+		List<GroupDisplay> groupInfo = groupDispService.groupInfo(g.getGroup_id());
+
+		if (group.isEmpty()) {
+			mav.addObject("Msg", "グループメンバがいません");
+		}
+
+		System.out.println(group);
+
+		System.out.println(groupInfo);
+
+		mav.addObject("groupInfo", groupInfo);
 		mav.addObject("groups", group);
 		mav.setViewName("admin/groupDetails");
 
@@ -1074,7 +1088,16 @@ public class AdminCtrl {
 			GroupMemberDeleteView g) {
 
 		//グループメンバ削除確認画面のテーブルを表示する
-		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
+		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id(), g.getGroup_id());
+
+		System.out.println(group);
+
+		if (group.isEmpty()) {
+			mav.addObject("Msg", "タスク情報がありません");
+			mav.addObject("user_name", g.getUser_name());
+			mav.addObject("user_id", g.getUser_id());
+			mav.addObject("group_id", g.getGroup_id());
+		}
 
 		mav.addObject("user", group);
 		mav.setViewName("admin/groupMemberDelete");
@@ -1093,19 +1116,21 @@ public class AdminCtrl {
 			GroupMemberDeleteView g, ModelAndView mav) {
 
 		//グループメンバ削除確認画面のテーブルを表示する
-		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id());
+		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id(), g.getGroup_id());
 
-		for (int i = 0; i < group.size(); i++) {
+		if (group.isEmpty()) {
+			for (int i = 0; i < group.size(); i++) {
 
-			//更新後のスコアと進捗度を計算するサービスを呼び出す
-			Object[] updateData = groupDispService.scoreCalc(g.getGroup_id(), g.getUser_id());
+				//更新後のスコアと進捗度を計算するサービスを呼び出す
+				Object[] updateData = groupDispService.scoreCalc(g.getGroup_id(), g.getUser_id());
 
-			//user_detailのtask_idを更新(タスクの自動振り分け)
-			groupDispService.updateUserId(group.get(0).getTask_id(), (String) updateData[2]);
+				//user_detailのtask_idを更新(タスクの自動振り分け)
+				groupDispService.updateUserId(group.get(0).getTask_id(), (String) updateData[2]);
 
-			//user_detailのscoreとuser_progressを更新
-			groupDispService.updateScore((String) updateData[2], g.getGroup_id(), (int) updateData[0],
-					(int) updateData[1]);
+				//user_detailのscoreとuser_progressを更新
+				groupDispService.updateScore((String) updateData[2], g.getGroup_id(), (int) updateData[0],
+						(int) updateData[1]);
+			}
 		}
 
 		//user_detailテーブルの一列を削除
@@ -1114,10 +1139,7 @@ public class AdminCtrl {
 		//グループの全体進捗を更新するサービスを呼び出す
 		groupDispService.allProgress(g.getGroup_id());
 
-		//グループ詳細画面を表示するためにグループ情報を格納
-		List<GroupDetailView> groupDetails = groupDispService.groupDetail(g.getGroup_id());
-
-		mav.addObject("group", groupDetails);
+		mav.addObject("group_id", g.getGroup_id());
 		mav.addObject("groupMemberDeleteComp", true);
 		mav.setViewName("admin/groupMemberDelete");
 
@@ -1483,23 +1505,25 @@ public class AdminCtrl {
 	@LoginRequired
 	@PostMapping("groupDissConfirm")
 	public ModelAndView groupDelete(ModelAndView mav, TeamsDisplay teamsDisplay,
-			@RequestParam("user_id") String[] user_id,
-			@RequestParam("user_name") String[] user_name,
-			@RequestParam("user_roll") String[] user_roll) {
+			@RequestParam(name = "user_id", required = false) String[] user_id,
+			@RequestParam(name = "user_name", required = false) String[] user_name,
+			@RequestParam(name = "user_roll", required = false) String[] user_roll) {
 
 		List<TeamsDisplay> leaderList = new ArrayList<>();
 		List<TeamsDisplay> memberList = new ArrayList<>();
 
-		for (int i = 0; i < user_id.length; i++) {
-			TeamsDisplay userInfo = new TeamsDisplay();
-			userInfo.setUser_id(user_id[i]);
-			userInfo.setUser_name(user_name[i]);
-			userInfo.setUser_roll(user_roll[i]);
+		if(user_id != null) {
+			for (int i = 0; i < user_id.length; i++) {
+				TeamsDisplay userInfo = new TeamsDisplay();
+				userInfo.setUser_id(user_id[i]);
+				userInfo.setUser_name(user_name[i]);
+				userInfo.setUser_roll(user_roll[i]);
 
-			if (user_roll[i].equals("リーダ")) {
-				leaderList.add(userInfo);
-			} else {
-				memberList.add(userInfo);
+				if (user_roll[i].equals("リーダ")) {
+					leaderList.add(userInfo);
+				} else {
+					memberList.add(userInfo);
+				}
 			}
 		}
 
