@@ -36,6 +36,16 @@
 
 		<h2>グループ詳細</h2>
 
+		<div th:each="groupInfo : ${groupInfo}" th:if="${#lists.isEmpty(groups)}">
+			<span class="form-label">グループ名</span>
+			<div type="text" class="form-control" th:text="${groupInfo.group_name}"></div>
+
+			<div class="group-detail-text-view">
+				<span class="form-label">ジャンル</span>
+				<div type="text" class="form-control" th:text="${groupInfo.genre}"></div>
+			</div>
+		</div>
+
 		<!--グループ全体情報-->
 		<div th:each="groupDetails : ${groups}" th:if="${groupDetailsStat.index == 0}">
 
@@ -77,10 +87,15 @@
 
 		</div>
 
+		<!--指示文を表示-->
+		<p th:if="${Msg}" th:text="${Msg}"
+			style="text-align: center; margin-top: 35px; margin-bottom: 30px; font-size: 19px; text-decoration: double;">
+		</p>
+
 		<!--メイン項目-->
 		<div class="main-content">
 			<div th:each="group : ${groups}" class="content-child">
-
+				<p style="font-size: 14px; margin-bottom: -16px;">割り振られているタスクがありません。</p>
 				<div class="row">
 					<div class="col">
 
@@ -114,6 +129,7 @@
 						<form th:action="@{groupMemberDetails}" method="post">
 							<input type="hidden" name="user_id" th:value="${group.user_id}">
 							<input type="hidden" name="group_id" th:value="${group.group_id}">
+							<input type="hidden" name="user_name" th:value="${group.user_name}">
 							<button type="submit" name="button" class="select-btn" value="詳細">詳細</button>
 						</form>
 					</div>
@@ -123,7 +139,7 @@
 							<input type="hidden" name="user_id" th:value="${group.user_id}">
 							<input type="hidden" name="group_id" th:value="${group.group_id}">
 
-							<!--<input type="hidden" name="user_name" th:value="${group.user_name}">-->
+							<input type="hidden" name="user_name" th:value="${group.user_name}">
 							<!--<input type="hidden" name="group_name" th:value="${group.group_name}">-->
 
 							<button type="submit" name="button" class="select-btn" value="削除">削除</button>
@@ -136,13 +152,13 @@
 		<!--グループメンバ追加 -->
 		<div class="btn-group btnS-group">
 			<form th:action="@{groupMemberAdd}" method="post">
-				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
-				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
+				<input type="hidden" name="group_id" th:value="${groupInfo[0].group_id}">
+				<input type="hidden" name="group_name" th:value="${groupInfo[0].group_name}">
 				<button type="submit" name="button" class="move-btn mini-btn" value="追加">追加</button>
 			</form>
 
 			<!--グループ編集 -->
-			<form th:action="@{groupEdit}" method="post">
+			<form th:action="@{groupEdit}" method="post" th:if="${!#lists.isEmpty(groups)}">
 				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
 				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
 				<input type="hidden" name="genre" th:value="${groups[0].genre}">
@@ -154,8 +170,8 @@
 
 			<!--グループ解散 -->
 			<form th:action="@{groupDissConfirm}" method="post">
-				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
-				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
+				<input type="hidden" name="group_id" th:value="${groupInfo[0].group_id}">
+				<input type="hidden" name="group_name" th:value="${groupInfo[0].group_name}">
 				<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
 				<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
 				<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">

@@ -15,6 +15,8 @@ public interface GroupDisplayServiceInterface {
 	// グループ一覧表示
 	public List<TeamsForm> groupList(String est_year, String genre, int school_id);
 
+	public List<GroupDisplay> groupInfo(int group_id);
+	
 	//湊原
 	public List<TeamsForm> getTeamsByCriteria(String schoolName);
 
@@ -34,7 +36,7 @@ public interface GroupDisplayServiceInterface {
 	public void groupEdit(String group_id);
 
 	//グループメンバ削除画面を表示するためだけのメソッド
-	public List<GroupMemberDeleteView> grMemDelDisp(String user_id);
+	public List<GroupMemberDeleteView> grMemDelDisp(String user_id, int group_id);
 
 	//グループメンバ削除
 	public void groupMemberDelete(int group_id, String user_id);

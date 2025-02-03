@@ -53,6 +53,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and genre = :genre")
 	public List<TeamsForm> groupListGenre(String genre);
 
+	
 	/**
 	 * 湊原
 	 * 絞り込み
@@ -64,6 +65,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Query("select * from teams where group_flg = 1 and school_name = :schoolName")
 	public List<TeamsForm> findByCriteria(String schoolName);
 
+	
+	/**
+	 * 末吉
+	 * グループ情報
+	 */
+	@Query("select * from teams where group_id = :group_id")
+	public List<GroupDisplay> groupInfo(int group_id);
+	
 	/*
 	 * 向江
 	 * グループ詳細表示
@@ -104,8 +113,8 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * グループメンバ削除画面を表示するためだけのsql
 	 */
-	@Query("select u.user_name, t.task_id, t.task_name,t.task_content, u.user_id, t.task_id, t.group_id, t.task_weight from user u join task t on u.user_id = t.user_id where u.user_id = :user_id")
-	public List<GroupMemberDeleteView> grMemDelDisp(String user_id);
+	@Query("select u.user_name, t.task_id, t.task_name,t.task_content, u.user_id, t.task_id, t.group_id, t.task_weight from user u join task t on u.user_id = t.user_id where u.user_id = :user_id and t.group_id = :group_id")
+	public List<GroupMemberDeleteView> grMemDelDisp(String user_id, int group_id);
 
 	/*
 	 * 向江
