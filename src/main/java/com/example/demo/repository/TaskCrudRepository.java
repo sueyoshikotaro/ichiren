@@ -98,8 +98,8 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * タスクの進捗を更新するメソッド
 	 */
 	@Modifying
-	@Query("update task set progress=:progress where task_id=:task_id;")
-	public void updateProgress(int task_id, int progress);
+	@Query("update task set progress=:progress, task_status=:taskstatus where task_id=:task_id;")
+	public void updateProgress(int task_id, int progress, String taskstatus);
 
 	/**
 	 * 湊原

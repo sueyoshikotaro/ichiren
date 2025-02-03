@@ -1,11 +1,8 @@
 /* SQL エラー  (1054): Unknown column 'te66667777' in 'where clause' *//* SQL エラー  (1054): Unknown column 'te66667777' in 'where clause' */
 package com.example.demo.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.form.Room;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.repository.UserDisplayCrudRepository;
@@ -205,17 +202,6 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	public void adminDisable(String user_id, int user_flg) {
 
 		userCrudRepo.adminDisable(user_id, user_flg);
-
-	}
-
-	/*
-	 * 坂本
-	 * 居場所選択
-	 */
-	@Override
-	public List<Room> roomSelect() {
-
-		return groupCrudRepo.roomSelect();
 
 	}
 }

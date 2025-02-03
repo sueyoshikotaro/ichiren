@@ -110,9 +110,9 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * タスクの進捗を更新するメソッド
 	 */
 	@Override
-	public void taskUpProgress(int task_id, int progress) {
+	public void taskUpProgress(int task_id, int progress, String taskstatus) {
 
-		repo.updateProgress(task_id, progress);
+		repo.updateProgress(task_id, progress,taskstatus);
 
 	}
 
