@@ -89,7 +89,7 @@
 						</form>
 					</div>
 
-					<div class="col">
+					<div class="col" th:if="${#strings.startsWith(te.user_id, 'te')}">
 						<form th:action="@{teDeleteConfirm}" method="post">
 							<input type="hidden" name="user_id" th:value="${te.user_id}">
 							<input type="hidden" name="user_name" th:value="${te.user_name}">

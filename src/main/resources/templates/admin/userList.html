@@ -88,7 +88,7 @@
 					<div type="text" class="form-control" th:text="${user.enr_year}"></div>
 				</div>
 
-				<div class="row  userList-btn-group">
+				<div class="row  userList-btn-group" th:if="${user.school_id == session.user.school_id}">
 					<div class="col">
 						<!-- 削除 -->
 						<form th:action="@{userDelete}" method="post">
