@@ -18,14 +18,14 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 	 * ユーザ一覧表示用のSQL
 	 */
 	//学校名だけ選択されている場合
-	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id where user_flg = 1 and user_id like '%st%' and u.school_id = :school_id")
+	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year,u.school_id from user u inner join school s on u.school_id = s.school_id where user_flg = 1 and user_id like '%st%' and u.school_id = :school_id")
 	public List<UserDisplay> userList(int school_id);
 	//学校名と年度がどちらも選択されている場合
-	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id"
+	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year,u.school_id from user u inner join school s on u.school_id = s.school_id"
 			+ " where user_flg = 1 and user_id like '%st%' and u.school_id = :school_id and Year(u.enr_year) = :enr_year")
 	public Iterable<UserDisplay> userList(int school_id, String enr_year);
 	//年度だけ選択されている場合
-	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id"
+	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year,u.school_id from user u inner join school s on u.school_id = s.school_id"
 			+ " where user_flg = 1 and user_id like '%st%' and Year(u.enr_year) = :enr_year")
 	public Iterable<UserDisplay> userList(String enr_year);
 	
@@ -82,9 +82,9 @@ public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, S
 
 	/*
 	 * 向江
-	 * 講師一覧表示用のSQL
+	 * 講師一覧表示用のSQL(stアカウント以外)
 	 */
-	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id where user_flg = 1 and user_id like '%te%' and u.school_id = :school_id")
+	@Query("select u.user_id,u.user_name,'****' as user_pass,s.school_name as school_name,u.enr_year from user u inner join school s on u.school_id = s.school_id where user_flg = 1 and user_id not like '%st%' and u.school_id = :school_id")
 	public List<UserDisplay> teList(int school_id);
 
 	/*

@@ -425,13 +425,14 @@ public class AdminCtrl {
 		Calendar calendar = Calendar.getInstance();
 		int y = calendar.get(Calendar.YEAR);
 		Iterable<UserDisplay> userList = null;
+		
+		//サービスのメソッドを呼び出す
 		if ((selectedSchool == null && selectedYear == null) || (selectedSchool == 0 && selectedYear.equals("選択なし"))) {
 			userList = userDisplayService.userFilterList(school_id, String.valueOf(y));
 		} else {
 			userList = userDisplayService.userFilterList((int) selectedSchool, selectedYear);
 		}
-		//サービスのメソッドを呼び出す
-
+		
 		mav.addObject("school", school);
 		mav.addObject("year", year);
 		mav.addObject("users", userList);
@@ -605,7 +606,6 @@ public class AdminCtrl {
 		Optional<School> school = schoolCrudRepo.findById(school_id);
 
 		mav.addObject("school_name", school.get().getSchool_name());
-		System.out.println(school.get().getSchool_name());
 		mav.setViewName("admin/teInfoRegist");
 
 		return mav;
@@ -874,22 +874,18 @@ public class AdminCtrl {
 	public ModelAndView groupDetail(ModelAndView mav,
 			GroupMemberDeleteView g) {
 
-		System.out.println(g.getGroup_id());
-
+		//グループメンバの情報を格納
 		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
-
+		//グループ情報を格納
 		List<GroupDisplay> groupInfo = groupDispService.groupInfo(g.getGroup_id());
 
+		//グループメンバがいない場合メッセージを表示する
 		if (group.isEmpty()) {
 			mav.addObject("Msg", "グループメンバがいません");
 		}
 
-		System.out.println(group);
-
-		System.out.println(groupInfo);
-
-		mav.addObject("groupInfo", groupInfo);
 		mav.addObject("groups", group);
+		mav.addObject("groupInfo", groupInfo);
 		mav.setViewName("admin/groupDetails");
 
 		return mav;
@@ -1089,8 +1085,6 @@ public class AdminCtrl {
 
 		//グループメンバ削除確認画面のテーブルを表示する
 		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id(), g.getGroup_id());
-
-		System.out.println(group);
 
 		if (group.isEmpty()) {
 			mav.addObject("Msg", "タスク情報がありません");
@@ -1391,26 +1385,25 @@ public class AdminCtrl {
 			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
 			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id) {
 
+		// セッション情報のUserFormを取得
+		User userForm = (User) session.getAttribute("user");
+
+		//グループ作成
+		groupDispService.groupCreate(group_name, userForm.getSchool_id(), genre);
+
+		//登録したグループIDを取得する
+		int group_id = groupDispService.MaxGroupId(userForm.getSchool_id());
+
+		// ここで、リーダーのデータを処理する
+		for (int i = 0; i < leaderUser_id.size(); i++) {
+			String leaderUserId = leaderUser_id.get(i);
+			groupDispService.groupDetailCreate(leaderUserId, group_id, "リーダ", 0);
+		}
+
+		// ここで、メンバーのデータを処理する
 		if (memberUser_id != null) {
-			// セッション情報のUserFormを取得
-			User userForm = (User) session.getAttribute("user");
-
-			groupDispService.groupCreate(group_name, userForm.getSchool_id(), genre);
-
-			//登録したグループIDを取得する
-			int group_id = groupDispService.MaxGroupId(userForm.getSchool_id());
-
-			// ここで、受け取ったデータを処理する
-			for (int i = 0; i < leaderUser_id.size(); i++) {
-				String leaderUserId = leaderUser_id.get(i);
-				// ここで、リーダーのデータを処理する
-
-				groupDispService.groupDetailCreate(leaderUserId, group_id, "リーダ", 0);
-			}
-
 			for (int i = 0; i < memberUser_id.size(); i++) {
 				String memberUserId = memberUser_id.get(i);
-				// ここで、メンバーのデータを処理する
 				groupDispService.groupDetailCreate(memberUserId, group_id, "メンバ", 0);
 			}
 		}
@@ -1512,7 +1505,7 @@ public class AdminCtrl {
 		List<TeamsDisplay> leaderList = new ArrayList<>();
 		List<TeamsDisplay> memberList = new ArrayList<>();
 
-		if(user_id != null) {
+		if (user_id != null) {
 			for (int i = 0; i < user_id.length; i++) {
 				TeamsDisplay userInfo = new TeamsDisplay();
 				userInfo.setUser_id(user_id[i]);

@@ -72,6 +72,16 @@
 
 					<input type="hidden" name="task_id" th:value="${user.task_id}">
 				</div>
+
+				<div class="form-check">
+					<label class="form-check-label" for="flexCheckDefault">
+						<u>内容を確認しました</u>
+					</label>
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+				</div>
+
+				<div id="message" style="display: none; color: dimgray;">※チェックボックスにチェックしてください</div>
+
 			</div>
 
 			<!--タスク情報が存在しない場合にコントロールに送るデータ-->
@@ -133,6 +143,23 @@
 			}
 		});
 		/*]]>*/
+	</script>
+
+	<!--チェックボックスが押されていない間ボタンを無効化-->
+	<script>
+		$(document).ready(function () {
+			$('#flexCheckDefault').on('change', function () {
+				if ($(this).is(':checked')) {
+					$('button[name="button"]').prop('disabled', false);
+					$('#message').hide();
+				} else {
+					$('button[name="button"]').prop('disabled', true);
+					$('#message').show();
+				}
+			});
+			$('button[name="button"]').prop('disabled', true);
+			$('#message').show();
+		});
 	</script>
 
 	<!--bootstrapのjsリンク接続-->
