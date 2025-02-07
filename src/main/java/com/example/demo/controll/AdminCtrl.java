@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -82,7 +83,7 @@ public class AdminCtrl {
 
 	public int school_id;
 	public String user_id;
-	
+
 	/**
 	 * 末吉
 	 * メニュー画面を表示する
@@ -108,12 +109,12 @@ public class AdminCtrl {
 	 * メニュー画面を表示する(ログイン画面から)
 	 * @return
 	 */
-//	@LoginRequired
-//	@PostMapping("menu")
-//	public String menuLogin() {
-//
-//		return "admin/menuAdmin";
-//	}
+	//	@LoginRequired
+	//	@PostMapping("menu")
+	//	public String menuLogin() {
+	//
+	//		return "admin/menuAdmin";
+	//	}
 
 	/**
 	 * 末吉
@@ -403,14 +404,14 @@ public class AdminCtrl {
 		Calendar calendar = Calendar.getInstance();
 		int y = calendar.get(Calendar.YEAR);
 		Iterable<UserDisplay> userList = null;
-		
+
 		//サービスのメソッドを呼び出す
 		if ((selectedSchool == null && selectedYear == null) || (selectedSchool == 0 && selectedYear.equals("選択なし"))) {
 			userList = userDisplayService.userFilterList(school_id, String.valueOf(y));
 		} else {
 			userList = userDisplayService.userFilterList((int) selectedSchool, selectedYear);
 		}
-		
+
 		mav.addObject("school", school);
 		mav.addObject("year", year);
 		mav.addObject("users", userList);
@@ -599,21 +600,14 @@ public class AdminCtrl {
 	@PostMapping("teInfoRegistConfirm")
 	public ModelAndView dispTeInfoRegistConf(UserDisplay u, ModelAndView mav) {
 
-		// ログインユーザのエンティティを取得
-		User userEntity = (User) session.getAttribute("user");
-
-		// エンティティの中のschool_idを取得
-		school_id = userEntity.getSchool_id();
-		// エンティティの中のuser_idを取得
-		user_id = userEntity.getUser_id();
-
 		//入力したユーザIDを取得
 		String userId = u.getUser_id();
 
 		//admin○○アカウントでログインしているとき
 		if (user_id.startsWith("admin")) {
 			//adユーザを作成しようとしている場合
-			if (userId.startsWith("ad") || userId.length() != 10) {
+			//			if (userId.startsWith("ad") || userId.length() != 10) {
+			if (!Pattern.matches("ad\\d{8}", userId)) {
 				if (userDisplayService.userIDCheck(userId)) {
 
 					mav.addObject("te", u);
@@ -633,15 +627,16 @@ public class AdminCtrl {
 				mav.setViewName("admin/teInfoRegist");
 			}
 
+			//ad〇〇アカウントでログインしているとき
 		} else {
-			if (!userId.startsWith("te") || userId.length() != 10) {
+			if (!Pattern.matches("te\\d{8}", userId)) {
 
 				mav.addObject("errMsg", "講師IDは「te」 + 8桁の数字です。");
 				mav.setViewName("admin/teInfoRegist");
 
 			} else {
 
-				if (userDisplayService.userIDCheck(u.getUser_id())) {
+				if (userDisplayService.userIDCheck(userId)) {
 
 					mav.addObject("te", u);
 					mav.setViewName("admin/teInfoRegistConfirm");
@@ -655,6 +650,7 @@ public class AdminCtrl {
 			}
 		}
 
+		mav.addObject("school_name", u.getSchool_name());
 		return mav;
 	}
 
@@ -857,6 +853,8 @@ public class AdminCtrl {
 		//グループ情報を格納
 		List<GroupDisplay> groupInfo = groupDispService.groupInfo(g.getGroup_id());
 
+		System.out.println(groupInfo);
+		
 		//グループメンバがいない場合メッセージを表示する
 		if (group.isEmpty()) {
 			mav.addObject("Msg", "グループメンバがいません");
@@ -1476,6 +1474,8 @@ public class AdminCtrl {
 			@RequestParam(name = "user_name", required = false) String[] user_name,
 			@RequestParam(name = "user_roll", required = false) String[] user_roll) {
 
+		System.out.println(teamsDisplay);
+		
 		List<TeamsDisplay> leaderList = new ArrayList<>();
 		List<TeamsDisplay> memberList = new ArrayList<>();
 

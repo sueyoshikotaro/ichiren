@@ -10,6 +10,10 @@ import com.example.demo.form.UserDisplay;
 
 public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, String> {
 
+	/**
+	 * 末吉
+	 * 講師情報登録時に同じIDが存在するかチェック
+	 */
 	@Query("select user_id from user where user_id = :user_id")
 	public String selectById(String user_id);
 

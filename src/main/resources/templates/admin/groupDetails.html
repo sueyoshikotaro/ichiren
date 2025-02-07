@@ -155,13 +155,13 @@
 			<form th:action="@{groupDissConfirm}" method="post">
 				<input type="hidden" name="group_id" th:value="${groupInfo[0].group_id}">
 				<input type="hidden" name="group_name" th:value="${groupInfo[0].group_name}">
+				<input type="hidden" name="genre" th:value="${groupInfo[0].genre}">
 				<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
 				<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
 				<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
 				<button type="submit" name="button" class="move-btn mini-btn" value="解散">解散</button>
 			</form>
 		</div>
-
 	</div>
 
 	<!--bootstrapのjsリンク接続-->
