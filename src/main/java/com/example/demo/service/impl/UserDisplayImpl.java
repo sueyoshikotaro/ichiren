@@ -79,13 +79,13 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	@Override
 	public boolean userIDCheck(String user_id) {
 
+		//講師IDの重複チェック
 		String flg = userCrudRepo.selectById(user_id);
-
-		if (flg == "") {
-			System.out.println("重複しないユーザID");
+		
+		//登録の可否判断
+		if (flg == null) {
 			return true;
 		} else {
-			System.out.println("重複するユーザID");
 			return false;
 		}
 	}
@@ -139,18 +139,6 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 		userCrudRepo.saveAll(user_id, user_name, user_pass, school_name, enr_year, user_flg);
 
 	}
-
-	/*
-	 * 坂本
-	 * 上位講師登録
-	 */
-//	@Override
-//	public void insertAdminTeach(String user_id, String user_name, String user_pass, String school_name,
-//			String enr_year, int user_flg) {
-//		
-//		
-//
-//	}
 
 	/*
 	 * 向江

@@ -68,7 +68,6 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	@Override
 	public List<GroupDisplay> groupInfo(int group_id) {
 
-		System.out.println(group_id);
 		return groupDispCrudRepo.groupInfo(group_id);
 	}
 
