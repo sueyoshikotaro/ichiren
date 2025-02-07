@@ -80,31 +80,9 @@ public class AdminCtrl {
 	@Qualifier("ChatService")
 	ChatServiceInterface chatServise;
 
-	private int school_id;
-	private String user_id;
-
-	/**
-	 * ログイン画面を表示する
-	 * @return
-	 */
-	@GetMapping("login")
-	public String login() {
-		return "common/login";
-	}
-
-	/**
-	 * 末吉
-	 * ログアウト
-	 * @return
-	 */
-	@GetMapping("logout")
-	public String logout() {
-
-		session.invalidate();
-
-		return "common/login";
-	}
-
+	public int school_id;
+	public String user_id;
+	
 	/**
 	 * 末吉
 	 * メニュー画面を表示する
@@ -130,12 +108,12 @@ public class AdminCtrl {
 	 * メニュー画面を表示する(ログイン画面から)
 	 * @return
 	 */
-	@LoginRequired
-	@PostMapping("menu")
-	public String menuLogin() {
-
-		return "admin/menuAdmin";
-	}
+//	@LoginRequired
+//	@PostMapping("menu")
+//	public String menuLogin() {
+//
+//		return "admin/menuAdmin";
+//	}
 
 	/**
 	 * 末吉
@@ -1384,15 +1362,11 @@ public class AdminCtrl {
 			@RequestParam(name = "genre", required = false) String genre,
 			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
 			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id) {
-
-		// セッション情報のUserFormを取得
-		User userForm = (User) session.getAttribute("user");
-
 		//グループ作成
-		groupDispService.groupCreate(group_name, userForm.getSchool_id(), genre);
+		groupDispService.groupCreate(group_name, school_id, genre);
 
 		//登録したグループIDを取得する
-		int group_id = groupDispService.MaxGroupId(userForm.getSchool_id());
+		int group_id = groupDispService.MaxGroupId(school_id);
 
 		// ここで、リーダーのデータを処理する
 		for (int i = 0; i < leaderUser_id.size(); i++) {
@@ -1616,5 +1590,4 @@ public class AdminCtrl {
 
 		return mav;
 	}
-
 }

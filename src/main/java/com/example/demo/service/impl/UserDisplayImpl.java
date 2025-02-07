@@ -81,7 +81,7 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 		String flg = userCrudRepo.selectById(user_id);
 
-		if (flg != "") {
+		if (flg == "") {
 			System.out.println("重複しないユーザID");
 			return true;
 		} else {
