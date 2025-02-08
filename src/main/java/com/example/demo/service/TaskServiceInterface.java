@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.example.demo.entity.Task;
-import com.example.demo.entity.TaskReqView;
+import com.example.demo.form.TaskReqForm;
 
 public interface TaskServiceInterface {
 	//タスク一覧表示
@@ -38,7 +38,7 @@ public interface TaskServiceInterface {
 	public void taskUpProgress(int task_id, int progress, String task_status);
 
 	//タスク未承認一覧表示
-	public List<TaskReqView> selectTaskUnapproved(int group_id);
+	public List<TaskReqForm> selectTaskUnapproved(int group_id);
 
 	//タスク未承認フラグ更新(承認済)
 	public boolean taskReqFlg(int request_id);

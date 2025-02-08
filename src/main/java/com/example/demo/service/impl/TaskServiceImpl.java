@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.entity.Task;
-import com.example.demo.entity.TaskReqView;
+import com.example.demo.form.TaskReqForm;
 import com.example.demo.repository.TaskCrudRepository;
 import com.example.demo.repository.TaskReqCrudRepository;
 import com.example.demo.service.TaskServiceInterface;
@@ -121,7 +121,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * 未承認タスク一覧
 	 */
 	@Override
-	public List<TaskReqView> selectTaskUnapproved(int group_id) {
+	public List<TaskReqForm> selectTaskUnapproved(int group_id) {
 
 		return repo_req.selectTaskUnapproved(group_id);
 	}

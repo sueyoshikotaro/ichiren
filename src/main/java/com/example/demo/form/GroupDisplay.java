@@ -12,8 +12,10 @@ public class GroupDisplay {
 	private String genre;
 	private String work_status;
 	private String user_id;
+	private String user_name;
 	private String user_roll;
 	private int score;
-	private String all_progress;
+	private int user_progress;
+	private int all_progress;
 
 }
