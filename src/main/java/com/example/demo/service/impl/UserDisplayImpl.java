@@ -6,16 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.repository.UserDisplayCrudRepository;
-import com.example.demo.repository.UserViewCrudRepository;
 import com.example.demo.service.UserDisplayServiceInterface;
 
 public class UserDisplayImpl implements UserDisplayServiceInterface {
 
 	@Autowired
 	UserDisplayCrudRepository userCrudRepo;
-
-	@Autowired
-	UserViewCrudRepository userViewCrudRepo;
 
 	@Autowired
 	GroupDisplayCrudRepository groupCrudRepo;

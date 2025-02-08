@@ -28,11 +28,10 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
 import com.example.demo.form.ChatForm;
-import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.NoticeViewForm;
-import com.example.demo.form.Room;
+import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TaskReqForm;
 import com.example.demo.form.TaskView;
@@ -365,15 +364,15 @@ public class UserCtrl {
 		mav.setViewName("common/menuUser");
 
 		//居場所リストに表示する内容取得
-		List<Room> roomList = groupDispService.roomSelect(school_id);
+		List<SchoolDisplay> roomList = groupDispService.roomSelect(school_id);
 
 		// リストの先頭の列に値を追加
-		Room room = new Room();
+		SchoolDisplay room = new SchoolDisplay();
 		room.setRoom_name("休憩中");
 		roomList.add(0, room);
 
 		// リストの最後の列に値を追加
-		room = new Room();
+		room = new SchoolDisplay();
 		room.setRoom_name("校外作業中");
 		roomList.add(room);
 
@@ -419,7 +418,7 @@ public class UserCtrl {
 		groupDispService.roomUpdate(updateStatus, group_id);
 
 		//居場所情報取得
-		List<Room> roomList = groupDispService.roomSelect(school_id);
+		List<SchoolDisplay> roomList = groupDispService.roomSelect(school_id);
 
 		mav.addObject("status", updateStatus);
 		mav.addObject("roomList", roomList);
@@ -1008,7 +1007,7 @@ public class UserCtrl {
 		mav.addObject("noticeList", noticeList);
 		mav.setViewName("common/menuUser");
 
-		List<Room> roomList = groupDispService.roomSelect(school_id);
+		List<SchoolDisplay> roomList = groupDispService.roomSelect(school_id);
 
 		mav.addObject("roomList", roomList);
 
@@ -1058,7 +1057,7 @@ public class UserCtrl {
 			membertask = groupDispService.memberDetail(g.getUser_id(), g.getGroup_id(), selectedValue);
 		} else {
 			//ドロップダウンリストが選択されている場合の処理
-			membertask = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
+			membertask = groupDispService.memberDetail(userId, groupId, selectedValue);
 		}
 		//		mav.addObject("userProgress", g.getUser_progress());
 		mav.addObject("Category", taskCategory);
@@ -1075,29 +1074,20 @@ public class UserCtrl {
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
 
-		//		// ログインユーザのエンティティを取得
-		//		User userEntity = (User) session.getAttribute("user");
-		//
-		//		// エンティティの中の値をそれぞれ取得
-		//		school_id = userEntity.getSchool_id();
-		//		group_id = (int) session.getAttribute("groupId");
-		//		user_id = userEntity.getUser_id();
-		//		user_roll = (String) session.getAttribute("user_roll");
-
 		//リーダの場合は管理者とグループメンバすべてを格納
 		if (user_roll.equals("リーダ")) {
 
 			//チャットの通信可能相手(管理者)を格納
-			List<GroupDetailView> chatPartnerAdmin = chatServise.leaderSetChatAdmin(school_id);
+			List<GroupDisplay> chatPartnerAdmin = chatServise.leaderSetChatAdmin(school_id);
 
 			mav.addObject("chatPartnerAdmin", chatPartnerAdmin);
 		}
 
 		//チャットの通信可能相手を格納
-		List<GroupDetailView> chatPartner = chatServise.memberSetChatUser(school_id, group_id);
+		List<GroupDisplay> chatPartner = chatServise.memberSetChatUser(school_id, group_id);
 
 		//ログインしているユーザの分のデータはListから除外する
-		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
+		List<GroupDisplay> filteredChatPartner = chatPartner.stream()
 				.filter(chat -> !chat.getUser_id().equals(user_id))
 				.collect(Collectors.toList());
 
@@ -1119,16 +1109,16 @@ public class UserCtrl {
 		//リーダの場合は管理者とグループメンバのすべてから検索し格納
 		if (user_roll.equals("リーダ")) {
 			//チャットの通信可能相手(管理者)を格納
-			List<GroupDetailView> chatPartnerAdmin = chatServise.AdminChatPartnerSearch(school_id, search);
+			List<GroupDisplay> chatPartnerAdmin = chatServise.AdminChatPartnerSearch(school_id, search);
 			System.out.println("リーダ：" + chatPartnerAdmin);
 			mav.addObject("chatPartnerAdmin", chatPartnerAdmin);
 		}
 
 		//チャット相手を検索し、Listに格納
-		List<GroupDetailView> chatPartner = chatServise.memberChatPartnerSearch(school_id, group_id, search);
+		List<GroupDisplay> chatPartner = chatServise.memberChatPartnerSearch(school_id, group_id, search);
 
 		//ログインしているユーザの分のデータはListから除外
-		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
+		List<GroupDisplay> filteredChatPartner = chatPartner.stream()
 				.filter(chat -> !chat.getUser_id().equals(user_id))
 				.collect(Collectors.toList());
 

@@ -101,8 +101,8 @@
 				<div>
 
 					<!--タスク詳細 -->
-					<form th:action="@{taskDeails}" method="get">
-						<input type="hidden" name="task_name" th:value="${group.task_name}">
+					<form th:action="@{taskDeails}" method="post">
+						<input type="hidden" name="task_id" th:value="${group.task_id}">
 						<button type="submit" name="button" class="select-btn mini-btn" value="詳細">詳細</button>
 					</form>
 

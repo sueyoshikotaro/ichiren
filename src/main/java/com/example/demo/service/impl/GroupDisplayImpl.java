@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
-import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
-import com.example.demo.form.Room;
+import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.TaskForm;
-import com.example.demo.form.TeamsForm;
+import com.example.demo.form.TeamsDisplay;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.service.GroupDisplayServiceInterface;
 
@@ -24,9 +22,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ一覧
 	 */
 	@Override
-	public List<TeamsForm> groupList(String year, String genre, int school_id) {
+	public List<TeamsDisplay> groupList(String year, String genre, int school_id) {
 
-		List<TeamsForm> result = null;
+		List<TeamsDisplay> result = null;
 		if (genre == null) {
 			result = groupDispCrudRepo.groupList1(year, school_id);
 		} else {
@@ -77,7 +75,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ一覧
 	 */
 	@Override
-	public List<TeamsForm> getTeamsByCriteria(String schoolName) {
+	public List<TeamsDisplay> getTeamsByCriteria(String schoolName) {
 
 		return groupDispCrudRepo.findByCriteria(schoolName);
 	}
@@ -87,7 +85,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ詳細
 	 */
 	@Override
-	public List<GroupDetailView> groupDetail(int group_id) {
+	public List<GroupDisplay> groupDetail(int group_id) {
 
 		return groupDispCrudRepo.groupDetail(group_id);
 	}
@@ -107,9 +105,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * タスク詳細
 	 */
 	@Override
-	public List<TaskForm> taskDetail(String task_name) {
+	public List<TaskForm> taskDetail(int task_id) {
 
-		return groupDispCrudRepo.taskDetail(task_name);
+		return groupDispCrudRepo.taskDetail(task_id);
 	}
 
 	/**
@@ -138,7 +136,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ削除画面を表示するためだけのメソッド
 	 */
 	@Override
-	public List<GroupMemberDeleteView> grMemDelDisp(String user_id, int group_id) {
+	public List<GroupMemberDetailView> grMemDelDisp(String user_id, int group_id) {
 
 		return groupDispCrudRepo.grMemDelDisp(user_id, group_id);
 	}
@@ -160,9 +158,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * user_detailテーブルのscoreを昇順に並び変える
 	 */
 	@Override
-	public List<GroupMemberDeleteView> membersScore(int group_id) {
+	public List<GroupMemberDetailView> membersScore(int group_id) {
 
-		List<GroupMemberDeleteView> group = groupDispCrudRepo.membersScore(group_id);
+		List<GroupMemberDetailView> group = groupDispCrudRepo.membersScore(group_id);
 
 		return group;
 
@@ -266,7 +264,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		int userProgressResult = 0;
 
 		//user_detailの情報をscoreの昇順に格納
-		List<GroupMemberDeleteView> group = groupDispCrudRepo.membersScore(group_id);
+		List<GroupMemberDetailView> group = groupDispCrudRepo.membersScore(group_id);
 
 		//タスクを割り振るメンバのscoreを取得
 		int score = group.get(0).getScore();
@@ -329,10 +327,10 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		//更新後のグループ全体の進捗度を格納
 		int all_progress_result = 0;
 
-		List<GroupDetailView> taskList = groupDispCrudRepo.groupDetail(group_id);
+		List<GroupDisplay> taskList = groupDispCrudRepo.groupDetail(group_id);
 
 		//全体進捗の計算
-		for (GroupDetailView progressSum : taskList) {
+		for (GroupDisplay progressSum : taskList) {
 			all_progress += progressSum.getUser_progress();
 		}
 		
@@ -360,7 +358,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 	//チャット相手を設定
 	@Override
-	public List<GroupDetailView> setChatUser(int school_id, String user_roll) {
+	public List<GroupDisplay> setChatUser(int school_id, String user_roll) {
 
 		//チャット相手を一覧で格納
 		return groupDispCrudRepo.setChatUser(school_id, user_roll);
@@ -368,7 +366,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 	//チャット相手を検索
 	@Override
-	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll) {
+	public List<GroupDisplay> chatPartnerSearch(int school_id, String search, String user_roll) {
 		return groupDispCrudRepo.chatPartnerSearch(school_id, search, user_roll);
 	}
 
@@ -392,7 +390,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	}
 
 	@Override
-	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id, String selectedValue) {
+	public List<GroupMemberDetailView> memberDetail(String user_id, int group_id, String selectedValue) {
 
 		List<GroupMemberDetailView> result = null;
 		if (selectedValue.equals("選択なし")) {
@@ -409,7 +407,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * 学校一覧(絞り込み用)
 	 */
 	@Override
-	public List<TeamsForm> selectSchool() {
+	public List<TeamsDisplay> selectSchool() {
 		return groupDispCrudRepo.selectSchool();
 	}
 
@@ -418,8 +416,8 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ結成年度一覧(絞り込み用)
 	 */
 	@Override
-	public List<TeamsForm> selectEstYear(String value) {
-		List<TeamsForm> result = null;
+	public List<TeamsDisplay> selectEstYear(String value) {
+		List<TeamsDisplay> result = null;
 		if (value.equals("user")) {
 			result = groupDispCrudRepo.selectuserEstYear();
 		} else if (value.equals("group")) {
@@ -434,7 +432,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * ジャンル一覧(絞り込み用)
 	 */
 	@Override
-	public List<TeamsForm> selectGenre() {
+	public List<TeamsDisplay> selectGenre() {
 		return groupDispCrudRepo.selectGenre();
 	}
 
@@ -443,7 +441,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * 居場所一覧
 	 */
 	@Override
-	public List<Room> roomSelect(int school_id) {
+	public List<SchoolDisplay> roomSelect(int school_id) {
 
 		return groupDispCrudRepo.roomSelect(school_id);
 	}

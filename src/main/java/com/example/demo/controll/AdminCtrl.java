@@ -29,15 +29,11 @@ import com.example.demo.entity.School;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.form.ChatForm;
-import com.example.demo.form.FormContents;
-import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
-import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TeamsDisplay;
-import com.example.demo.form.TeamsForm;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.repository.SchoolDisplayCrudRepository;
 import com.example.demo.service.ChatServiceInterface;
@@ -203,9 +199,6 @@ public class AdminCtrl {
 
 			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 
-			//ラジオボタンの情報を取得
-			model.addAttribute("FormContent", new FormContents());
-
 			mav.addObject("schoolS", SchoolDetails);
 			mav.setViewName("admin/schoolDetails");
 
@@ -350,9 +343,6 @@ public class AdminCtrl {
 
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 
-		//ラジオボタンの情報を取得
-		model.addAttribute("FormContent", new FormContents());
-
 		mav.addObject("schoolS", SchoolDetails);
 		mav.setViewName("admin/schoolDetails");
 
@@ -374,9 +364,6 @@ public class AdminCtrl {
 
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 
-		//ラジオボタンの情報を取得
-		model.addAttribute("FormContent", new FormContents());
-
 		mav.addObject("schoolS", SchoolDetails);
 		mav.setViewName("admin/schoolDetails");
 
@@ -397,9 +384,9 @@ public class AdminCtrl {
 		ModelAndView mav = new ModelAndView();
 
 		//結成年度取得
-		List<TeamsForm> year = groupDispService.selectEstYear("user");
+		List<TeamsDisplay> year = groupDispService.selectEstYear("user");
 		//所属学校
-		List<TeamsForm> school = groupDispService.selectSchool();
+		List<TeamsDisplay> school = groupDispService.selectSchool();
 
 		Calendar calendar = Calendar.getInstance();
 		int y = calendar.get(Calendar.YEAR);
@@ -810,13 +797,13 @@ public class AdminCtrl {
 			@RequestParam(name = "selectedGenre", required = false) String selectedGenre) {
 
 		//結成年度取得
-		List<TeamsForm> year = groupDispService.selectEstYear("group");
+		List<TeamsDisplay> year = groupDispService.selectEstYear("group");
 		//所属学校
-		List<TeamsForm> school = groupDispService.selectSchool();
+		List<TeamsDisplay> school = groupDispService.selectSchool();
 		//ジャンル
-		List<TeamsForm> genre = groupDispService.selectGenre();
+		List<TeamsDisplay> genre = groupDispService.selectGenre();
 
-		List<TeamsForm> group = null;
+		List<TeamsDisplay> group = null;
 		Calendar calendar = Calendar.getInstance();
 		int y = calendar.get(Calendar.YEAR);
 
@@ -846,10 +833,10 @@ public class AdminCtrl {
 	@LoginRequired
 	@PostMapping("groupDetail")
 	public ModelAndView groupDetail(ModelAndView mav,
-			GroupMemberDeleteView g) {
+			GroupMemberDetailView g) {
 
 		//グループメンバの情報を格納
-		List<GroupDetailView> group = groupDispService.groupDetail(g.getGroup_id());
+		List<GroupDisplay> group = groupDispService.groupDetail(g.getGroup_id());
 		//グループ情報を格納
 		List<GroupDisplay> groupInfo = groupDispService.groupInfo(g.getGroup_id());
 
@@ -886,14 +873,14 @@ public class AdminCtrl {
 		List<GroupMemberDetailView> group = null;
 
 		if (groupId == null || userId == null) {
-			taskCategory = TaskService.selectCategory(Integer.parseInt(gmdv.getGroup_id()));
+			taskCategory = TaskService.selectCategory(gmdv.getGroup_id());
 			selectedValue = "選択なし";
 			//ドロップダウンリストが選択されていない場合の処理
 			group = groupDispService.memberDetail(gmdv.getUser_id(), gmdv.getGroup_id(), selectedValue);
 		} else {
-			taskCategory = TaskService.selectCategory((int) groupId);
+			taskCategory = TaskService.selectCategory(groupId);
 			//ドロップダウンリストが選択されている場合の処理
-			group = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
+			group = groupDispService.memberDetail(userId, groupId, selectedValue);
 		}
 
 		mav.addObject("Category", taskCategory);
@@ -909,10 +896,10 @@ public class AdminCtrl {
 	 * @return
 	 */
 	@LoginRequired
-	@GetMapping("taskDeails")
+	@PostMapping("taskDeails")
 	public ModelAndView taskDeails(ModelAndView mav, TaskForm t) {
 
-		List<TaskForm> task = groupDispService.taskDetail(t.getTask_name());
+		List<TaskForm> task = groupDispService.taskDetail(t.getTask_id());
 
 		mav.addObject("task", task);
 		mav.setViewName("admin/groupMemberTaskDetails");
@@ -1057,10 +1044,10 @@ public class AdminCtrl {
 	@LoginRequired
 	@PostMapping("groupMemberDelDisp")
 	public ModelAndView groupMemberDeleteDisp(ModelAndView mav,
-			GroupMemberDeleteView g) {
+			GroupMemberDetailView g) {
 
 		//グループメンバ削除確認画面のテーブルを表示する
-		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id(), g.getGroup_id());
+		List<GroupMemberDetailView> group = groupDispService.grMemDelDisp(g.getUser_id(), g.getGroup_id());
 
 		if (group.isEmpty()) {
 			mav.addObject("Msg", "タスク情報がありません");
@@ -1083,10 +1070,10 @@ public class AdminCtrl {
 	@LoginRequired
 	@PostMapping("groupMemberDeleteConfirm")
 	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
-			GroupMemberDeleteView g, ModelAndView mav) {
+			GroupMemberDetailView g, ModelAndView mav) {
 
 		//グループメンバ削除確認画面のテーブルを表示する
-		List<GroupMemberDeleteView> group = groupDispService.grMemDelDisp(g.getUser_id(), g.getGroup_id());
+		List<GroupMemberDetailView> group = groupDispService.grMemDelDisp(g.getUser_id(), g.getGroup_id());
 
 		if (group.isEmpty()) {
 			for (int i = 0; i < group.size(); i++) {
@@ -1530,8 +1517,10 @@ public class AdminCtrl {
 	public ModelAndView chat(ModelAndView mav) {
 
 		//チャットの通信可能相手を格納
-		List<GroupDetailView> chatPartner = chatServise.setChatUser(school_id);
+		List<GroupDisplay> chatPartner = chatServise.setChatUser(school_id);
 
+		System.out.println(chatPartner);
+		
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
@@ -1547,7 +1536,7 @@ public class AdminCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 		//チャット相手を検索し、Listに格納する
-		List<GroupDetailView> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
+		List<GroupDisplay> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
 
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
