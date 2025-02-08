@@ -17,7 +17,6 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
-	<link rel="stylesheet" th:href="@{/css/school.css}"> <!-- 学校情報系CSS -->
 	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!--ウェブアイコン-->
@@ -35,7 +34,7 @@
 	<div class="container">
 
 		<h2>学校情報追加</h2>
-		<h3>[追加内容確認]</h3> <!--確認画面用の説明用テキスト-->
+		<h3 style="margin-bottom: 30px;">[追加内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
 		<div th:each="schoolDetails : ${SchoolDisplay}" th:if="${schoolDetailsStat.index == 0}">
 			<div class="mb-3 school-info-text">
@@ -57,20 +56,32 @@
 				</div>
 
 				<div class="mb-3">
-					<span class="form-label">建物</span>
+					<span class="form-label">建物名</span>
 					<input type="text" class="form-control" th:value="${schoolDetails.hall}" readonly>
 				</div>
 
 				<div class="row">
 					<div class="col">
 						<div class="mb-3">
-							<span class="form-label">階層</span>
+							<span class="form-label">階層
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+									class="bi bi-layers" viewBox="0 0 16 16" style="margin-top: -5px;">
+									<path
+										d="M8.235 1.559a.5.5 0 0 0-.47 0l-7.5 4a.5.5 0 0 0 0 .882L3.188 8 .264 9.559a.5.5 0 0 0 0 .882l7.5 4a.5.5 0 0 0 .47 0l7.5-4a.5.5 0 0 0 0-.882L12.813 8l2.922-1.559a.5.5 0 0 0 0-.882zm3.515 7.008L14.438 10 8 13.433 1.562 10 4.25 8.567l3.515 1.874a.5.5 0 0 0 .47 0zM8 9.433 1.562 6 8 2.567 14.438 6z" />
+								</svg>
+							</span>
 							<input type="text" class="form-control" th:value="${schoolDetails.floor}" readonly>
 						</div>
 					</div>
 					<div class="col">
 						<div class="mb-3">
-							<span class="form-label">PC-有無</span>
+							<span class="form-label">PC-有無
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+									class="bi bi-pc-display" viewBox="0 0 16 16" style="margin-top: -4px;">
+									<path
+										d="M8 1a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1zm1 13.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0M9.5 1a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM9 3.5a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5M1.5 2A1.5 1.5 0 0 0 0 3.5v7A1.5 1.5 0 0 0 1.5 12H6v2h-.5a.5.5 0 0 0 0 1H7v-4H1.5a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5H7V2z" />
+								</svg>
+							</span>
 							<div th:if="${schoolDetails.pc_flg == 1}">
 								<input type="text" class="form-control" th:value="有" readonly>
 							</div>
@@ -89,9 +100,15 @@
 				<input type="hidden" name="school_name" th:value="${schoolDetails.school_name}">
 
 				<button type="button" name="button" value="追加" class="control-btn mini-btn"
-					onclick="schoolAddAndShowPopup()">追加</button>
-
-				<!--<button type="submit" name="button" value="戻る" class="btn btn-info">戻る</button>-->
+					onclick="schoolAddAndShowPopup()" style="margin-bottom: 20px;">追加
+					<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
+						class="bi bi-check2-square" viewBox="0 0 16 16" style="margin-bottom: 3px;">
+						<path
+							d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z" />
+						<path
+							d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0" />
+					</svg>
+				</button>
 
 			</div>
 		</form>

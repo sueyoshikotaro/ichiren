@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 
 	<!-- サイトタイトル -->
-	<title>タスクどん|退職確認</title>
+	<title>タスクどん|講師退職</title>
 
 	<!-- デザイン等 -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,18 +32,10 @@
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2>講師退職
-			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-dash"
-				viewBox="0 0 16 16" style="margin-top: -7px;">
-				<path
-					d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
-				<path
-					d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
-			</svg>
-		</h2>
-		<h3 style="margin-bottom: 30px;">[退職内容確認]</h3> <!--確認画面用の説明用テキスト-->
+		<h2>講師退職</h2>
+		<h3 style="margin-bottom: 15px;">[退職内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
-		<h5 style="color: crimson;">※講師を退職させると元には戻せません</h5>
+		<p style="color: crimson; margin-bottom: 15px;">※講師を退職させると元には戻せません</p>
 
 		<div class="main-content">
 
@@ -60,12 +52,29 @@
 				</div>
 
 				<div class="mb-3 retirement-item" style="margin-top: 22px;">
-					<span class="form-label">所属学校</span>
+					<span class="form-label">所属学校
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+							class="bi bi-building" viewBox="0 0 16 16" style="margin-bottom: 4px; margin-left: -3px;">
+							<path
+								d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+							<path
+								d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z" />
+						</svg>
+					</span>
 					<div type="text" class="form-control" th:text="${te.school_name}"></div>
 				</div>
 
 				<div class="mb-3 retirement-item" style="margin-top: 22px;">
-					<span class="form-label">入学年度</span>
+					<span class="form-label">入社年月日
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+							class="bi bi-calendar-event" viewBox="0 0 16 16"
+							style="margin-bottom: 4px; margin-left: -2px;">
+							<path
+								d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
+							<path
+								d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+						</svg>
+					</span>
 					<div type="text" class="form-control" th:text="${te.enr_year}"></div>
 				</div>
 
@@ -80,12 +89,10 @@
 
 				<button type="submit" name="buttonCheck" value="退職" class="control-btn mini-btn"
 					style="margin-top: 30px; margin-bottom: 20px;">退職
-					<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
-						class="bi bi-check2-square" viewBox="0 0 16 16" style="margin-bottom: 3px;">
-						<path
-							d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z" />
-						<path
-							d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0" />
+					<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor"
+						class="bi bi-dash-circle" viewBox="0 0 16 16" style="margin-top: -3px;">
+						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+						<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
 					</svg>
 				</button>
 

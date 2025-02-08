@@ -33,15 +33,7 @@
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2 style="margin-bottom: 30px;">新規講師登録
-			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-add"
-				viewBox="0 0 16 16" style="margin-top: -8px;">
-				<path
-					d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
-				<path
-					d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
-			</svg>
-		</h2>
+		<h2 style="margin-bottom: 30px;">新規講師登録</h2>
 
 		<!--エラー-->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
@@ -58,25 +50,44 @@
 				<input type="text" class="form-control regist-field" name="user_id" placeholder="例:te〇〇〇○○○○〇" required>
 			</div>
 
-			<div id="passwordHelpBlock" class="form-text"> <!--入力欄下の注釈-->
+			<div id="passwordHelpBlock" class="form-text" style="margin-top: 0px; margin-left: 5px;"> <!--入力欄下の注釈-->
 				※te+8桁の英数字.
 			</div>
 
 			<div class="form-group regist-item" style="margin-top: 22px;">
-				<label class="form-label" for="school-select">所属学校名</label>
+				<label class="form-label" for="school-select">所属学校
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+						class="bi bi-building" viewBox="0 0 16 16" style="margin-bottom: 4px; margin-left: -3px;">
+						<path
+							d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+						<path
+							d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z" />
+					</svg>
+				</label>
 				<input type="text" class="form-control regist-field" name="school_name" th:value="${school_name}"
-					required>
+					readonly>
 			</div>
 
 			<div class="form-group regist-item" style="margin-top: 22px;">
-				<label class="form-label">入社年月日</label>
+				<label class="form-label">入社年月日
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+						class="bi bi-calendar-event" viewBox="0 0 16 16" style="margin-bottom: 4px; margin-left: -2px;">
+						<path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
+						<path
+							d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+					</svg>
+				</label>
 				<input type="date" class="form-control regist-field" id="enr_year" name="enr_year" min="1900-01-01"
 					max="9999-12-31" required>
 			</div>
 
+			<div id="passwordHelpBlock" class="form-text" style="margin-left: 5px; margin-top: 0px;">
+				入力欄右側のマーク押下で選択可.
+			</div>
+
 			<button type="submit" class="control-btn mini-btn" style="margin-top: 30px; margin-bottom: 20px;">確認
 				<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
-					class="bi bi-arrow-right-circle" viewBox="0 0 16 16" style="margin-bottom: 3.5px;">
+					class="bi bi-arrow-right-circle" viewBox="0 0 16 16" style="margin-top: -4px;">
 					<path fill-rule="evenodd"
 						d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
 				</svg>
