@@ -15,8 +15,8 @@
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
 	<!-- CSS接続 -->
-	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
-	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通 -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通 -->
 	<link rel="stylesheet" th:href="@{/css/list.css}">
 
 	<!--ウェブアイコン-->
@@ -41,10 +41,10 @@
 			</svg>
 		</h2><br>
 
-		<!--絞り込みグループ-->
+		<!-- 絞り込みグループ -->
 		<div class="narrow-dowm-group" id="form">
 
-			<!--絞り込み(所属学校)-->
+			<!-- 絞り込み(所属学校) -->
 			<span class="form-label">所属学校
 				<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
 					class="bi bi-building" viewBox="0 0 16 16" style="margin-bottom: 3px;">
@@ -63,7 +63,7 @@
 
 			<div class="row" style="margin-top: 8px;">
 				<div class="col">
-					<!--絞り込み(結成年度)-->
+					<!-- 絞り込み(結成年度) -->
 					<span class="form-label">結成年度
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 							class="bi bi-calendar-event" viewBox="0 0 16 16"
@@ -82,7 +82,7 @@
 					</select>
 				</div>
 				<div class="col">
-					<!--絞り込み(ジャンル)-->
+					<!-- 絞り込み(ジャンル) -->
 					<span class="form-label">ジャンル
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 							class="bi bi-boxes" viewBox="0 0 16 16" style="margin-bottom: 4px; margin-left: -2px;">
@@ -100,23 +100,23 @@
 			</div>
 		</div>
 
-		<!--メイン項目-->
+		<!-- メイン項目 -->
 		<div class="main-content" id="data">
 
 			<div th:each="group : ${groups}" class="content-child">
 
-				<!--グループ名-->
+				<!-- グループ名 -->
 				<div class="input-group groupList-name">
 					<span class="form-label groupList-text" th:text="'【'+${group.group_name}+'】'"></span>
 				</div>
 
-				<!--居場所表示-->
+				<!-- 居場所表示 -->
 				<div class="input-group groupList-whereabouts">
 					<span class="input-group-text">居場所</span>
 					<div type="text" class="form-control" th:text="${group.work_status}"></div>
 				</div>
 
-				<!--進捗表示-->
+				<!-- 進捗表示 -->
 				<span class="form-label">全体進捗</span>
 				<div class="progress group-progress all-progress" role="progressbar">
 					<div class="progress-bar progress-bar-striped progress-bar-animated"
@@ -182,7 +182,7 @@
 				}
 			}
 
-			/*URL指定＆ドロップダウンリストの値引き渡し*/
+			/* RL指定＆ドロップダウンリストの値引き渡し */
 			var url = "groupList";
 			var params = {
 				"selectedSchool": selectedSchool,
@@ -190,12 +190,12 @@
 				"selectedGenre": selectedGenre
 			};
 
-			/*HTML内容のクリア*/
+			/* HTML内容のクリア */
 			var elements = document.getElementsByClassName("main-content");
 			for (var i = 0; i < elements.length; i++) {
 				elements[i].innerHTML = "";
 			}
-			/*グループ一覧表示メソッドの呼び出し*/
+			/* グループ一覧表示メソッドの呼び出し */
 			$.ajax({
 				type: "GET",
 				url: url,

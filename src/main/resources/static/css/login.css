@@ -1,7 +1,7 @@
 @charset "UTF-8";
-/*ログイン専用*/
+/* ログイン専用 */
 
-/*コンテナ(ログイン専用)*/
+/* コンテナ(ログイン専用) */
 .login-container {
 	background-image: url(../img/containerImage.png);
 	background-size: cover;
@@ -13,7 +13,7 @@
 	border-radius: 25px;
 }
 
-/*アプリ名(ログインコンテナ内)*/
+/* アプリ名(ログインコンテナ内) */
 .app-title {
 	text-align: center;
 	font-weight: bold;
@@ -21,12 +21,12 @@
 	text-shadow: 3px 3px #AAAAAA;
 }
 
-/*非表示目アイコン*/
+/* 非表示目アイコン */
 .input-group-text {
 	cursor: pointer;
 }
 
-/*ログインボタン*/
+/* ログインボタン */
 .login-button {
 	width: 100%;
 	height: 40px;
@@ -117,6 +117,7 @@
 	font-size: 16px;
 }
 
+/* 閉じる機能 */
 .close {
 	position: absolute;
 	top: 10px;
