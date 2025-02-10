@@ -14,17 +14,16 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
-	<!--CSS接続-->
-	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<!-- CSS接続 -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通 -->
 	<link rel="stylesheet" th:href="@{/css/control.css}">
 
-	<!--ウェブアイコン-->
+	<!-- ウェブアイコン -->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
-
 </head>
 
 <body>
-	<!--コンテナ-->
+	<!-- コンテナ -->
 	<div class="container">
 
 		<h1 class="app-title">タスクどん</h1>
@@ -36,12 +35,14 @@
 
 		<form th:action=@{/taskdon/user/updatePass} method="post">
 
+			<!-- 説明テキスト -->
 			<p style="margin-top: 16px;">新しいパスワードを入力してください</p>
 
+			<!-- パスワード入力欄(1回目) -->
 			<div class="mb-3">
 
 				<span class="form-label">パスワード
-					<!--アイコン画像(bootstrap引用)-->
+					<!-- 鍵画像(bootstrap引用) -->
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-key"
 						viewBox="0 0 16 16" style="margin-top: -3px; margin-left: -3px;">
 						<path
@@ -54,10 +55,11 @@
 
 					<input type="password" name="newPass" class="form-control" required>
 
-					<!--目マーク(ポインター表示)-->
+					<!-- 目マーク機能範囲 -->
 					<span class="input-group-text" style="cursor: pointer;">
 
-						<!--入力内容の目マーク機能-->
+						<!-- 入力内容の目マーク機能(表示・非表示切替) -->
+						<!-- 目画像1(bootstrap引用) -->
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 							class="bi bi-eye" id="eye" viewBox="0 0 16 16">
 							<path
@@ -65,6 +67,7 @@
 							<path
 								d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
 						</svg>
+						<!-- 目画像2(bootstrap引用) -->
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 							class="bi bi-eye-slash" id="eye-slash" viewBox="0 0 16 16" style="display: none;">
 							<path
@@ -78,16 +81,18 @@
 					</span>
 				</div>
 
-				<div id="passwordHelpBlock" class="form-text"> <!--入力欄下の注釈-->
+				<!--入力欄下の注釈-->
+				<div id="passwordHelpBlock" class="form-text">
 					8桁以上,16桁未満の英数字.
 				</div>
 
 			</div>
 
+			<!-- パスワード入力欄(2回目) -->
 			<div class="mb-3">
 
 				<span class="form-label">パスワード(確認用)
-					<!--アイコン画像(bootstrap引用)-->
+					<!-- 鍵画像(bootstrap引用) -->
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-key"
 						viewBox="0 0 16 16" style="margin-top: -3px; margin-left: -3px;">
 						<path
@@ -100,10 +105,11 @@
 
 					<input type="password" name="confirmPass" class="form-control" required>
 
-					<!--目マーク(ポインター表示)-->
+					<!-- 目マーク機能範囲 -->
 					<span class="input-group-text" style="cursor: pointer;">
 
-						<!--入力内容の目マーク機能-->
+						<!-- 入力内容の目マーク機能(表示・非表示切替) -->
+						<!-- 目画像1(bootstrap引用) -->
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 							class="bi bi-eye" id="eye" viewBox="0 0 16 16">
 							<path
@@ -111,6 +117,7 @@
 							<path
 								d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
 						</svg>
+						<!-- 目画像2(bootstrap引用) -->
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 							class="bi bi-eye-slash" id="eye-slash" viewBox="0 0 16 16" style="display: none;">
 							<path
@@ -126,6 +133,7 @@
 
 			</div>
 
+			<!-- Script(目機能用) -->
 			<script>
 				// 目マークを押下したときの処理
 				document.querySelectorAll('.input-group-text').forEach((element) => {
@@ -149,7 +157,7 @@
 				});
 			</script>
 
-			<!--パスワード再設定確認(ポップアップ)-->
+			<!-- パスワード再設定確認(ポップアップ) -->
 			<div style="margin-top: 40px;">
 				<button type="button" class="control-btn long-btn" data-toggle="modal" data-target="#passResetModal">再設定
 					<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
@@ -164,7 +172,7 @@
 
 		</form>
 
-		<!--ポップアップ-->
+		<!-- ポップアップ -->
 		<div class="modal fade popup-place" id="passResetModal" tabindex="-1" role="dialog"
 			aria-labelledby="passResetModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
@@ -190,10 +198,11 @@
 			</div>
 		</div>
 
+		<!-- Link -->
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-		<!--newPassとconfirmPassに値を設定するscript-->
+		<!-- newPassとconfirmPassに値を設定するscript -->
 		<script>
 			$(document).ready(function () {
 				$('#passResetModal').on('show.bs.modal', function (event) {
@@ -205,7 +214,7 @@
 			});
 		</script>
 
-		<!--bootstrapのjsリンク接続-->
+		<!-- bootstrapのjsリンク接続 -->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 			crossorigin="anonymous"></script>

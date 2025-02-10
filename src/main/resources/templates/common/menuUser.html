@@ -1,4 +1,3 @@
-<!-- ユーザ用メニュー(名称:ホーム) -->
 <!-- 必須情報(下記2項目) -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -16,30 +15,32 @@
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
 	<!-- CSS接続 -->
-	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
-	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通 -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通 -->
 	<link rel="stylesheet" th:href="@{/css/notice.css}">
 
-	<!--ウェブアイコン-->
+	<!-- ウェブアイコン -->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
-
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 	<!-- 共通header呼出し(ユーザ用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerUser">
 	</div>
 
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 
-<body>
+<body> <!-- ユーザ用(メニュー:名称(ホーム)) -->
 	<!-- コンテナ -->
 	<div class="container">
 
+		<!-- 強制テーブル(見え方の為) -->
 		<div class="row">
 			<div class="col">
-				<!--居場所更新-->
-				<div th:if="${session.user_roll} == 'リーダ'"> <!--役職判断処理-->
+
+				<!-- 居場所更新 -->
+				<div th:if="${session.user_roll} == 'リーダ'">
+
 					<select class="form-select place-update" aria-label="Default select example"
 						th:onchange="updateStatus(this.value)">
 						<option th:each="room : ${roomList}" th:selected="${room.room_name} == ${status}"
@@ -47,26 +48,35 @@
 							th:text="${room.room_name == '休憩中' or room.room_name == '校外作業中'} ? ${room.room_name} : ${room.room_name} + '(' + ${room.hall} + ${room.floor} + ')'">
 						</option>
 					</select>
+
 				</div>
+
 			</div>
 			<div class="col">
 
 			</div>
 			<div class="col">
-				<!--左側開閉用ボタン-->
+				<!-- 開閉用ボタン -->
 				<button class="notice-open-btn menu-link" type="button" data-bs-toggle="offcanvas"
-					data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">連絡事項</button>
+					data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">連絡事項
+				</button>
 			</div>
 		</div>
 
 		<h2 class="menu-text">ホーム</h2>
 
-		<!--連絡事項(Offcamvas)-->
-		<!--連絡事項内部-->
+		<!-- 連絡事項(Offcamvas) -->
+		<!-- 連絡事項内部 -->
 		<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
 			<div class="offcanvas-header">
 				<h3 class="offcanvas-title" id="offcanvasRightLabel" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);">
-					連絡事項</h3>
+					連絡事項
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						class="bi bi-envelope" viewBox="0 0 16 16" style="margin-top: -4px; margin-left: -1px;">
+						<path
+							d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
+					</svg>
+				</h3>
 				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
 			<div class="offcanvas-body">
@@ -76,38 +86,36 @@
 			</div>
 		</div>
 
-		<div th:if="${session.user_roll} == 'リーダ'" style="margin-top: 40px;">
-			<!-- 役職判断処理 -->
-			<a class="menu-btn menu-link" th:onclick="|location.href='@{memberList}'|">メンバ一覧</a>
+		<!-- 役職判断処理 -->
+		<div th:if="${session.user_roll} == 'リーダ'" style="margin-top: 50px;">
+			<a class="menu-btn menu-link" th:onclick="|location.href='@{memberList}'|">
+				メンバ一覧
+			</a>
 		</div>
 
-		<a class="menu-btn menu-link" th:onclick="|location.href='@{taskList}'|" style="margin-top: 32px;">タスク一覧</a>
+		<a class="menu-btn menu-link" th:onclick="|location.href='@{taskList}'|" style="margin-top: 40px;">
+			タスク一覧
+		</a>
 
-		<a class="menu-btn menu-link" th:onclick="|location.href='@{todoList}'|" style="margin-top: 32px;">ToDoリスト</a>
+		<a class="menu-btn menu-link" th:onclick="|location.href='@{todoList}'|" style="margin-top: 40px;">
+			ToDoリスト
+		</a>
 
-		<div th:if="${session.user_roll} == 'リーダ'"> <!-- 役職判断処理 -->
-			<a class="menu-btn menu-link" th:onclick="|location.href='@{noticeRegist}'|"
-				style="margin-top: 32px;">連絡事項作成</a>
+		<!-- 役職判断処理 -->
+		<div th:if="${session.user_roll} == 'リーダ'">
+			<a class="menu-btn menu-link" th:onclick="|location.href='@{noticeRegist}'|" style="margin-top: 40px;">
+				連絡事項作成
+			</a>
 		</div>
 
-		<a class="menu-btn menu-link" th:onclick="|location.href='@{chat}'|" style="margin-top: 32px;">チャット</a>
-
-		<!--<a class="menu-btn" th:onclick="|location.href='@{/taskdon/user/getPlace}'|">所属グループ一覧</a>-->
+		<a class="menu-btn menu-link" th:onclick="|location.href='@{chat}'|"
+			style="margin-top: 40px; margin-bottom: 60px;">チャット
+		</a>
 
 	</div>
 
-	<!--休憩中の間、リンクを無効化-->
+	<!-- Link(休憩中の間,リンクを無効化) -->
 	<script th:src="@{/js/placeUpdate.js}"></script>
-
-	<!--チェックボックスが押されていない間ボタンを無効化-->
-	<!--	<script th:inline="javascript">-->
-
-	<!--	</script>-->
-
-	<!--居場所更新-->
-	<!--	<script th:inline="javascript">-->
-
-	<!--	</script>-->
 
 	<!-- bootstrapのjsリンク接続 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
