@@ -6,10 +6,18 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.example.demo.entity.User;
 import com.example.demo.form.UserDisplay;
 
-public interface UserDisplayCrudRepository extends CrudRepository<UserDisplay, String> {
+public interface UserDisplayCrudRepository extends CrudRepository<User, String> {
 
+	/*
+	 * 坂本
+	 * findAll
+	 */
+	@Query("select user.user_id,user.user_name,user.user_pass,user.school_id,user.enr_year,user.user_flg")
+	public List<User> findAll();
+	
 	/**
 	 * 末吉
 	 * 講師情報登録時に同じIDが存在するかチェック

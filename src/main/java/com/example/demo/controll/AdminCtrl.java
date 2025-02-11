@@ -26,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.entity.School;
-import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.form.ChatForm;
 import com.example.demo.form.GroupDisplay;
@@ -868,7 +867,7 @@ public class AdminCtrl {
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
 
 		//ドロップダウンリスト取得処理
-		List<Task> taskCategory = null;
+		List<TaskForm> taskCategory = null;
 
 		List<GroupMemberDetailView> group = null;
 

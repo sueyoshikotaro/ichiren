@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.entity.Task;
+import com.example.demo.form.TaskForm;
 import com.example.demo.form.TaskReqForm;
 import com.example.demo.repository.TaskCrudRepository;
 import com.example.demo.repository.TaskReqCrudRepository;
@@ -24,8 +24,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * タスク一覧表示
 	 */
 	@Override
-	public List<Task> taskDisplayList(String user, int group_id) {
-		List<Task> result;
+	public List<TaskForm> taskDisplayList(String user, int group_id) {
+		List<TaskForm> result;
 		if (user.equals("全員")) {
 			result = repo.selectTask(group_id);
 		} else {
@@ -40,7 +40,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * @param group_id 
 	 */
 	@Override
-	public List<Task> taskDetails(int task_id, int group_id) {
+	public List<TaskForm> taskDetails(int task_id, int group_id) {
 		return repo.selectTaskDetails(task_id, group_id);
 	}
 
@@ -152,7 +152,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 	 * カテゴリ取得(絞り込み用)
 	 */
 	@Override
-	public List<Task> selectCategory(int group_id) {
+	public List<TaskForm> selectCategory(int group_id) {
 		return repo.selectCategory(group_id);
 	}
 }
