@@ -8,6 +8,7 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.entity.Task;
+import com.example.demo.form.TaskForm;
 
 public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	/**
@@ -21,10 +22,10 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * タスク一覧表示
 	 */
 	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id inner join teams on task.group_id=teams.group_id where teams.group_id=:group_id and task_flg= 1;")
-	public List<Task> selectTask(int group_id);
+	public List<TaskForm> selectTask(int group_id);
 
 	@Query("select task.* ,user.user_name from task inner join user on task.user_id=user.user_id inner join teams on task.group_id=teams.group_id where teams.group_id=:group_id and task_flg= 1 and user_name=:user;")
-	public List<Task> selectTask(String user, int group_id);
+	public List<TaskForm> selectTask(String user, int group_id);
 
 	/**
 	 * タスク詳細データ取得
@@ -33,7 +34,7 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * @return
 	 */
 	@Query("select * ,user.user_name from task inner join user on task.user_id=user.user_id inner join teams on task.group_id=teams.group_id where teams.group_id=:group_id and task_flg= 1 and task_id = :task_id;")
-	public List<Task> selectTaskDetails(int task_id, int group_id);
+	public List<TaskForm> selectTaskDetails(int task_id, int group_id);
 	
 	/**
 	 * 湊原
@@ -108,7 +109,7 @@ public interface TaskCrudRepository extends CrudRepository<Task, Integer> {
 	 * @return
 	 */
 	@Query("select distinct task_category from task where group_id=:group_id and task_flg= 1;")
-	public List<Task> selectCategory(int group_id);
+	public List<TaskForm> selectCategory(int group_id);
 
 	
 }
