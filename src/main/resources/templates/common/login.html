@@ -46,12 +46,12 @@
 					</svg>
 				</label>
 				<input type="text" id="user_id" name="user_id" class="form-control" aria-labelledby="passwordHelpBlock"
-					placeholder="例:st○○○○○○○○" required>
+					placeholder="例：st○○○○○○○○" maxlength="10" pattern="^(st|te|ad)[0-9]{8}$" required>
 			</div>
 
 			<!-- 入力欄下の注釈 -->
 			<div id="passwordHelpBlock" class="form-text">
-				学生(st+学籍番号),管理者(te+8桁の英数字).
+				学生(st),講師(te),管理者(ad)+8桁の英数字.
 			</div>
 
 			<!-- パスワード入力欄 -->
@@ -69,7 +69,8 @@
 
 				<div class="input-group">
 					<input type="password" id="user_pass" name="user_pass" class="form-control"
-						aria-labelledby="passwordHelpBlock" required></input>
+						aria-labelledby="passwordHelpBlock" maxlength="16" pattern="^[a-zA-Z0-9]{8,15}$"
+						required></input>
 
 					<!-- 目マーク機能範囲 -->
 					<span class="input-group-text">
