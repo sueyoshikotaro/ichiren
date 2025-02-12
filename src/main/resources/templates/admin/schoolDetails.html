@@ -44,7 +44,7 @@
 		</h2>
 
 		<!--学校名と学校ID(表示)-->
-		<div th:each="schoolDetails : ${schoolS}" th:if="${schoolDetailsStat.index == 0}">
+		<div th:each="schoolDetails : ${schoolInfo}" th:if="${schoolDetailsStat.index == 0}">
 
 			<div class="mb-3 school-info-text" style="margin-top: 10px;">
 				<span class="form-label" id="basic-addon1">学校名</span>

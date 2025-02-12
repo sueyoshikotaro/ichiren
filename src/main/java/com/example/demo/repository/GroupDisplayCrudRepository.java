@@ -40,7 +40,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	public List<TeamsDisplay> groupList(String year, String genre);
 
 	//結成年度のみ選択されている場合
-	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and est_year = :estYear")
+	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and Year(est_year) = :estYear")
 	public List<TeamsDisplay> groupListYear(String estYear);
 
 	//学校のみ選択されている場合
@@ -170,6 +170,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 
 	/**
 	 * 末吉
+	 * グループ解散に伴い、task_flgをfalseに
+	 */
+	@Modifying
+	@Query("update task set task_flg = 0 where group_id = :group_id")
+	public void taskDiss(int group_id);
+	
+	/**
+	 * 末吉
 	 * グループ編集完了
 	 */
 	@Modifying
@@ -268,10 +276,10 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 湊原
 	 * 結成年度取得(絞り込み用)
 	 */
-	@Query("SELECT distinct YEAR(est_year) AS est_year FROM teams WHERE YEAR(est_year) != 9999;")
+	@Query("SELECT distinct YEAR(est_year) AS est_year FROM teams WHERE YEAR(est_year) != 9999 order by est_year;")
 	public List<TeamsDisplay> selectgroupEstYear();
 
-	@Query("SELECT distinct YEAR(enr_year) AS est_year FROM user WHERE YEAR(enr_year) != 9999 and user_id like '%st%';")
+	@Query("SELECT distinct YEAR(enr_year) AS est_year FROM user WHERE YEAR(enr_year) != 9999 and user_id like '%st%' order by enr_year;")
 	public List<TeamsDisplay> selectuserEstYear();
 
 	/**

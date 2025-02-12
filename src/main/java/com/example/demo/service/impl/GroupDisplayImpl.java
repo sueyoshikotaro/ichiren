@@ -213,9 +213,11 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 */
 	@Override
 	public void groupDiss(int group_id) {
-
+		//解散
 		groupDispCrudRepo.groupDiss(group_id);
 
+		//タスクフラグをfalseに
+		groupDispCrudRepo.taskDiss(group_id);
 	}
 
 	/**
@@ -266,6 +268,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		//user_detailの情報をscoreの昇順に格納
 		List<GroupMemberDetailView> group = groupDispCrudRepo.membersScore(group_id);
 
+		//削除するユーザを割り振る候補から除外する
+		group.removeIf(member -> member.getUser_id().equals(user_id));
+		
 		//タスクを割り振るメンバのscoreを取得
 		int score = group.get(0).getScore();
 
@@ -320,7 +325,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	//グループの全体進捗更新
 	@Override
 	public void allProgress(int group_id) {
-
+		
 		//メンバごとの進捗度の合計を格納
 		int all_progress = 0;
 
