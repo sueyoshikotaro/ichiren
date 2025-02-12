@@ -88,7 +88,7 @@
 			<input type="hidden" name="user_id" th:value="${user_id}" th:if="${user_id != null}">
 			<input type="hidden" name="group_id" th:value="${group_id}" th:if="${group_id != null}">
 
-			<button type="button" name="button" value="削除" class="control-btn mini-btn"
+			<button type="button" name="buttonCheck" value="削除" class="control-btn mini-btn"
 				onclick="groupMemberDeleteAndShowPopup()">削除</button>
 
 		</form>
@@ -149,14 +149,14 @@
 		$(document).ready(function () {
 			$('#flexCheckDefault').on('change', function () {
 				if ($(this).is(':checked')) {
-					$('button[name="button"]').prop('disabled', false);
+					$('button[name="buttonCheck"]').prop('disabled', false);
 					$('#message').hide();
 				} else {
-					$('button[name="button"]').prop('disabled', true);
+					$('button[name="buttonCheck"]').prop('disabled', true);
 					$('#message').show();
 				}
 			});
-			$('button[name="button"]').prop('disabled', true);
+			$('button[name="buttonCheck"]').prop('disabled', true);
 			$('#message').show();
 		});
 	</script>
