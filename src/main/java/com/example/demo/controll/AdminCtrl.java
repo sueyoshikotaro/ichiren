@@ -61,9 +61,6 @@ public class AdminCtrl {
 	UserDisplayServiceInterface userDisplayService;
 
 	@Autowired
-	HttpSession session;
-
-	@Autowired
 	@Qualifier("groupService")
 	GroupDisplayServiceInterface groupDispService;
 
@@ -76,6 +73,10 @@ public class AdminCtrl {
 	@Qualifier("ChatService")
 	ChatServiceInterface chatServise;
 
+	@Autowired
+	HttpSession session;
+	
+	//セッション情報のフィールド変数
 	public int school_id;
 	public String user_id;
 
@@ -87,10 +88,8 @@ public class AdminCtrl {
 	@LoginRequired
 	@GetMapping("menu")
 	public String menu() {
-
 		// ログインユーザのエンティティを取得
 		User userEntity = (User) session.getAttribute("user");
-
 		// エンティティの中のschool_idを取得
 		school_id = userEntity.getSchool_id();
 		// エンティティの中のuser_idを取得
@@ -101,26 +100,18 @@ public class AdminCtrl {
 
 	/**
 	 * 末吉
-	 * メニュー画面を表示する(ログイン画面から)
-	 * @return
-	 */
-	//	@LoginRequired
-	//	@PostMapping("menu")
-	//	public String menuLogin() {
-	//
-	//		return "admin/menuAdmin";
-	//	}
-
-	/**
-	 * 末吉
 	 * 学校情報詳細画面を表示する
 	 * @return
 	 */
 	@LoginRequired
 	@GetMapping("schoolDetails")
-	public ModelAndView schoolDetails(ModelAndView mav, Model model) {
+	public ModelAndView schoolDetails(ModelAndView mav) {
 
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
+
+		if (SchoolDetails.isEmpty()) {
+			mav.addObject("Msg", "教室情報がありません");
+		}
 
 		mav.addObject("schoolS", SchoolDetails);
 		mav.setViewName("admin/schoolDetails");
@@ -130,46 +121,44 @@ public class AdminCtrl {
 
 	/**
 	 * 末吉
-	 * 学校情報編集、削除、追加画面の表示する
+	 * 学校情報追加、編集、削除画面を表示する
 	 * @return
 	 */
 	@LoginRequired
 	@PostMapping("schoolDetailsChange")
 	public ModelAndView schoolDetailsChange(@RequestParam("button") String button,
-			@RequestParam("flexRadioDefault") int room_id, @RequestParam("before_room_name") String room_name,
+			@RequestParam(name = "flexRadioDefault", required = false) Integer room_id,
 			ModelAndView mav) {
 
-		//ラジオボタンで選択したデータを取得
-		List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(room_id, school_id);
+		//学校情報取得
+		List<School> SchoolDetails = schoolDisplayService.SchoolInfo(school_id);
 
-		//選択したデータの教室名を編集前の教室名として保持
-		EditSchoolDetails.get(0).setBefore_room_name(EditSchoolDetails.get(0).getRoom_name());
+		if (room_id != null) {
+			//ラジオボタンで選択したデータを取得
+			List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(room_id, school_id);
 
-		//学校IDと学校名のみ表示
-		List<SchoolDisplay> SchoolDetails = new ArrayList<SchoolDisplay>();
+			//選択したデータの教室名を編集前の教室名として保持
+			EditSchoolDetails.get(0).setBefore_room_name(EditSchoolDetails.get(0).getRoom_name());
 
-		SchoolDetails.add(new SchoolDisplay());
-		SchoolDetails.get(0).setSchool_id(EditSchoolDetails.get(0).getSchool_id());
-		SchoolDetails.get(0).setSchool_name(EditSchoolDetails.get(0).getSchool_name());
+			//編集ボタンを押下
+			if (button.equals("edit")) {
 
-		//編集ボタンを押下
-		if (button.equals("edit")) {
+				mav.addObject("schoolEdit", EditSchoolDetails);
+				mav.setViewName("admin/schoolEdit");
 
-			mav.addObject("schoolEdit", EditSchoolDetails);
-			mav.setViewName("admin/schoolEdit");
+				//削除ボタンを押下
+			} else if (button.equals("delete")) {
 
-			//追加ボタンを押下
-		} else if (button.equals("add")) {
+				mav.addObject("schoolDelete", EditSchoolDetails);
+				mav.setViewName("admin/schoolDelete");
 
+			}
+		}
+
+		//学校情報がない場合
+		if (button.equals("add")) {
 			mav.addObject("schoolAdd", SchoolDetails);
 			mav.setViewName("admin/schoolAdd");
-
-			//削除ボタンを押下
-		} else {
-
-			mav.addObject("schoolDelete", EditSchoolDetails);
-			mav.setViewName("admin/schoolDelete");
-
 		}
 
 		return mav;
@@ -182,27 +171,12 @@ public class AdminCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("schoolEditConfirm")
-	public ModelAndView schoolEditConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
-			Model model) {
+	public ModelAndView schoolEditConfirm(SchoolDisplay s, ModelAndView mav) {
 
-		//確認ボタンを押下
-		if (button.equals("確認")) {
+		mav.addObject("SchoolDisplay", s);
+		mav.setViewName("admin/schoolEditConfirm");
 
-			mav.addObject("SchoolDisplay", s);
-			mav.setViewName("admin/schoolEditConfirm");
-
-			return mav;
-
-			//戻るボタンを押下し学校情報詳細画面を表示
-		} else {
-
-			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
-
-			mav.addObject("schoolS", SchoolDetails);
-			mav.setViewName("admin/schoolDetails");
-
-			return mav;
-		}
+		return mav;
 	}
 
 	/**
@@ -214,49 +188,37 @@ public class AdminCtrl {
 	@PostMapping("schoolEditComp")
 	public ModelAndView schoolEditComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav) {
 
-		//編集ボタンを押下
-		if (button.equals("編集")) {
+		//編集前と編集後の教室名が同じ場合
+		if (s.getRoom_name().equals(s.getBefore_room_name())) {
 
-			//編集前と編集後の教室名が同じ場合
-			if (s.getRoom_name().equals(s.getBefore_room_name())) {
+			schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(),
+					s.getFloor(),
+					s.getSchool_id(), s.getRoom_id());
+
+			// ポップアップを表示するために、画面遷移をしないようにする
+			mav.addObject("schoolEditComp", true);
+			mav.setViewName("admin/schoolEditConfirm");
+
+		} else {
+			//同じ教室名が登録されている場合
+			if (schoolDisplayService.isExistRoomName(s.getRoom_name(), s.getSchool_id())) {
+
+				mav.addObject("errMsg", "※同じ教室名がすでに登録されています。");
+				mav.addObject("schoolEdit", s);
+				mav.setViewName("admin/schoolEdit");
+
+				//まだ同じ教室名が登録されていない場合
+			} else {
 
 				schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(),
-						s.getFloor(),
-						s.getSchool_id(), s.getRoom_id());
+						s.getFloor(), s.getSchool_id(), s.getRoom_id());
 
 				// ポップアップを表示するために、画面遷移をしないようにする
 				mav.addObject("schoolEditComp", true);
 				mav.setViewName("admin/schoolEditConfirm");
-
-			} else {
-				//同じ教室名が登録されている場合
-				if (schoolDisplayService.isExistRoomName(s.getRoom_name(), s.getSchool_id())) {
-
-					mav.addObject("errMsg", "※同じ教室名がすでに登録されています。");
-					mav.addObject("schoolEdit", s);
-					mav.setViewName("admin/schoolEdit");
-
-					//まだ同じ教室名が登録されていない場合
-				} else {
-
-					schoolDisplayService.EditSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(),
-							s.getFloor(),
-							s.getSchool_id(), s.getRoom_id());
-
-					// ポップアップを表示するために、画面遷移をしないようにする
-					mav.addObject("schoolEditComp", true);
-					mav.setViewName("admin/schoolEditConfirm");
-
-				}
 			}
-
-			//戻るボタンを押下
-		} else {
-
-			mav.addObject("schoolEdit", s);
-			mav.setViewName("admin/schoolEdit");
 		}
-
+		
 		return mav;
 	}
 
@@ -267,27 +229,12 @@ public class AdminCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("schoolAddConfirm")
-	public ModelAndView schoolAddConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
-			Model model) {
+	public ModelAndView schoolAddConfirm(SchoolDisplay s, ModelAndView mav) {
 
-		//確認ボタンを押下
-		if (button.equals("確認")) {
-			mav.addObject("SchoolDisplay", s);
-			mav.setViewName("admin/schoolAddConfirm");
+		mav.addObject("SchoolDisplay", s);
+		mav.setViewName("admin/schoolAddConfirm");
 
-			return mav;
-
-			//戻るボタンを押下し学校情報詳細画面を表示
-		} else {
-
-			List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
-
-			mav.addObject("schoolS", SchoolDetails);
-			mav.setViewName("admin/schoolDetails");
-
-			return mav;
-		}
-
+		return mav;
 	}
 
 	/**
@@ -297,56 +244,25 @@ public class AdminCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("schoolAddComp")
-	public ModelAndView schoolAddComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
-			Model model) {
+	public ModelAndView schoolAddComp(SchoolDisplay s, ModelAndView mav) {
 
-		//追加ボタンを押下
-		if (button.equals("追加")) {
-
-			//同じ教室名が登録されている場合
-			if (schoolDisplayService.isExistRoomName(s.getRoom_name(), s.getSchool_id())) {
-				mav.addObject("errMsg", "※同じ教室名がすでに登録されています。");
-				mav.addObject("schoolAdd", s);
-				mav.setViewName("admin/schoolAdd");
-
-				//まだ同じ教室名が登録されていない場合
-			} else {
-				schoolDisplayService.AddSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
-						s.getSchool_id());
-
-				// ポップアップを表示するために、画面遷移をしないようにする
-				mav.addObject("schoolAddComp", true);
-				mav.setViewName("admin/schoolAddConfirm");
-			}
-
-			//戻るボタンを押下
-		} else {
-
+		//同じ教室名が登録されている場合
+		if (schoolDisplayService.isExistRoomName(s.getRoom_name(), s.getSchool_id())) {
+			mav.addObject("errMsg", "※同じ教室名がすでに登録されています。");
 			mav.addObject("schoolAdd", s);
 			mav.setViewName("admin/schoolAdd");
 
+			//まだ同じ教室名が登録されていない場合
+		} else {
+			schoolDisplayService.AddSchoolDetailsComp(s.getRoom_name(), s.getPc_flg(), s.getHall(), s.getFloor(),
+					s.getSchool_id());
+
+			// ポップアップを表示するために、画面遷移をしないようにする
+			mav.addObject("schoolAddComp", true);
+			mav.setViewName("admin/schoolAddConfirm");
 		}
 
 		return mav;
-	}
-
-	/**
-	 * 末吉
-	 * 学校情報削除画面の戻るボタンを押下
-	 * @return
-	 */
-	@LoginRequired
-	@PostMapping("schoolDeleteConfirm")
-	public ModelAndView schoolDeleteConfirm(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
-			Model model) {
-
-		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
-
-		mav.addObject("schoolS", SchoolDetails);
-		mav.setViewName("admin/schoolDetails");
-
-		return mav;
-
 	}
 
 	/**
@@ -356,12 +272,15 @@ public class AdminCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("schoolDeleteComp")
-	public ModelAndView schoolDeleteComp(@RequestParam("button") String button, SchoolDisplay s, ModelAndView mav,
-			Model model) {
+	public ModelAndView schoolDeleteComp(SchoolDisplay s, ModelAndView mav) {
 
 		schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
 
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
+
+		if (SchoolDetails.isEmpty()) {
+			mav.addObject("Msg", "教室情報がありません");
+		}
 
 		mav.addObject("schoolS", SchoolDetails);
 		mav.setViewName("admin/schoolDetails");
@@ -377,10 +296,7 @@ public class AdminCtrl {
 	@LoginRequired
 	@GetMapping("userList")
 	public ModelAndView userList(@RequestParam(name = "selectedSchool", required = false) Integer selectedSchool,
-			@RequestParam(name = "selectedYear", required = false) String selectedYear) {
-
-		//ModelAndViewのインスタンス生成
-		ModelAndView mav = new ModelAndView();
+			@RequestParam(name = "selectedYear", required = false) String selectedYear, ModelAndView mav) {
 
 		//結成年度取得
 		List<TeamsDisplay> year = groupDispService.selectEstYear("user");
@@ -568,6 +484,14 @@ public class AdminCtrl {
 	@GetMapping("teInfoRegist")
 	public ModelAndView dispRegist(ModelAndView mav) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
+		// エンティティの中のuser_idを取得
+		user_id = userEntity.getUser_id();
+
 		Optional<School> school = schoolCrudRepo.findById(school_id);
 
 		mav.addObject("school_name", school.get().getSchool_name());
@@ -593,9 +517,8 @@ public class AdminCtrl {
 		if (user_id.startsWith("admin")) {
 			//adユーザを作成しようとしている場合
 			//			if (userId.startsWith("ad") || userId.length() != 10) {
-			if (!Pattern.matches("ad\\d{8}", userId)) {
+			if (Pattern.matches("ad\\d{8}", userId)) {
 				if (userDisplayService.userIDCheck(userId)) {
-
 					mav.addObject("te", u);
 					mav.setViewName("admin/teInfoRegistConfirm");
 
@@ -840,7 +763,7 @@ public class AdminCtrl {
 		List<GroupDisplay> groupInfo = groupDispService.groupInfo(g.getGroup_id());
 
 		System.out.println(groupInfo);
-		
+
 		//グループメンバがいない場合メッセージを表示する
 		if (group.isEmpty()) {
 			mav.addObject("Msg", "グループメンバがいません");
@@ -1460,8 +1383,6 @@ public class AdminCtrl {
 			@RequestParam(name = "user_name", required = false) String[] user_name,
 			@RequestParam(name = "user_roll", required = false) String[] user_roll) {
 
-		System.out.println(teamsDisplay);
-		
 		List<TeamsDisplay> leaderList = new ArrayList<>();
 		List<TeamsDisplay> memberList = new ArrayList<>();
 
@@ -1518,8 +1439,6 @@ public class AdminCtrl {
 		//チャットの通信可能相手を格納
 		List<GroupDisplay> chatPartner = chatServise.setChatUser(school_id);
 
-		System.out.println(chatPartner);
-		
 		mav.addObject("chatPartnerMember", chatPartner);
 		mav.setViewName("common/chat");
 		return mav;
@@ -1552,6 +1471,7 @@ public class AdminCtrl {
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
+
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
 
 		mav.addObject("chatHistory", chatHistory);

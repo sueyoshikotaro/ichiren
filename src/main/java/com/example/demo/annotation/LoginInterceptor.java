@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import com.example.demo.entity.User;
+
 /**
  * 末吉
  * 自作アノテーション
@@ -34,16 +36,26 @@ public class LoginInterceptor implements HandlerInterceptor {
 					return false;
 				}
 
-//				// ユーザーの権限をチェックする
-//				User user = (User) session.getAttribute("user");
-//				if (user.getUser_id().startsWith("ad") || user.getUser_id().startsWith("te")) {
-//					// 権限が管理者の場合、管理者のメニュー画面に遷移する
-//					response.sendRedirect("/taskdon/admin/menu");
-//				} else {
-//					// 権限がユーザの場合、ユーザのメニュー画面に遷移する
-//					response.sendRedirect("/taskdon/user/menu");
-//					return false;
-//				}
+				// ユーザーの権限をチェックする
+				User user = (User) session.getAttribute("user");
+				String currentUrl = request.getRequestURI();
+				
+				if(user.getUser_id().startsWith("ad") && user.getUser_id().length() == 7) {
+					// 権限が上位管理者の場合、管理者のメニュー画面に遷移する
+				    if (!currentUrl.startsWith("/taskdon/admin/teInfoRegist")) {
+				    	response.sendRedirect("/taskdon/admin/teInfoRegist");
+				    }
+				} else if(user.getUser_id().startsWith("ad") || user.getUser_id().startsWith("te")) {
+					// 権限が管理者の場合、管理者のメニュー画面に遷移する
+				    if (!currentUrl.startsWith("/taskdon/admin")) {
+				        response.sendRedirect("/taskdon/admin/menu");
+				    }
+				} else if (user.getUser_id().startsWith("st")) {
+				    // 権限がユーザの場合、ユーザのメニュー画面に遷移する
+				    if (!currentUrl.startsWith("/taskdon/user")) {
+				        response.sendRedirect("/taskdon/user/deptGroupList");
+				    }
+				}
 			}
 		}
 
