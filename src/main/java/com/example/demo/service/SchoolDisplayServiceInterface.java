@@ -2,9 +2,13 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import com.example.demo.entity.School;
 import com.example.demo.form.SchoolDisplay;
 
 public interface SchoolDisplayServiceInterface {
+	
+	//学校情報取得
+	public List<School> SchoolInfo(int school_id);
 	
 	//学校情報詳細一覧
 	public List<SchoolDisplay> SchoolDetails(int school_id);
