@@ -1,25 +1,25 @@
-<!--必須情報(下記2項目)-->
+<!-- 必須情報(下記2項目) -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<!--必須項目-->
+	<!-- 必須項目 -->
 	<meta charset="UTF-8">
 
-	<!--サイトタイトル-->
+	<!-- サイトタイトル -->
 	<title>タスクどん|ToDoリスト</title>
 
-	<!--デザイン等-->
+	<!-- デザイン等 -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
-	<!--CSS接続-->
-	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
-	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
-	<link rel="stylesheet" th:href="@{/css/list.css}"> <!-- 共通CSS -->
+	<!-- CSS接続 -->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通 -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通 -->
+	<link rel="stylesheet" th:href="@{/css/list.css}">
 
-	<!--ウェブアイコン-->
+	<!-- ウェブアイコン -->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(ユーザ用) -->
@@ -30,23 +30,24 @@
 </head>
 
 <body>
-	<!--ドロップダウンメニュー(開閉)-->
+	<!-- ドロップダウンメニュー(開閉) -->
 	<button th:if="${button != null}" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExampleSide"
 		aria-controls="offcanvasExample">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 
-	<!--Fragment使ってコードの部品化-->
+	<!-- Fragment使ってコードの部品化 -->
 	<div>
 		<th:block th:insert="fragment/todoFragment :: toggle">
 	</div>
 
-	<!--コンテナ-->
+	<!-- コンテナ -->
 	<div class="container">
 
 		<h2>ToDoリスト
-			<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-				class="bi bi-clipboard-check" viewBox="0 0 16 16" style="margin-bottom: 6px; margin-left: -6px;">
+			<!-- アイコン画像(bootstrap引用) -->
+			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+				class="bi bi-clipboard-check" viewBox="0 0 16 16" style="margin-top: -7px; margin-left: -8px;">
 				<path fill-rule="evenodd"
 					d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0" />
 				<path
@@ -60,7 +61,7 @@
 
 	</div>
 
-	<!--JavaScript-->
+	<!-- JavaScript -->
 	<script th:inline="javascript">
 		var rows = document.querySelectorAll('.data');
 		var url = "todoList";
@@ -80,7 +81,7 @@
 					"checked": checkbox.checked
 				};
 
-				/*ToDo一覧表示メソッドの呼び出し*/
+				/* ToDo一覧表示メソッドの呼び出し */
 				$.ajax({
 					type: "GET",
 					url: url,
@@ -90,11 +91,11 @@
 		});
 	</script>
 
-	<!--bootstrapのjsリンク接続-->
+	<!-- bootstrapのjsリンク接続 -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
 		crossorigin="anonymous"></script>
-	<!--JavaScript-->
+	<!-- JavaScript -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 </body>

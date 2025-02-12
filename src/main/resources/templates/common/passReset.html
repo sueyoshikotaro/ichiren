@@ -53,7 +53,8 @@
 
 				<div class="input-group" style="max-width: 360px;">
 
-					<input type="password" name="newPass" class="form-control" required>
+					<input type="password" name="newPass" class="form-control" maxlength="16"
+						pattern="^[a-zA-Z0-9]{8,15}$" required>
 
 					<!-- 目マーク機能範囲 -->
 					<span class="input-group-text" style="cursor: pointer;">
@@ -103,7 +104,8 @@
 
 				<div class="input-group" style="max-width: 360px;">
 
-					<input type="password" name="confirmPass" class="form-control" required>
+					<input type="password" name="confirmPass" class="form-control" maxlength="16"
+						pattern="^[a-zA-Z0-9]{8,15}$" required>
 
 					<!-- 目マーク機能範囲 -->
 					<span class="input-group-text" style="cursor: pointer;">
