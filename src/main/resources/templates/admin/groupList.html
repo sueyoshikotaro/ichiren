@@ -149,7 +149,7 @@
 			</div>
 		</div>
 
-		<form th:action="@{groupCreate}" method="post">
+		<form th:action="@{groupCreate}" method="post" th:if="${#strings.startsWith(session.user.user_id, 'te')}">
 			<button type="submit" name="button" class="move-btn long-btn" value="作成">新規作成
 				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
 					class="bi bi-plus-circle" viewBox="0 0 16 16" style="margin-bottom: 4px;">
