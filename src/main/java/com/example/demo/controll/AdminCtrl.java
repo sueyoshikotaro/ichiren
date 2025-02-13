@@ -434,15 +434,15 @@ public class AdminCtrl {
 				user.setUser_flg(Integer.parseInt(values[4]));
 				users.add(user);
 			}
-			
-			if(users.isEmpty()) {
+
+			if (users.isEmpty()) {
 				mav.addObject("errMsg1", "CSVファイルを選択してください");
 				mav.setViewName("admin/userRegist");
 			} else {
 				mav.addObject("userRegist", users);
 				mav.setViewName("admin/userRegistConfirm");
 			}
-			
+
 		} catch (Exception e) {
 			mav.addObject("errMsg1", "登録内容に不備があります。CSVファイルの中身を確認して下さい。");
 			mav.setViewName("admin/userRegist");
@@ -473,7 +473,7 @@ public class AdminCtrl {
 
 			mav.addObject("userRegistComp", true);
 			mav.setViewName("admin/userRegistConfirm");
-			
+
 		} catch (Exception e) {
 			mav.addObject("errMsg1", "すでに登録されているユーザが含まれているか、CSVファイルの形式が正しくありません。");
 			mav.addObject("errMsg2", "※CSVファイルにはユーザID,ユーザ名,入学年度が入力されていること");
@@ -942,15 +942,16 @@ public class AdminCtrl {
 	public ModelAndView groupEditComp(ModelAndView mav, TeamsDisplay t,
 			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
 			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id) {
-
-		if (memberUser_id != null) {
-
-			// ここで、リーダーのデータを処理する
+		
+		// ここで、リーダーのデータを処理する
+		if (leaderUser_id != null) {
 			for (String i : leaderUser_id) {
 				groupDispService.groupEdit(i, t.getGroup_id(), "リーダ");
 			}
+		}
 
-			//ここで、メンバーのデータを処理する
+		//ここで、メンバーのデータを処理する
+		if (memberUser_id != null) {
 			for (String i : memberUser_id) {
 				groupDispService.groupEdit(i, t.getGroup_id(), "メンバ");
 			}
@@ -995,8 +996,7 @@ public class AdminCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("groupMemberDeleteConfirm")
-	public ModelAndView memberDeleteConfirm(@RequestParam("button") String button,
-			GroupMemberDetailView g, ModelAndView mav) {
+	public ModelAndView memberDeleteConfirm(GroupMemberDetailView g, ModelAndView mav) {
 
 		//グループメンバ削除確認画面のテーブルを表示する
 		List<GroupMemberDetailView> group = groupDispService.grMemDelDisp(g.getUser_id(), g.getGroup_id());
@@ -1006,8 +1006,6 @@ public class AdminCtrl {
 
 				//更新後のスコアと進捗度を計算するサービスを呼び出す
 				Object[] updateData = groupDispService.scoreCalc(g.getGroup_id(), g.getUser_id());
-
-				System.out.println(updateData[2]);
 
 				//user_detailのtask_idを更新(タスクの自動振り分け)
 				groupDispService.updateUserId(group.get(0).getTask_id(), (String) updateData[2]);
