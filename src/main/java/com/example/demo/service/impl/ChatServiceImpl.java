@@ -53,8 +53,6 @@ public class ChatServiceImpl implements ChatServiceInterface {
 
 		//チャットルーム検索
 		int chatRoom_id = chatCrud.chatRoomSearch(user_id, chatUser_id);
-
-		System.out.println(sendText);
 		
 		if(sendText != null && !sendText.isEmpty()) {
 			//チャット履歴を更新
