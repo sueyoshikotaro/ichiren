@@ -523,8 +523,6 @@ public class AdminCtrl {
 
 		//admin○○アカウントでログインしているとき
 		if (user_id.startsWith("admin")) {
-			//adユーザを作成しようとしている場合
-			//			if (userId.startsWith("ad") || userId.length() != 10) {
 			if (Pattern.matches("ad\\d{8}", userId)) {
 				if (userDisplayService.userIDCheck(userId)) {
 					mav.addObject("te", u);
