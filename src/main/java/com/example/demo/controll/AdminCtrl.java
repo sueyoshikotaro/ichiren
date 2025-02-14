@@ -352,6 +352,36 @@ public class AdminCtrl {
 	@PostMapping("userDeleteConfirm")
 	public ModelAndView userDeleteConfirm(UserDisplay u, ModelAndView mav) {
 
+		//所属グループ一覧取得
+		List<GroupDisplay> deptGroupList = groupDispService.deptGroupList(u.getUser_id());
+
+		//
+		for (GroupDisplay i : deptGroupList) {
+			//所属するグループの削除するユーザ情報を取得
+			List<GroupMemberDetailView> group = groupDispService.grMemDelDisp(u.getUser_id(), i.getGroup_id());
+
+			if (!group.isEmpty()) {
+				for (int j = 0; j < group.size(); j++) {
+					//更新後のスコアと進捗度を計算するサービスを呼び出す
+					Object[] updateData = groupDispService.scoreCalc(i.getGroup_id(), u.getUser_id());
+
+					//user_detailのtask_idを更新(タスクの自動振り分け)
+					groupDispService.updateUserId(group.get(0).getTask_id(), (String) updateData[2]);
+
+					//user_detailのscoreとuser_progressを更新
+					groupDispService.updateScore((String) updateData[2], i.getGroup_id(), (int) updateData[0],
+							(int) updateData[1]);
+				}
+			}
+
+			//user_detailテーブルの一列を削除
+			groupDispService.groupMemberDelete(i.getGroup_id(), u.getUser_id());
+
+			//グループの全体進捗を更新するサービスを呼び出す
+			groupDispService.allProgress(i.getGroup_id());
+
+		}
+
 		// サービスのメソッドを呼び出す
 		userDisplayService.DeleteUser(u.getUser_id());
 
@@ -940,7 +970,7 @@ public class AdminCtrl {
 	public ModelAndView groupEditComp(ModelAndView mav, TeamsDisplay t,
 			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
 			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id) {
-		
+
 		// ここで、リーダーのデータを処理する
 		if (leaderUser_id != null) {
 			for (String i : leaderUser_id) {
@@ -989,7 +1019,7 @@ public class AdminCtrl {
 
 	/**
 	 * 向江・末吉
-	 * グループメンバ削除確認画面を表示する
+	 * グループメンバ削除完了
 	 * @return
 	 */
 	@LoginRequired
