@@ -112,7 +112,10 @@
 				<!-- 居場所表示 -->
 				<div class="input-group groupList-whereabouts">
 					<span class="input-group-text">居場所</span>
-					<div type="text" class="form-control" th:text="${group.work_status}"></div>
+					<div type="text" class="form-control" th:text="${group.work_status}"
+						th:if="${group.work_status != '休憩中'}"></div>
+					<div type="text" class="form-control" th:text="${group.work_status}"
+						th:unless="${group.work_status != '休憩中'}" style="background-color: grey; color: white;"></div>
 				</div>
 
 				<!-- 進捗表示 -->

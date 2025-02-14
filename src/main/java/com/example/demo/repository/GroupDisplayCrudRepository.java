@@ -83,7 +83,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループメンバ詳細表示
 	 */
 	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id")
-	public List<GroupMemberDetailView> groupMemberDetail(String user_id, String group_id);
+	public List<GroupMemberDetailView> groupMemberDetail(String user_id, int group_id);
 
 	/*
 	 * 向江
@@ -127,7 +127,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループメンバ削除
 	 * user_detailのscoreを持ってくる
 	 */
-	@Query("select * from user_detail where group_id = :group_id order by score asc")
+	@Query("select * from user_detail where group_id = :group_id order by score, user_progress desc")
 	public List<GroupMemberDetailView> membersScore(int group_id);
 
 	/**

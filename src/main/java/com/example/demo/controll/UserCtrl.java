@@ -244,20 +244,6 @@ public class UserCtrl {
 	}
 
 	/**
-	 * メニュー(管理者)画面
-	 * @return
-	 */
-//	@LoginRequired
-//	@GetMapping("/taskdon/admin/menu")
-//	public ModelAndView adminMenu(ModelAndView mav) {
-//
-//		System.out.println("kannrisya!!!");
-//		mav.setViewName("admin/menuAdmin");
-//
-//		return mav;
-//	}
-
-	/**
 	 * 所属グループ一覧画面に遷移
 	 * @return
 	 */
