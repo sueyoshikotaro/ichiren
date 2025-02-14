@@ -337,17 +337,23 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		//更新後のグループ全体の進捗度を格納
 		int all_progress_result = 0;
 
+		int taskCnt = 0;
+		
 		List<GroupDisplay> taskList = groupDispCrudRepo.groupDetail(group_id);
 
 		//全体進捗の計算
 		for (GroupDisplay progressSum : taskList) {
 			all_progress += progressSum.getUser_progress();
+			
+			if(progressSum.getUser_progress() != 0) {
+				taskCnt++;
+			}
 		}
-
+		
 		//グループにメンバがいる場合
 		if (!taskList.isEmpty()) {
 			//更新後の全体進捗の計算
-			all_progress_result = all_progress / taskList.size();
+			all_progress_result = all_progress / taskCnt;
 		} else {
 			all_progress_result = 0;
 		}

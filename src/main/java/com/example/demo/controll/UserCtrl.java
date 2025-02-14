@@ -376,8 +376,9 @@ public class UserCtrl {
 		} else {
 			score = String.valueOf(TaskService.userScore(selectedValue, group_id));
 		}
-
+		
 		task = TaskService.taskDisplayList(selectedValue, group_id);
+		
 		mav.addObject("score", score);
 		mav.addObject("user", selectedValue);
 		mav.addObject("tasks", task);
