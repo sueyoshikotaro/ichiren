@@ -36,6 +36,16 @@
 
 		<h2>グループ詳細</h2>
 
+		<div th:each="groupInfo : ${groupInfo}" th:if="${#lists.isEmpty(groups)}">
+			<span class="form-label">グループ名</span>
+			<div type="text" class="form-control" th:text="${groupInfo.group_name}"></div>
+
+			<div class="group-detail-text-view">
+				<span class="form-label">ジャンル</span>
+				<div type="text" class="form-control" th:text="${groupInfo.genre}"></div>
+			</div>
+		</div>
+
 		<!--グループ全体情報-->
 		<div th:each="groupDetails : ${groups}" th:if="${groupDetailsStat.index == 0}">
 
@@ -47,14 +57,6 @@
 				<div type="text" class="form-control" th:text="${groupDetails.genre}"></div>
 			</div>
 
-			<!--			<span class="form-label group-name-title" th:text="${groupDetails.group_name}"></span>-->
-
-			<!--			<p th:text="${groupDetails.group_name}"></p>-->
-			<!--			<p th:text="${groupDetails.genre}"></p>-->
-
-			<!--		<h3 th:text="${group.group_name}"></h3>-->
-			<!--		<h3 th:text="${group.genre}"></h3>-->
-
 			<div class="group-detail-text-view">
 				<!-- グループ全体の進捗率(バー&パーセント)を表示する -->
 				<span class="form-label">全体進捗</span>
@@ -64,23 +66,17 @@
 							class="var-text group-progress-text" th:text="${groupDetails.all_progress}+'%'"></div>
 				</div>
 			</div>
-
-			<!--<div class="overview">-->
-			<!--	<div th:text="'進捗：' + ${groupDetails.all_progress} + '％'"></div>-->
-			<!--		<div class="w-auto p-3">-->
-			<!--			<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="0"-->
-			<!--				aria-valuemin="0" aria-valuemax="100">-->
-			<!--			<div class="progress-bar" th:style="'width:'+ ${groupDetails.all_progress}+'%'"></div>-->
-			<!--		</div>-->
-			<!--	</div>-->
-			<!--</div>-->
-
 		</div>
+
+		<!--指示文を表示-->
+		<p th:if="${Msg}" th:text="${Msg}"
+			style="text-align: center; margin-top: 35px; margin-bottom: 30px; font-size: 19px; text-decoration: double;">
+		</p>
 
 		<!--メイン項目-->
 		<div class="main-content">
 			<div th:each="group : ${groups}" class="content-child">
-
+				<p style="font-size: 14px; margin-bottom: -16px;" th:if="${group.score == 0}">割り振られているタスクがありません。</p>
 				<div class="row">
 					<div class="col">
 
@@ -106,26 +102,29 @@
 							th:text="${group.user_progress}+'%'"></div>
 				</div>
 
-				<!--<td th:text="${group.app_date}"></td> 更新日 後回しのやつ -->
-
 				<div class="row">
-					<div class="col">
+					<div class="col" th:if="${group.score != 0}">
 						<!--グループメンバ詳細-->
 						<form th:action="@{groupMemberDetails}" method="post">
 							<input type="hidden" name="user_id" th:value="${group.user_id}">
 							<input type="hidden" name="group_id" th:value="${group.group_id}">
-							<button type="submit" name="button" class="select-btn" value="詳細">詳細</button>
+							<input type="hidden" name="user_name" th:value="${group.user_name}">
+							<button type="submit" name="button" class="select-btn" value="詳細">詳細
+								<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor"
+									class="bi bi-info-circle" viewBox="0 0 16 16" style="margin-bottom: 4px;">
+									<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+									<path
+										d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+								</svg>
+							</button>
 						</form>
 					</div>
-					<div class="col">
+					<div class="col" th:if="${group.school_id == session.user.school_id and group.user_roll == 'メンバ'}">
 						<!--グループメンバ削除-->
 						<form th:action="@{groupMemberDelDisp}" method="post">
 							<input type="hidden" name="user_id" th:value="${group.user_id}">
 							<input type="hidden" name="group_id" th:value="${group.group_id}">
-
-							<!--<input type="hidden" name="user_name" th:value="${group.user_name}">-->
-							<!--<input type="hidden" name="group_name" th:value="${group.group_name}">-->
-
+							<input type="hidden" name="user_name" th:value="${group.user_name}">
 							<button type="submit" name="button" class="select-btn" value="削除">削除</button>
 						</form>
 					</div>
@@ -134,15 +133,15 @@
 		</div>
 
 		<!--グループメンバ追加 -->
-		<div class="btn-group btnS-group">
+		<div class="btn-group btnS-group" th:if="${groupInfo[0].school_id == session.user.school_id}">
 			<form th:action="@{groupMemberAdd}" method="post">
-				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
-				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
+				<input type="hidden" name="group_id" th:value="${groupInfo[0].group_id}">
+				<input type="hidden" name="group_name" th:value="${groupInfo[0].group_name}">
 				<button type="submit" name="button" class="move-btn mini-btn" value="追加">追加</button>
 			</form>
 
 			<!--グループ編集 -->
-			<form th:action="@{groupEdit}" method="post">
+			<form th:action="@{groupEdit}" method="post" th:if="${!#lists.isEmpty(groups)}">
 				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
 				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
 				<input type="hidden" name="genre" th:value="${groups[0].genre}">
@@ -154,15 +153,15 @@
 
 			<!--グループ解散 -->
 			<form th:action="@{groupDissConfirm}" method="post">
-				<input type="hidden" name="group_id" th:value="${groups[0].group_id}">
-				<input type="hidden" name="group_name" th:value="${groups[0].group_name}">
+				<input type="hidden" name="group_id" th:value="${groupInfo[0].group_id}">
+				<input type="hidden" name="group_name" th:value="${groupInfo[0].group_name}">
+				<input type="hidden" name="genre" th:value="${groupInfo[0].genre}">
 				<input type="hidden" name="user_id" th:each="member : ${groups}" th:value="${member.user_id}">
 				<input type="hidden" name="user_name" th:each="member : ${groups}" th:value="${member.user_name}">
 				<input type="hidden" name="user_roll" th:each="member : ${groups}" th:value="${member.user_roll}">
 				<button type="submit" name="button" class="move-btn mini-btn" value="解散">解散</button>
 			</form>
 		</div>
-
 	</div>
 
 	<!--bootstrapのjsリンク接続-->

@@ -3,15 +3,15 @@ package com.example.demo.service;
 import java.util.Date;
 import java.util.List;
 
-import com.example.demo.entity.Task;
-import com.example.demo.entity.TaskReqView;
+import com.example.demo.form.TaskForm;
+import com.example.demo.form.TaskReqForm;
 
 public interface TaskServiceInterface {
 	//タスク一覧表示
-	public List<Task> taskDisplayList(String user, int group_id);
+	public List<TaskForm> taskDisplayList(String user, int group_id);
 
 	//タスクの詳細データを取得
-	public List<Task> taskDetails(int task_id, int group_id);
+	public List<TaskForm> taskDetails(int task_id, int group_id);
 
 	//タスク登録
 	public boolean taskRegister(String task_category, String task_name, String task_content, String string,
@@ -38,7 +38,7 @@ public interface TaskServiceInterface {
 	public void taskUpProgress(int task_id, int progress, String task_status);
 
 	//タスク未承認一覧表示
-	public List<TaskReqView> selectTaskUnapproved(int group_id);
+	public List<TaskReqForm> selectTaskUnapproved(int group_id);
 
 	//タスク未承認フラグ更新(承認済)
 	public boolean taskReqFlg(int request_id);
@@ -48,6 +48,6 @@ public interface TaskServiceInterface {
 			Date add_date, String user_name, int group_id);
 
 	//カテゴリ取得(絞り込み用)
-	public List<Task> selectCategory(int group_id);
+	public List<TaskForm> selectCategory(int group_id);
 
 }

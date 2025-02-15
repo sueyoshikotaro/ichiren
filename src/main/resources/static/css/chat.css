@@ -50,6 +50,17 @@
 	border: 2px solid #EEEEEE;
 }
 
+.chat-partner-list::-webkit-scrollbar-thumb:active {
+	background-color: #ccc;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	transition: background-color 0.2s ease-in-out;
+}
+
+.chat-partner-list::-webkit-scrollbar-thumb:active:hover {
+	background-color: #aaa;
+}
+
 /*チャット欄*/
 .chat-main-content {
 	background-image: url(../img/chat-background.png);

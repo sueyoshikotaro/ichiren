@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
-import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
-import com.example.demo.form.Room;
+import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.TaskForm;
-import com.example.demo.form.TeamsForm;
+import com.example.demo.form.TeamsDisplay;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.service.GroupDisplayServiceInterface;
 
@@ -24,9 +22,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ一覧
 	 */
 	@Override
-	public List<TeamsForm> groupList(String year, String genre, int school_id) {
+	public List<TeamsDisplay> groupList(String year, String genre, int school_id) {
 
-		List<TeamsForm> result = null;
+		List<TeamsDisplay> result = null;
 		if (genre == null) {
 			result = groupDispCrudRepo.groupList1(year, school_id);
 		} else {
@@ -60,60 +58,16 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		}
 		return result;
 	}
-	//		else if() {
-	//			
-	//		}
 
-	//	}else if(genre.equals("選択なし")&&year.equals("選択なし")&&school_id==0)
-	//
-	//	{
-	//		result = groupDispCrudRepo.groupList();
-	//	}else if(genre.equals("選択なし")&&year.equals("選択なし"))
-	//	{
-	//		result = groupDispCrudRepo.groupListSchool(school_id);
-	//	}else if(genre.equals("選択なし")&&school_id==0)
-	//	{
-	//		result = groupDispCrudRepo.groupListYear(year);
-	//	}else if(year.equals("選択なし")&&school_id==0)
-	//	{
-	//		result = groupDispCrudRepo.groupListGenre(genre);
-	//	}else
-	//	{
-	//		result = groupDispCrudRepo.groupList(genre, year, school_id);
-	//	}
+	/**
+	 * 末吉
+	 * 絞り込み検索結果
+	 */
+	@Override
+	public List<GroupDisplay> groupInfo(int group_id) {
 
-	//		} else if(year.equals("選択なし") && school_id == 0){
-	//			result = groupDispCrudRepo.groupList(year, genre, school_id);
-	//		} else if(school_id == 0){
-	//			result = groupDispCrudRepo.groupList(year, genre, school_id);
-	//		}
-	//		result = groupDispCrudRepo.groupList(year, genre, school_id);
-	//	}
-
-	//		String dropdown = year;
-	//		String dropid = genre;
-	//		if (dropdown.equals("--")) {
-	//		} else {
-	//			if (dropid.equals("year")) {
-	//				if (dropdown.equals("グループ結成年度")) {
-	//					result = groupDispCrudRepo.groupList(school_id);
-	//				} else {
-	//					result = groupDispCrudRepo.groupListYear(dropdown);
-	//				}
-	//			} else if (dropid.equals("school")) {
-	//				if (dropdown.equals("学校名")) {
-	//					result = groupDispCrudRepo.groupList(school_id);
-	//				} else {
-	//					result = groupDispCrudRepo.groupListSchool(dropdown);
-	//				}
-	//			} else if (dropid.equals("genre")) {
-	//				if (dropdown.equals("ジャンル")) {
-	//					result = groupDispCrudRepo.groupList(school_id);
-	//				} else {
-	//					result = groupDispCrudRepo.groupListGenre(dropdown);
-	//				}
-	//			}
-	//		}
+		return groupDispCrudRepo.groupInfo(group_id);
+	}
 
 	/*
 	 * 湊原
@@ -121,7 +75,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ一覧
 	 */
 	@Override
-	public List<TeamsForm> getTeamsByCriteria(String schoolName) {
+	public List<TeamsDisplay> getTeamsByCriteria(String schoolName) {
 
 		return groupDispCrudRepo.findByCriteria(schoolName);
 	}
@@ -131,7 +85,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ詳細
 	 */
 	@Override
-	public List<GroupDetailView> groupDetail(int group_id) {
+	public List<GroupDisplay> groupDetail(int group_id) {
 
 		return groupDispCrudRepo.groupDetail(group_id);
 	}
@@ -141,7 +95,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ詳細
 	 */
 	@Override
-	public List<GroupMemberDetailView> groupMemberDetail(String user_id, String group_id) {
+	public List<GroupMemberDetailView> groupMemberDetail(String user_id, int group_id) {
 
 		return groupDispCrudRepo.groupMemberDetail(user_id, group_id);
 	}
@@ -151,9 +105,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * タスク詳細
 	 */
 	@Override
-	public List<TaskForm> taskDetail(String task_name) {
+	public List<TaskForm> taskDetail(int task_id) {
 
-		return groupDispCrudRepo.taskDetail(task_name);
+		return groupDispCrudRepo.taskDetail(task_id);
 	}
 
 	/**
@@ -182,9 +136,9 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループメンバ削除画面を表示するためだけのメソッド
 	 */
 	@Override
-	public List<GroupMemberDeleteView> grMemDelDisp(String user_id) {
+	public List<GroupMemberDetailView> grMemDelDisp(String user_id, int group_id) {
 
-		return groupDispCrudRepo.grMemDelDisp(user_id);
+		return groupDispCrudRepo.grMemDelDisp(user_id, group_id);
 	}
 
 	/*
@@ -204,19 +158,11 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * user_detailテーブルのscoreを昇順に並び変える
 	 */
 	@Override
-	public List<GroupMemberDeleteView> membersScore(int group_id) {
+	public List<GroupMemberDetailView> membersScore(int group_id) {
 
-		List<GroupMemberDeleteView> group = groupDispCrudRepo.membersScore(group_id);
+		List<GroupMemberDetailView> group = groupDispCrudRepo.membersScore(group_id);
 
 		return group;
-		//		// membersScore の一つ目の要素を取得
-		//		GroupMemberDeleteView firstMember = group.get(0);
-		//		
-		//		// score と user_id を含む新しいオブジェクトを返す
-		//		List<GroupMemberDeleteView> result = new ArrayList<>();
-		//		result.add(firstMember);
-
-		//		return result;
 
 	}
 
@@ -267,9 +213,11 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 */
 	@Override
 	public void groupDiss(int group_id) {
-
+		//解散
 		groupDispCrudRepo.groupDiss(group_id);
 
+		//タスクフラグをfalseに
+		groupDispCrudRepo.taskDiss(group_id);
 	}
 
 	/**
@@ -318,24 +266,32 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		int userProgressResult = 0;
 
 		//user_detailの情報をscoreの昇順に格納
-		List<GroupMemberDeleteView> group = groupDispCrudRepo.membersScore(group_id);
+		List<GroupMemberDetailView> group = groupDispCrudRepo.membersScore(group_id);
+
+		//削除するユーザを割り振る候補から除外する
+		group.removeIf(member -> member.getUser_id().equals(user_id));
 
 		//タスクを割り振るメンバのscoreを取得
 		int score = group.get(0).getScore();
 
 		//割り振るユーザのタスク情報を取得
-		List<TaskForm> delteUserTask = groupDispCrudRepo.taskList(user_id, group_id);
+		List<TaskForm> deleteUserTask = groupDispCrudRepo.taskList(user_id, group_id);
 
 		//割り振られるユーザのタスク情報を取得
 		List<TaskForm> updateUserTask = groupDispCrudRepo.taskList(group.get(0).getUser_id(), group_id);
 
 		//割り振るタスクのtask_weightを取得
-		task_weight = delteUserTask.get(0).getTask_weight();
+		task_weight = deleteUserTask.get(0).getTask_weight();
 
 		//割り振ったメンバのscoreを再計算(戻り値)
 		scoreResult = score + task_weight;
 
-		progressSum = updateUserTask.get(0).getUser_progress() + delteUserTask.get(0).getProgress();
+		//進捗度を足す
+		if(updateUserTask.isEmpty()) {
+			progressSum = 0 + deleteUserTask.get(0).getProgress();
+		} else {
+			progressSum = updateUserTask.get(0).getUser_progress() + deleteUserTask.get(0).getProgress();
+		}
 
 		//変更後の進捗度を計算(戻り値)
 		userProgressResult = progressSum / 2;
@@ -359,17 +315,14 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		//割り振られるユーザのタスク情報を取得
 		List<TaskForm> updateUserTask = groupDispCrudRepo.taskList(user_id, group_id);
 
-		System.out.println(updateUserTask);
-		
-		for(TaskForm i : updateUserTask) {
+		//ユーザの進捗度の計算
+		for (TaskForm i : updateUserTask) {
 			progressSum += i.getProgress();
-			
-			System.out.println(progressSum);
 		}
-		
+
 		//更新するユーザ
 		int userProgressResult = progressSum / updateUserTask.size();
-		
+
 		groupDispCrudRepo.updateProgress(group_id, user_id, userProgressResult);
 
 	}
@@ -384,20 +337,29 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		//更新後のグループ全体の進捗度を格納
 		int all_progress_result = 0;
 
-		List<GroupDetailView> taskList = groupDispCrudRepo.groupDetail(group_id);
+		int taskCnt = 0;
+		
+		List<GroupDisplay> taskList = groupDispCrudRepo.groupDetail(group_id);
 
-		System.out.println(taskList.size());
-
-		for (GroupDetailView progressSum : taskList) {
+		//全体進捗の計算
+		for (GroupDisplay progressSum : taskList) {
 			all_progress += progressSum.getUser_progress();
+			
+			if(progressSum.getUser_progress() != 0) {
+				taskCnt++;
+			}
+		}
+		
+		//グループにメンバがいる場合
+		if (!taskList.isEmpty()) {
+			//更新後の全体進捗の計算
+			all_progress_result = all_progress / taskCnt;
+		} else {
+			all_progress_result = 0;
 		}
 
-		//更新後の全体進捗の計算
-		all_progress_result = all_progress / taskList.size();
-
 		//全体進捗の更新
-		groupDispCrudRepo.allProgressUpdate(taskList.get(0).getGroup_id(), all_progress_result);
-
+		groupDispCrudRepo.allProgressUpdate(group_id, all_progress_result);
 	}
 
 	/**
@@ -412,7 +374,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 	//チャット相手を設定
 	@Override
-	public List<GroupDetailView> setChatUser(int school_id, String user_roll) {
+	public List<GroupDisplay> setChatUser(int school_id, String user_roll) {
 
 		//チャット相手を一覧で格納
 		return groupDispCrudRepo.setChatUser(school_id, user_roll);
@@ -420,7 +382,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 	//チャット相手を検索
 	@Override
-	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll) {
+	public List<GroupDisplay> chatPartnerSearch(int school_id, String search, String user_roll) {
 		return groupDispCrudRepo.chatPartnerSearch(school_id, search, user_roll);
 	}
 
@@ -444,7 +406,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	}
 
 	@Override
-	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id, String selectedValue) {
+	public List<GroupMemberDetailView> memberDetail(String user_id, int group_id, String selectedValue) {
 
 		List<GroupMemberDetailView> result = null;
 		if (selectedValue.equals("選択なし")) {
@@ -461,7 +423,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * 学校一覧(絞り込み用)
 	 */
 	@Override
-	public List<TeamsForm> selectSchool() {
+	public List<TeamsDisplay> selectSchool() {
 		return groupDispCrudRepo.selectSchool();
 	}
 
@@ -470,8 +432,8 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * グループ結成年度一覧(絞り込み用)
 	 */
 	@Override
-	public List<TeamsForm> selectEstYear(String value) {
-		List<TeamsForm> result = null;
+	public List<TeamsDisplay> selectEstYear(String value) {
+		List<TeamsDisplay> result = null;
 		if (value.equals("user")) {
 			result = groupDispCrudRepo.selectuserEstYear();
 		} else if (value.equals("group")) {
@@ -486,28 +448,28 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 	 * ジャンル一覧(絞り込み用)
 	 */
 	@Override
-	public List<TeamsForm> selectGenre() {
+	public List<TeamsDisplay> selectGenre() {
 		return groupDispCrudRepo.selectGenre();
 	}
-	
+
 	/**
 	 * 末吉
 	 * 居場所一覧
 	 */
 	@Override
-	public List<Room> roomSelect(int school_id) {
-		
+	public List<SchoolDisplay> roomSelect(int school_id) {
+
 		return groupDispCrudRepo.roomSelect(school_id);
 	}
-	
+
 	/**
 	 * 末吉
 	 * 居場所更新
 	 */
 	@Override
 	public void roomUpdate(String work_status, int group_id) {
-		
+
 		groupDispCrudRepo.roomUpdate(work_status, group_id);
 	}
-	
+
 }

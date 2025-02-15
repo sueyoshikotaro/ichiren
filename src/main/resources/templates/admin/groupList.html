@@ -1,4 +1,3 @@
-<!-- グループ一覧機能(向江) -->
 <!-- 必須情報(下記2項目) -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -16,37 +15,44 @@
 		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
 	<!-- CSS接続 -->
-	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
-	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
+	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通 -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通 -->
 	<link rel="stylesheet" th:href="@{/css/list.css}">
 
-	<!--ウェブアイコン-->
+	<!-- ウェブアイコン -->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
-
 </head>
 
 <body>
-	<!--コンテナ-->
+	<!-- コンテナ -->
 	<div class="container">
 
 		<h2>グループ一覧
-			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-				class="bi bi-people-fill group-icon" viewBox="0 0 16 16" style="margin-bottom: 3px;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-people"
+				viewBox="0 0 16 16" style="margin-top: -6px; margin-left: -4px;">
 				<path
-					d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
+					d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
 			</svg>
 		</h2><br>
 
-		<!--絞り込みグループ-->
+		<!-- 絞り込みグループ -->
 		<div class="narrow-dowm-group" id="form">
 
-			<!--絞り込み(所属学校)-->
-			<span class="form-label">所属学校</span>
+			<!-- 絞り込み(所属学校) -->
+			<span class="form-label">所属学校
+				<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+					class="bi bi-building" viewBox="0 0 16 16" style="margin-bottom: 3px;">
+					<path
+						d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+					<path
+						d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z" />
+				</svg>
+			</span>
 			<select id="school" name="selectedSchool" class="form-select" th:onchange="groupList()">
 				<option value="0">選択なし</option>
 				<option name="school_id" th:each="school : ${school}" th:value="${school.school_id}"
@@ -54,10 +60,19 @@
 				</option>
 			</select>
 
-			<div class="row">
+			<div class="row" style="margin-top: 8px;">
 				<div class="col">
-					<!--絞り込み(結成年度)-->
-					<span class="form-label">結成年度</span>
+					<!-- 絞り込み(結成年度) -->
+					<span class="form-label">結成年度
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+							class="bi bi-calendar-event" viewBox="0 0 16 16"
+							style="margin-bottom: 4px; margin-left: -2px;">
+							<path
+								d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
+							<path
+								d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+						</svg>
+					</span>
 					<select id="year" name="selectedYear" class="form-select" th:onchange="groupList()">
 						<option value="選択なし">選択なし</option>
 						<option name="est_year" th:each="year : ${year}" th:value="${year.est_year}"
@@ -66,8 +81,14 @@
 					</select>
 				</div>
 				<div class="col">
-					<!--絞り込み(ジャンル)-->
-					<span class="form-label">ジャンル</span>
+					<!-- 絞り込み(ジャンル) -->
+					<span class="form-label">ジャンル
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+							class="bi bi-boxes" viewBox="0 0 16 16" style="margin-bottom: 4px; margin-left: -2px;">
+							<path
+								d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z" />
+						</svg>
+					</span>
 					<select id="genre" name="selectedGenre" class="form-select" th:onchange="groupList()">
 						<option value="選択なし">選択なし</option>
 						<option name="genre" th:each="genre : ${genre}" th:value="${genre.genre}"
@@ -78,39 +99,32 @@
 			</div>
 		</div>
 
-		<!--メイン項目-->
+		<!-- メイン項目 -->
 		<div class="main-content" id="data">
 
 			<div th:each="group : ${groups}" class="content-child">
 
-				<!--グループ名-->
+				<!-- グループ名 -->
 				<div class="input-group groupList-name">
 					<span class="form-label groupList-text" th:text="'【'+${group.group_name}+'】'"></span>
 				</div>
 
-				<!--居場所表示-->
+				<!-- 居場所表示 -->
 				<div class="input-group groupList-whereabouts">
 					<span class="input-group-text">居場所</span>
-					<div type="text" class="form-control" th:text="${group.work_status}"></div>
+					<div type="text" class="form-control" th:text="${group.work_status}"
+						th:if="${group.work_status != '休憩中'}"></div>
+					<div type="text" class="form-control" th:text="${group.work_status}"
+						th:unless="${group.work_status != '休憩中'}" style="background-color: grey; color: white;"></div>
 				</div>
 
-				<!--進捗表示-->
+				<!-- 進捗表示 -->
 				<span class="form-label">全体進捗</span>
 				<div class="progress group-progress all-progress" role="progressbar">
 					<div class="progress-bar progress-bar-striped progress-bar-animated"
 						th:style="'width:'+ ${group.all_progress}+'%'"><label class="var-text group-progress-text"
 							th:text="${group.all_progress}+'%'"></div>
 				</div>
-
-				<!--				<div>-->
-				<!--					<div th:text="'進捗：' + ${group.all_progress} + '％'"></div>-->
-				<!--					<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"-->
-				<!--						aria-valuemin="0" aria-valuemax="100">-->
-				<!--						<div class="progress-bar" th:style="'width:'+ ${group.all_progress}+'%'"></div>-->
-				<!--					</div>-->
-				<!--				</div>-->
-
-				<!--				<div th:text="'居場所：' + ${group.work_status}"></div>-->
 
 				<div>
 					<form th:action="@{groupDetail}" method="post">
@@ -123,7 +137,14 @@
 						<input type="hidden" name="all_progress" th:value="${group.all_progress}">
 						<input type="hidden" name="est_year" th:value="${group.est_year}">
 
-						<button type="submit" name="button" class="select-btn mini-btn" value="詳細">詳細</button>
+						<button type="submit" name="button" class="select-btn mini-btn" value="詳細">詳細
+							<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor"
+								class="bi bi-info-circle" viewBox="0 0 16 16" style="margin-bottom: 4px;">
+								<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+								<path
+									d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+							</svg>
+						</button>
 
 					</form>
 				</div>
@@ -131,13 +152,16 @@
 			</div>
 		</div>
 
-		<form th:action="@{groupCreate}" method="post">
-			<button type="submit" name="button" class="move-btn long-btn" value="作成">新規作成</button>
+		<form th:action="@{groupCreate}" method="post" th:if="${#strings.startsWith(session.user.user_id, 'te')}">
+			<button type="submit" name="button" class="move-btn long-btn" value="作成">新規作成
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+					class="bi bi-plus-circle" viewBox="0 0 16 16" style="margin-bottom: 4px;">
+					<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+					<path
+						d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+				</svg>
+			</button>
 		</form>
-
-		<!--		<form th:action="@{menu}" method="get">-->
-		<!--			<button type="submit" name="button" class="move-btn mini-btn" value="メニュー">メニュー</button>-->
-		<!--		</form>-->
 
 	</div>
 
@@ -160,7 +184,7 @@
 				}
 			}
 
-			/*URL指定＆ドロップダウンリストの値引き渡し*/
+			/* RL指定＆ドロップダウンリストの値引き渡し */
 			var url = "groupList";
 			var params = {
 				"selectedSchool": selectedSchool,
@@ -168,12 +192,12 @@
 				"selectedGenre": selectedGenre
 			};
 
-			/*HTML内容のクリア*/
+			/* HTML内容のクリア */
 			var elements = document.getElementsByClassName("main-content");
 			for (var i = 0; i < elements.length; i++) {
 				elements[i].innerHTML = "";
 			}
-			/*グループ一覧表示メソッドの呼び出し*/
+			/* グループ一覧表示メソッドの呼び出し */
 			$.ajax({
 				type: "GET",
 				url: url,

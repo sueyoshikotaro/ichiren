@@ -7,7 +7,7 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.form.ChatForm;
-import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupDisplay;
 
 public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	
@@ -16,14 +16,14 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	 * チャット相手を格納
 	 */
 	@Query("select distinct u.user_id, u.user_name, t.group_name from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = 'リーダ' and t.group_flg = 1 group by u.user_id")
-	public List<GroupDetailView> setChatUser(int school_id);
+	public List<GroupDisplay> setChatUser(int school_id);
 
 	/**
 	 * 末吉
 	 * チャット相手を検索
 	 */
 	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1 and u.user_name like concat('%', :search, '%')")
-	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll);
+	public List<GroupDisplay> chatPartnerSearch(int school_id, String search, String user_roll);
 
 	/**
 	 * チャットルームがすでに存在するかどうか確認
@@ -71,14 +71,14 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	 * チャット相手を格納
 	 */
 	@Query("select * from user where school_id = :school_id and user_id like 'te%'")
-	public List<GroupDetailView> leaderSetChatUser(int school_id);
+	public List<GroupDisplay> leaderSetChatUser(int school_id);
 	
 	/**
 	 * 末吉
 	 * チャット相手を検索
 	 */
 	@Query("select * from user where school_id = :school_id and user_id like 'te%' and user_name like concat('%', :search, '%')")
-	public List<GroupDetailView> AdminChatPartnerSearch(int school_id, String search);
+	public List<GroupDisplay> AdminChatPartnerSearch(int school_id, String search);
 	
 	
 	/**
@@ -90,13 +90,13 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	 * チャット相手を格納
 	 */
 	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.group_id = :group_id and t.group_flg = 1")
-	public List<GroupDetailView> memberSetChatUser(int school_id, int group_id);
+	public List<GroupDisplay> memberSetChatUser(int school_id, int group_id);
 	
 	/**
 	 * 末吉
 	 * チャット相手を検索
 	 */
 	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.group_id = :group_id and t.group_flg = 1 and u.user_name like concat('%', :search, '%')")
-	public List<GroupDetailView> memberChatPartnerSearch(int school_id, int group_id, String search);
+	public List<GroupDisplay> memberChatPartnerSearch(int school_id, int group_id, String search);
 	
 }

@@ -3,15 +3,15 @@ package com.example.demo.service;
 import java.util.List;
 
 import com.example.demo.form.ChatForm;
-import com.example.demo.form.GroupDetailView;
+import com.example.demo.form.GroupDisplay;
 
 public interface ChatServiceInterface {
 
 	//チャット相手を設定
-	public List<GroupDetailView> setChatUser(int school_id);
+	public List<GroupDisplay> setChatUser(int school_id);
 
 	//チャット相手検索
-	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll);
+	public List<GroupDisplay> chatPartnerSearch(int school_id, String search, String user_roll);
 
 	//チャット履歴を表示
 	public List<ChatForm> getChatHistory(String user_id, String chatUser_id);
@@ -24,19 +24,19 @@ public interface ChatServiceInterface {
 	 * リーダ用のサービス
 	 */
 	//チャット相手(管理者)を設定
-	public List<GroupDetailView> leaderSetChatAdmin(int school_id);
+	public List<GroupDisplay> leaderSetChatAdmin(int school_id);
 	
 	//チャット相手検索
-	public List<GroupDetailView> AdminChatPartnerSearch(int school_id, String search);
+	public List<GroupDisplay> AdminChatPartnerSearch(int school_id, String search);
 
 	
 	/**
 	 * メンバ用のサービス
 	 */
 	//チャット相手を設定
-	public List<GroupDetailView> memberSetChatUser(int school_id, int group_id);
+	public List<GroupDisplay> memberSetChatUser(int school_id, int group_id);
 
 	//チャット相手検索
-	public List<GroupDetailView> memberChatPartnerSearch(int school_id, int group_id, String search);
+	public List<GroupDisplay> memberChatPartnerSearch(int school_id, int group_id, String search);
 
 }

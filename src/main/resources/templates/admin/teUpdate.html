@@ -42,7 +42,8 @@
 
 			<div class="form-group regist-item">
 				<label class="form-label">講師名</label>
-				<input type="text" class="form-control regist-field" th:value="${te.user_name}" name="user_name">
+				<input type="text" maxlength="20" class="form-control regist-field" th:value="${te.user_name}"
+					name="user_name">
 			</div>
 
 			<div class="form-group regist-item" style="margin-top: 22px;">
@@ -50,8 +51,17 @@
 				<input type="text" class="form-control regist-field" th:value="${te.user_id}" name="user_id" readonly>
 			</div>
 
-			<div class="form-group regist-item" style="margin-top: 22px;">
-				<label class="form-label" for="school-select">所属学校名</label>
+			<div class="form-group regist-item" style="margin-top: 22px;"
+				th:if="${#strings.startsWith(te.user_id, 'te')}">
+				<label class="form-label" for="school-select">所属学校
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+						class="bi bi-building" viewBox="0 0 16 16" style="margin-bottom: 4px; margin-left: -3px;">
+						<path
+							d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+						<path
+							d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z" />
+					</svg>
+				</label>
 				<select id="school-select" name="school_name" class="form-select regist-field">
 					<option name="school_name" th:selected="${te.school_name=='北海道情報専門学校'}">北海道情報専門学校</option>
 					<option name="school_name" th:selected="${te.school_name=='JOHO 新潟情報専門学校'}">JOHO 新潟情報専門学校</option>
@@ -65,17 +75,43 @@
 					<option name="school_name" th:selected="${te.school_name=='KCS鹿児島情報専門学校'}">KCS鹿児島情報専門学校</option>
 				</select>
 			</div>
+			
+			<div class="form-group regist-item" style="margin-top: 22px;"
+				th:unless="${#strings.startsWith(te.user_id, 'te')}">
+				<label class="form-label" for="school-select">所属学校
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+						class="bi bi-building" viewBox="0 0 16 16" style="margin-bottom: 4px; margin-left: -3px;">
+						<path
+							d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+						<path
+							d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z" />
+					</svg>
+				</label>
+				<input type="text" class="form-control regist-field" th:value="${te.school_name}" name="school_name"
+					readonly>
+			</div>
 
 			<div class="form-group regist-item" style="margin-top: 22px;">
-				<label class="form-label">入社年月日</label>
+				<label class="form-label">入社年月日
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+						class="bi bi-calendar-event" viewBox="0 0 16 16" style="margin-bottom: 4px; margin-left: -2px;">
+						<path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
+						<path
+							d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+					</svg>
+				</label>
 				<input type="date" th:value="${te.enr_year}" class="form-control regist-field" id="enr_year"
 					name="enr_year" min="1900-01-01" max="9999-12-31" required>
+			</div>
+
+			<div id="passwordHelpBlock" class="form-text" style="margin-left: 5px; margin-top: 0px;">
+				入力欄右側のマーク押下で選択可.
 			</div>
 
 			<button type="submit" class="control-btn mini-btn" value="確認"
 				style="margin-top: 30px; margin-bottom: 20px;">確認
 				<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
-					class="bi bi-arrow-right-circle" viewBox="0 0 16 16" style="margin-bottom: 3.5px;">
+					class="bi bi-arrow-right-circle" viewBox="0 0 16 16" style="margin-top: -4px;">
 					<path fill-rule="evenodd"
 						d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
 				</svg>

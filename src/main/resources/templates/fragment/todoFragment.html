@@ -1,10 +1,10 @@
-<!--todo用の共通HTML-->
+<!-- ToDo用HTML(共通) -->
 <!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<!--必須項目-->
+	<!-- 必須項目 -->
 	<meta charset="UTF-8">
 
 	<!-- デザイン等 -->
@@ -14,9 +14,9 @@
 
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-	<!--CSS接続-->
-	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
-	<link rel="stylesheet" th:href="@{/css/list.css}"> <!-- 共通CSS -->
+	<!-- CSS接続 -->
+	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通 -->
+	<link rel="stylesheet" th:href="@{/css/list.css}"> <!-- 共通 -->
 
 </head>
 
@@ -45,7 +45,7 @@
 
 					<div th:each="todo:${todoList}" class="data d-flex justify-content-between">
 
-						<!--チェックボックス-->
+						<!-- チェックボックス -->
 						<div class="form-check" id="check" style="width: 20px; margin-left: 5px;">
 							<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="tdlist_id"
 								th:value="${todo.tdlist_id}" th:if="${todo.tdlist_flg} == 1" style="font-size: 20px;"
@@ -54,7 +54,7 @@
 								th:value="${todo.tdlist_id}" th:if="${todo.tdlist_flg} == 0" style="font-size: 20px;">
 						</div>
 
-						<!--ToDoテキスト-->
+						<!-- ToDoテキスト -->
 						<div class="text flex-grow-1 todo-text" th:text="${todo.tdlist_content}"
 							th:if="${todo.tdlist_flg} == 1"
 							style="text-decoration: line-through; font-size: 20px; border-bottom: 1px solid #ccc;">
@@ -64,7 +64,7 @@
 							style="text-decoration: none; font-size: 20px; border-bottom: 1px solid #ccc;">
 						</div>
 
-						<!--ラジオボタン-->
+						<!-- ラジオボタン -->
 						<div class="form-check" style="background-color: lightblue; border-radius: 15px; width: 34px;">
 							<input class="form-check-input" type="radio" name="flexRadioDefault"
 								th:value="${todo.tdlist_id}" id="flexRadioDefault1"
@@ -76,7 +76,7 @@
 
 				</div>
 
-				<!--機能ボタン-->
+				<!-- 機能ボタン -->
 				<div class="btn-group btnS-group" style="margin-top: 16px;" th:unless="${#lists.isEmpty(todoList)}">
 					<button type="submit" name="button" value="regist" class="move-btn mini-btn">登録</button>
 					<button type="submit" name="button" value="edit" class="move-btn mini-btn">編集</button>
@@ -86,9 +86,20 @@
 				<div th:if="${#lists.isEmpty(todoList)}">
 					<p style="margin-bottom: 50px;">　ToDoリストが空です。　</p>
 				</div>
-				<!--機能ボタン-->
-				<div class="btn-group btnS-group" style="margin-top: 16px;">
-					<button type="submit" name="button" value="regist" class="move-btn mini-btn">登録</button>
+
+				<!-- 機能ボタン -->
+				<div class="btn-group btnS-group" style="margin-top: 16px;" th:if="${#lists.isEmpty(todoList)}">
+					<button type="submit" name="button" value="regist" class="move-btn long-btn">新規登録
+						<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
+							class="bi bi-clipboard-plus" viewBox="0 0 16 16" style="margin-top: -5px;">
+							<path fill-rule="evenodd"
+								d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7" />
+							<path
+								d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+							<path
+								d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+						</svg>
+					</button>
 				</div>
 
 			</form>

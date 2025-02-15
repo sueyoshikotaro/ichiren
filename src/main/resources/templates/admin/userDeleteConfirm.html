@@ -1,4 +1,3 @@
-<!-- 向江 -->
 <!--必須情報(下記2項目)-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -35,9 +34,9 @@
 	<div class="container">
 
 		<h2>ユーザ削除</h2>
-		<h3>[削除内容確認]</h3> <!--確認画面用の説明用テキスト-->
+		<h3 style="margin-bottom: 15px;">[削除内容確認]</h3> <!--確認画面用の説明用テキスト-->
 
-		<h5 style="color: crimson;">ユーザを削除すれば元には戻せません</h5>
+		<p style="color: crimson; margin-bottom: 15px;">※ユーザを削除すると元には戻せません</p>
 
 		<div th:if="${user != null}">
 			<form th:action="@{userDeleteConfirm}" method="post">
@@ -52,12 +51,29 @@
 				</div>
 
 				<div class="mb-3">
-					<span class="form-label" id="basic-addon1">所属学校</span>
+					<span class="form-label" id="basic-addon1">所属学校
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+							class="bi bi-building" viewBox="0 0 16 16" style="margin-bottom: 4px; margin-left: -3px;">
+							<path
+								d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+							<path
+								d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z" />
+						</svg>
+					</span>
 					<div type="text" class="form-control" th:text="${user.school_name}"></div>
 				</div>
 
 				<div class="mb-3">
-					<span class="form-label" id="basic-addon1">入学年度</span>
+					<span class="form-label" id="basic-addon1">入学年度
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+							class="bi bi-calendar-event" viewBox="0 0 16 16"
+							style="margin-bottom: 4px; margin-left: -2px;">
+							<path
+								d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
+							<path
+								d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+						</svg>
+					</span>
 					<div type="text" class="form-control" th:text="${user.enr_year}"></div>
 				</div>
 
@@ -70,8 +86,14 @@
 
 				<div id="message" style="display: none; color: dimgray;">※チェックボックスにチェックしてください</div>
 
-				<button type="button" name="button" value="削除" class="control-btn mini-btn"
-					onclick="userDereteAndShowPopup()">削除</button>
+				<button type="submit" name="buttonCheck" value="削除" class="control-btn mini-btn"
+					style="margin-top: 30px; margin-bottom: 20px;">削除
+					<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor"
+						class="bi bi-dash-circle" viewBox="0 0 16 16" style="margin-top: -3px;">
+						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+						<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
+					</svg>
+				</button>
 
 				<input type="hidden" name="user_id" th:value="${user.user_id}">
 				<input type="hidden" name="user_name" th:value="${user.user_name}">
@@ -84,11 +106,9 @@
 		</div>
 	</div>
 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-
 	<!-- ポップアップ -->
-	<div class="modal fade popup-place" id="userDeleteModal" tabindex="-1" role="dialog"
-		aria-labelledby="userDeleteModalLabel" aria-hidden="true">
+	<div class="modal fade popup-place" id="Modal" tabindex="-1" role="dialog" aria-labelledby="userDeleteModalLabel"
+		aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<p class="modal-text">削除が完了しました</p>
@@ -99,48 +119,17 @@
 		</div>
 	</div>
 
-	<!--コントロールを呼び出す-->
-	<script>
-		function userDereteAndShowPopup() {
-			// フォーム要素を取得
-			var form = document.querySelector('form');
-
-			// コントローラメソッドを呼び出すためにフォームを送信
-			form.action = 'userDeleteConfirm'; // コントローラメソッドの実際のURLに置き換えてください
-			form.method = 'post';
-
-			form.submit();
-		}
-	</script>
-
-	<!--ポップアップを表示するためのコード-->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	
+	<!--modal.jsで使う用の変数-->
 	<script th:inline="javascript">
 		/*<![CDATA[*/
-		var userDeleteConfirm = /*[[${userDeleteConfirm}]]*/ true;
-		$(document).ready(function () {
-			if (userDeleteConfirm == true) {
-				$('#userDeleteModal').modal('show');
-			}
-		});
+		var comp = /*[[${userDeleteConfirm}]]*/ true;
 		/*]]>*/
 	</script>
 
-	<!--チェックボックスが押されていない間ボタンを無効化-->
-	<script>
-		$(document).ready(function () {
-			$('#flexCheckDefault').on('change', function () {
-				if ($(this).is(':checked')) {
-					$('button[name="button"]').prop('disabled', false);
-					$('#message').hide();
-				} else {
-					$('button[name="button"]').prop('disabled', true);
-					$('#message').show();
-				}
-			});
-			$('button[name="button"]').prop('disabled', true);
-			$('#message').show();
-		});
-	</script>
+	<!--modal.jsへのリンク-->
+	<script th:src="@{/js/modal.js}"></script>
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

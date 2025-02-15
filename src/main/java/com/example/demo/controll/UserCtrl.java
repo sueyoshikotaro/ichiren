@@ -24,20 +24,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.annotation.LoginRequired;
-import com.example.demo.entity.Task;
 import com.example.demo.entity.Tdlist;
 import com.example.demo.entity.User;
 import com.example.demo.form.ChatForm;
-import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
 import com.example.demo.form.GroupMemberDetailView;
 import com.example.demo.form.NoticeViewForm;
-import com.example.demo.form.Room;
+import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.TaskForm;
 import com.example.demo.form.TaskReqForm;
 import com.example.demo.form.TaskView;
 import com.example.demo.form.TdlistForm;
-import com.example.demo.repository.UserCrudRepository;
 import com.example.demo.repository.UserDisplayCrudRepository;
 import com.example.demo.service.ChatServiceInterface;
 import com.example.demo.service.GroupDisplayServiceInterface;
@@ -51,8 +48,6 @@ import com.example.demo.service.UserDisplayServiceInterface;
 public class UserCtrl {
 
 	//フィールド
-	@Autowired
-	UserCrudRepository userCrudRepo;
 
 	@Autowired
 	UserDisplayCrudRepository groupCrudRepo;
@@ -105,12 +100,8 @@ public class UserCtrl {
 	 * ログアウト画面を表示
 	 * @return
 	 */
-	@LoginRequired
 	@GetMapping("logout")
 	public String logout(HttpServletResponse response) {
-
-		// ログアウト時に居場所を'休憩中'に設定するフラグをセッションに保存
-		session.setAttribute("logoutFlg", true);
 
 		//居場所を'休憩中'に更新
 		groupDispService.roomUpdate("休憩中", group_id);
@@ -134,13 +125,6 @@ public class UserCtrl {
 	@GetMapping("login")
 	public String login() {
 
-		Boolean logoutFlg = (Boolean) session.getAttribute("logoutFlg");
-		if (logoutFlg != null && logoutFlg) {
-
-			session.setAttribute("currentPlace", "休憩中");
-			session.removeAttribute("logoutFlg");
-		}
-
 		return "common/login";
 	}
 
@@ -155,7 +139,7 @@ public class UserCtrl {
 	@PostMapping("login")
 	public ModelAndView loginCheck(ModelAndView mav, String user_id, String user_pass, RedirectAttributes ra) {
 
-		Optional<User> user = userCrudRepo.findById(user_id);
+		Optional<User> user = groupCrudRepo.findById(user_id);
 
 		if (user.isPresent() && user.get().getUser_flg() == 1 && user.get().getUser_pass().equals(user_pass)) {
 
@@ -165,8 +149,6 @@ public class UserCtrl {
 			ra.addFlashAttribute("user_id", user_id);
 
 			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
-
-				userDisplayService.adminDisable(user_id, 0); //adminアカウント無効化
 
 				return new ModelAndView("redirect:/taskdon/admin/teInfoRegist"); //上位管理者がログインした場合(初回のみ)
 
@@ -217,7 +199,7 @@ public class UserCtrl {
 	public ModelAndView updatePass(ModelAndView mav, @RequestParam("user_id") String user_id,
 			@RequestParam("newPass") String newPass, @RequestParam("confirmPass") String confirmPass) {
 
-		Optional<User> user = userCrudRepo.findById(user_id);
+		Optional<User> user = groupCrudRepo.findById(user_id);
 
 		User u = user.get();
 
@@ -262,35 +244,15 @@ public class UserCtrl {
 	}
 
 	/**
-	 * メニュー(管理者)画面
-	 * @return
-	 */
-	@LoginRequired
-	@GetMapping("/taskdon/admin/menu")
-	public ModelAndView adminMenu(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
-
-		mav.setViewName("admin/menuAdmin");
-
-		return mav;
-	}
-
-	/**
 	 * 所属グループ一覧画面に遷移
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("deptGroupList")
 	public ModelAndView deptGroupList(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
-		Boolean deptGroupFlg = (Boolean) session.getAttribute("deptGroupFlg");
-
-		if (deptGroupFlg != null && deptGroupFlg) {
-
-			//居場所を'休憩中'に更新_末吉追加
-			groupDispService.roomUpdate("休憩中", group_id);
-
-			session.setAttribute("currentPlace", "休憩中");
-			session.removeAttribute("deptGroupFlg");
-		}
+		//居場所を'休憩中'に更新_末吉追加
+		groupDispService.roomUpdate("休憩中", group_id);
 
 		if (user_id == null || user_id.isEmpty()) {
 
@@ -298,7 +260,7 @@ public class UserCtrl {
 			user_id = (String) session.getAttribute("user_id");
 		}
 
-		Optional<User> user = userCrudRepo.findById(user_id);
+		Optional<User> user = groupCrudRepo.findById(user_id);
 
 		if (user.isPresent()) {
 
@@ -316,16 +278,6 @@ public class UserCtrl {
 		}
 
 		return mav;
-	}
-
-	@LoginRequired
-	@GetMapping("getPlace")
-	public String getPlace() {
-
-		// 所属グループ遷移時に居場所を'休憩中'に設定するフラグをセッションに保存
-		session.setAttribute("deptGroupFlg", true);
-
-		return "redirect:/taskdon/user/deptGroupList";
 	}
 
 	/**
@@ -349,7 +301,7 @@ public class UserCtrl {
 			// ログインユーザのエンティティを取得
 			User userEntity = (User) session.getAttribute("user");
 
-			// エンティティの中の値をそれぞれフィールドに設定
+			// エンティティの中の値をそれぞれフィールドに設定_末吉追加
 			school_id = userEntity.getSchool_id();
 			this.group_id = (int) session.getAttribute("groupId");
 			user_id = userEntity.getUser_id();
@@ -359,21 +311,21 @@ public class UserCtrl {
 			status = "休憩中";
 		}
 		//連絡事項一覧取得
-		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
+		List<NoticeViewForm> noticeList = NoticeService.noticeDisp(this.group_id);
 
 		mav.addObject("noticeList", noticeList);
 		mav.setViewName("common/menuUser");
 
 		//居場所リストに表示する内容取得
-		List<Room> roomList = groupDispService.roomSelect(school_id);
+		List<SchoolDisplay> roomList = groupDispService.roomSelect(school_id);
 
 		// リストの先頭の列に値を追加
-		Room room = new Room();
+		SchoolDisplay room = new SchoolDisplay();
 		room.setRoom_name("休憩中");
 		roomList.add(0, room);
 
 		// リストの最後の列に値を追加
-		room = new Room();
+		room = new SchoolDisplay();
 		room.setRoom_name("校外作業中");
 		roomList.add(room);
 
@@ -381,26 +333,6 @@ public class UserCtrl {
 		mav.addObject("roomList", roomList);
 
 		return mav;
-	}
-
-	/**
-	 * メニュー(ユーザ)の表示
-	 * @return
-	 */
-	@LoginRequired
-	@GetMapping("menu")
-	public String menu() {
-
-		// ログインユーザのエンティティを取得
-		User userEntity = (User) session.getAttribute("user");
-
-		// エンティティの中の値をそれぞれフィールドに設定
-		school_id = userEntity.getSchool_id();
-		group_id = (int) session.getAttribute("groupId");
-		user_id = userEntity.getUser_id();
-		user_roll = (String) session.getAttribute("user_roll");
-
-		return "common/menuUser";
 	}
 
 	/**
@@ -419,7 +351,7 @@ public class UserCtrl {
 		groupDispService.roomUpdate(updateStatus, group_id);
 
 		//居場所情報取得
-		List<Room> roomList = groupDispService.roomSelect(school_id);
+		List<SchoolDisplay> roomList = groupDispService.roomSelect(school_id);
 
 		mav.addObject("status", updateStatus);
 		mav.addObject("roomList", roomList);
@@ -437,16 +369,16 @@ public class UserCtrl {
 	@GetMapping("taskList")
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
-		int groupId = (int) session.getAttribute("groupId");
 		String score = "--";
-		List<Task> task = null;
+		List<TaskForm> task = null;
 		if (selectedValue == null || selectedValue.equals("全員")) {
 			selectedValue = "全員";
 		} else {
-			score = String.valueOf(TaskService.userScore(selectedValue, groupId));
+			score = String.valueOf(TaskService.userScore(selectedValue, group_id));
 		}
-
-		task = TaskService.taskDisplayList(selectedValue, groupId);
+		
+		task = TaskService.taskDisplayList(selectedValue, group_id);
+		
 		mav.addObject("score", score);
 		mav.addObject("user", selectedValue);
 		mav.addObject("tasks", task);
@@ -489,8 +421,6 @@ public class UserCtrl {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date st_date = null;
 		Date end_date = null;
-		int group_id = (int) session.getAttribute("groupId");
-		System.out.println(group_id);
 		int score = TaskService.userScore(t.getUser_name(), group_id);
 		try {
 			st_date = sdf.parse(t.getStart_date());
@@ -521,7 +451,7 @@ public class UserCtrl {
 	public ModelAndView taskDetail(@RequestParam(name = "taskProgress", required = false) Integer progress,
 			@RequestParam(name = "task_id") Integer task_id, ModelAndView mav) {
 		mav.getModel().clear();
-		List<Task> detail = TaskService.taskDetails(task_id, (int) session.getAttribute("groupId"));
+		List<TaskForm> detail = TaskService.taskDetails(task_id, group_id);
 		this.progress = detail.get(0).getProgress();
 		String taskstatus = null;
 		if (progress != null) {
@@ -546,7 +476,7 @@ public class UserCtrl {
 			groupDispService.allProgress(group_id);
 
 			this.progress = progress;
-			detail = TaskService.taskDetails(task_id, (int) session.getAttribute("groupId"));
+			detail = TaskService.taskDetails(task_id, group_id);
 		}
 		mav.addObject("task", detail);
 		mav.setViewName("common/taskDetails");
@@ -561,14 +491,12 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskDetailsChange")
 	public ModelAndView taskDetailChange(@RequestParam("button") String button, TaskForm t, ModelAndView mav) {
-		//セッション情報の取得
-		int groupId = (int) session.getAttribute("groupId");
 		//編集ボタンを押下
 		if (button.equals("edit")) {
 			//古いスコアの減算
-			int score = TaskService.userScore(t.getUser_name(), groupId);
+			int score = TaskService.userScore(t.getUser_name(), group_id);
 			score = score - t.getTask_weight();
-			TaskService.userUpScore(score, t.getUser_name(), groupId);
+			TaskService.userUpScore(score, t.getUser_name(), group_id);
 			t.setTask_weight(score);
 			mav.setViewName("leader/taskEdit");
 			//削除ボタンを押下
@@ -603,13 +531,10 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskEditComplete")
 	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
-		//セッション情報の取得
-		int groupId = (int) session.getAttribute("groupId");
-
 		//スコアの足しこみ
-		int score = TaskService.userScore(t.getUser_name(), groupId);
+		int score = TaskService.userScore(t.getUser_name(), group_id);
 		score = score + Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level());
-		TaskService.userUpScore(score, t.getUser_name(), groupId);
+		TaskService.userUpScore(score, t.getUser_name(), group_id);
 
 		int weight = t.getTask_priority() * t.getTask_level();
 		TaskService.taskUpdate(t.getTask_id(), t.getTask_category(), t.getTask_name(), t.getTask_content(),
@@ -632,12 +557,10 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskDeleteComplete")
 	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
-		//セッション情報の取得
-		int groupId = (int) session.getAttribute("groupId");
 		//スコアの減算
-		int score = TaskService.userScore(t.getUser_name(), groupId);
+		int score = TaskService.userScore(t.getUser_name(), group_id);
 		score = score - Integer.valueOf(t.getTask_weight());
-		TaskService.userUpScore(score, t.getUser_name(), groupId);
+		TaskService.userUpScore(score, t.getUser_name(), group_id);
 
 		TaskService.taskUpFlg(t.getTask_id());
 		mav.addObject("taskDeleteComp", true);
@@ -654,7 +577,7 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("taskUnapproved")
 	public ModelAndView taskUnapproved(ModelAndView mav) {
-		mav.addObject("taskNonapp", TaskService.selectTaskUnapproved((int) session.getAttribute("groupId")));
+		mav.addObject("taskNonapp", TaskService.selectTaskUnapproved(group_id));
 		mav.setViewName("leader/taskUnapproved");
 		return mav;
 	}
@@ -686,7 +609,6 @@ public class UserCtrl {
 		//変数定義
 		Date st_date = null;
 		Date end_date = null;
-		int group_id = (int) session.getAttribute("groupId");
 		int score = TaskService.userScore(t.getUser_name(), group_id);
 		try {
 			//開始予定日と終了予定日の型変換
@@ -751,7 +673,7 @@ public class UserCtrl {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		System.out.println(sdf.format(date));
 		TaskService.registerTaskReq(t.getReq_category(), t.getReq_name(), t.getReq_content(), t.getReq_reason(), date,
-				t.getUser_name(), (int) session.getAttribute("groupId"));
+				t.getUser_name(), group_id);
 		mav.addObject("taskRequestComp", true);
 		mav.addObject("taskRequest", t);
 		mav.setViewName("member/taskRequestConfirm");
@@ -776,8 +698,6 @@ public class UserCtrl {
 				}
 			}
 		}
-		User user = (User) session.getAttribute("user");
-		String user_id = user.getUser_id();
 		mav.addObject("todoList", TodoService.selectTodoList(user_id));
 		mav.setViewName("common/todoList");
 		return mav;
@@ -793,8 +713,6 @@ public class UserCtrl {
 			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
 			@RequestParam(name = "button") String button) {
 		List<Tdlist> todo = null;
-		User user = (User) session.getAttribute("user");
-		String user_id = user.getUser_id();
 		if (tdlist_id != null) {
 			todo = TodoService.selectTodo(tdlist_id);
 		}
@@ -820,8 +738,6 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("registConfirm")
 	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t) {
-		User user = (User) session.getAttribute("user");
-		String user_id = user.getUser_id();
 		TodoService.todoRegister(user_id, t.getTdlist_content(), t.getImportance());
 		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
@@ -849,30 +765,6 @@ public class UserCtrl {
 		TodoService.todoDelete(t.getTdlist_id());
 		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
-
-	/**
-	
-	 * 向江
-	 * 連絡事項一覧画面を表示
-	 * 埋め込み前
-	 * @return
-	 */
-	//	@GetMapping("noticeDisp")
-	//	public ModelAndView noticeDisp(ModelAndView mav) {
-	//
-	//		// ログインユーザのエンティティを取得
-	//		User userEntity = (User) session.getAttribute("user");
-	//
-	//		// エンティティの中のuser_idを取得
-	//		String user_id = userEntity.getUser_id();
-	//
-	//		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
-	//
-	//		mav.addObject("noticeList", noticeList);
-	//		mav.setViewName("common/menuUser");
-	//
-	//		return mav;
-	//	}
 
 	/*
 	 * 向江
@@ -908,15 +800,9 @@ public class UserCtrl {
 	 */
 	@PostMapping("noticeRegistComp")
 	public ModelAndView noticeRegistComp(ModelAndView mav,
-			@RequestParam(name = "button") String button,
 			@ModelAttribute NoticeViewForm n,
+			@RequestParam(name = "button") String button,
 			@RequestParam(name = "title") String title) throws ParseException {
-
-		// ログインユーザのエンティティを取得
-		User userEntity = (User) session.getAttribute("user");
-
-		// エンティティの中のuser_idを取得
-		String user_id = userEntity.getUser_id();
 
 		// 日付型定義
 		String sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS").format(new Date());
@@ -927,7 +813,7 @@ public class UserCtrl {
 		if (button.equals("登録")) {
 			send_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(sdf);
 			NoticeService.noticeRegist(n.getTitle(), n.getContact_msg(), send_date,
-					0, user_id, (int) session.getAttribute("groupId"));
+					0, user_id, group_id);
 
 			// ポップアップを表示するために、画面遷移をしないようにする
 			mav.addObject("noticeRegistComp", true);
@@ -1003,12 +889,12 @@ public class UserCtrl {
 			}
 		}
 
-		List<NoticeViewForm> noticeList = NoticeService.noticeDisp((int) session.getAttribute("groupId"));
+		List<NoticeViewForm> noticeList = NoticeService.noticeDisp(group_id);
 
 		mav.addObject("noticeList", noticeList);
 		mav.setViewName("common/menuUser");
 
-		List<Room> roomList = groupDispService.roomSelect(school_id);
+		List<SchoolDisplay> roomList = groupDispService.roomSelect(school_id);
 
 		mav.addObject("roomList", roomList);
 
@@ -1026,8 +912,9 @@ public class UserCtrl {
 	@GetMapping("memberList")
 	public ModelAndView memberList(ModelAndView mav) {
 
-		List<GroupMemberDetailView> group = groupDispService.memberList((int) session.getAttribute("groupId"));
-		int allProgress = groupDispService.selectProgress((int) session.getAttribute("groupId"));
+		System.out.println("メンバ一覧");
+		List<GroupMemberDetailView> group = groupDispService.memberList(group_id);
+		int allProgress = groupDispService.selectProgress(group_id);
 
 		mav.addObject("progress", allProgress);
 		mav.addObject("group", group);
@@ -1049,7 +936,7 @@ public class UserCtrl {
 			@RequestParam(name = "userId", required = false) String userId,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
 		//ドロップダウンリスト取得処理
-		List<Task> taskCategory = TaskService.selectCategory((int) session.getAttribute("groupId"));
+		List<TaskForm> taskCategory = TaskService.selectCategory(group_id);
 
 		List<GroupMemberDetailView> membertask = null;
 		if (groupId == null || userId == null) {
@@ -1058,7 +945,7 @@ public class UserCtrl {
 			membertask = groupDispService.memberDetail(g.getUser_id(), g.getGroup_id(), selectedValue);
 		} else {
 			//ドロップダウンリストが選択されている場合の処理
-			membertask = groupDispService.memberDetail(userId, String.valueOf(groupId), selectedValue);
+			membertask = groupDispService.memberDetail(userId, groupId, selectedValue);
 		}
 		//		mav.addObject("userProgress", g.getUser_progress());
 		mav.addObject("Category", taskCategory);
@@ -1075,29 +962,20 @@ public class UserCtrl {
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
 
-		//		// ログインユーザのエンティティを取得
-		//		User userEntity = (User) session.getAttribute("user");
-		//
-		//		// エンティティの中の値をそれぞれ取得
-		//		school_id = userEntity.getSchool_id();
-		//		group_id = (int) session.getAttribute("groupId");
-		//		user_id = userEntity.getUser_id();
-		//		user_roll = (String) session.getAttribute("user_roll");
-
 		//リーダの場合は管理者とグループメンバすべてを格納
 		if (user_roll.equals("リーダ")) {
 
 			//チャットの通信可能相手(管理者)を格納
-			List<GroupDetailView> chatPartnerAdmin = chatServise.leaderSetChatAdmin(school_id);
+			List<GroupDisplay> chatPartnerAdmin = chatServise.leaderSetChatAdmin(school_id);
 
 			mav.addObject("chatPartnerAdmin", chatPartnerAdmin);
 		}
 
 		//チャットの通信可能相手を格納
-		List<GroupDetailView> chatPartner = chatServise.memberSetChatUser(school_id, group_id);
+		List<GroupDisplay> chatPartner = chatServise.memberSetChatUser(school_id, group_id);
 
 		//ログインしているユーザの分のデータはListから除外する
-		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
+		List<GroupDisplay> filteredChatPartner = chatPartner.stream()
 				.filter(chat -> !chat.getUser_id().equals(user_id))
 				.collect(Collectors.toList());
 
@@ -1119,16 +997,16 @@ public class UserCtrl {
 		//リーダの場合は管理者とグループメンバのすべてから検索し格納
 		if (user_roll.equals("リーダ")) {
 			//チャットの通信可能相手(管理者)を格納
-			List<GroupDetailView> chatPartnerAdmin = chatServise.AdminChatPartnerSearch(school_id, search);
+			List<GroupDisplay> chatPartnerAdmin = chatServise.AdminChatPartnerSearch(school_id, search);
 			System.out.println("リーダ：" + chatPartnerAdmin);
 			mav.addObject("chatPartnerAdmin", chatPartnerAdmin);
 		}
 
 		//チャット相手を検索し、Listに格納
-		List<GroupDetailView> chatPartner = chatServise.memberChatPartnerSearch(school_id, group_id, search);
+		List<GroupDisplay> chatPartner = chatServise.memberChatPartnerSearch(school_id, group_id, search);
 
 		//ログインしているユーザの分のデータはListから除外
-		List<GroupDetailView> filteredChatPartner = chatPartner.stream()
+		List<GroupDisplay> filteredChatPartner = chatPartner.stream()
 				.filter(chat -> !chat.getUser_id().equals(user_id))
 				.collect(Collectors.toList());
 

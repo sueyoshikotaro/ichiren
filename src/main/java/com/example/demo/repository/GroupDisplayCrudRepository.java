@@ -7,13 +7,11 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.entity.Teams;
-import com.example.demo.form.GroupDetailView;
 import com.example.demo.form.GroupDisplay;
-import com.example.demo.form.GroupMemberDeleteView;
 import com.example.demo.form.GroupMemberDetailView;
-import com.example.demo.form.Room;
+import com.example.demo.form.SchoolDisplay;
 import com.example.demo.form.TaskForm;
-import com.example.demo.form.TeamsForm;
+import com.example.demo.form.TeamsDisplay;
 
 public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Integer> {
 
@@ -23,36 +21,37 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 */
 	//全て「選択なし」の場合
 	@Query("select * from teams where group_flg = 1")
-	public List<TeamsForm> groupList();
+	public List<TeamsDisplay> groupList();
 
 	//全て選択されている場合
 	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE t.school_id = :school_id AND t.genre = :genre AND Year(t.est_year) = :est_year AND t.group_flg = 1")
-	public List<TeamsForm> groupList(String genre, String est_year, int school_id);
+	public List<TeamsDisplay> groupList(String genre, String est_year, int school_id);
 
 	//学校と結成年度が選択されている場合 兼 デフォルトでの絞り込み
 	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE t.school_id = :school_id AND Year(t.est_year) = :est_year AND t.group_flg = 1")
-	public List<TeamsForm> groupList1(String est_year, int school_id);
+	public List<TeamsDisplay> groupList1(String est_year, int school_id);
 
 	//ジャンルと学校が選択されている場合
 	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE t.school_id = :school_id AND genre = :genre AND t.group_flg = 1")
-	public List<TeamsForm> groupList2(String genre, int school_id);
+	public List<TeamsDisplay> groupList2(String genre, int school_id);
 
 	//結成年度とジャンルが選択されている場合
 	@Query("SELECT t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id WHERE Year(t.est_year) = :year AND t.genre = :genre AND t.group_flg = 1")
-	public List<TeamsForm> groupList(String year, String genre);
+	public List<TeamsDisplay> groupList(String year, String genre);
 
 	//結成年度のみ選択されている場合
-	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and est_year = :estYear")
-	public List<TeamsForm> groupListYear(String estYear);
+	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and Year(est_year) = :estYear")
+	public List<TeamsDisplay> groupListYear(String estYear);
 
 	//学校のみ選択されている場合
 	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and t.school_id = :school_id")
-	public List<TeamsForm> groupListSchool(int school_id);
+	public List<TeamsDisplay> groupListSchool(int school_id);
 
 	//ジャンルのみ選択されている場合
 	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and genre = :genre")
-	public List<TeamsForm> groupListGenre(String genre);
+	public List<TeamsDisplay> groupListGenre(String genre);
 
+	
 	/**
 	 * 湊原
 	 * 絞り込み
@@ -62,28 +61,36 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * @return
 	 */
 	@Query("select * from teams where group_flg = 1 and school_name = :schoolName")
-	public List<TeamsForm> findByCriteria(String schoolName);
+	public List<TeamsDisplay> findByCriteria(String schoolName);
 
+	
+	/**
+	 * 末吉
+	 * グループ情報
+	 */
+	@Query("select * from teams where group_id = :group_id")
+	public List<GroupDisplay> groupInfo(int group_id);
+	
 	/*
 	 * 向江
 	 * グループ詳細表示
 	 */
 	@Query("select t.group_id, t.group_name, t.genre, t.all_progress, u.user_name, ud.user_progress, ud.score, ud.user_roll, u.user_id, u.school_id from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.group_id = :group_id order by ud.user_roll desc")
-	public List<GroupDetailView> groupDetail(int group_id);
+	public List<GroupDisplay> groupDetail(int group_id);
 
 	/*
 	 * 向江
 	 * グループメンバ詳細表示
 	 */
 	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id")
-	public List<GroupMemberDetailView> groupMemberDetail(String user_id, String group_id);
+	public List<GroupMemberDetailView> groupMemberDetail(String user_id, int group_id);
 
 	/*
 	 * 向江
 	 * タスク詳細表示
 	 */
-	@Query("select t.task_id, t.task_name, t.task_priority, t.task_category, t.progress, t.start_date, t.end_date, t.task_content, t.task_weight from task t where t.task_name = :task_name")
-	public List<TaskForm> taskDetail(String task_name);
+	@Query("select t.task_id, t.task_name, t.task_priority, t.task_category, t.progress, t.start_date, t.end_date, t.task_content, t.task_weight from task t where t.task_id = :task_id")
+	public List<TaskForm> taskDetail(int task_id);
 
 	/**
 	 * 末吉
@@ -104,8 +111,8 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 向江
 	 * グループメンバ削除画面を表示するためだけのsql
 	 */
-	@Query("select u.user_name, t.task_id, t.task_name,t.task_content, u.user_id, t.task_id, t.group_id, t.task_weight from user u join task t on u.user_id = t.user_id where u.user_id = :user_id")
-	public List<GroupMemberDeleteView> grMemDelDisp(String user_id);
+	@Query("select u.user_name, t.task_id, t.task_name,t.task_content, u.user_id, t.task_id, t.group_id, t.task_weight from user u join task t on u.user_id = t.user_id where u.user_id = :user_id and t.group_id = :group_id")
+	public List<GroupMemberDetailView> grMemDelDisp(String user_id, int group_id);
 
 	/*
 	 * 向江
@@ -120,8 +127,8 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループメンバ削除
 	 * user_detailのscoreを持ってくる
 	 */
-	@Query("select * from user_detail where group_id = :group_id order by score asc")
-	public List<GroupMemberDeleteView> membersScore(int group_id);
+	@Query("select * from user_detail where group_id = :group_id order by score, user_progress desc")
+	public List<GroupMemberDetailView> membersScore(int group_id);
 
 	/**
 	 * 末吉
@@ -161,6 +168,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Query("update teams set group_flg = 0 where group_id = :group_id")
 	public void groupDiss(int group_id);
 
+	/**
+	 * 末吉
+	 * グループ解散に伴い、task_flgをfalseに
+	 */
+	@Modifying
+	@Query("update task set task_flg = 0 where group_id = :group_id")
+	public void taskDiss(int group_id);
+	
 	/**
 	 * 末吉
 	 * グループ編集完了
@@ -213,14 +228,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * チャット相手を格納
 	 */
 	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1")
-	public List<GroupDetailView> setChatUser(int school_id, String user_roll);
+	public List<GroupDisplay> setChatUser(int school_id, String user_roll);
 
 	/**
 	 * 末吉
 	 * チャット相手を検索
 	 */
 	@Query("select * from teams t join user_detail ud on t.group_id = ud.group_id join user u on ud.user_id = u.user_id where t.school_id = :school_id and ud.user_roll = :user_roll and t.group_flg = 1 and u.user_name like concat('%', :search, '%')")
-	public List<GroupDetailView> chatPartnerSearch(int school_id, String search, String user_roll);
+	public List<GroupDisplay> chatPartnerSearch(int school_id, String search, String user_roll);
 
 	/**
 	 * 湊原
@@ -245,27 +260,27 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループメンバ詳細表示
 	 */
 	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress,t.task_id, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id and t.group_id = ud.group_id")
-	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id);
+	public List<GroupMemberDetailView> memberDetail(String user_id, int group_id);
 
 	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress,t.task_id, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id and task_category = :selectedValue and t.group_id = ud.group_id")
-	public List<GroupMemberDetailView> memberDetail(String user_id, String group_id, String selectedValue);
+	public List<GroupMemberDetailView> memberDetail(String user_id, int group_id, String selectedValue);
 
 	/**
 	 * 湊原
 	 * 所属学校取得(絞り込み用)
 	 */
 	@Query("SELECT distinct school_name,school_id FROM school;")
-	public List<TeamsForm> selectSchool();
+	public List<TeamsDisplay> selectSchool();
 
 	/**
 	 * 湊原
 	 * 結成年度取得(絞り込み用)
 	 */
-	@Query("SELECT distinct YEAR(est_year) AS est_year FROM teams WHERE YEAR(est_year) != 9999;")
-	public List<TeamsForm> selectgroupEstYear();
+	@Query("SELECT distinct YEAR(est_year) AS est_year FROM teams WHERE YEAR(est_year) != 9999 order by est_year;")
+	public List<TeamsDisplay> selectgroupEstYear();
 
-	@Query("SELECT distinct YEAR(enr_year) AS est_year FROM user WHERE YEAR(enr_year) != 9999 and user_id like '%st%';")
-	public List<TeamsForm> selectuserEstYear();
+	@Query("SELECT distinct YEAR(enr_year) AS est_year FROM user WHERE YEAR(enr_year) != 9999 and user_id like '%st%' order by enr_year;")
+	public List<TeamsDisplay> selectuserEstYear();
 
 	/**
 	 * 湊原
@@ -273,14 +288,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * @return
 	 */
 	@Query("SELECT distinct genre FROM teams;")
-	public List<TeamsForm> selectGenre();
+	public List<TeamsDisplay> selectGenre();
 
 	/**
 	 * 坂本
 	 * 教室情報一覧取得
 	 */
 	@Query("select room_id, room_name, hall, floor from room where school_id = :school_id")
-	public List<Room> roomSelect(int school_id);
+	public List<SchoolDisplay> roomSelect(int school_id);
 	
 	/**
 	 * 末吉

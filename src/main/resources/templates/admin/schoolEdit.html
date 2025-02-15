@@ -17,7 +17,6 @@
 	<!--CSS接続-->
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!-- 共通CSS -->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通CSS -->
-	<link rel="stylesheet" th:href="@{/css/school.css}"> <!-- 学校情報系CSS -->
 	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!--ウェブアイコン-->
@@ -34,7 +33,7 @@
 	<!--コンテナ-->
 	<div class="container">
 
-		<h2>学校情報編集</h2>
+		<h2 style="margin-bottom: 30px;">学校情報編集</h2>
 
 		<!-- エラー文を表示する -->
 		<p th:if="${errMsg}" th:text="${errMsg}" style="color: red;"></p>
@@ -55,26 +54,38 @@
 			<div th:each="schoolDetails : ${schoolEdit}">
 				<div class="mb-3">
 					<span class="form-label">教室名</span>
-					<input type="text" th:value="${schoolDetails.room_name}" class="form-control" name="room_name"
+					<input type="text" maxlength="10" th:value="${schoolDetails.room_name}" class="form-control" name="room_name"
 						required>
 				</div>
 
 				<div class="mb-3">
-					<span class="form-label">建物</span>
-					<input type="text" th:value="${schoolDetails.hall}" class="form-control" name="hall" required>
+					<span class="form-label">建物名</span>
+					<input type="text" maxlength="10" th:value="${schoolDetails.hall}" class="form-control" name="hall" required>
 				</div>
 
 				<div class="row">
 					<div class="col">
 						<div class="mb-3">
-							<span class="form-label">階層</span>
-							<input type="text" th:value="${schoolDetails.floor}" class="form-control" name="floor"
+							<span class="form-label">階層
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+									class="bi bi-layers" viewBox="0 0 16 16" style="margin-top: -5px;">
+									<path
+										d="M8.235 1.559a.5.5 0 0 0-.47 0l-7.5 4a.5.5 0 0 0 0 .882L3.188 8 .264 9.559a.5.5 0 0 0 0 .882l7.5 4a.5.5 0 0 0 .47 0l7.5-4a.5.5 0 0 0 0-.882L12.813 8l2.922-1.559a.5.5 0 0 0 0-.882zm3.515 7.008L14.438 10 8 13.433 1.562 10 4.25 8.567l3.515 1.874a.5.5 0 0 0 .47 0zM8 9.433 1.562 6 8 2.567 14.438 6z" />
+								</svg>
+							</span>
+							<input type="text" maxlength="10" th:value="${schoolDetails.floor}" class="form-control" name="floor"
 								required>
 						</div>
 					</div>
 					<div class="col">
 						<div class="mb-3">
-							<span class="form-label">PC-有無</span>
+							<span class="form-label">PC-有無
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+									class="bi bi-pc-display" viewBox="0 0 16 16" style="margin-top: -4px;">
+									<path
+										d="M8 1a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1zm1 13.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0m2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0M9.5 1a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM9 3.5a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5M1.5 2A1.5 1.5 0 0 0 0 3.5v7A1.5 1.5 0 0 0 1.5 12H6v2h-.5a.5.5 0 0 0 0 1H7v-4H1.5a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5H7V2z" />
+								</svg>
+							</span>
 							<select th:value="${schoolDetails.pc_flg}" class="form-select" name="pc_flg" required>
 								<option th:value="1" th:text="有" th:selected="${schoolDetails.pc_flg == 1}"></option>
 								<option th:value="0" th:text="無" th:selected="${schoolDetails.pc_flg == 0}"></option>
@@ -89,10 +100,15 @@
 					<input type="hidden" name="room_id" th:value="${schoolDetails.room_id}">
 					<input type="hidden" name="before_room_name" th:value="${schoolDetails.before_room_name}">
 
-					<button type="submit" name="button" class="control-btn mini-btn" value="確認">確認</button>
+					<button type="submit" name="button" class="control-btn mini-btn" value="確認"
+						style="margin-bottom: 20px;">確認
+						<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
+							class="bi bi-arrow-right-circle" viewBox="0 0 16 16" style="margin-top: -4px;">
+							<path fill-rule="evenodd"
+								d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+						</svg>
+					</button>
 				</div>
-
-				<!--<input type="submit" name="button" value="戻る">-->
 
 			</div>
 		</form>

@@ -1,12 +1,14 @@
 /* SQL エラー  (1054): Unknown column 'te66667777' in 'where clause' *//* SQL エラー  (1054): Unknown column 'te66667777' in 'where clause' */
 package com.example.demo.service.impl;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.entity.User;
 import com.example.demo.form.UserDisplay;
 import com.example.demo.repository.GroupDisplayCrudRepository;
 import com.example.demo.repository.UserDisplayCrudRepository;
-import com.example.demo.repository.UserViewCrudRepository;
 import com.example.demo.service.UserDisplayServiceInterface;
 
 public class UserDisplayImpl implements UserDisplayServiceInterface {
@@ -15,10 +17,10 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	UserDisplayCrudRepository userCrudRepo;
 
 	@Autowired
-	UserViewCrudRepository userViewCrudRepo;
+	GroupDisplayCrudRepository groupCrudRepo;
 
 	@Autowired
-	GroupDisplayCrudRepository groupCrudRepo;
+	private HttpSession session;
 	
 	/*
 	 * 向江
@@ -49,6 +51,7 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 		} else {
 			result = userCrudRepo.userList(school_id, est_year);
 		}
+
 		return result;
 	}
 
@@ -78,13 +81,13 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 	@Override
 	public boolean userIDCheck(String user_id) {
 
+		//講師IDの重複チェック
 		String flg = userCrudRepo.selectById(user_id);
 
-		if (flg != "") {
-			System.out.println("重複しないユーザID");
+		//登録の可否判断
+		if (flg == null) {
 			return true;
 		} else {
-			System.out.println("重複するユーザID");
 			return false;
 		}
 	}
@@ -136,20 +139,15 @@ public class UserDisplayImpl implements UserDisplayServiceInterface {
 			int user_flg) {
 
 		userCrudRepo.saveAll(user_id, user_name, user_pass, school_name, enr_year, user_flg);
+		
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
 
+		//adminアカウント無効化
+		if (userEntity.getUser_id().startsWith("admin")) {
+			userCrudRepo.adminDisable(userEntity.getUser_id(), 0);
+		}
 	}
-
-	/*
-	 * 坂本
-	 * 上位講師登録
-	 */
-//	@Override
-//	public void insertAdminTeach(String user_id, String user_name, String user_pass, String school_name,
-//			String enr_year, int user_flg) {
-//		
-//		
-//
-//	}
 
 	/*
 	 * 向江
