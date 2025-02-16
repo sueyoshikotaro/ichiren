@@ -405,8 +405,15 @@ public class UserCtrl {
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
 
-		mav.addObject("tasks", t);
-		mav.setViewName("leader/taskRegistConfirm");
+		int result = t.getStart_date().compareToIgnoreCase(t.getEnd_date());
+		if (result <= 0) {
+			mav.addObject("tasks", t);
+			mav.setViewName("leader/taskRegistConfirm");
+		}else {
+			mav.addObject("終了予定日は開始予定日以降に設定してください");
+			mav.setViewName("leader/taskRegist");
+		}
+		
 		return mav;
 	}
 
