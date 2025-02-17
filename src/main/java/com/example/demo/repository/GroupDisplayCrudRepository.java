@@ -40,7 +40,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	public List<TeamsDisplay> groupList(String year, String genre);
 
 	//結成年度のみ選択されている場合
-	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and est_year = :estYear")
+	@Query("select t.*, s.school_id, s.school_name FROM teams t INNER JOIN school s ON t.school_id = s.school_id where group_flg = 1 and Year(est_year) = :estYear")
 	public List<TeamsDisplay> groupListYear(String estYear);
 
 	//学校のみ選択されている場合
@@ -83,7 +83,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループメンバ詳細表示
 	 */
 	@Query("select u.user_name, t.user_id, ud.score, ud.user_progress, t.task_name, t.task_priority, t.progress, ud.group_id from task t join user u on t.user_id = u.user_id join user_detail ud on u.user_id = ud.user_id where u.user_id = :user_id and t.group_id = :group_id")
-	public List<GroupMemberDetailView> groupMemberDetail(String user_id, String group_id);
+	public List<GroupMemberDetailView> groupMemberDetail(String user_id, int group_id);
 
 	/*
 	 * 向江
@@ -127,7 +127,7 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * グループメンバ削除
 	 * user_detailのscoreを持ってくる
 	 */
-	@Query("select * from user_detail where group_id = :group_id order by score asc")
+	@Query("select * from user_detail where group_id = :group_id order by score, user_progress desc")
 	public List<GroupMemberDetailView> membersScore(int group_id);
 
 	/**
@@ -168,6 +168,14 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	@Query("update teams set group_flg = 0 where group_id = :group_id")
 	public void groupDiss(int group_id);
 
+	/**
+	 * 末吉
+	 * グループ解散に伴い、task_flgをfalseに
+	 */
+	@Modifying
+	@Query("update task set task_flg = 0 where group_id = :group_id")
+	public void taskDiss(int group_id);
+	
 	/**
 	 * 末吉
 	 * グループ編集完了
@@ -268,10 +276,10 @@ public interface GroupDisplayCrudRepository extends CrudRepository<Teams, Intege
 	 * 湊原
 	 * 結成年度取得(絞り込み用)
 	 */
-	@Query("SELECT distinct YEAR(est_year) AS est_year FROM teams WHERE YEAR(est_year) != 9999;")
+	@Query("SELECT distinct YEAR(est_year) AS est_year FROM teams WHERE YEAR(est_year) != 9999 order by est_year;")
 	public List<TeamsDisplay> selectgroupEstYear();
 
-	@Query("SELECT distinct YEAR(enr_year) AS est_year FROM user WHERE YEAR(enr_year) != 9999 and user_id like '%st%';")
+	@Query("SELECT distinct YEAR(enr_year) AS est_year FROM user WHERE YEAR(enr_year) != 9999 and user_id like '%st%' order by enr_year;")
 	public List<TeamsDisplay> selectuserEstYear();
 
 	/**

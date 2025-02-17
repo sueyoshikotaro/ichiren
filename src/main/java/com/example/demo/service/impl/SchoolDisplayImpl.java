@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.entity.School;
 import com.example.demo.form.SchoolDisplay;
 import com.example.demo.repository.SchoolDisplayCrudRepository;
 import com.example.demo.service.SchoolDisplayServiceInterface;
@@ -14,8 +15,13 @@ public class SchoolDisplayImpl implements SchoolDisplayServiceInterface {
 	SchoolDisplayCrudRepository repo;
 	
 	@Override
-	public List<SchoolDisplay> SchoolDetails(int school_id) {
+	public List<School> SchoolInfo(int school_id) {
 		
+		return repo.SchoolInfo(school_id);
+	}
+	
+	@Override
+	public List<SchoolDisplay> SchoolDetails(int school_id) {
 		
 		return repo.selectSchoolDetails(school_id);
 	}

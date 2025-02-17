@@ -17,6 +17,10 @@ public interface SchoolDisplayCrudRepository extends CrudRepository<School, Inte
 	 * 独自のSQL文<br>
 	 * SELCT文以外は「@Modifying」を付与
 	 */
+	//
+	@Query("select * from school where school_id = :school_id")
+	public List<School> SchoolInfo(int school_id);
+	
 	@Query("select * from school inner join room on school.school_id = room.school_id where room.school_id = :school_id order by room.room_name")
 	public List<SchoolDisplay> selectSchoolDetails(int school_id);
 

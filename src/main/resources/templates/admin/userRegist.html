@@ -35,6 +35,10 @@
 
 		<h2>新規ユーザ登録</h2>
 
+		<!-- エラー文を表示する -->
+		<p th:if="${errMsg1}" th:text="${errMsg1}" style="color: red;"></p>
+		<p th:if="${errMsg2}" th:text="${errMsg2}" style="color: red;"></p>
+
 		<!--登録欄-->
 		<form th:action="@{userRegistConfirm}" method="post" enctype="multipart/form-data" style="margin-top: 40px;">
 

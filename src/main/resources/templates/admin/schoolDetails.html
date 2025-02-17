@@ -44,7 +44,7 @@
 		</h2>
 
 		<!--学校名と学校ID(表示)-->
-		<div th:each="schoolDetails : ${schoolS}" th:if="${schoolDetailsStat.index == 0}">
+		<div th:each="schoolDetails : ${schoolInfo}" th:if="${schoolDetailsStat.index == 0}">
 
 			<div class="mb-3 school-info-text" style="margin-top: 10px;">
 				<span class="form-label" id="basic-addon1">学校名</span>
@@ -57,6 +57,11 @@
 			</div>
 
 		</div>
+
+		<!--指示文を表示-->
+		<p th:if="${Msg}" th:text="${Msg}"
+			style="text-align: center; margin-top: 35px; margin-bottom: 30px; font-size: 19px; text-decoration: double;">
+		</p>
 
 		<form th:action="@{schoolDetailsChange}" th:object="${FormContent}" method="post">
 
@@ -121,8 +126,6 @@
 				</div>
 			</div>
 
-			<input type="hidden" id="before_room_name" name="before_room_name">
-
 			<div class="btn-group btnS-group">
 
 				<button type="submit" name="button" class="move-btn mini-btn" value="add">追加
@@ -137,7 +140,8 @@
 					</svg>
 				</button>
 
-				<button type="submit" name="button" class="move-btn mini-btn" value="edit">編集
+				<button type="submit" name="button" class="move-btn mini-btn" value="edit"
+					th:if="${not #lists.isEmpty(schoolS)}">編集
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
 						class="bi bi-building-gear" viewBox="0 0 16 16" style="margin-bottom: 3px;">
 						<path
@@ -147,7 +151,8 @@
 					</svg>
 				</button>
 
-				<button type="submit" name="button" class="move-btn mini-btn" value="delete">削除
+				<button type="submit" name="button" class="move-btn mini-btn" value="delete"
+					th:if="${not #lists.isEmpty(schoolS)}">削除
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
 						class="bi bi-building-dash" viewBox="0 0 16 16" style="margin-bottom: 3px;">
 						<path

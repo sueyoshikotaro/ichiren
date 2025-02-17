@@ -22,7 +22,7 @@ public interface GroupDisplayServiceInterface {
 	public List<GroupDisplay> groupDetail(int group_id);
 
 	//グループメンバ詳細表示
-	public List<GroupMemberDetailView> groupMemberDetail(String user_id, String group_id);
+	public List<GroupMemberDetailView> groupMemberDetail(String user_id, int group_id);
 
 	//グループメンバタスク詳細表示
 	public List<TaskForm> taskDetail(int task_id);

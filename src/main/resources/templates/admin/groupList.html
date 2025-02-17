@@ -19,23 +19,17 @@
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!-- 共通 -->
 	<link rel="stylesheet" th:href="@{/css/list.css}">
 
-	<!--ウェブアイコン-->
+	<!-- ウェブアイコン -->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
 
 	<!-- 共通header呼出し(管理者用) -->
 	<div>
 		<th:block th:insert="fragment/header :: headerAdmin">
 	</div>
-
-	<!--自動でキャッシュクリア_末吉追加-->
-<!--	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">-->
-<!--	<meta http-equiv="Pragma" content="no-cache">-->
-<!--	<meta http-equiv="Expires" content="0">-->
-	
 </head>
 
 <body>
-	<!--コンテナ-->
+	<!-- コンテナ -->
 	<div class="container">
 
 		<h2>グループ一覧
@@ -118,7 +112,10 @@
 				<!-- 居場所表示 -->
 				<div class="input-group groupList-whereabouts">
 					<span class="input-group-text">居場所</span>
-					<div type="text" class="form-control" th:text="${group.work_status}"></div>
+					<div type="text" class="form-control" th:text="${group.work_status}"
+						th:if="${group.work_status != '休憩中'}"></div>
+					<div type="text" class="form-control" th:text="${group.work_status}"
+						th:unless="${group.work_status != '休憩中'}" style="background-color: grey; color: white;"></div>
 				</div>
 
 				<!-- 進捗表示 -->

@@ -100,7 +100,6 @@ public class UserCtrl {
 	 * ログアウト画面を表示
 	 * @return
 	 */
-	@LoginRequired
 	@GetMapping("logout")
 	public String logout(HttpServletResponse response) {
 
@@ -150,8 +149,6 @@ public class UserCtrl {
 			ra.addFlashAttribute("user_id", user_id);
 
 			if (user.get().getUser_id().contains("admin") && user.get().getUser_pass().equals("admin")) {
-
-				userDisplayService.adminDisable(user_id, 0); //adminアカウント無効化
 
 				return new ModelAndView("redirect:/taskdon/admin/teInfoRegist"); //上位管理者がログインした場合(初回のみ)
 
@@ -247,22 +244,10 @@ public class UserCtrl {
 	}
 
 	/**
-	 * メニュー(管理者)画面
-	 * @return
-	 */
-	@LoginRequired
-	@GetMapping("/taskdon/admin/menu")
-	public ModelAndView adminMenu(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
-
-		mav.setViewName("admin/menuAdmin");
-
-		return mav;
-	}
-
-	/**
 	 * 所属グループ一覧画面に遷移
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("deptGroupList")
 	public ModelAndView deptGroupList(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
@@ -351,28 +336,6 @@ public class UserCtrl {
 	}
 
 	/**
-	 * メニュー(ユーザ)の表示
-	 * @return
-	 */
-//	@LoginRequired
-//	@GetMapping("menu")
-//	public String menu() {
-//
-//		System.out.println("tukawareteru?");
-//		
-//		// ログインユーザのエンティティを取得
-//		User userEntity = (User) session.getAttribute("user");
-//
-//		// エンティティの中の値をそれぞれフィールドに設定
-//		school_id = userEntity.getSchool_id();
-//		group_id = (int) session.getAttribute("groupId");
-//		user_id = userEntity.getUser_id();
-//		user_roll = (String) session.getAttribute("user_roll");
-//
-//		return "common/menuUser";
-//	}
-
-	/**
 	 * 末吉
 	 * 居場所更新
 	 */
@@ -413,8 +376,9 @@ public class UserCtrl {
 		} else {
 			score = String.valueOf(TaskService.userScore(selectedValue, group_id));
 		}
-
+		
 		task = TaskService.taskDisplayList(selectedValue, group_id);
+		
 		mav.addObject("score", score);
 		mav.addObject("user", selectedValue);
 		mav.addObject("tasks", task);
@@ -441,8 +405,15 @@ public class UserCtrl {
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
 
-		mav.addObject("tasks", t);
-		mav.setViewName("leader/taskRegistConfirm");
+		int result = t.getStart_date().compareToIgnoreCase(t.getEnd_date());
+		if (result <= 0) {
+			mav.addObject("tasks", t);
+			mav.setViewName("leader/taskRegistConfirm");
+		}else {
+			mav.addObject("終了予定日は開始予定日以降に設定してください");
+			mav.setViewName("leader/taskRegist");
+		}
+		
 		return mav;
 	}
 
@@ -948,6 +919,7 @@ public class UserCtrl {
 	@GetMapping("memberList")
 	public ModelAndView memberList(ModelAndView mav) {
 
+		System.out.println("メンバ一覧");
 		List<GroupMemberDetailView> group = groupDispService.memberList(group_id);
 		int allProgress = groupDispService.selectProgress(group_id);
 
