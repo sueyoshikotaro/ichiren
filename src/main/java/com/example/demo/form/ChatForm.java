@@ -8,7 +8,7 @@ import lombok.Data;
 public class ChatForm {
 	
 	//chatroomテーブル
-	private int room_id;
+	private int chat_id;
 	private String user_id1;
 	private String user_id2;
 	
