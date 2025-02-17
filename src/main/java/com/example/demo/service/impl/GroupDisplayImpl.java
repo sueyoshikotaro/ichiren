@@ -280,10 +280,6 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		//割り振られるユーザのタスク情報を取得
 		List<TaskForm> updateUserTask = groupDispCrudRepo.taskList(group.get(0).getUser_id(), group_id);
 		
-		System.out.println("割り振られる！！！");
-		System.out.println(updateUserTask);
-		System.out.println("タスクのサイズ:" + updateUserTask.size());
-		
 		//割り振るタスクのtask_weightを取得
 		task_weight = deleteUserTask.get(0).getTask_weight();
 
@@ -296,14 +292,13 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 			
 			//タスクがすでに割り振られている場合
 		} else {
-			System.out.println("score計算:" + updateUserTask.get(0).getUser_progress() + "*" + updateUserTask.size() + "+" + deleteUserTask.get(0).getProgress());
 			progressSum = updateUserTask.get(0).getUser_progress() * updateUserTask.size() + deleteUserTask.get(0).getProgress();
 		}
 
 		//変更後の進捗度を計算(戻り値)
-		System.out.println("score計算:" + progressSum + "/" + updateUserTask.size() + 1);
-		userProgressResult = progressSum / (updateUserTask.size() + 1);
-		System.out.println("こたえ:" + userProgressResult);
+		if(progressSum != 0) {
+			userProgressResult = progressSum / (updateUserTask.size() + 1);			
+		}
 		
 
 		//戻り値をresult配列に格納
@@ -361,7 +356,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		}
 		
 		//グループにメンバがいる場合
-		if (!taskList.isEmpty()) {
+		if (!taskList.isEmpty() && all_progress != 0) {
 			//更新後の全体進捗の計算
 			all_progress_result = all_progress / taskCnt;
 		} else {
