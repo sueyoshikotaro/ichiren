@@ -43,14 +43,14 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	 * 末吉
 	 * チャットルーム検索
 	 */
-	@Query("select room_id from chatroom where (user_id1 = :user_id and user_id2 = :chatUser_id) or (user_id1 = :chatUser_id and user_id2 = :user_id)")
+	@Query("select chat_id from chatroom where (user_id1 = :user_id and user_id2 = :chatUser_id) or (user_id1 = :chatUser_id and user_id2 = :user_id)")
 	public int chatRoomSearch(String user_id, String chatUser_id);
 	
 	/**
 	 * 末吉
 	 * チャット履歴を表示
 	 */
-	@Query("select * from message m join user u on m.send_by = u.user_id where room_id = :chatRoom_id")
+	@Query("select * from message m join user u on m.send_by = u.user_id where chat_id = :chatRoom_id")
 	public List<ChatForm> getChatHistory(int chatRoom_id);
 	
 	/**
@@ -58,7 +58,7 @@ public interface ChatCrudRepository extends CrudRepository<ChatForm, Integer> {
 	 * チャット履歴を更新
 	 */
 	@Modifying
-	@Query("insert into message(send_by, room_id, msg) values(:user_id, :chatRoom_id, :sendText)")
+	@Query("insert into message(send_by, chat_id, msg) values(:user_id, :chatRoom_id, :sendText)")
 	public void updateChat(String user_id, int chatRoom_id, String sendText);
 
 	
