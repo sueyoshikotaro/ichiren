@@ -919,7 +919,6 @@ public class UserCtrl {
 	@GetMapping("memberList")
 	public ModelAndView memberList(ModelAndView mav) {
 
-		System.out.println("メンバ一覧");
 		List<GroupMemberDetailView> group = groupDispService.memberList(group_id);
 		int allProgress = groupDispService.selectProgress(group_id);
 
@@ -1005,7 +1004,6 @@ public class UserCtrl {
 		if (user_roll.equals("リーダ")) {
 			//チャットの通信可能相手(管理者)を格納
 			List<GroupDisplay> chatPartnerAdmin = chatServise.AdminChatPartnerSearch(school_id, search);
-			System.out.println("リーダ：" + chatPartnerAdmin);
 			mav.addObject("chatPartnerAdmin", chatPartnerAdmin);
 		}
 

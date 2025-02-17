@@ -132,37 +132,43 @@ public class AdminCtrl {
 			@RequestParam(name = "flexRadioDefault", required = false) Integer room_id,
 			ModelAndView mav) {
 
-		//学校情報取得
-		List<School> SchoolDetails = schoolDisplayService.SchoolInfo(school_id);
+		try {
+			//学校情報取得
+			List<School> SchoolDetails = schoolDisplayService.SchoolInfo(school_id);
 
-		if (room_id != null) {
-			//ラジオボタンで選択したデータを取得
-			List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(room_id, school_id);
+			if (room_id != null) {
+				//ラジオボタンで選択したデータを取得
+				List<SchoolDisplay> EditSchoolDetails = schoolDisplayService.EditSchoolDetails(room_id, school_id);
 
-			//選択したデータの教室名を編集前の教室名として保持
-			EditSchoolDetails.get(0).setBefore_room_name(EditSchoolDetails.get(0).getRoom_name());
+				//選択したデータの教室名を編集前の教室名として保持
+				EditSchoolDetails.get(0).setBefore_room_name(EditSchoolDetails.get(0).getRoom_name());
 
-			//編集ボタンを押下
-			if (button.equals("edit")) {
+				//編集ボタンを押下
+				if (button.equals("edit")) {
 
-				mav.addObject("schoolEdit", EditSchoolDetails);
-				mav.setViewName("admin/schoolEdit");
+					mav.addObject("schoolEdit", EditSchoolDetails);
+					mav.setViewName("admin/schoolEdit");
 
-				//削除ボタンを押下
-			} else if (button.equals("delete")) {
+					//削除ボタンを押下
+				} else if (button.equals("delete")) {
 
-				mav.addObject("schoolDelete", EditSchoolDetails);
-				mav.setViewName("admin/schoolDelete");
+					mav.addObject("schoolDelete", EditSchoolDetails);
+					mav.setViewName("admin/schoolDelete");
 
+				}
 			}
-		}
 
-		//学校情報がない場合
-		if (button.equals("add")) {
-			mav.addObject("schoolAdd", SchoolDetails);
-			mav.setViewName("admin/schoolAdd");
+			//学校情報がない場合
+			if (button.equals("add")) {
+				mav.addObject("schoolAdd", SchoolDetails);
+				mav.setViewName("admin/schoolAdd");
+			}
+			
+		} catch (Exception e) {
+			
+			return new ModelAndView("redirect:/admin/schoolDetails");
 		}
-
+		
 		return mav;
 	}
 
@@ -1033,14 +1039,14 @@ public class AdminCtrl {
 			for (int i = 0; i < group.size(); i++) {
 				//更新後のスコアと進捗度を計算するサービスを呼び出す
 				Object[] updateData = groupDispService.scoreCalc(g.getGroup_id(), g.getUser_id());
-				
+
 				//user_detailのtask_idを更新(タスクの自動振り分け)
 				groupDispService.updateUserId(group.get(i).getTask_id(), (String) updateData[2]);
 
 				//user_detailのscoreとuser_progressを更新
 				groupDispService.updateScore((String) updateData[2], g.getGroup_id(), (int) updateData[0],
 						(int) updateData[1]);
-				
+
 			}
 		}
 

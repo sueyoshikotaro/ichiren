@@ -44,16 +44,19 @@ public class LoginInterceptor implements HandlerInterceptor {
 					// 権限が上位管理者の場合、管理者のメニュー画面に遷移する
 				    if (!currentUrl.startsWith("/taskdon/admin/teInfoRegist")) {
 				    	response.sendRedirect("/taskdon/admin/teInfoRegist");
+				    	return false;
 				    }
 				} else if(user.getUser_id().startsWith("ad") || user.getUser_id().startsWith("te")) {
 					// 権限が管理者の場合、管理者のメニュー画面に遷移する
 				    if (!currentUrl.startsWith("/taskdon/admin")) {
-				        response.sendRedirect("/taskdon/admin/menu");
+				    	response.sendRedirect("/taskdon/admin/menu");
+				    	return false;
 				    }
 				} else if (user.getUser_id().startsWith("st")) {
 				    // 権限がユーザの場合、ユーザのメニュー画面に遷移する
 				    if (!currentUrl.startsWith("/taskdon/user")) {
 				        response.sendRedirect("/taskdon/user/deptGroupList");
+				        return false;
 				    }
 				}
 			}
