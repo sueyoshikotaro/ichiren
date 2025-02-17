@@ -18,6 +18,7 @@
 	<link rel="stylesheet" th:href="@{/css/header.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/body.css}"> <!--共通CSS-->
 	<link rel="stylesheet" th:href="@{/css/taskS.css}">
+	<link rel="stylesheet" th:href="@{/css/control.css}">
 
 	<!--ウェブアイコン-->
 	<link rel="icon" type="image/png" th:href="@{/img/web_icon.png}">
@@ -120,8 +121,10 @@
 				<input type="hidden" name="req_content" th:value="${taskAppConf.req_content}">
 				<input type="hidden" name="req_reason" th:value="${taskAppConf.req_reason}">
 
-				<button type="submit" name="button" value="app" class="Confirm-btn"
-					onclick="taskAppAndShowPopup()">承認</button>
+				<button type="submit" name="button" value="app" class="Confirm-btn">承認</button>
+
+				<button type="button" class="Confirm-btn" data-toggle="modal"
+					data-target="#taskDenialModal">再設定</button>
 
 		</form>
 
@@ -137,9 +140,45 @@
 			</div>
 		</div>
 
+
+		<!-- 承認拒否ポップアップ -->
+		<div class="modal fade popup-place" id="taskDenialModal" tabindex="-1" role="dialog"
+			aria-labelledby="taskDenialModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<center>
+						<h3 class="confirm-text">否認確認</h3>
+					</center>
+
+					<p class="modal-text">タスク申請を否認しますか？</p>
+
+					<form th:action="@{/taskdon/user/taskDenial}" method="post">
+						<input type="hidden" name="request_id" th:value="${taskAppConf.request_id}">
+
+						<div class="btn-group">
+							<button type="submit" name="button" value="はい" class="answer-btn yes-btn">はい</button>
+							<button type="button" class="answer-btn no-btn" data-dismiss="modal">いいえ</button>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<!-- newPassとconfirmPassに値を設定するscript -->
+	<script>
+		$(document).ready(function () {
+			$('#taskDenialModal').on('show.bs.modal', function (event) {
+				var request_id = $('input[name="request_id"]').val();
+				$('#request_idHidden').val(request_id);
+			});
+		});
+	</script>
 
 	<!--JavaScript挿入欄(重み計算)-->
 	<script th:inline="javascript">
@@ -167,26 +206,6 @@
 			}
 		});
 		/*]]>*/
-	</script>
-
-	<script>
-		function taskAppAndShowPopup() {
-			// フォーム要素を取得
-			var form = document.querySelector('form');
-
-			// コントローラメソッドを呼び出すためにフォームを送信
-			form.action = 'taskAppComplete'; // コントローラメソッドの実際のURLに置き換えてください
-			form.method = 'post';
-
-			// buttonパラメータを追加
-			var buttonInput = document.createElement('input');
-			buttonInput.type = 'hidden';
-			buttonInput.name = 'button';
-			buttonInput.value = 'app'; // または '戻る' など必要な値を設定
-			form.appendChild(buttonInput);
-
-			form.submit();
-		}
 	</script>
 
 	<!--bootstrapのjsリンク接続-->
