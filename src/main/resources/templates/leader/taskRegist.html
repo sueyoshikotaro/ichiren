@@ -35,6 +35,10 @@
 
 		<h2>タスク登録</h2>
 
+		<!--エラー-->
+		<p th:if="${DateErrMsg}" th:text="${DateErrMsg}" style="color: red;"></p>
+		<p th:if="${UserErrMsg}" th:text="${UserErrMsg}" style="color: red;"></p>
+
 		<form th:action="@{taskRegistConfirm}" method="post">
 			<div class="form-group">
 				<label for="exampleFormControlInput1" class="form-label">タスク名</label>
