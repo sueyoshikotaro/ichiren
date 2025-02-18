@@ -626,31 +626,34 @@ public class UserCtrl {
 		Date end_date = null;
 		int score = TaskService.userScore(t.getUser_name(), group_id);
 		try {
-			//開始予定日と終了予定日の型変換
-			st_date = sdf.parse(t.getStart_date());
-			end_date = sdf.parse(t.getEnd_date());
-			//登録が出来た場合
-			if (TaskService.taskRegister(t.getReq_category(), t.getReq_name(), t.getReq_content(), "未着手",
-					st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
-					group_id)) {
+			//開始予定日が終了予定日以前かどうかの判定
+			int result = t.getStart_date().compareToIgnoreCase(t.getEnd_date());
+			if (result <= 0 && t.getUser_name() != null) {
+				//開始予定日と終了予定日の型変換
+				st_date = sdf.parse(t.getStart_date());
+				end_date = sdf.parse(t.getEnd_date());
+				//登録が出来た場合
+				if (TaskService.taskRegister(t.getReq_category(), t.getReq_name(), t.getReq_content(), "未着手",
+						st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
+						group_id)) {
 
-				//タスク承認(フラグ更新)
-				TaskService.taskReqFlg(t.getRequest_id());
+					//タスク承認(フラグ更新)
+					TaskService.taskReqFlg(t.getRequest_id());
 
-				//スコアの足しこみ
-				score = score + t.getTask_weight();
-				TaskService.userUpScore(score, t.getUser_name(), group_id);
+					//スコアの足しこみ
+					score = score + t.getTask_weight();
+					TaskService.userUpScore(score, t.getUser_name(), group_id);
 
-				mav.addObject("taskAppComp", true);
-			} else {
-				mav.addObject("taskAppComp", false);
+					mav.addObject("taskAppComp", true);
+				} else {
+					mav.addObject("taskAppComp", false);
+				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
 		mav.addObject("taskAppConf", t);
-		mav.setViewName("leader/taskApprovedConfirm");
 		return mav;
 	}
 
