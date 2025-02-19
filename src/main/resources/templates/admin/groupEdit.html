@@ -87,33 +87,9 @@
 				</div>
 			</div>
 
-			<button type="button" name="button" value="確認" onclick="formSubmit('確認')"
-				class="control-btn mini-btn">確認</button>
-
+			<button type="submit" name="button" value="確認" class="control-btn mini-btn">確認</button>
 		</form>
-
 	</div>
-
-	<!--確認と戻るボタンを押した場合-->
-	<script>
-		function formSubmit(buttonValue) {
-			// フォーム要素を取得
-			var form = document.querySelector('form');
-
-			// ボタンの値をhiddenフィールドに設定
-			var hiddenField = document.createElement('input');
-			hiddenField.type = 'hidden';
-			hiddenField.name = 'button';
-			hiddenField.value = buttonValue;
-			form.appendChild(hiddenField);
-
-			// コントローラメソッドを呼び出すためにフォームを送信
-			form.action = 'groupEditConfirm'; // グループ編集確認画面を表示するコントロールのURL
-			form.method = 'post';
-
-			form.submit();
-		}
-	</script>
 
 	<!--bootstrapのjsリンク接続-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

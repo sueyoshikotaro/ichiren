@@ -2,6 +2,9 @@ package com.example.demo.service.impl;
 
 import java.util.List;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.form.ChatForm;
@@ -32,7 +35,7 @@ public class ChatServiceImpl implements ChatServiceInterface {
 	//チャット履歴を表示
 	@Override
 	public List<ChatForm> getChatHistory(String user_id, String chatUser_id) {
-		
+
 		//チャットルーム作成
 		boolean flg = chatCrud.existsChatRoom(user_id, chatUser_id);
 
@@ -53,50 +56,65 @@ public class ChatServiceImpl implements ChatServiceInterface {
 
 		//チャットルーム検索
 		int chatRoom_id = chatCrud.chatRoomSearch(user_id, chatUser_id);
-		
-		if(sendText != null && !sendText.isEmpty()) {
+
+		if (sendText != null && !sendText.isEmpty()) {
 			//チャット履歴を更新
 			chatCrud.updateChat(user_id, chatRoom_id, sendText);
 		}
-		
 
 		return chatCrud.getChatHistory(chatRoom_id);
 	}
 
-	
 	/**
 	 * リーダ用のサービス
 	 */
 	//チャット相手を設定
 	@Override
 	public List<GroupDisplay> leaderSetChatAdmin(int school_id) {
-		
+
 		return chatCrud.leaderSetChatUser(school_id);
 	}
-	
+
 	//チャット相手検索
 	@Override
 	public List<GroupDisplay> AdminChatPartnerSearch(int school_id, String search) {
 
 		return chatCrud.AdminChatPartnerSearch(school_id, search);
 	}
-	
-	
+
 	/**
 	 * メンバ用のサービス
 	 */
 	//チャット相手を設定
 	@Override
 	public List<GroupDisplay> memberSetChatUser(int school_id, int group_id) {
-		
+
 		return chatCrud.memberSetChatUser(school_id, group_id);
 	}
 
 	//チャット相手検索
 	@Override
 	public List<GroupDisplay> memberChatPartnerSearch(int school_id, int group_id, String search) {
-		
+
 		return chatCrud.memberChatPartnerSearch(school_id, group_id, search);
+	}
+
+	@Override
+	public boolean CookieCheck(HttpServletRequest request) {
+
+		//Cookie情報にチャット相手の情報が入っていなければ、チャットを送れないようにする
+		Cookie[] cookies = request.getCookies();
+		boolean flg = false;
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("chatPartnerUserId")) {
+					flg = true;
+					break;
+				}
+			}
+		}
+
+		return flg;
 	}
 
 }

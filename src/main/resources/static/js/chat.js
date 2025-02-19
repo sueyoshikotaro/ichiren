@@ -4,13 +4,11 @@
  */
 $(document).ready(function() {
 	$(document).on('click', '#showChatPartnerButton', function() {
-		console.log("よびだし！！");
 		// コントロールを呼び出す
 		$.ajax({
 			type: 'GET',
 			url: 'chat',
 			success: function(data) {
-				console.log("中にも入ったよ！！！");
 
 				var chatPartnerList = data;
 
@@ -110,8 +108,6 @@ function chatSearch() {
  * チャット履歴表示
  */
 function getChatHistory(chatUserId) {
-	console.log("getChatHistory 関数が呼び出されました。");
-
 	//Cookieに値を保存
 	document.cookie = "chatPartnerUserId=" + chatUserId;
 	$.ajax({
@@ -142,7 +138,6 @@ function getChatHistory(chatUserId) {
  * チャットを送信
  */
 function sendMessage() {
-	console.log("チャットを送信しまーーーーーーーす！");
 	var sendInput = document.getElementById("send_input").value;
 
 	//Cookie情報を取得
@@ -154,7 +149,6 @@ function sendMessage() {
 		url: 'sendChat',
 		data: { sendInput: sendInput, chatPartnerUserId: chatPartnerUserId },
 		success: function(data) {
-			console.log("チャット送信しましたーーーーーーー！！！");
 			document.body.innerHTML = data; // HTML全体を再描画
 		}
 	});
@@ -183,8 +177,3 @@ window.addEventListener('load', function() {
 		getChatHistory(chatPartnerUserId);
 	}
 });
-
-
-/**
- * ログアウトしたらCookie情報を削除
- */

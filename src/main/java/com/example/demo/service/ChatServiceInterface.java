@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.example.demo.form.ChatForm;
 import com.example.demo.form.GroupDisplay;
 
@@ -39,4 +41,8 @@ public interface ChatServiceInterface {
 	//チャット相手検索
 	public List<GroupDisplay> memberChatPartnerSearch(int school_id, int group_id, String search);
 
+	/**
+	 * 共通のサービス
+	 */
+	public boolean CookieCheck(HttpServletRequest request);
 }

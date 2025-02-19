@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
@@ -266,6 +267,10 @@ public class UserCtrl {
 
 			List<GroupDisplay> deptGroupList = groupDispService.deptGroupList(user_id);
 
+			if (deptGroupList.isEmpty()) {
+				mav.addObject("Msg", "所属グループがありません。");
+			}
+
 			mav.setViewName("common/deptGroupList");
 			mav.addObject("groupS", deptGroupList);
 			session.setAttribute("deptGroupList", deptGroupList);
@@ -376,9 +381,9 @@ public class UserCtrl {
 		} else {
 			score = String.valueOf(TaskService.userScore(selectedValue, group_id));
 		}
-		
+
 		task = TaskService.taskDisplayList(selectedValue, group_id);
-		
+
 		mav.addObject("score", score);
 		mav.addObject("user", selectedValue);
 		mav.addObject("tasks", task);
@@ -409,11 +414,11 @@ public class UserCtrl {
 		if (result <= 0) {
 			mav.addObject("tasks", t);
 			mav.setViewName("leader/taskRegistConfirm");
-		}else {
+		} else {
 			mav.addObject("終了予定日は開始予定日以降に設定してください");
 			mav.setViewName("leader/taskRegist");
 		}
-		
+
 		return mav;
 	}
 
@@ -966,7 +971,7 @@ public class UserCtrl {
 	 * @return
 	 */
 	@GetMapping("chat")
-	public ModelAndView chat(ModelAndView mav) {
+	public ModelAndView chat(ModelAndView mav, HttpServletRequest request) {
 
 		//リーダの場合は管理者とグループメンバすべてを格納
 		if (user_roll.equals("リーダ")) {
@@ -985,6 +990,10 @@ public class UserCtrl {
 				.filter(chat -> !chat.getUser_id().equals(user_id))
 				.collect(Collectors.toList());
 
+		//Cookie情報にチャット相手が入っているかどうか
+		boolean hasChatPartnerUserId = chatServise.CookieCheck(request);
+
+		mav.addObject("hasChatPartnerUserId", hasChatPartnerUserId);
 		mav.addObject("chatPartnerMember", filteredChatPartner);
 		mav.setViewName("common/chat");
 
@@ -1027,10 +1036,15 @@ public class UserCtrl {
 	 * @return
 	 */
 	@PostMapping("getChatHistory")
-	public ModelAndView getChatHistory(ModelAndView mav,
+	public ModelAndView getChatHistory(ModelAndView mav, HttpServletRequest request,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
 
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
+
+		//Cookie情報にチャット相手が入っているかどうか
+		boolean hasChatPartnerUserId = chatServise.CookieCheck(request);
+
+		mav.addObject("hasChatPartnerUserId", hasChatPartnerUserId);
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
 
