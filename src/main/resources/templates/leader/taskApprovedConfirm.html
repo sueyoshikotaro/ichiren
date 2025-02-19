@@ -36,6 +36,9 @@
 
 		<h2>タスク承認</h2>
 
+		<!--エラー-->
+		<p th:if="${ErrMsg}" th:text="${ErrMsg}" style="color: red;"></p>
+
 		<form th:action="@{taskAppComplete}" method="post">
 			<div class="form-group">
 				<div class="row">
@@ -123,8 +126,7 @@
 
 				<button type="submit" name="button" value="app" class="Confirm-btn">承認</button>
 
-				<button type="button" class="Confirm-btn" data-toggle="modal"
-					data-target="#taskDenialModal">再設定</button>
+				<button type="button" class="Confirm-btn" data-toggle="modal" data-target="#taskDenialModal">拒否</button>
 
 		</form>
 

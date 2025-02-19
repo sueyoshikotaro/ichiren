@@ -135,7 +135,6 @@ public class UserCtrl {
 	 * パスワードチェック
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("login")
 	public ModelAndView loginCheck(ModelAndView mav, String user_id, String user_pass, RedirectAttributes ra) {
 
@@ -285,7 +284,6 @@ public class UserCtrl {
 	 * メニュー(ユーザ)
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("menu")
 	public ModelAndView menu(@RequestParam(name = "group_id", required = false) Integer group_id,
 			@RequestParam(name = "user_roll", required = false) String user_roll,
@@ -339,7 +337,6 @@ public class UserCtrl {
 	 * 末吉
 	 * 居場所更新
 	 */
-	@LoginRequired
 	@PostMapping("updateStatus")
 	public ModelAndView roomUpdate(ModelAndView mav,
 			@RequestParam(name = "updateStatus", required = false) String updateStatus) {
@@ -403,7 +400,6 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
 
@@ -461,7 +457,6 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(@RequestParam(name = "taskProgress", required = false) Integer progress,
 			@RequestParam(name = "task_id") Integer task_id, ModelAndView mav) {
@@ -503,7 +498,6 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("taskDetailsChange")
 	public ModelAndView taskDetailChange(@RequestParam("button") String button, TaskForm t, ModelAndView mav) {
 		//編集ボタンを押下
@@ -529,7 +523,6 @@ public class UserCtrl {
 	 * @param t
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("taskEditConfirm")
 	public ModelAndView taskEditConfirm(ModelAndView mav, TaskForm t) {
 		mav.addObject("task", t);
@@ -543,7 +536,6 @@ public class UserCtrl {
 	 * @param mav
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("taskEditComplete")
 	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
 		//スコアの足しこみ
@@ -569,7 +561,6 @@ public class UserCtrl {
 	 * @param t
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("taskDeleteComplete")
 	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
 		//スコアの減算
@@ -601,7 +592,6 @@ public class UserCtrl {
 	 * タスク承認確認画面を表示するリクエストハンドラメソッド
 	 * 向江
 	 */
-	@LoginRequired
 	@PostMapping("taskAppConfirm")
 	public ModelAndView taskAppConfirm(ModelAndView mav, TaskReqForm t) {
 		mav.addObject("taskAppConf", t);
@@ -616,7 +606,6 @@ public class UserCtrl {
 	 * @param t
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("taskAppComplete")
 	public ModelAndView taskAppComplete(ModelAndView mav, TaskView t) {
 		//日付型定義
@@ -628,7 +617,7 @@ public class UserCtrl {
 		try {
 			//開始予定日が終了予定日以前かどうかの判定
 			int result = t.getStart_date().compareToIgnoreCase(t.getEnd_date());
-			if (result <= 0 && t.getUser_name() != null) {
+			if (result <= 0) {
 				//開始予定日と終了予定日の型変換
 				st_date = sdf.parse(t.getStart_date());
 				end_date = sdf.parse(t.getEnd_date());
@@ -643,17 +632,20 @@ public class UserCtrl {
 					//スコアの足しこみ
 					score = score + t.getTask_weight();
 					TaskService.userUpScore(score, t.getUser_name(), group_id);
-
 					mav.addObject("taskAppComp", true);
 				} else {
+					
 					mav.addObject("taskAppComp", false);
 				}
+			}else {
+				mav.addObject("ErrMsg", "終了予定日は開始予定日以降に設定してください");
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
 		mav.addObject("taskAppConf", t);
+		mav.setViewName("leader/taskApprovedConfirm");
 		return mav;
 	}
 
@@ -672,7 +664,6 @@ public class UserCtrl {
 	 * タスク申請確認画面を表示
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("taskRequestConfirm")
 	public ModelAndView taskRequestConfirm(ModelAndView mav, TaskReqForm t) {
 		mav.addObject("taskRequest", t);
@@ -684,7 +675,6 @@ public class UserCtrl {
 	 * タスク申請完了
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("taskRequestComplete")
 	public ModelAndView taskRequestComplete(ModelAndView mav, TaskReqForm t) {
 		Date date = new Date();
@@ -723,7 +713,6 @@ public class UserCtrl {
 	 * 選択されたToDoリスト画面を表示
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("todoListChange")
 	public ModelAndView todoListChange(ModelAndView mav,
 			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
@@ -751,7 +740,6 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("registConfirm")
 	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoRegister(user_id, t.getTdlist_content(), t.getImportance());
@@ -763,7 +751,6 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("editConfirm")
 	public ModelAndView editConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoUpdate(t.getTdlist_id(), t.getTdlist_content(), t.getImportance());
@@ -775,7 +762,6 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("deleteConfirm")
 	public ModelAndView deleteConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoDelete(t.getTdlist_id());
@@ -787,6 +773,7 @@ public class UserCtrl {
 	 * 連絡事項作成画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("noticeRegist")
 	public ModelAndView noticeRegist(ModelAndView mav) {
 
@@ -800,7 +787,6 @@ public class UserCtrl {
 	 * 連絡事項作成確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("noticeRegistConfirm")
 	public ModelAndView noticeregistConfirm(ModelAndView mav, NoticeViewForm n) {
 
@@ -815,7 +801,6 @@ public class UserCtrl {
 	 * 連絡事項作成完了画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("noticeRegistComp")
 	public ModelAndView noticeRegistComp(ModelAndView mav,
 			@ModelAttribute NoticeViewForm n,
@@ -854,7 +839,6 @@ public class UserCtrl {
 	 * 連絡事項削除確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("noticeDelete")
 	public ModelAndView noticeDelete(ModelAndView mav,
 			@RequestParam(name = "check", required = false) Integer[] check) {
@@ -893,7 +877,6 @@ public class UserCtrl {
 	 * 連絡事項削除完了するリクエストハンドラメソッド
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("noticeDeleteConfirm")
 	public ModelAndView noticeDeleteConfirm(ModelAndView mav,
 			@RequestParam(name = "notice_id", required = false) Integer[] notice_id,
@@ -946,7 +929,6 @@ public class UserCtrl {
 	 * @param g
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("memberDetails")
 	public ModelAndView memberDetails(ModelAndView mav, GroupMemberDetailView g,
 			@RequestParam(name = "groupId", required = false) Integer groupId,
@@ -1008,7 +990,6 @@ public class UserCtrl {
 	 * チャット相手検索
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("chatSearch")
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
@@ -1039,7 +1020,6 @@ public class UserCtrl {
 	 * チャット画面にチャット履歴を表示
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
@@ -1056,7 +1036,6 @@ public class UserCtrl {
 	 * チャット送信
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("sendChat")
 	public ModelAndView sendChat(ModelAndView mav,
 			@RequestParam(name = "sendInput", required = false) String sendText,
