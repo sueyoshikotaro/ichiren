@@ -391,6 +391,7 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("taskRegister")
 	public ModelAndView taskRegister(ModelAndView mav) {
 		mav.setViewName("leader/taskRegist");
@@ -402,15 +403,22 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
 
+		//開始予定日が終了予定日以前かどうかの判定
 		int result = t.getStart_date().compareToIgnoreCase(t.getEnd_date());
-		if (result <= 0) {
+		if (result <= 0 && t.getUser_name() != null) {
 			mav.addObject("tasks", t);
 			mav.setViewName("leader/taskRegistConfirm");
 		}else {
-			mav.addObject("終了予定日は開始予定日以降に設定してください");
+			if (result > 0) {
+				mav.addObject("DateErrMsg","終了予定日は開始予定日以降に設定してください");
+			}
+			if (t.getUser_name() == null) {
+				mav.addObject("UserErrMsg","担当者を選択してください");
+			}
 			mav.setViewName("leader/taskRegist");
 		}
 		
@@ -677,8 +685,6 @@ public class UserCtrl {
 	@PostMapping("taskRequestComplete")
 	public ModelAndView taskRequestComplete(ModelAndView mav, TaskReqForm t) {
 		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		System.out.println(sdf.format(date));
 		TaskService.registerTaskReq(t.getReq_category(), t.getReq_name(), t.getReq_content(), t.getReq_reason(), date,
 				t.getUser_name(), group_id);
 		mav.addObject("taskRequestComp", true);
@@ -791,6 +797,7 @@ public class UserCtrl {
 	 * 連絡事項作成確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("noticeRegistConfirm")
 	public ModelAndView noticeregistConfirm(ModelAndView mav, NoticeViewForm n) {
 
@@ -805,6 +812,7 @@ public class UserCtrl {
 	 * 連絡事項作成完了画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("noticeRegistComp")
 	public ModelAndView noticeRegistComp(ModelAndView mav,
 			@ModelAttribute NoticeViewForm n,
@@ -919,7 +927,6 @@ public class UserCtrl {
 	@GetMapping("memberList")
 	public ModelAndView memberList(ModelAndView mav) {
 
-		System.out.println("メンバ一覧");
 		List<GroupMemberDetailView> group = groupDispService.memberList(group_id);
 		int allProgress = groupDispService.selectProgress(group_id);
 
@@ -966,6 +973,7 @@ public class UserCtrl {
 	 * チャット画面を表示
 	 * @return
 	 */
+	@LoginRequired
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
 
@@ -997,6 +1005,7 @@ public class UserCtrl {
 	 * チャット相手検索
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("chatSearch")
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
@@ -1005,7 +1014,6 @@ public class UserCtrl {
 		if (user_roll.equals("リーダ")) {
 			//チャットの通信可能相手(管理者)を格納
 			List<GroupDisplay> chatPartnerAdmin = chatServise.AdminChatPartnerSearch(school_id, search);
-			System.out.println("リーダ：" + chatPartnerAdmin);
 			mav.addObject("chatPartnerAdmin", chatPartnerAdmin);
 		}
 
@@ -1028,6 +1036,7 @@ public class UserCtrl {
 	 * チャット画面にチャット履歴を表示
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
@@ -1044,6 +1053,7 @@ public class UserCtrl {
 	 * チャット送信
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("sendChat")
 	public ModelAndView sendChat(ModelAndView mav,
 			@RequestParam(name = "sendInput", required = false) String sendText,
