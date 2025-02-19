@@ -111,10 +111,6 @@
 
 							<span th:text="${chat.user_name}">○○さん</span>
 
-							<!--未実装部分-->
-							<span class="badge bg-primary rounded-pill" th:text="${notificationCount}"
-								th:if="${notificationCount != null}">通知数</span>
-
 						</li>
 
 						<!--リーダ&メンバを表示-->
@@ -186,6 +182,7 @@
 
 	<input type="hidden" id="userId" th:value="${session.user_id}">
 
+	<!--scriptにセッション情報を渡す-->
 	<script>
 		var userId = document.getElementById('userId').value;
 	</script>
