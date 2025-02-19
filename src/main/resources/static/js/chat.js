@@ -50,6 +50,10 @@ $(document).ready(function() {
 });
 
 
+/**
+ * 末吉
+ * チャット相手を検索する
+ */
 function chatSearch() {
 	const form = document.getElementById("searchForm");
 	const value = form.querySelector("input[name='search']").value;
@@ -108,8 +112,9 @@ function chatSearch() {
  * チャット履歴表示
  */
 function getChatHistory(chatUserId) {
-	//Cookieに値を保存
-	document.cookie = "chatPartnerUserId=" + chatUserId;
+	// ローカルストレージにチャット相手の情報を保存する
+	console.log(chatUserId);
+	localStorage.setItem('chatPartnerUserId', chatUserId);
 	$.ajax({
 		type: 'POST',
 		url: 'getChatHistory',
@@ -141,7 +146,7 @@ function sendMessage() {
 	var sendInput = document.getElementById("send_input").value;
 
 	//Cookie情報を取得
-	var chatPartnerUserId = getCookie("chatPartnerUserId");
+	var chatPartnerUserId = localStorage.getItem('chatPartnerUserId');
 
 	// コントロールを呼び出す
 	$.ajax({
@@ -156,24 +161,25 @@ function sendMessage() {
 
 
 /**
- * Cookieにチャット相手のuser_idを格納する
- */
-function getCookie(name) {
-	var value = "; " + document.cookie;
-	var parts = value.split("; " + name + "=");
-	if (parts.length == 2) return parts.pop().split(";").shift();
-}
-
-
-/**
  * 画面を更新したときにチャット履歴を残しておく
  * (画面の更新ボタン・F15・Ctrl + R　など)
  */
 window.addEventListener('load', function() {
 	//Cookie情報を取得
-	var chatPartnerUserId = getCookie("chatPartnerUserId");
+	var chatPartnerUserId = localStorage.getItem('chatPartnerUserId');
 	//Cookieにデータが入っているときのみ処理を実行
-	if (chatPartnerUserId !== undefined && chatPartnerUserId !== "") {
+	if (chatPartnerUserId !== null) {
 		getChatHistory(chatPartnerUserId);
 	}
 });
+
+
+
+// ローカルストレージの中身を読み取り
+var chatPartnerUserId = localStorage.getItem('chatPartnerUserId');
+
+// チャット相手がいない場合
+if (!chatPartnerUserId) {
+	// ボタンを無効にする
+	document.getElementById('button-addon2').disabled = true;
+}
