@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
@@ -266,6 +267,10 @@ public class UserCtrl {
 		if (user.isPresent()) {
 
 			List<GroupDisplay> deptGroupList = groupDispService.deptGroupList(user_id);
+
+			if (deptGroupList.isEmpty()) {
+				mav.addObject("Msg", "所属グループがありません。");
+			}
 
 			mav.setViewName("common/deptGroupList");
 			mav.addObject("groupS", deptGroupList);
@@ -984,7 +989,7 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@GetMapping("chat")
-	public ModelAndView chat(ModelAndView mav) {
+	public ModelAndView chat(ModelAndView mav, HttpServletRequest request) {
 
 		//リーダの場合は管理者とグループメンバすべてを格納
 		if (user_roll.equals("リーダ")) {
@@ -1003,6 +1008,10 @@ public class UserCtrl {
 				.filter(chat -> !chat.getUser_id().equals(user_id))
 				.collect(Collectors.toList());
 
+		//Cookie情報にチャット相手が入っているかどうか
+		boolean hasChatPartnerUserId = chatServise.CookieCheck(request);
+
+		mav.addObject("hasChatPartnerUserId", hasChatPartnerUserId);
 		mav.addObject("chatPartnerMember", filteredChatPartner);
 		mav.setViewName("common/chat");
 
@@ -1047,10 +1056,15 @@ public class UserCtrl {
 	 */
 	@LoginRequired
 	@PostMapping("getChatHistory")
-	public ModelAndView getChatHistory(ModelAndView mav,
+	public ModelAndView getChatHistory(ModelAndView mav, HttpServletRequest request,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
 
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
+
+		//Cookie情報にチャット相手が入っているかどうか
+		boolean hasChatPartnerUserId = chatServise.CookieCheck(request);
+
+		mav.addObject("hasChatPartnerUserId", hasChatPartnerUserId);
 		mav.addObject("chatHistory", chatHistory);
 		mav.setViewName("common/chat");
 

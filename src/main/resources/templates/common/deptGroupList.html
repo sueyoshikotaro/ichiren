@@ -41,6 +41,11 @@
 			</svg>
 		</h2>
 
+		<!--指示文を表示-->
+		<p th:if="${Msg}" th:text="${Msg}"
+			style="text-align: center; margin-top: 35px; margin-bottom: 30px; font-size: 19px; text-decoration: double;">
+		</p>
+
 		<!-- 所属グループを表示(下記) -->
 		<!-- 所属グループ分だけ繰り返し -->
 		<div class="input-group" th:each="deptGroup : ${session.deptGroupList}">

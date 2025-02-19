@@ -12,16 +12,12 @@ function toggleLinkStatus() {
 	const selectedOption = selectElement.options[selectElement.selectedIndex].text;
 	const links = document.querySelectorAll('.menu-link');
 
-	console.log(selectedOption)
-
 	links.forEach(link => {
 		if (selectedOption === '休憩中') {
-			console.log("seikou!!!!");
 			link.classList.add('disabled');
 			link.style.pointerEvents = 'none';
 			link.setAttribute('aria-disabled', 'true');
 		} else {
-			console.log("sippai!!!!");
 			link.classList.remove('disabled');
 			link.style.pointerEvents = 'auto';
 			link.removeAttribute('aria-disabled');
@@ -48,7 +44,6 @@ $(document).ready(function() {
 
 //居場所更新
 function updateStatus(updateStatus) {
-	console.log("updateStatus関数が実行されました");
 
 	var updateStatus;
 
@@ -64,9 +59,6 @@ function updateStatus(updateStatus) {
 		url: url,
 		data: params
 	});
-
-	console.log("updateStatusの値は" + updateStatus + "です");
-
 
 	// toggleLinkStatus関数を呼び出す
 	toggleLinkStatus(updateStatus);
