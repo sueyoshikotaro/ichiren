@@ -113,7 +113,6 @@ function chatSearch() {
  */
 function getChatHistory(chatUserId) {
 	// ローカルストレージにチャット相手の情報を保存する
-	console.log(chatUserId);
 	localStorage.setItem('chatPartnerUserId', chatUserId);
 	$.ajax({
 		type: 'POST',
@@ -148,6 +147,11 @@ function sendMessage() {
 	//Cookie情報を取得
 	var chatPartnerUserId = localStorage.getItem('chatPartnerUserId');
 
+	if (chatPartnerUserId === null || chatPartnerUserId === '') {
+		// コントロールを呼び出さない
+		return;
+	}
+
 	// コントロールを呼び出す
 	$.ajax({
 		type: 'POST',
@@ -174,12 +178,7 @@ window.addEventListener('load', function() {
 });
 
 
-
-// ローカルストレージの中身を読み取り
 var chatPartnerUserId = localStorage.getItem('chatPartnerUserId');
-
-// チャット相手がいない場合
-if (!chatPartnerUserId) {
-	// ボタンを無効にする
-	document.getElementById('button-addon2').disabled = true;
+if (chatPartnerUserId === null || chatPartnerUserId === '') {
+	document.getElementById('chat-partner-status').innerHTML = 'チャット相手が選択されていません';
 }
