@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -96,6 +95,7 @@ public class UserCtrl {
 
 	//湊原追加
 	private int progress;
+	private int score;
 
 	/**
 	 * ログアウト画面を表示
@@ -107,11 +107,6 @@ public class UserCtrl {
 		//居場所を'休憩中'に更新
 		groupDispService.roomUpdate("休憩中", group_id);
 
-		// Cookie情報を削除
-		Cookie cookie = new Cookie("chatPartnerUserId", null);
-		cookie.setMaxAge(0);
-		response.addCookie(cookie);
-
 		//セッション情報を削除
 		session.invalidate();
 
@@ -122,7 +117,6 @@ public class UserCtrl {
 	 * ログイン画面を表示 
 	 * @return
 	 */
-	@LoginRequired
 	@GetMapping("login")
 	public String login() {
 
@@ -196,7 +190,6 @@ public class UserCtrl {
 	 * パスワード更新処理
 	 * @return
 	 */
-	@LoginRequired
 	@PostMapping("updatePass")
 	public ModelAndView updatePass(ModelAndView mav, @RequestParam("user_id") String user_id,
 			@RequestParam("newPass") String newPass, @RequestParam("confirmPass") String confirmPass) {
@@ -515,11 +508,7 @@ public class UserCtrl {
 	public ModelAndView taskDetailChange(@RequestParam("button") String button, TaskForm t, ModelAndView mav) {
 		//編集ボタンを押下
 		if (button.equals("edit")) {
-			//古いスコアの減算
-			int score = TaskService.userScore(t.getUser_name(), group_id);
-			score = score - t.getTask_weight();
-			TaskService.userUpScore(score, t.getUser_name(), group_id);
-			t.setTask_weight(score);
+			this.score = TaskService.userScore(t.getUser_name(), group_id);
 			mav.setViewName("leader/taskEdit");
 			//削除ボタンを押下
 		} else if (button.equals("delete")) {
@@ -555,6 +544,7 @@ public class UserCtrl {
 	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
 		//スコアの足しこみ
 		int score = TaskService.userScore(t.getUser_name(), group_id);
+		score = score - this.score;
 		score = score + t.getTask_priority() * t.getTask_level();
 		TaskService.userUpScore(score, t.getUser_name(), group_id);
 
@@ -661,10 +651,10 @@ public class UserCtrl {
 			}
 			//タスク承認(フラグ更新)
 			TaskService.taskReqFlg(t.getRequest_id());
-			if(button.equals("はい")){
+			if (button.equals("はい")) {
 				return new ModelAndView("redirect:/taskdon/user/taskUnapproved");
 			}
-			
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -842,7 +832,7 @@ public class UserCtrl {
 
 		//登録ボタンを押下
 		if (button.equals("登録")) {
-			NoticeService.noticeRegist(n.getTitle(), n.getContact_msg(), 0, user_id, group_id);
+			NoticeService.noticeRegist(n.getTitle(), n.getContact_msg(), 0, n.getSend_by(), group_id);
 
 			// ポップアップを表示するために、画面遷移をしないようにする
 			mav.addObject("noticeRegistComp", true);
@@ -1008,7 +998,7 @@ public class UserCtrl {
 				.filter(chat -> !chat.getUser_id().equals(user_id))
 				.collect(Collectors.toList());
 
-		//Cookie情報にチャット相手が入っているかどうか
+		// チャット相手の情報を取得する
 		boolean hasChatPartnerUserId = chatServise.CookieCheck(request);
 
 		mav.addObject("hasChatPartnerUserId", hasChatPartnerUserId);

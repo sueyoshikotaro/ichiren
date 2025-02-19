@@ -279,7 +279,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 		//割り振られるユーザのタスク情報を取得
 		List<TaskForm> updateUserTask = groupDispCrudRepo.taskList(group.get(0).getUser_id(), group_id);
-		
+
 		//割り振るタスクのtask_weightを取得
 		task_weight = deleteUserTask.get(0).getTask_weight();
 
@@ -287,19 +287,19 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		scoreResult = score + task_weight;
 
 		//進捗度を足す_タスクがまだ割り振られていない場合
-		if(updateUserTask.isEmpty()) {
+		if (updateUserTask.isEmpty()) {
 			progressSum = 0 + deleteUserTask.get(0).getProgress();
-			
+
 			//タスクがすでに割り振られている場合
 		} else {
-			progressSum = updateUserTask.get(0).getUser_progress() * updateUserTask.size() + deleteUserTask.get(0).getProgress();
+			progressSum = updateUserTask.get(0).getUser_progress() * updateUserTask.size()
+					+ deleteUserTask.get(0).getProgress();
 		}
 
 		//変更後の進捗度を計算(戻り値)
-		if(progressSum != 0) {
-			userProgressResult = progressSum / (updateUserTask.size() + 1);			
+		if (progressSum != 0) {
+			userProgressResult = progressSum / (updateUserTask.size() + 1);
 		}
-		
 
 		//戻り値をresult配列に格納
 		Object[] result = { scoreResult, userProgressResult, group.get(0).getUser_id() };
@@ -324,7 +324,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		for (TaskForm i : updateUserTask) {
 			progressSum += i.getProgress();
 		}
-
+		System.out.println(progressSum);
 		//更新するユーザ
 		int userProgressResult = progressSum / updateUserTask.size();
 
@@ -343,18 +343,18 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		int all_progress_result = 0;
 
 		int taskCnt = 0;
-		
+
 		List<GroupDisplay> taskList = groupDispCrudRepo.groupDetail(group_id);
 
 		//全体進捗の計算
 		for (GroupDisplay progressSum : taskList) {
 			all_progress += progressSum.getUser_progress();
-			
-			if(progressSum.getUser_progress() != 0) {
+
+			if (progressSum.getUser_progress() != 0) {
 				taskCnt++;
 			}
 		}
-		
+
 		//グループにメンバがいる場合
 		if (!taskList.isEmpty() && all_progress != 0) {
 			//更新後の全体進捗の計算

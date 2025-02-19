@@ -53,7 +53,7 @@
 			<input type="hidden" name="contact_msg" th:value="${notice.contact_msg}">
 			<input type="hidden" name="send_date" th:value="${notice.send_date}">
 			<input type="hidden" name="view_count" th:value="${notice.view_count}">
-			<input type="hidden" name="send_by" th:value="${notice.send_by}">
+			<input type="hidden" name="send_by" th:value="${session.user.user_id}">
 			<input type="hidden" name="group_id" th:value="${notice.group_id}">
 
 			<button type="submit" name="button" value="登録" class="control-btn long-btn" style="margin-top: 30px; margin-bottom: 30px;">送信
