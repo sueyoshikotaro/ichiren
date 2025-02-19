@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +28,9 @@ public class NoticeServiceImpl implements NoticeServiceInterface {
 	 * r連絡事項作成登録
 	 */
 	@Override
-	public void noticeRegist(String title, String contact_msg, Date send_date, int view_count,
-			String send_by, int group_id) {
+	public void noticeRegist(String title, String contact_msg, int view_count, String send_by, int group_id) {
 		
-		noticeCrudRepo.noticeRegist(title, contact_msg, send_date, view_count, send_by, group_id);
+		noticeCrudRepo.noticeRegist(title, contact_msg, view_count, send_by, group_id);
 		
 	}
 
