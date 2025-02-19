@@ -135,6 +135,7 @@ public class UserCtrl {
 	 * パスワードチェック
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("login")
 	public ModelAndView loginCheck(ModelAndView mav, String user_id, String user_pass, RedirectAttributes ra) {
 
@@ -194,6 +195,7 @@ public class UserCtrl {
 	 * パスワード更新処理
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("updatePass")
 	public ModelAndView updatePass(ModelAndView mav, @RequestParam("user_id") String user_id,
 			@RequestParam("newPass") String newPass, @RequestParam("confirmPass") String confirmPass) {
@@ -284,6 +286,7 @@ public class UserCtrl {
 	 * メニュー(ユーザ)
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("menu")
 	public ModelAndView menu(@RequestParam(name = "group_id", required = false) Integer group_id,
 			@RequestParam(name = "user_roll", required = false) String user_roll,
@@ -337,6 +340,7 @@ public class UserCtrl {
 	 * 末吉
 	 * 居場所更新
 	 */
+	@LoginRequired
 	@PostMapping("updateStatus")
 	public ModelAndView roomUpdate(ModelAndView mav,
 			@RequestParam(name = "updateStatus", required = false) String updateStatus) {
@@ -373,9 +377,9 @@ public class UserCtrl {
 		} else {
 			score = String.valueOf(TaskService.userScore(selectedValue, group_id));
 		}
-		
+
 		task = TaskService.taskDisplayList(selectedValue, group_id);
-		
+
 		mav.addObject("score", score);
 		mav.addObject("user", selectedValue);
 		mav.addObject("tasks", task);
@@ -400,6 +404,7 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskRegistConfirm")
 	public ModelAndView taskRegistConfirm(TaskForm t, ModelAndView mav) {
 
@@ -408,16 +413,16 @@ public class UserCtrl {
 		if (result <= 0 && t.getUser_name() != null) {
 			mav.addObject("tasks", t);
 			mav.setViewName("leader/taskRegistConfirm");
-		}else {
+		} else {
 			if (result > 0) {
-				mav.addObject("DateErrMsg","終了予定日は開始予定日以降に設定してください");
+				mav.addObject("DateErrMsg", "終了予定日は開始予定日以降に設定してください");
 			}
 			if (t.getUser_name() == null) {
-				mav.addObject("UserErrMsg","担当者を選択してください");
+				mav.addObject("UserErrMsg", "担当者を選択してください");
 			}
 			mav.setViewName("leader/taskRegist");
 		}
-		
+
 		return mav;
 	}
 
@@ -426,6 +431,7 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskRegistComplete")
 	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
 
@@ -457,6 +463,7 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(@RequestParam(name = "taskProgress", required = false) Integer progress,
 			@RequestParam(name = "task_id") Integer task_id, ModelAndView mav) {
@@ -498,6 +505,7 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskDetailsChange")
 	public ModelAndView taskDetailChange(@RequestParam("button") String button, TaskForm t, ModelAndView mav) {
 		//編集ボタンを押下
@@ -523,6 +531,7 @@ public class UserCtrl {
 	 * @param t
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskEditConfirm")
 	public ModelAndView taskEditConfirm(ModelAndView mav, TaskForm t) {
 		mav.addObject("task", t);
@@ -536,11 +545,12 @@ public class UserCtrl {
 	 * @param mav
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskEditComplete")
 	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
 		//スコアの足しこみ
 		int score = TaskService.userScore(t.getUser_name(), group_id);
-		score = score + Integer.valueOf(t.getTask_priority()) * Integer.valueOf(t.getTask_level());
+		score = score + t.getTask_priority() * t.getTask_level();
 		TaskService.userUpScore(score, t.getUser_name(), group_id);
 
 		int weight = t.getTask_priority() * t.getTask_level();
@@ -555,17 +565,18 @@ public class UserCtrl {
 	}
 
 	/**
-	 * タスク削除確認画面を表示するリクエストハンドラメソッド
+	 * タスク削除をするリクエストハンドラメソッド
 	 * 湊原
 	 * @param mav
 	 * @param t
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskDeleteComplete")
 	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
 		//スコアの減算
 		int score = TaskService.userScore(t.getUser_name(), group_id);
-		score = score - Integer.valueOf(t.getTask_weight());
+		score = score - t.getTask_weight();
 		TaskService.userUpScore(score, t.getUser_name(), group_id);
 
 		TaskService.taskUpFlg(t.getTask_id());
@@ -592,6 +603,7 @@ public class UserCtrl {
 	 * タスク承認確認画面を表示するリクエストハンドラメソッド
 	 * 向江
 	 */
+	@LoginRequired
 	@PostMapping("taskAppConfirm")
 	public ModelAndView taskAppConfirm(ModelAndView mav, TaskReqForm t) {
 		mav.addObject("taskAppConf", t);
@@ -606,46 +618,54 @@ public class UserCtrl {
 	 * @param t
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskAppComplete")
-	public ModelAndView taskAppComplete(ModelAndView mav, TaskView t) {
+	public ModelAndView taskAppComplete(ModelAndView mav, TaskView t, @RequestParam(name = "button") String button) {
 		//日付型定義
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		//変数定義
 		Date st_date = null;
 		Date end_date = null;
-		int score = TaskService.userScore(t.getUser_name(), group_id);
+		int score = 0;
 		try {
-			//開始予定日が終了予定日以前かどうかの判定
-			int result = t.getStart_date().compareToIgnoreCase(t.getEnd_date());
-			if (result <= 0) {
-				//開始予定日と終了予定日の型変換
-				st_date = sdf.parse(t.getStart_date());
-				end_date = sdf.parse(t.getEnd_date());
-				//登録が出来た場合
-				if (TaskService.taskRegister(t.getReq_category(), t.getReq_name(), t.getReq_content(), "未着手",
-						st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(), t.getUser_name(),
-						group_id)) {
+			if (button.equals("app")) {
+				score = TaskService.userScore(t.getUser_name(), group_id);
+				//開始予定日が終了予定日以前かどうかの判定
+				int result = t.getStart_date().compareToIgnoreCase(t.getEnd_date());
+				if (result <= 0) {
+					//開始予定日と終了予定日の型変換
+					st_date = sdf.parse(t.getStart_date());
+					end_date = sdf.parse(t.getEnd_date());
+					//登録が出来た場合
+					if (TaskService.taskRegister(t.getReq_category(), t.getReq_name(), t.getReq_content(), "未着手",
+							st_date, end_date, t.getTask_priority(), t.getTask_level(), t.getTask_weight(),
+							t.getUser_name(),
+							group_id)) {
 
-					//タスク承認(フラグ更新)
-					TaskService.taskReqFlg(t.getRequest_id());
-
-					//スコアの足しこみ
-					score = score + t.getTask_weight();
-					TaskService.userUpScore(score, t.getUser_name(), group_id);
-					mav.addObject("taskAppComp", true);
+						//スコアの足しこみ
+						score = score + t.getTask_weight();
+						TaskService.userUpScore(score, t.getUser_name(), group_id);
+						mav.addObject("taskAppComp", true);
+					} else {
+						mav.addObject("taskAppComp", false);
+					}
+					mav.setViewName("leader/taskApprovedConfirm");
 				} else {
-					
-					mav.addObject("taskAppComp", false);
+					mav.addObject("ErrMsg", "終了予定日は開始予定日以降に設定してください");
 				}
-			}else {
-				mav.addObject("ErrMsg", "終了予定日は開始予定日以降に設定してください");
 			}
+			//タスク承認(フラグ更新)
+			TaskService.taskReqFlg(t.getRequest_id());
+			if(button.equals("はい")){
+				return new ModelAndView("redirect:/taskdon/user/taskUnapproved");
+			}
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
 		mav.addObject("taskAppConf", t);
-		mav.setViewName("leader/taskApprovedConfirm");
+
 		return mav;
 	}
 
@@ -664,6 +684,7 @@ public class UserCtrl {
 	 * タスク申請確認画面を表示
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskRequestConfirm")
 	public ModelAndView taskRequestConfirm(ModelAndView mav, TaskReqForm t) {
 		mav.addObject("taskRequest", t);
@@ -675,6 +696,7 @@ public class UserCtrl {
 	 * タスク申請完了
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("taskRequestComplete")
 	public ModelAndView taskRequestComplete(ModelAndView mav, TaskReqForm t) {
 		Date date = new Date();
@@ -713,6 +735,7 @@ public class UserCtrl {
 	 * 選択されたToDoリスト画面を表示
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("todoListChange")
 	public ModelAndView todoListChange(ModelAndView mav,
 			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
@@ -740,6 +763,7 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("registConfirm")
 	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoRegister(user_id, t.getTdlist_content(), t.getImportance());
@@ -751,6 +775,7 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("editConfirm")
 	public ModelAndView editConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoUpdate(t.getTdlist_id(), t.getTdlist_content(), t.getImportance());
@@ -762,6 +787,7 @@ public class UserCtrl {
 	 * 湊原
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("deleteConfirm")
 	public ModelAndView deleteConfirm(ModelAndView mav, TdlistForm t) {
 		TodoService.todoDelete(t.getTdlist_id());
@@ -787,6 +813,7 @@ public class UserCtrl {
 	 * 連絡事項作成確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("noticeRegistConfirm")
 	public ModelAndView noticeregistConfirm(ModelAndView mav, NoticeViewForm n) {
 
@@ -801,22 +828,16 @@ public class UserCtrl {
 	 * 連絡事項作成完了画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("noticeRegistComp")
 	public ModelAndView noticeRegistComp(ModelAndView mav,
 			@ModelAttribute NoticeViewForm n,
 			@RequestParam(name = "button") String button,
 			@RequestParam(name = "title") String title) throws ParseException {
 
-		// 日付型定義
-		String sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS").format(new Date());
-		// 変数定義
-		Date send_date = null;
-
 		//登録ボタンを押下
 		if (button.equals("登録")) {
-			send_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(sdf);
-			NoticeService.noticeRegist(n.getTitle(), n.getContact_msg(), send_date,
-					0, user_id, group_id);
+			NoticeService.noticeRegist(n.getTitle(), n.getContact_msg(), 0, user_id, group_id);
 
 			// ポップアップを表示するために、画面遷移をしないようにする
 			mav.addObject("noticeRegistComp", true);
@@ -839,6 +860,7 @@ public class UserCtrl {
 	 * 連絡事項削除確認画面を表示するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("noticeDelete")
 	public ModelAndView noticeDelete(ModelAndView mav,
 			@RequestParam(name = "check", required = false) Integer[] check) {
@@ -877,6 +899,7 @@ public class UserCtrl {
 	 * 連絡事項削除完了するリクエストハンドラメソッド
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("noticeDeleteConfirm")
 	public ModelAndView noticeDeleteConfirm(ModelAndView mav,
 			@RequestParam(name = "notice_id", required = false) Integer[] notice_id,
@@ -929,6 +952,7 @@ public class UserCtrl {
 	 * @param g
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("memberDetails")
 	public ModelAndView memberDetails(ModelAndView mav, GroupMemberDetailView g,
 			@RequestParam(name = "groupId", required = false) Integer groupId,
@@ -990,6 +1014,7 @@ public class UserCtrl {
 	 * チャット相手検索
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("chatSearch")
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
@@ -1020,6 +1045,7 @@ public class UserCtrl {
 	 * チャット画面にチャット履歴を表示
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("getChatHistory")
 	public ModelAndView getChatHistory(ModelAndView mav,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
@@ -1036,6 +1062,7 @@ public class UserCtrl {
 	 * チャット送信
 	 * @return
 	 */
+	@LoginRequired
 	@PostMapping("sendChat")
 	public ModelAndView sendChat(ModelAndView mav,
 			@RequestParam(name = "sendInput", required = false) String sendText,

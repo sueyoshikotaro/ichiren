@@ -124,9 +124,14 @@
 				<input type="hidden" name="req_content" th:value="${taskAppConf.req_content}">
 				<input type="hidden" name="req_reason" th:value="${taskAppConf.req_reason}">
 
-				<button type="submit" name="button" value="app" class="Confirm-btn">承認</button>
-
-				<button type="button" class="Confirm-btn" data-toggle="modal" data-target="#taskDenialModal">拒否</button>
+				<div class="row">
+					<div class="col">
+						<button type="submit" name="button" value="app" class="Confirm-btn">承認</button>
+					</div>
+					<div class="col">
+						<button type="button" class="Confirm-btn" data-toggle="modal" data-target="#taskDenialModal">拒否</button>
+					</div>
+				</div>
 
 		</form>
 
@@ -154,7 +159,7 @@
 
 					<p class="modal-text">タスク申請を否認しますか？</p>
 
-					<form th:action="@{/taskdon/user/taskDenial}" method="post">
+					<form th:action="@{/taskdon/user/taskAppComplete}" method="post">
 						<input type="hidden" name="request_id" th:value="${taskAppConf.request_id}">
 
 						<div class="btn-group">
