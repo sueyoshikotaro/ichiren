@@ -113,8 +113,7 @@ function chatSearch() {
  */
 function getChatHistory(chatUserId) {
 	// ローカルストレージにチャット相手の情報を保存する
-	console.log(chatUserId);
-	localStorage.setItem('chatPartnerUserId', chatUserId);
+	localStorage.setItem('chatPartnerUserId-' + userId, chatUserId);
 	$.ajax({
 		type: 'POST',
 		url: 'getChatHistory',
@@ -146,7 +145,12 @@ function sendMessage() {
 	var sendInput = document.getElementById("send_input").value;
 
 	//Cookie情報を取得
-	var chatPartnerUserId = localStorage.getItem('chatPartnerUserId');
+	var chatPartnerUserId = localStorage.getItem('chatPartnerUserId-' + userId);
+
+	if (chatPartnerUserId === null || chatPartnerUserId === '') {
+		// コントロールを呼び出さない
+		return;
+	}
 
 	// コントロールを呼び出す
 	$.ajax({
@@ -166,20 +170,16 @@ function sendMessage() {
  */
 window.addEventListener('load', function() {
 	//Cookie情報を取得
-	var chatPartnerUserId = localStorage.getItem('chatPartnerUserId');
+	console.log(userId);
+	var chatPartnerUserId = localStorage.getItem('chatPartnerUserId-' + userId);
 	//Cookieにデータが入っているときのみ処理を実行
 	if (chatPartnerUserId !== null) {
 		getChatHistory(chatPartnerUserId);
 	}
 });
 
-
-
-// ローカルストレージの中身を読み取り
-var chatPartnerUserId = localStorage.getItem('chatPartnerUserId');
-
-// チャット相手がいない場合
-if (!chatPartnerUserId) {
-	// ボタンを無効にする
-	document.getElementById('button-addon2').disabled = true;
+var chatPartnerUserId = localStorage.getItem('chatPartnerUserId-' + userId);
+console.log(chatPartnerUserId);
+if (chatPartnerUserId === null || chatPartnerUserId === '') {
+	document.getElementById('chat-partner-status').innerHTML = 'チャット相手が選択されていません';
 }
