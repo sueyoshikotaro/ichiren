@@ -105,6 +105,11 @@ public class AdminCtrl {
 	@LoginRequired
 	@GetMapping("schoolDetails")
 	public ModelAndView schoolDetails(ModelAndView mav) {
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
+
 		//教室情報取得
 		List<SchoolDisplay> SchoolDetails = schoolDisplayService.SchoolDetails(school_id);
 		//学校情報取得
@@ -133,6 +138,11 @@ public class AdminCtrl {
 			ModelAndView mav) {
 
 		try {
+			// ログインユーザのエンティティを取得
+			User userEntity = (User) session.getAttribute("user");
+			// エンティティの中のschool_idを取得
+			school_id = userEntity.getSchool_id();
+
 			//学校情報取得
 			List<School> SchoolDetails = schoolDisplayService.SchoolInfo(school_id);
 
@@ -163,12 +173,12 @@ public class AdminCtrl {
 				mav.addObject("schoolAdd", SchoolDetails);
 				mav.setViewName("admin/schoolAdd");
 			}
-			
+
 		} catch (Exception e) {
-			
+
 			return new ModelAndView("redirect:/admin/schoolDetails");
 		}
-		
+
 		return mav;
 	}
 
@@ -282,6 +292,11 @@ public class AdminCtrl {
 	@PostMapping("schoolDeleteComp")
 	public ModelAndView schoolDeleteComp(SchoolDisplay s, ModelAndView mav) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
+
 		schoolDisplayService.DeleteSchoolDetails(s.getSchool_id(), s.getRoom_id());
 
 		//教室情報取得
@@ -309,6 +324,11 @@ public class AdminCtrl {
 	@GetMapping("userList")
 	public ModelAndView userList(@RequestParam(name = "selectedSchool", required = false) Integer selectedSchool,
 			@RequestParam(name = "selectedYear", required = false) String selectedYear, ModelAndView mav) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
 
 		//結成年度取得
 		List<TeamsDisplay> year = groupDispService.selectEstYear("user");
@@ -453,6 +473,11 @@ public class AdminCtrl {
 		// CSVファイルを読み込み、ユーザ情報を取得する
 		List<UserDisplay> users = new ArrayList<>();
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
+
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(csvFile.getInputStream(), "UTF-8"));
 			String line;
@@ -554,6 +579,11 @@ public class AdminCtrl {
 	@PostMapping("teInfoRegistConfirm")
 	public ModelAndView dispTeInfoRegistConf(UserDisplay u, ModelAndView mav) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のuser_idを取得
+		user_id = userEntity.getUser_id();
+
 		//入力したユーザIDを取得
 		String userId = u.getUser_id();
 
@@ -646,6 +676,11 @@ public class AdminCtrl {
 	@LoginRequired
 	@GetMapping("teList")
 	public ModelAndView dispTeList(ModelAndView mav, UserDisplay u) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
 
 		Iterable<UserDisplay> teList = userDisplayService.teList(school_id);
 
@@ -759,6 +794,11 @@ public class AdminCtrl {
 			@RequestParam(name = "selectedSchool", required = false) Integer selectedSchool,
 			@RequestParam(name = "selectedYear", required = false) String selectedYear,
 			@RequestParam(name = "selectedGenre", required = false) String selectedGenre) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
 
 		//結成年度取得
 		List<TeamsDisplay> year = groupDispService.selectEstYear("group");
@@ -1039,11 +1079,7 @@ public class AdminCtrl {
 			for (int i = 0; i < group.size(); i++) {
 				//更新後のスコアと進捗度を計算するサービスを呼び出す
 				Object[] updateData = groupDispService.scoreCalc(g.getGroup_id(), g.getUser_id());
-				
-				System.out.println("メンバのスコア：" + updateData[0]);
-				System.out.println("進捗度：" + updateData[1]);
-				System.out.println("割り振るユーザID：" + updateData[2]);
-				
+
 				//user_detailのtask_idを更新(タスクの自動振り分け)
 				groupDispService.updateUserId(group.get(i).getTask_id(), (String) updateData[2]);
 
@@ -1081,6 +1117,11 @@ public class AdminCtrl {
 			@RequestParam(name = "group_id", required = false) Integer group_id,
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
 
 		//グループ一覧の作成ボタンから遷移してきた場合
 		if (userId == null) {
@@ -1165,6 +1206,11 @@ public class AdminCtrl {
 			@RequestParam(name = "group_name", required = false) String group_name,
 			@RequestParam(name = "genre", required = false) String genre,
 			@RequestParam(name = "button", required = false) String button) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
 
 		TeamsDisplay teamsDisplay = new TeamsDisplay();
 
@@ -1311,6 +1357,12 @@ public class AdminCtrl {
 			@RequestParam(name = "genre", required = false) String genre,
 			@RequestParam(name = "leaderUser_id", required = false) List<String> leaderUser_id,
 			@RequestParam(name = "memberUser_id", required = false) List<String> memberUser_id) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
+
 		//グループ作成
 		groupDispService.groupCreate(group_name, school_id, genre);
 
@@ -1486,6 +1538,11 @@ public class AdminCtrl {
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
+
 		//チャットの通信可能相手を格納
 		List<GroupDisplay> chatPartner = chatServise.setChatUser(school_id);
 
@@ -1503,6 +1560,12 @@ public class AdminCtrl {
 	@PostMapping("chatSearch")
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のschool_idを取得
+		school_id = userEntity.getSchool_id();
+
 		//チャット相手を検索し、Listに格納する
 		List<GroupDisplay> chatPartner = chatServise.chatPartnerSearch(school_id, search, "リーダ");
 
@@ -1522,6 +1585,11 @@ public class AdminCtrl {
 	public ModelAndView getChatHistory(ModelAndView mav,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のuser_idを取得
+		user_id = userEntity.getUser_id();
+
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
 
 		mav.addObject("chatHistory", chatHistory);
@@ -1540,6 +1608,11 @@ public class AdminCtrl {
 	public ModelAndView sendChat(ModelAndView mav,
 			@RequestParam(name = "sendInput", required = false) String sendText,
 			@RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+		// エンティティの中のuser_idを取得
+		user_id = userEntity.getUser_id();
 
 		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
 

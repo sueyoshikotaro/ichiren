@@ -351,12 +351,15 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 
 		List<GroupDisplay> taskList = groupDispCrudRepo.groupDetail(group_id);
 
+		System.out.println("リストの数！！！:" + taskList.size());
+		
 		//全体進捗の計算
 		for (GroupDisplay progressSum : taskList) {
 			all_progress += progressSum.getUser_progress();
 
 			if (progressSum.getScore() != 0) {
 				taskCnt++;
+				System.out.println(taskCnt);
 			}
 		}
 

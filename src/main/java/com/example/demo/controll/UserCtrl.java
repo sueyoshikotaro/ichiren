@@ -88,10 +88,9 @@ public class UserCtrl {
 
 	//末吉追加(セッション情報格納)
 	private int school_id;
-	private int group_id;
+	private int group_id = 0;
 	private String user_id;
 	private String user_roll;
-	private String status;
 
 	//湊原追加
 	private int progress;
@@ -104,8 +103,12 @@ public class UserCtrl {
 	@GetMapping("logout")
 	public String logout(HttpServletResponse response) {
 
-		//居場所を'休憩中'に更新
-		groupDispService.roomUpdate("休憩中", group_id);
+		if (session.getAttribute("groupId") != null && user_id.startsWith("st")) {
+			int group_id = (int) session.getAttribute("groupId");
+
+			//居場所を'休憩中'に更新
+			groupDispService.roomUpdate("休憩中", group_id);
+		}
 
 		//セッション情報を削除
 		session.invalidate();
@@ -140,6 +143,12 @@ public class UserCtrl {
 
 			session.setAttribute("user_id", user_id);
 			session.setAttribute("user", user.get());
+
+			// ログインユーザのエンティティを取得
+			User userEntity = (User) session.getAttribute("user");
+
+			// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+			this.user_id = userEntity.getUser_id();
 
 			ra.addFlashAttribute("user_id", user_id);
 
@@ -246,8 +255,13 @@ public class UserCtrl {
 	@GetMapping("deptGroupList")
 	public ModelAndView deptGroupList(ModelAndView mav, @ModelAttribute("user_id") String user_id) {
 
-		//居場所を'休憩中'に更新_末吉追加
-		groupDispService.roomUpdate("休憩中", group_id);
+		if (session.getAttribute("groupId") != null) {
+			// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+			group_id = (int) session.getAttribute("groupId");
+
+			//居場所を'休憩中'に更新_末吉追加
+			groupDispService.roomUpdate("休憩中", group_id);
+		}
 
 		if (user_id == null || user_id.isEmpty()) {
 
@@ -303,11 +317,6 @@ public class UserCtrl {
 			// エンティティの中の値をそれぞれフィールドに設定_末吉追加
 			school_id = userEntity.getSchool_id();
 			this.group_id = (int) session.getAttribute("groupId");
-			user_id = userEntity.getUser_id();
-			this.user_roll = (String) session.getAttribute("user_roll");
-
-			//居場所の初期値を休憩中にする
-			status = "休憩中";
 		}
 		//連絡事項一覧取得
 		List<NoticeViewForm> noticeList = NoticeService.noticeDisp(this.group_id);
@@ -328,7 +337,7 @@ public class UserCtrl {
 		room.setRoom_name("校外作業中");
 		roomList.add(room);
 
-		mav.addObject("status", status);
+		mav.addObject("status", "休憩中");
 		mav.addObject("roomList", roomList);
 
 		return mav;
@@ -343,8 +352,12 @@ public class UserCtrl {
 	public ModelAndView roomUpdate(ModelAndView mav,
 			@RequestParam(name = "updateStatus", required = false) String updateStatus) {
 
-		//フィールド変数に居場所情報を格納
-		status = updateStatus;
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		school_id = userEntity.getSchool_id();
+		group_id = (int) session.getAttribute("groupId");
 
 		//居場所更新
 		groupDispService.roomUpdate(updateStatus, group_id);
@@ -368,6 +381,9 @@ public class UserCtrl {
 	@GetMapping("taskList")
 	public ModelAndView taskList(ModelAndView mav,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
+
+		group_id = (int) session.getAttribute("groupId");
+
 		String score = "--";
 		List<TaskForm> task = null;
 		if (selectedValue == null || selectedValue.equals("全員")) {
@@ -433,6 +449,8 @@ public class UserCtrl {
 	@PostMapping("taskRegistComplete")
 	public ModelAndView taskRegistComplete(ModelAndView mav, TaskForm t) {
 
+		group_id = (int) session.getAttribute("groupId");
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date st_date = null;
 		Date end_date = null;
@@ -465,6 +483,14 @@ public class UserCtrl {
 	@PostMapping("taskDetails")
 	public ModelAndView taskDetail(@RequestParam(name = "taskProgress", required = false) Integer progress,
 			@RequestParam(name = "task_id") Integer task_id, ModelAndView mav) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		group_id = (int) session.getAttribute("groupId");
+		user_id = userEntity.getUser_id();
+
 		mav.getModel().clear();
 		List<TaskForm> detail = TaskService.taskDetails(task_id, group_id);
 		this.progress = detail.get(0).getProgress();
@@ -506,9 +532,13 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskDetailsChange")
 	public ModelAndView taskDetailChange(@RequestParam("button") String button, TaskForm t, ModelAndView mav) {
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		group_id = (int) session.getAttribute("groupId");
+
 		//編集ボタンを押下
 		if (button.equals("edit")) {
-			this.score = TaskService.userScore(t.getUser_name(), group_id);
+			this.score = t.getTask_weight();
 			mav.setViewName("leader/taskEdit");
 			//削除ボタンを押下
 		} else if (button.equals("delete")) {
@@ -542,6 +572,10 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskEditComplete")
 	public ModelAndView taskEditComplete(ModelAndView mav, TaskForm t) {
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		group_id = (int) session.getAttribute("groupId");
+
 		//スコアの足しこみ
 		int score = TaskService.userScore(t.getUser_name(), group_id);
 		score = score - this.score;
@@ -569,10 +603,17 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("taskDeleteComplete")
 	public ModelAndView taskDeleteConfirm(ModelAndView mav, TaskForm t) {
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		group_id = (int) session.getAttribute("groupId");
+
 		//スコアの減算
 		int score = TaskService.userScore(t.getUser_name(), group_id);
 		score = score - t.getTask_weight();
 		TaskService.userUpScore(score, t.getUser_name(), group_id);
+
+		//グループの全体進捗を更新するサービスを呼び出す
+		groupDispService.allProgress(group_id);
 
 		TaskService.taskUpFlg(t.getTask_id());
 		mav.addObject("taskDeleteComp", true);
@@ -589,6 +630,10 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("taskUnapproved")
 	public ModelAndView taskUnapproved(ModelAndView mav) {
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		group_id = (int) session.getAttribute("groupId");
+
 		mav.addObject("taskNonapp", TaskService.selectTaskUnapproved(group_id));
 		mav.setViewName("leader/taskUnapproved");
 		return mav;
@@ -622,6 +667,10 @@ public class UserCtrl {
 		Date st_date = null;
 		Date end_date = null;
 		int score = 0;
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		this.group_id = (int) session.getAttribute("groupId");
+
 		try {
 			if (button.equals("app")) {
 				score = TaskService.userScore(t.getUser_name(), group_id);
@@ -644,10 +693,10 @@ public class UserCtrl {
 					} else {
 						mav.addObject("taskAppComp", false);
 					}
-					mav.setViewName("leader/taskApprovedConfirm");
 				} else {
 					mav.addObject("ErrMsg", "終了予定日は開始予定日以降に設定してください");
 				}
+				mav.setViewName("leader/taskApprovedConfirm");
 			}
 			//タスク承認(フラグ更新)
 			TaskService.taskReqFlg(t.getRequest_id());
@@ -695,6 +744,10 @@ public class UserCtrl {
 	@PostMapping("taskRequestComplete")
 	public ModelAndView taskRequestComplete(ModelAndView mav, TaskReqForm t) {
 		Date date = new Date();
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		group_id = (int) session.getAttribute("groupId");
+
 		TaskService.registerTaskReq(t.getReq_category(), t.getReq_name(), t.getReq_content(), t.getReq_reason(), date,
 				t.getUser_name(), group_id);
 		mav.addObject("taskRequestComp", true);
@@ -712,6 +765,13 @@ public class UserCtrl {
 	public ModelAndView todoList(ModelAndView mav,
 			@RequestParam(name = "tdlist_id", required = false) Integer tdlist_id,
 			@RequestParam(name = "checked", required = false) Boolean checked) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		user_id = userEntity.getUser_id();
+
 		if (tdlist_id != null) {
 			if (checked != null) {
 				if (checked) {
@@ -735,6 +795,13 @@ public class UserCtrl {
 	public ModelAndView todoListChange(ModelAndView mav,
 			@RequestParam(name = "flexRadioDefault", required = false) Integer tdlist_id,
 			@RequestParam(name = "button") String button) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		user_id = userEntity.getUser_id();
+
 		List<Tdlist> todo = null;
 		if (tdlist_id != null) {
 			todo = TodoService.selectTodo(tdlist_id);
@@ -761,6 +828,13 @@ public class UserCtrl {
 	@LoginRequired
 	@PostMapping("registConfirm")
 	public ModelAndView registConfirm(ModelAndView mav, TdlistForm t) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		user_id = userEntity.getUser_id();
+
 		TodoService.todoRegister(user_id, t.getTdlist_content(), t.getImportance());
 		return new ModelAndView("redirect:/taskdon/user/todoList");
 	}
@@ -829,6 +903,9 @@ public class UserCtrl {
 			@ModelAttribute NoticeViewForm n,
 			@RequestParam(name = "button") String button,
 			@RequestParam(name = "title") String title) throws ParseException {
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		group_id = (int) session.getAttribute("groupId");
 
 		//登録ボタンを押下
 		if (button.equals("登録")) {
@@ -900,6 +977,13 @@ public class UserCtrl {
 			@RequestParam(name = "notice_id", required = false) Integer[] notice_id,
 			@RequestParam(name = "action") String action) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		school_id = userEntity.getSchool_id();
+		group_id = (int) session.getAttribute("groupId");
+
 		if (action.equals("yes") && notice_id != null) {
 
 			for (int i = 0; i < notice_id.length; i++) {
@@ -931,6 +1015,9 @@ public class UserCtrl {
 	@GetMapping("memberList")
 	public ModelAndView memberList(ModelAndView mav) {
 
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		this.group_id = (int) session.getAttribute("groupId");
+
 		List<GroupMemberDetailView> group = groupDispService.memberList(group_id);
 		int allProgress = groupDispService.selectProgress(group_id);
 
@@ -953,6 +1040,10 @@ public class UserCtrl {
 			@RequestParam(name = "groupId", required = false) Integer groupId,
 			@RequestParam(name = "userId", required = false) String userId,
 			@RequestParam(name = "selectedValue", required = false) String selectedValue) {
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		this.group_id = (int) session.getAttribute("groupId");
+
 		//ドロップダウンリスト取得処理
 		List<TaskForm> taskCategory = TaskService.selectCategory(group_id);
 
@@ -980,6 +1071,15 @@ public class UserCtrl {
 	@LoginRequired
 	@GetMapping("chat")
 	public ModelAndView chat(ModelAndView mav, HttpServletRequest request) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		school_id = userEntity.getSchool_id();
+		this.group_id = (int) session.getAttribute("groupId");
+		user_id = userEntity.getUser_id();
+		this.user_roll = (String) session.getAttribute("user_roll");
 
 		//リーダの場合は管理者とグループメンバすべてを格納
 		if (user_roll.equals("リーダ")) {
@@ -1018,6 +1118,15 @@ public class UserCtrl {
 	public ModelAndView chatSearch(ModelAndView mav,
 			@RequestParam(name = "search", required = false) String search) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		school_id = userEntity.getSchool_id();
+		this.group_id = (int) session.getAttribute("groupId");
+		user_id = userEntity.getUser_id();
+		this.user_roll = (String) session.getAttribute("user_roll");
+
 		//リーダの場合は管理者とグループメンバのすべてから検索し格納
 		if (user_roll.equals("リーダ")) {
 			//チャットの通信可能相手(管理者)を格納
@@ -1049,6 +1158,12 @@ public class UserCtrl {
 	public ModelAndView getChatHistory(ModelAndView mav, HttpServletRequest request,
 			@RequestParam(name = "chatUserId", required = false) String chatUser_id) {
 
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		user_id = userEntity.getUser_id();
+
 		List<ChatForm> chatHistory = chatServise.getChatHistory(user_id, chatUser_id);
 
 		//Cookie情報にチャット相手が入っているかどうか
@@ -1071,6 +1186,12 @@ public class UserCtrl {
 	public ModelAndView sendChat(ModelAndView mav,
 			@RequestParam(name = "sendInput", required = false) String sendText,
 			@RequestParam(name = "chatPartnerUserId", required = false) String chatPartnerUserId) {
+
+		// ログインユーザのエンティティを取得
+		User userEntity = (User) session.getAttribute("user");
+
+		// エンティティの中の値をそれぞれフィールドに設定_末吉追加
+		user_id = userEntity.getUser_id();
 
 		List<ChatForm> chatHistory = chatServise.sendChat(user_id, chatPartnerUserId, sendText);
 
