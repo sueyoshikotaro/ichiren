@@ -271,6 +271,11 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		//削除するユーザを割り振る候補から除外する
 		group.removeIf(member -> member.getUser_id().equals(user_id));
 
+		System.out.println("削除するユーザ以外のユーザ：" + group);
+		System.out.println("削除するユーザ：" + user_id);
+		System.out.println("割り振るユーザ：" + group.get(0).getUser_id());
+		
+		
 		//タスクを割り振るメンバのscoreを取得
 		int score = group.get(0).getScore();
 
@@ -350,7 +355,7 @@ public class GroupDisplayImpl implements GroupDisplayServiceInterface {
 		for (GroupDisplay progressSum : taskList) {
 			all_progress += progressSum.getUser_progress();
 
-			if (progressSum.getUser_progress() != 0) {
+			if (progressSum.getScore() != 0) {
 				taskCnt++;
 			}
 		}
