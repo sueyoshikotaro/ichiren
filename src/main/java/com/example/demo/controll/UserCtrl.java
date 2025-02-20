@@ -995,7 +995,7 @@ public class UserCtrl {
 
 		//ログインしているユーザの分のデータはListから除外する
 		List<GroupDisplay> filteredChatPartner = chatPartner.stream()
-				.filter(chat -> !chat.getUser_id().equals(user_id))
+				.filter(chat -> !chat.getUser_id().equals((String) session.getAttribute("user_id")))
 				.collect(Collectors.toList());
 
 		// チャット相手の情報を取得する

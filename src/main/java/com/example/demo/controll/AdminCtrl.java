@@ -372,7 +372,7 @@ public class AdminCtrl {
 					Object[] updateData = groupDispService.scoreCalc(i.getGroup_id(), u.getUser_id());
 
 					//user_detailのtask_idを更新(タスクの自動振り分け)
-					groupDispService.updateUserId(group.get(0).getTask_id(), (String) updateData[2]);
+					groupDispService.updateUserId(group.get(j).getTask_id(), (String) updateData[2]);
 
 					//user_detailのscoreとuser_progressを更新
 					groupDispService.updateScore((String) updateData[2], i.getGroup_id(), (int) updateData[0],
@@ -1039,7 +1039,11 @@ public class AdminCtrl {
 			for (int i = 0; i < group.size(); i++) {
 				//更新後のスコアと進捗度を計算するサービスを呼び出す
 				Object[] updateData = groupDispService.scoreCalc(g.getGroup_id(), g.getUser_id());
-
+				
+				System.out.println("メンバのスコア：" + updateData[0]);
+				System.out.println("進捗度：" + updateData[1]);
+				System.out.println("割り振るユーザID：" + updateData[2]);
+				
 				//user_detailのtask_idを更新(タスクの自動振り分け)
 				groupDispService.updateUserId(group.get(i).getTask_id(), (String) updateData[2]);
 
