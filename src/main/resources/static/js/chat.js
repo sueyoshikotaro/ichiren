@@ -170,7 +170,6 @@ function sendMessage() {
  */
 window.addEventListener('load', function() {
 	//Cookie情報を取得
-	console.log(userId);
 	var chatPartnerUserId = localStorage.getItem('chatPartnerUserId-' + userId);
 	//Cookieにデータが入っているときのみ処理を実行
 	if (chatPartnerUserId !== null) {
@@ -179,7 +178,6 @@ window.addEventListener('load', function() {
 });
 
 var chatPartnerUserId = localStorage.getItem('chatPartnerUserId-' + userId);
-console.log(chatPartnerUserId);
 if (chatPartnerUserId === null || chatPartnerUserId === '') {
 	document.getElementById('chat-partner-status').innerHTML = 'チャット相手が選択されていません';
 }
